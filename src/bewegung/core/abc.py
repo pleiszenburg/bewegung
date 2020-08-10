@@ -43,6 +43,9 @@ class ImageABC(ABC):
 class IndexPoolABC(ABC):
     pass
 
+class SequenceABC(ABC):
+    pass
+
 class TimeABC(ABC):
     pass
 
@@ -53,4 +56,7 @@ class Vector2DABC(ABC):
     pass
 
 class Vector3DABC(ABC):
+    pass
+
+class VideoABC(ABC):
     pass
