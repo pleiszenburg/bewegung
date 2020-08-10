@@ -29,16 +29,9 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from abc import ABC
-from typing import Union
+from typing import Generator, List, Tuple, Union
 
 import numpy as np
-
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# Types
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Number = Union[int, float, np.number]
-Dtype = Union[str, np.dtype]
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASSES
@@ -79,3 +72,22 @@ class Vector3DABC(ABC):
 
 class VideoABC(ABC):
     pass
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Types
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Number = Union[int, float, np.number]
+Dtype = Union[str, np.dtype]
+
+VectorIterable2D = Union[
+    List[Vector2DABC],
+    Tuple[Vector2DABC],
+    Generator[Vector2DABC, None, None],
+]
+
+VectorIterable3D = Union[
+    List[Vector3DABC],
+    Tuple[Vector3DABC],
+    Generator[Vector3DABC, None, None],
+]

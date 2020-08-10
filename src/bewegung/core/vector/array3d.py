@@ -33,7 +33,7 @@ from typing import Tuple
 import numpy as np
 from typeguard import typechecked
 
-from ..abc import Dtype, Number, VectorArray3DABC
+from ..abc import Dtype, Number, VectorArray3DABC, VectorIterable3D
 from ..const import FLOAT_DEFAULT
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -140,6 +140,17 @@ class VectorArray3D(VectorArray3DABC):
     # @z.setter
     # def z(self, value: float):
     #     self._z = value
+
+    @classmethod
+    def from_iterable(cls, obj: VectorIterable3D, dtype: Dtype = FLOAT_DEFAULT) -> VectorArray3DABC:
+        if not isinstance(obj, list):
+            obj = list(obj)
+        x = np.zeros((len(obj),), dtype = dtype)
+        y = np.zeros((len(obj),), dtype = dtype)
+        z = np.zeros((len(obj),), dtype = dtype)
+        for idx, item in enumerate(obj):
+            x[idx], y[idx], z[idx] = item.x, item.y, item.z
+        return cls(x = x, y = y, z = z,)
 
     @classmethod
     def from_polar(cls, radius: np.ndarray, theta: np.ndarray, phi: np.ndarray) -> VectorArray3DABC:

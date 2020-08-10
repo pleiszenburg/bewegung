@@ -33,7 +33,7 @@ from typing import Tuple
 import numpy as np
 from typeguard import typechecked
 
-from ..abc import Dtype, Number, VectorArray2DABC
+from ..abc import Dtype, Number, VectorArray2DABC, VectorIterable2D
 from ..const import FLOAT_DEFAULT
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -127,6 +127,16 @@ class VectorArray2D(VectorArray2DABC):
     # @y.setter
     # def y(self, value: float):
     #     self._y = value
+
+    @classmethod
+    def from_iterable(cls, obj: VectorIterable2D, dtype: Dtype = FLOAT_DEFAULT) -> VectorArray2DABC:
+        if not isinstance(obj, list):
+            obj = list(obj)
+        x = np.zeros((len(obj),), dtype = dtype)
+        y = np.zeros((len(obj),), dtype = dtype)
+        for idx, item in enumerate(obj):
+            x[idx], y[idx] = item.x, item.y
+        return cls(x = x, y = y,)
 
     @classmethod
     def from_polar(cls, radius: np.ndarray, angle: np.ndarray) -> VectorArray2DABC:
