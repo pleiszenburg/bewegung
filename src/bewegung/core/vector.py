@@ -32,7 +32,7 @@ import math
 import typing
 
 import numpy as np
-import typeguard
+from typeguard import typechecked
 
 from .abc import Vector2DABC, Vector3DABC
 
@@ -40,7 +40,7 @@ from .abc import Vector2DABC, Vector3DABC
 # CLASSES
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-@typeguard.typechecked
+@typechecked
 class Vector2D(Vector2DABC):
     def __init__(self, x: float, y: float):
         self._x, self._y = x, y
@@ -93,7 +93,7 @@ class Vector2D(Vector2DABC):
             y = radius * math.sin(angle),
             )
 
-@typeguard.typechecked
+@typechecked
 class Vector3D(Vector3DABC):
     _rad2deg = math.pi / 180.0
     _halfpi = math.pi / 2.0
