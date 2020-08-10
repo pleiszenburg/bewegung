@@ -34,7 +34,13 @@ from abc import ABC
 # CLASSES
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+class FrameSizeABC(ABC):
+    pass
+
 class ImageABC(ABC):
+    pass
+
+class IndexPoolABC(ABC):
     pass
 
 class Vector2DABC(ABC):
