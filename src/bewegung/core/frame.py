@@ -2,20 +2,20 @@
 
 """
 
-Earthquakes / Erdbeben 1950-2020
-source code behind https://www.youtube.com/watch?v=RLHM5MQ5kAs
-https://github.com/pleiszenburg/earthquakes_youtube02
+BEWEGUNG
+a versatile video renderer
+https://github.com/pleiszenburg/bewegung
 
-    lib/frame.py: About video frames
+    src/bewegung/core/frame.py: About video frames
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
 <LICENSE_BLOCK>
-The contents of this file are subject to the GNU General Public License
-Version 2 ("GPL" or "License"). You may not use this file except in
+The contents of this file are subject to the GNU Lesser General Public License
+Version 2.1 ("LGPL" or "License"). You may not use this file except in
 compliance with the License. You may obtain a copy of the License at
-https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
-https://github.com/pleiszenburg/earthquakes_youtube02/blob/master/LICENSE
+https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
+https://github.com/pleiszenburg/bewegung/blob/master/LICENSE
 
 Software distributed under the License is distributed on an "AS IS" basis,
 WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
