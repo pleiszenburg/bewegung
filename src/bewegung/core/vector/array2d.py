@@ -61,10 +61,12 @@ class VectorArray2D(VectorArray2DABC):
 
     def __add__(self, other: VectorArray2DABC) -> VectorArray2DABC:
         assert len(self) == len(other)
+        assert self.dtype == other.dtype
         return VectorArray2D(self.x + other.x, self.y + other.y)
 
     def __sub__(self, other: VectorArray2DABC) -> VectorArray2DABC:
         assert len(self) == len(other)
+        assert self.dtype == other.dtype
         return VectorArray2D(self.x - other.x, self.y - other.y)
 
     def __mul__(self, other: Number):
@@ -76,6 +78,7 @@ class VectorArray2D(VectorArray2DABC):
 
     def __matmul__(self, other: VectorArray2DABC) -> np.ndarray:
         assert len(self) == len(other)
+        assert self.dtype == other.dtype
         return self.x * other.x + self.y * other.y
 
     def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> np.ndarray:
@@ -88,6 +91,11 @@ class VectorArray2D(VectorArray2DABC):
 
     # def as_tuple(self) -> Tuple[float, float]:
     #     return self._x, self._y
+
+    def as_type(self, dtype: Dtype) -> VectorArray2DABC:
+        return self.copy() if self.dtype == np.dtype(dtype) else VectorArray2D(
+            self._x.astype(dtype), self._y.astype(dtype),
+        )
 
     def copy(self):
         return VectorArray2D(self._x.copy(), self._y.copy())
