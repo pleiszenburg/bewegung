@@ -35,6 +35,7 @@ import numpy as np
 from typeguard import typechecked
 
 from ..abc import Vector2DABC
+from ..const import FLOAT_DEFAULT
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -68,7 +69,7 @@ class Vector2D(Vector2DABC):
     def __matmul__(self, other: Vector2DABC) -> float:
         return self.x * other.x + self.y * other.y
 
-    def as_ndarray(self, dtype: str = 'f4') -> np.ndarray:
+    def as_ndarray(self, dtype: str = FLOAT_DEFAULT) -> np.ndarray:
         return np.array(self.as_tuple(), dtype = dtype)
 
     def as_polar_tuple(self) -> Tuple[float, float]:

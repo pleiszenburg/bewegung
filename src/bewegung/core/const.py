@@ -29,3 +29,4 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 FPS_DEFAULT = 60
+FLOAT_DEFAULT = 'f4'
