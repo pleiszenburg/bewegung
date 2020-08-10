@@ -30,3 +30,5 @@ specific language governing rights and limitations under the License.
 
 from .single2d import Vector2D
 from .single3d import Vector3D
+from .array2d import VectorArray2D
+from .array3d import VectorArray3D
