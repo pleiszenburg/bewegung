@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import numpy as np
 from typeguard import typechecked
@@ -54,6 +54,11 @@ class VectorArray3D(VectorArray3DABC):
 
     def __len__(self) -> int:
         return self._x.shape[0]
+
+    def __getitem__(self, idx: Union[int, slice]) -> Union[Vector3D, VectorArray3DABC]:
+        if isinstance(idx, int):
+            return Vector3D(float(self._x[idx]), float(self._y[idx]), float(self._z[idx]))
+        return VectorArray3D(self._x[idx].copy(), self._y[idx].copy(), self._z[idx].copy())
 
     def __eq__(self, other: VectorArray3DABC) -> bool:
         return np.array_equal(self.x, other.x) and np.array_equal(self.y, other.y) and np.array_equal(self.z, other.z)

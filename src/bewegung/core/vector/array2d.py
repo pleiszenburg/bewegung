@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import numpy as np
 from typeguard import typechecked
@@ -53,6 +53,11 @@ class VectorArray2D(VectorArray2DABC):
 
     def __len__(self) -> int:
         return self._x.shape[0]
+
+    def __getitem__(self, idx: Union[int, slice]) -> Union[Vector2D, VectorArray2DABC]:
+        if isinstance(idx, int):
+            return Vector2D(float(self._x[idx]), float(self._y[idx]))
+        return VectorArray2D(self._x[idx].copy(), self._y[idx].copy())
 
     def __eq__(self, other: VectorArray2DABC) -> bool:
         return np.array_equal(self.x, other.x) and np.array_equal(self.y, other.y)
