@@ -34,8 +34,11 @@ from abc import ABC
 # CLASSES
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class Vector2DABC(abc.ABC):
+class ImageABC(ABC):
     pass
 
-class Vector3DABC(abc.ABC):
+class Vector2DABC(ABC):
+    pass
+
+class Vector3DABC(ABC):
     pass
