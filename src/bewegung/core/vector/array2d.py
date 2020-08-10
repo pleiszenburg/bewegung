@@ -28,11 +28,12 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Tuple
+from typing import List, Tuple
 
 import numpy as np
 from typeguard import typechecked
 
+from .single2d import Vector2D
 from ..abc import Dtype, Number, VectorArray2DABC, VectorIterable2D
 from ..const import FLOAT_DEFAULT
 
@@ -80,6 +81,12 @@ class VectorArray2D(VectorArray2DABC):
         assert len(self) == len(other)
         assert self.dtype == other.dtype
         return self.x * other.x + self.y * other.y
+
+    def as_list(self) -> List[Vector2D]:
+        return [
+            Vector2D(float(self._x[idx]), float(self._y[idx]))
+            for idx in range(len(self))
+        ]
 
     def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> np.ndarray:
         a = np.zeros((len(self), 2), dtype = self.dtype)

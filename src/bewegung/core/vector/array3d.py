@@ -28,11 +28,12 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Tuple
+from typing import List, Tuple
 
 import numpy as np
 from typeguard import typechecked
 
+from .single3d import Vector3D
 from ..abc import Dtype, Number, VectorArray3DABC, VectorIterable3D
 from ..const import FLOAT_DEFAULT
 
@@ -82,6 +83,12 @@ class VectorArray3D(VectorArray3DABC):
         assert len(self) == len(other)
         assert self.dtype == other.dtype
         return self.x * other.x + self.y * other.y + self.z * other.z
+
+    def as_list(self) -> List[Vector3D]:
+        return [
+            Vector3D(float(self._x[idx]), float(self._y[idx]), float(self._z[idx]))
+            for idx in range(len(self))
+        ]
 
     def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> np.ndarray:
         a = np.zeros((len(self), 3), dtype = self.dtype)
