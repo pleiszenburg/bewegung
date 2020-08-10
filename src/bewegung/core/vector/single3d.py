@@ -34,7 +34,7 @@ from typing import Tuple
 import numpy as np
 from typeguard import typechecked
 
-from ..abc import Vector3DABC
+from ..abc import Dtype, Vector3DABC
 from ..const import FLOAT_DEFAULT
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -73,7 +73,7 @@ class Vector3D(Vector3DABC):
     def __matmul__(self, other: Vector3DABC) -> float:
         return self.x * other.x + self.y * other.y + self.z * other.z
 
-    def as_ndarray(self, dtype: str = FLOAT_DEFAULT) -> np.ndarray:
+    def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> np.ndarray:
         return np.array(self.as_tuple(), dtype = dtype)
 
     def as_polar_tuple(self) -> Tuple[float, float, float]:
