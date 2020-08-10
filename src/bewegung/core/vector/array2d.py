@@ -28,13 +28,12 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-import math
-from typing import Tuple
+# from typing import Tuple
 
 import numpy as np
 from typeguard import typechecked
 
-from ..abc import VectorArray2DABC
+from ..abc import Dtype, Number, VectorArray2DABC
 from ..const import FLOAT_DEFAULT
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -51,67 +50,83 @@ class VectorArray2D(VectorArray2DABC):
         assert x.dtype == y.dtype
         self._x, self._y = x, y
 
+    def __len__(self) -> int:
+        return self._x.shape[0]
+
     def __eq__(self, other: VectorArray2DABC) -> bool:
-        return (self.x == other.x) and (self.y == other.y)
+        return np.array_equal(self.x, other.x) and np.array_equal(self.y, other.y)
 
     def __mod__(self, other: VectorArray2DABC) -> bool:
-        return math.isclose(self.x, other.x) and math.isclose(self.y, other.y)
+        return np.allclose(self.x, other.x) and np.allclose(self.y, other.y)
 
     def __add__(self, other: VectorArray2DABC) -> VectorArray2DABC:
+        assert len(self) == len(other)
         return VectorArray2D(self.x + other.x, self.y + other.y)
 
     def __sub__(self, other: VectorArray2DABC) -> VectorArray2DABC:
+        assert len(self) == len(other)
         return VectorArray2D(self.x - other.x, self.y - other.y)
 
-    def __mul__(self, other: float):
+    def __mul__(self, other: Number):
         return VectorArray2D(self._x * other, self._y * other)
 
-    def mul(self, scalar: float):
-        self._x *= scalar
-        self._y *= scalar
+    def mul(self, scalar: Number):
+        np.multiply(self._x, scalar, out = self._x)
+        np.multiply(self._y, scalar, out = self._y)
 
-    def __matmul__(self, other: VectorArray2DABC) -> float:
+    def __matmul__(self, other: VectorArray2DABC) -> np.ndarray:
+        assert len(self) == len(other)
         return self.x * other.x + self.y * other.y
 
-    def as_ndarray(self, dtype: str = FLOAT_DEFAULT) -> np.ndarray:
-        return np.array(self.as_tuple(), dtype = dtype)
+    def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> np.ndarray:
+        a = np.zeros((len(self), 2), dtype = self.dtype)
+        a[:, 0], a[:, 1] = self._x, self._y
+        return a if a.dtype == np.dtype(dtype) else a.astype(dtype)
 
-    def as_polar_tuple(self) -> Tuple[float, float]:
-        return self.mag, math.atan2(self._y, self._x)
+    # def as_polar_tuple(self) -> Tuple[float, float]:
+    #     return self.mag, math.atan2(self._y, self._x)
 
-    def as_tuple(self) -> Tuple[float, float]:
-        return self._x, self._y
+    # def as_tuple(self) -> Tuple[float, float]:
+    #     return self._x, self._y
 
     def copy(self):
-        return VectorArray2D(self._x, self._y)
+        return VectorArray2D(self._x.copy(), self._y.copy())
 
-    def update(self, x: float, y: float):
-        self._x, self._y = x, y
+    # def update(self, x: float, y: float):
+    #     self._x, self._y = x, y
 
     def update_from_vector(self, other: VectorArray2DABC):
-        self._x, self._y = other.x, other.y
+        self._x[:], self._y[:] = other.x[:], other.y[:]
 
     @property
-    def mag(self) -> float:
-        return math.sqrt(self._x ** 2 + self._y ** 2)
+    def dtype(self) -> np.dtype:
+        return self._x.dtype
 
     @property
-    def x(self) -> float:
+    def mag(self) -> np.ndarray:
+        return np.sqrt(self._x ** 2 + self._y ** 2)
+
+    @property
+    def x(self) -> np.ndarray:
         return self._x
-    @x.setter
-    def x(self, value: float):
-        self._x = value
+    # @x.setter
+    # def x(self, value: float):
+    #     self._x = value
 
     @property
-    def y(self) -> float:
+    def y(self) -> np.ndarray:
         return self._y
-    @y.setter
-    def y(self, value: float):
-        self._y = value
+    # @y.setter
+    # def y(self, value: float):
+    #     self._y = value
 
     @classmethod
-    def from_polar(cls, radius: float, angle: float) -> VectorArray2DABC:
-        return cls(
-            x = radius * math.cos(angle),
-            y = radius * math.sin(angle),
-            )
+    def from_polar(cls, radius: np.ndarray, angle: np.ndarray) -> VectorArray2DABC:
+        assert radius.ndim == 1
+        assert angle.ndim == 1
+        assert radius.shape[0] == angle.shape[0]
+        assert radius.dtype == angle.dtype
+        x, y = np.cos(angle), np.sin(angle)
+        np.multiply(x, radius, out = x)
+        np.multiply(y, radius, out = y)
+        return cls(x = x, y = y,)
