@@ -43,6 +43,12 @@ class ImageABC(ABC):
 class IndexPoolABC(ABC):
     pass
 
+class TimeABC(ABC):
+    pass
+
+class TimeScaleABC(ABC):
+    pass
+
 class Vector2DABC(ABC):
     pass
 
