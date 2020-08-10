@@ -34,6 +34,9 @@ from abc import ABC
 # CLASSES
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+class CameraABC(ABC):
+    pass
+
 class FrameSizeABC(ABC):
     pass
 
