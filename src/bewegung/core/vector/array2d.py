@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-# from typing import Tuple
+from typing import Tuple
 
 import numpy as np
 from typeguard import typechecked
@@ -86,11 +86,11 @@ class VectorArray2D(VectorArray2DABC):
         a[:, 0], a[:, 1] = self._x, self._y
         return a if a.dtype == np.dtype(dtype) else a.astype(dtype)
 
-    # def as_polar_tuple(self) -> Tuple[float, float]:
-    #     return self.mag, math.atan2(self._y, self._x)
+    def as_polar_tuple(self) -> Tuple[np.ndarray, np.ndarray]:
+        return self.mag, np.atan2(self._y, self._x)
 
-    # def as_tuple(self) -> Tuple[float, float]:
-    #     return self._x, self._y
+    def as_tuple(self) -> Tuple[np.ndarray, np.ndarray]:
+        return self._x.copy(), self._y.copy()
 
     def as_type(self, dtype: Dtype) -> VectorArray2DABC:
         return self.copy() if self.dtype == np.dtype(dtype) else VectorArray2D(
