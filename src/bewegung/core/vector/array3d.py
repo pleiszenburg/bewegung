@@ -34,7 +34,7 @@ from typing import Tuple
 import numpy as np
 from typeguard import typechecked
 
-from ..abc import Dtype, VectorArray3DABC
+from ..abc import Dtype, Number, VectorArray3DABC
 from ..const import FLOAT_DEFAULT
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -44,95 +44,129 @@ from ..const import FLOAT_DEFAULT
 @typechecked
 class VectorArray3D(VectorArray3DABC):
 
-    _rad2deg = math.pi / 180.0
-    _halfpi = math.pi / 2.0
-
-    def __init__(self, x: float, y: float, z: float):
+    def __init__(self, x: np.ndarray, y: np.ndarray, z: np.ndarray):
+        assert x.ndim == 1
+        assert y.ndim == 1
+        assert z.ndim == 1
+        assert x.shape[0] == y.shape[0] == z.shape[0]
+        assert x.dtype == y.dtype == z.dtype
         self._x, self._y, self._z = x, y, z
 
+    def __len__(self) -> int:
+        return self._x.shape[0]
+
     def __eq__(self, other: VectorArray3DABC) -> bool:
-        return (self.x == other.x) and (self.y == other.y) and (self.z == other.z)
+        return np.array_equal(self.x, other.x) and np.array_equal(self.y, other.y) and np.array_equal(self.z, other.z)
 
     def __mod__(self, other: VectorArray3DABC) -> bool:
-        return math.isclose(self.x, other.x) and math.isclose(self.y, other.y) and math.isclose(self.z, other.z)
+        return np.allclose(self.x, other.x) and np.allclose(self.y, other.y) and np.allclose(self.z, other.z)
 
     def __add__(self, other: VectorArray3DABC) -> VectorArray3DABC:
+        assert len(self) == len(other)
+        assert self.dtype == other.dtype
         return VectorArray3D(self.x + other.x, self.y + other.y, self.z + other.z)
 
     def __sub__(self, other: VectorArray3DABC) -> VectorArray3DABC:
+        assert len(self) == len(other)
+        assert self.dtype == other.dtype
         return VectorArray3D(self.x - other.x, self.y - other.y, self.z - other.z)
 
-    def __mul__(self, other: float):
+    def __mul__(self, other: Number):
         return VectorArray3D(self._x * other, self._y * other, self._z * other)
 
-    def mul(self, scalar: float):
-        self._x *= scalar
-        self._y *= scalar
-        self._z *= scalar
+    def mul(self, scalar: Number):
+        np.multiply(self._x, scalar, out = self._x)
+        np.multiply(self._y, scalar, out = self._y)
+        np.multiply(self._z, scalar, out = self._z)
 
-    def __matmul__(self, other: VectorArray3DABC) -> float:
+    def __matmul__(self, other: VectorArray3DABC) -> np.ndarray:
+        assert len(self) == len(other)
+        assert self.dtype == other.dtype
         return self.x * other.x + self.y * other.y + self.z * other.z
 
     def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> np.ndarray:
-        return np.array(self.as_tuple(), dtype = dtype)
+        a = np.zeros((len(self), 3), dtype = self.dtype)
+        a[:, 0], a[:, 1], a[:, 2] = self._x, self._y, self._z
+        return a if a.dtype == np.dtype(dtype) else a.astype(dtype)
 
-    def as_polar_tuple(self) -> Tuple[float, float, float]:
-        return (
-            self.mag,
-            math.acos(self._z / self.mag),
-            math.atan2(self._y, self._x),
-            )
+    # def as_polar_tuple(self) -> Tuple[float, float, float]:
+    #     return (
+    #         self.mag,
+    #         math.acos(self._z / self.mag),
+    #         math.atan2(self._y, self._x),
+    #         )
 
-    def as_tuple(self) -> Tuple[float, float, float]:
-        return (self._x, self._y, self._z)
+    # def as_tuple(self) -> Tuple[float, float, float]:
+    #     return (self._x, self._y, self._z)
+
+    def as_type(self, dtype: Dtype) -> VectorArray3DABC:
+        return self.copy() if self.dtype == np.dtype(dtype) else VectorArray3D(
+            self._x.astype(dtype), self._y.astype(dtype), self._z.astype(dtype),
+        )
 
     def copy(self):
-        return VectorArray3D(self._x, self._y, self._z)
+        return VectorArray3D(self._x.copy(), self._y.copy(), self._z.copy())
 
-    def update(self, x: float, y: float, z: float):
-        self._x, self._y, self._z = x, y, z
+    # def update(self, x: float, y: float, z: float):
+    #     self._x, self._y, self._z = x, y, z
 
     def update_from_vector(self, other: VectorArray3DABC):
-        self._x, self._y, self._z = other.x, other.y, other.z
+        self._x[:], self._y[:], self._z[:] = other.x[:], other.y[:], other.z[:]
 
     @property
-    def mag(self) -> float:
-        return math.sqrt(self._x ** 2 + self._y ** 2 + self._z ** 2)
+    def dtype(self) -> np.dtype:
+        return self._x.dtype
 
     @property
-    def x(self) -> float:
+    def mag(self) -> np.ndarray:
+        return np.sqrt(self._x ** 2 + self._y ** 2 + self._z ** 2)
+
+    @property
+    def x(self) -> np.ndarray:
         return self._x
-    @x.setter
-    def x(self, value: float):
-        self._x = value
+    # @x.setter
+    # def x(self, value: float):
+    #     self._x = value
 
     @property
-    def y(self) -> float:
+    def y(self) -> np.ndarray:
         return self._y
-    @y.setter
-    def y(self, value: float):
-        self._y = value
+    # @y.setter
+    # def y(self, value: float):
+    #     self._y = value
 
     @property
-    def z(self) -> float:
+    def z(self) -> np.ndarray:
         return self._z
-    @z.setter
-    def z(self, value: float):
-        self._z = value
+    # @z.setter
+    # def z(self, value: float):
+    #     self._z = value
 
     @classmethod
-    def from_polar(cls, radius: float, theta: float, phi: float) -> VectorArray3DABC:
-        RadiusSinTheta = radius * math.sin(theta)
+    def from_polar(cls, radius: np.ndarray, theta: np.ndarray, phi: np.ndarray) -> VectorArray3DABC:
+        assert radius.ndim == 1
+        assert theta.ndim == 1
+        assert phi.ndim == 1
+        assert radius.shape[0] == theta.shape[0] == phi.shape[0]
+        assert radius.dtype == theta.dtype == phi.dtype
+        RadiusSinTheta = radius * np.sin(theta)
         return cls(
-            x = RadiusSinTheta * math.cos(phi),
-            y = RadiusSinTheta * math.sin(phi),
-            z = radius * math.cos(theta),
+            x = RadiusSinTheta * np.cos(phi),
+            y = RadiusSinTheta * np.sin(phi),
+            z = radius * np.cos(theta),
             )
 
     @classmethod
-    def from_geographic(cls, radius: float, lon: float, lat: float) -> VectorArray3DABC:
+    def from_geographic(cls, radius: np.ndarray, lon: np.ndarray, lat: np.ndarray) -> VectorArray3DABC:
+        assert radius.ndim == 1
+        assert lon.ndim == 1
+        assert lat.ndim == 1
+        assert radius.shape[0] == lon.shape[0] == lat.shape[0]
+        assert radius.dtype == lon.dtype == lat.dtype
+        rad2deg = np.dtype(radius.dtype).type(np.pi / 180.0)
+        halfpi = np.dtype(radius.dtype).type(np.pi / 2.0)
         return cls.from_polar(
             radius = radius,
-            theta = cls._halfpi - (lat * cls._rad2deg),
-            phi = lon * cls._rad2deg,
+            theta = halfpi - (lat * rad2deg),
+            phi = lon * rad2deg,
             )
