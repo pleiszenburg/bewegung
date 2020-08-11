@@ -32,4 +32,5 @@ from .single2d import Vector2D
 from .single2ddist import Vector2Ddist
 from .single3d import Vector3D
 from .array2d import VectorArray2D
+from .array2ddist import VectorArray2Ddist
 from .array3d import VectorArray3D
