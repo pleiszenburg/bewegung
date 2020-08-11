@@ -30,7 +30,7 @@ specific language governing rights and limitations under the License.
 
 import io
 import math
-import typing
+from typing import Callable, Union
 
 import cairo
 import PIL.Image
@@ -43,14 +43,15 @@ from gi.repository import Pango, PangoCairo
 
 import IPython.display
 
-from .abc import Color, ImageABC
+from .abc import Color, ImageABC, Vector2DABC
+from .vector import Vector2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-def _geometry(func: typing.Callable) -> typing.Callable:
+def _geometry(func: Callable) -> Callable:
     def wrapper(self, *args, **kwargs):
         self.ctx.save()
         self.ctx.new_path()
@@ -117,12 +118,15 @@ class Image(ImageABC):
     @_geometry
     def draw_text(self,
         text: str = '',
-        x: float = 0.0, y: float = 0.0, angle: float = 0.0,
-        font: typing.Union[Pango.FontDescription, None] = None,
+        point: Union[Vector2DABC, None] = None,
+        angle: float = 0.0,
+        font: Union[Pango.FontDescription, None] = None,
         font_color: Color = (1.0, 1.0, 1.0, 0.0),
         alignment: str = 'cc',
         ):
 
+        if point is None:
+            point = Vector2D(0.0, 0.0)
         if font is None:
             font = self.make_font('Arial', 10.0)
 
@@ -135,7 +139,7 @@ class Image(ImageABC):
         _, text_extents = layout.get_pixel_extents()
         text_width, text_height = text_extents.width, text_extents.height
 
-        self._ctx.translate(x, y)
+        self._ctx.translate(point.x, point.y)
         if angle != 0.0:
             self._ctx.rotate(angle)
         self._ctx.translate(*self._alignments[alignment](text_width, text_height))
@@ -162,40 +166,38 @@ class Image(ImageABC):
 
     @_geometry
     def draw_polygon(self,
-        *points: typing.Tuple[float, float],
+        *points: Vector2DABC,
         **kwargs,
         ):
 
-        assert len(points) >= 2
-        self._ctx.move_to(*points[0])
+        assert len(points) > 1
+        self._ctx.move_to(points[0].x, points[0].y)
         for point in points[1:]:
-            self._ctx.line_to(*point)
+            self._ctx.line_to(point.x, point.y)
         self._stroke(**kwargs)
 
     @_geometry
     def draw_circle(self,
-        x: float = 0.0,
-        y: float = 0.0,
+        point: Vector2DABC,
         r: float = 1.0,
         **kwargs,
         ):
 
         self._ctx.arc(
-            x, y, r,
+            point.x, point.y, r,
             0, 2 * math.pi,
         )
         self._stroke(**kwargs)
 
     @_geometry
     def draw_filledcircle(self,
-        x: float = 0.0,
-        y: float = 0.0,
+        point: Vector2DABC,
         r: float = 1.0,
         fill_color: Color = (1.0, 1.0, 1.0, 0.0),
         ):
 
         self._ctx.arc(
-            x, y, r,
+            point.x, point.y, r,
             0, 2 * math.pi,
         )
         self._ctx.set_source_rgba(*fill_color)
