@@ -50,9 +50,15 @@ class Video:
     Mutable. Decorators ...
     """
 
-    def __init__(self, time: Time):
+    def __init__(self, time: Time, width: int, height: int):
+
+        assert time.index > 0
+        assert width > 0
+        assert height > 0
 
         self._time = time
+        self._width = width
+        self._height = height
 
         self._sequences = [] # list of sequences
         self._layers = [] # list of layers
@@ -79,18 +85,23 @@ class Video:
         def decorator(func: Callable):
 
             @typechecked
-            def wrapper(other, time: Time):
+            def wrapper(other, time: Time): # TODO add canvas type & size param
                 func.__globals__['time'] = time # inject time into namespace
+                # TODO inject newly created canvas and relative time?
                 try:
                     ret = func(other)
                 finally:
                     func.__globals__.pop('time') # cleanup namespace
+                # TODO convert whatever image type "ret" has to PIL
                 return ret
 
             wrapper.layer = index # tag wrapper function
             return wrapper
 
         return decorator
+
+    # TODO prepare - similar to "layer"
+    # TODO "after effects" - similar to "layer"
 
     def render(self):
 
