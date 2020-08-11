@@ -118,9 +118,6 @@ class VectorArray3D(VectorArray3DABC):
     def copy(self) -> VectorArray3DABC:
         return VectorArray3D(self._x.copy(), self._y.copy(), self._z.copy())
 
-    # def update(self, x: float, y: float, z: float):
-    #     self._x, self._y, self._z = x, y, z
-
     def update_from_vector(self, other: VectorArray3DABC):
         self._x[:], self._y[:], self._z[:] = other.x[:], other.y[:], other.z[:]
 
@@ -135,23 +132,23 @@ class VectorArray3D(VectorArray3DABC):
     @property
     def x(self) -> np.ndarray:
         return self._x
-    # @x.setter
-    # def x(self, value: float):
-    #     self._x = value
+    @x.setter
+    def x(self, value: float):
+        raise NotImplementedError()
 
     @property
     def y(self) -> np.ndarray:
         return self._y
-    # @y.setter
-    # def y(self, value: float):
-    #     self._y = value
+    @y.setter
+    def y(self, value: float):
+        raise NotImplementedError()
 
     @property
     def z(self) -> np.ndarray:
         return self._z
-    # @z.setter
-    # def z(self, value: float):
-    #     self._z = value
+    @z.setter
+    def z(self, value: float):
+        raise NotImplementedError()
 
     @classmethod
     def from_iterable(cls, obj: VectorIterable3D, dtype: Dtype = FLOAT_DEFAULT) -> VectorArray3DABC:

@@ -112,9 +112,6 @@ class VectorArray2D(VectorArray2DABC):
     def copy(self) -> VectorArray2DABC:
         return VectorArray2D(self._x.copy(), self._y.copy())
 
-    # def update(self, x: float, y: float):
-    #     self._x, self._y = x, y
-
     def update_from_vector(self, other: VectorArray2DABC):
         self._x[:], self._y[:] = other.x[:], other.y[:]
 
@@ -129,16 +126,16 @@ class VectorArray2D(VectorArray2DABC):
     @property
     def x(self) -> np.ndarray:
         return self._x
-    # @x.setter
-    # def x(self, value: float):
-    #     self._x = value
+    @x.setter
+    def x(self, value: float):
+        raise NotImplementedError()
 
     @property
     def y(self) -> np.ndarray:
         return self._y
-    # @y.setter
-    # def y(self, value: float):
-    #     self._y = value
+    @y.setter
+    def y(self, value: float):
+        raise NotImplementedError()
 
     @classmethod
     def from_iterable(cls, obj: VectorIterable2D, dtype: Dtype = FLOAT_DEFAULT) -> VectorArray2DABC:
