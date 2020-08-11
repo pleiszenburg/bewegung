@@ -92,8 +92,8 @@ class Video:
                 def __init__(other, *args, **kwargs):
                     other._start, other._stop = start, stop
                     super().__init__(*args, **kwargs)
-                def __contains__(self, time: Time) -> bool:
-                    return self._start <= time and time < self._stop
+                def __contains__(other, time: Time) -> bool:
+                    return other._start <= time and time < other._stop
 
             self._sequences.append(wrapper) # track sequence classes
             return None # wrapper # HACK remove original class?
