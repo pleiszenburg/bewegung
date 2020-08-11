@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Callable, List
+from typing import List
 
 from typeguard import typechecked
 
@@ -67,30 +67,17 @@ class IndexPool(IndexPoolABC):
     def as_list(self) -> List[int]:
         return list(self._pool)
 
-    def register_ontop(self) -> Callable:
+    def register_ontop(self) -> int:
         index = (self.max + 1) if len(self) != 0 else 0
         self._pool.add(index)
-        def decorator(func: Callable) -> Callable:
-            def wrapper(*args, **kwargs):
-                return index, lambda: func(*args, **kwargs)
-            return wrapper
-        return decorator
+        return index
 
-    def register_onbottom(self) -> Callable:
+    def register_onbottom(self) -> int:
         index = (self.min - 1) if len(self) != 0 else 0
         self._pool.add(index)
-        def decorator(func: Callable) -> Callable:
-            def wrapper(*args, **kwargs):
-                return index, lambda: func(*args, **kwargs)
-            return wrapper
-        return decorator
+        return index
 
-    def register_custom(self, index: int) -> Callable:
+    def register_custom(self, index: int):
         if index in self:
             raise IndexError()
         self._pool.add(index)
-        def decorator(func: Callable) -> Callable:
-            def wrapper(*args, **kwargs):
-                return index, lambda: func(*args, **kwargs)
-            return wrapper
-        return decorator
