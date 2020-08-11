@@ -50,6 +50,9 @@ class Vector3D(Vector3DABC):
     def __init__(self, x: float, y: float, z: float):
         self._x, self._y, self._z = x, y, z
 
+    def __repr__(self) -> str:
+        return f'<Vector3D x={self._x:e} y={self._y:e} z={self._z:e}>'
+
     def __eq__(self, other: Vector3DABC) -> bool:
         return (self.x == other.x) and (self.y == other.y) and (self.z == other.z)
 

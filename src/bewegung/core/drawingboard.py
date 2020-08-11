@@ -83,6 +83,9 @@ class DrawingBoard(DrawingBoardABC):
         self._ctx = cairo.Context(self._surface)
         self._set_background_color(background_color)
 
+    def __repr__(self) -> str:
+        return f'<DrawingBoard width={self._width:d} height={self._height:d} subpixels={self._subpixels:d}>'
+
     def as_pil(self) -> Image:
 
         if self._subpixels == 1:

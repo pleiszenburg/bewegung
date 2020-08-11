@@ -52,6 +52,9 @@ class VectorArray3D(VectorArray3DABC):
         assert x.dtype == y.dtype == z.dtype
         self._x, self._y, self._z = x, y, z
 
+    def __repr__(self) -> str:
+        return f'<VectorArray3D len={len(self):d}>'
+
     def __len__(self) -> int:
         return self._x.shape[0]
 

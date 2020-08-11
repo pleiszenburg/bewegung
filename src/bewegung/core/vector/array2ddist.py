@@ -59,6 +59,9 @@ class VectorArray2Ddist(VectorArray2D):
         super().__init__(x = x, y = y,)
         self._dist = dist
 
+    def __repr__(self) -> str:
+        return f'<VectorArray2Ddist len={len(self):d}>'
+
     def __getitem__(self, idx: Union[int, slice]) -> Union[Vector2Ddist, VectorArray2DABC]:
         if isinstance(idx, int):
             return Vector2Ddist(float(self._x[idx]), float(self._y[idx]), float(self._dist[idx]))

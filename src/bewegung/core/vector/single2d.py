@@ -50,6 +50,9 @@ class Vector2D(Vector2DABC):
     def __init__(self, x: float, y: float):
         self._x, self._y = x, y
 
+    def __repr__(self) -> str:
+        return f'<Vector2D x={self._x:e} y={self._y:e}>'
+
     def __eq__(self, other: Vector2DABC) -> bool:
         return (self.x == other.x) and (self.y == other.y)
 

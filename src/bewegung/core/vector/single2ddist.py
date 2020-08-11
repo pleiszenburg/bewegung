@@ -47,6 +47,9 @@ class Vector2Ddist(Vector2D):
         super().__init__(x = x, y = y,)
         self._dist = dist
 
+    def __repr__(self) -> str:
+        return f'<Vector2Ddist x={self._x:e} y={self._y:e} disty={self._dist:e}>'
+
     def mul(self, scalar: float):
         raise NotImplementedError()
 

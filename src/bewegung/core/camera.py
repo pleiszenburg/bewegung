@@ -137,6 +137,14 @@ class Camera(CameraABC):
         # compute rendering plane
         self._update_plane()
 
+    def __repr__(self) -> str:
+        return (
+            '<Camera '
+            f'id={id(self):x} '
+            f'x={self._position.x:e} y={self._position.y:e} z={self._position.z:e} '
+            f'dx={self._direction.x:e} dy={self._direction.y:e} dz={self._direction.z:e}>'
+            )
+
     def _update_plane(self):
 
         _, theta, phi = self._direction.as_polar_tuple()

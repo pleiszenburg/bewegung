@@ -51,6 +51,9 @@ class VectorArray2D(VectorArray2DABC):
         assert x.dtype == y.dtype
         self._x, self._y = x, y
 
+    def __repr__(self) -> str:
+        return f'<VectorArray2D len={len(self):d}>'
+
     def __len__(self) -> int:
         return self._x.shape[0]
 
