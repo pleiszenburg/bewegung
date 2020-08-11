@@ -63,6 +63,18 @@ class Video:
         self._sequences = [] # list of sequences
         self._layers = [] # list of layers
 
+    @property
+    def time(self) -> Time:
+        return self._time
+
+    @property
+    def width(self) -> int:
+        return self._width
+
+    @property
+    def height(self) -> int:
+        return self._height
+
     def sequence(self, start: Time, stop: Time) -> Callable:
 
         @typechecked
