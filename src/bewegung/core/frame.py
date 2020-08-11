@@ -33,62 +33,11 @@ import typing
 import datashader
 from typeguard import typechecked
 
-from .abc import FrameSizeABC, IndexPoolABC
-from .image import Image
+from .abc import Color, FrameSizeABC
+from .drawingboard import DrawingBoard
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# CLASS: ZIndexPool
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-@typechecked
-class IndexPool(IndexPoolABC):
-    """
-    Used to manage z-index values and preparation taks between layers. index-values are unique.
-    """
-    def __init__(self):
-        self._pool = set()
-    def __repr__(self) -> str:
-        return f'<ZIndexPool len={len(self):d}>'
-    def __contains__(self, index: int) -> bool:
-        return index in self._pool
-    def __len__(self) -> int:
-        return len(self._pool)
-    @property
-    def max(self) -> int:
-        return max(self._pool)
-    @property
-    def min(self) -> int:
-        return min(self._pool)
-    def as_list(self) -> typing.List[int]:
-        return list(self._pool)
-    def register_ontop(self) -> typing.Callable:
-        index = (self.max + 1) if len(self) != 0 else 0
-        self._pool.add(index)
-        def decorator(func: typing.Callable) -> typing.Callable:
-            def wrapper(*args, **kwargs):
-                return index, lambda: func(*args, **kwargs)
-            return wrapper
-        return decorator
-    def register_onbottom(self) -> typing.Callable:
-        index = (self.min - 1) if len(self) != 0 else 0
-        self._pool.add(index)
-        def decorator(func: typing.Callable) -> typing.Callable:
-            def wrapper(*args, **kwargs):
-                return index, lambda: func(*args, **kwargs)
-            return wrapper
-        return decorator
-    def register_custom(self, index: int) -> typing.Callable:
-        if index in self:
-            raise IndexError()
-        self._pool.add(index)
-        def decorator(func: typing.Callable) -> typing.Callable:
-            def wrapper(*args, **kwargs):
-                return index, lambda: func(*args, **kwargs)
-            return wrapper
-        return decorator
-
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# CLASS: FrameSize
+# CLASS
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
@@ -96,27 +45,32 @@ class FrameSize(FrameSizeABC):
     """
     Simple wrapper for video frame size information
     """
+
     def __init__(self, width: int, height: int):
         if width <= 0:
             raise ValueError()
         if height <= 0:
             raise ValueError()
         self._width, self._height = width, height
+
     @property
     def w(self) -> int:
         return self._width
+
     @property
     def h(self) -> int:
         return self._height
+
     def create_image(self,
-        background_color: typing.Tuple[float, float, float, float] = (0.0, 0.0, 0.0, 0.0),
+        background_color: Color = (0.0, 0.0, 0.0, 0.0),
         subpixels: int = 1,
-        ) -> Image:
-        return Image(
+        ) -> DrawingBoard:
+        return DrawingBoard(
             self.w, self.h,
             background_color = background_color,
             subpixels = subpixels,
             )
+
     def create_dscanvas(self,
         x_range: typing.Union[None, typing.Tuple[int, int]] = None,
         y_range: typing.Union[None, typing.Tuple[int, int]] = None,
