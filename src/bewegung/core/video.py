@@ -126,9 +126,12 @@ class Video:
     # TODO prepare - similar to "layer"
     # TODO "after effects" - similar to "layer"
 
-    def render(self):
+    def render(self, parallel: bool = False):
 
         self._sequences[:] = [sequence() for sequence in self._sequences] # init sequences
+        # TODO re-init classes for next renderer run?
+
+        self._layers.clear()
         self._layers.extend([
             (sequence, getattr(sequence, attr).layer, getattr(sequence, attr))
             for sequence in self._sequences for attr in dir(sequence)
@@ -136,8 +139,22 @@ class Video:
         ]) # find layer methods based on tags
         self._layers.sort(key = lambda x: x[1]) # sort by z-index
 
+        # TODO branch for parallel frame rendering
+
         for time in Time.range(Time(fps = self._time.fps, index = 0), self._time):
-            for sequence, zindex, layer in self._layers:
-                if time not in sequence:
-                    continue
-                print( time, zindex, layer(time) ) # call layer render functions
+            frame = self.render_frame(time)
+
+        # TODO optionally write frames to files
+        # TODO optionally pipe frames to ffmpeg
+
+    def render_frame(self, time):
+
+        layers = [
+            layer(time)
+            for sequence, _, layer in self._layers
+            if time in sequence
+        ] # call layer render functions
+
+        # TODO merge layers
+
+        return None # TODO composit image
