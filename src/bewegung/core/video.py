@@ -32,6 +32,7 @@ from typing import Callable
 
 from typeguard import typechecked
 
+from .indexpool import IndexPool
 from .time import Time
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -61,7 +62,9 @@ class Video:
         self._height = height
 
         self._sequences = [] # list of sequences
+
         self._layers = [] # list of layers
+        self._zindex = IndexPool()
 
     @property
     def time(self) -> Time:
@@ -75,6 +78,10 @@ class Video:
     def height(self) -> int:
         return self._height
 
+    @property
+    def zindex(self) -> IndexPool:
+        return self._zindex
+
     def sequence(self, start: Time, stop: Time) -> Callable:
 
         @typechecked
@@ -85,13 +92,17 @@ class Video:
                 def __init__(other, *args, **kwargs):
                     other._start, other._stop = start, stop
                     super().__init__(*args, **kwargs)
+                def __contains__(self, time: Time) -> bool:
+                    return self._start <= time and time < self._stop
 
             self._sequences.append(wrapper) # track sequence classes
             return None # wrapper # HACK remove original class?
 
         return decorator
 
-    def layer(self, index: int) -> Callable:
+    def layer(self, zindex: int) -> Callable:
+
+        self._zindex.register(zindex) # ensure unique z-index
 
         @typechecked
         def decorator(func: Callable):
@@ -107,7 +118,7 @@ class Video:
                 # TODO convert whatever image type "ret" has to PIL
                 return ret
 
-            wrapper.layer = index # tag wrapper function
+            wrapper.layer = zindex # tag wrapper function
             return wrapper
 
         return decorator
@@ -119,11 +130,14 @@ class Video:
 
         self._sequences[:] = [sequence() for sequence in self._sequences] # init sequences
         self._layers.extend([
-            (getattr(sequence, attr).layer, getattr(sequence, attr))
+            (sequence, getattr(sequence, attr).layer, getattr(sequence, attr))
             for sequence in self._sequences for attr in dir(sequence)
             if hasattr(getattr(sequence, attr), 'layer')
         ]) # find layer methods based on tags
+        self._layers.sort(key = lambda x: x[1]) # sort by z-index
 
-        for frame in range(self._time):
-            for idx, layer in self._layers:
-                print( frame, idx, layer(frame) ) # call layer render functions
+        for time in Time.range(Time(fps = self._time.fps, index = 0), self._time):
+            for sequence, zindex, layer in self._layers:
+                if time not in sequence:
+                    continue
+                print( time, zindex, layer(time) ) # call layer render functions
