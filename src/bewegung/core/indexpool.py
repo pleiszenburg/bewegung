@@ -65,19 +65,15 @@ class IndexPool(IndexPoolABC):
         return min(self._pool)
 
     def as_list(self) -> List[int]:
-        return list(self._pool)
+        return sorted(self._pool)
 
-    def register_ontop(self) -> int:
-        index = (self.max + 1) if len(self) != 0 else 0
-        self._pool.add(index)
-        return index
+    def on_top(self) -> int:
+        return (self.max + 1) if len(self) != 0 else 0
 
-    def register_onbottom(self) -> int:
-        index = (self.min - 1) if len(self) != 0 else 0
-        self._pool.add(index)
-        return index
+    def on_bottom(self) -> int:
+        return (self.min - 1) if len(self) != 0 else 0
 
-    def register_custom(self, index: int):
+    def register(self, index: int):
         if index in self:
             raise IndexError()
         self._pool.add(index)
