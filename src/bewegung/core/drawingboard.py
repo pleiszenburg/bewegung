@@ -33,7 +33,7 @@ import math
 from typing import Callable, Union
 
 import cairo
-import PIL.Image
+from PIL import Image
 from typeguard import typechecked
 
 import gi
@@ -83,22 +83,22 @@ class DrawingBoard(DrawingBoardABC):
         self._ctx = cairo.Context(self._surface)
         self._set_background_color(background_color)
 
-    def as_pil(self) -> PIL.Image:
+    def as_pil(self) -> Image:
 
         if self._subpixels == 1:
-            return PIL.Image.frombuffer(
+            return Image.frombuffer(
                 mode = 'RGBA',
                 size = (self._width, self._height),
                 data = self._surface.get_data(),
                 )
 
-        return PIL.Image.frombuffer(
+        return Image.frombuffer(
             mode = 'RGBA',
             size = (self._width * self._subpixels, self._height * self._subpixels),
             data = self._surface.get_data(),
             ).resize(
                 (self._width, self._height),
-                resample = PIL.Image.LANCZOS,
+                resample = Image.LANCZOS,
             )
 
     def display(self):
