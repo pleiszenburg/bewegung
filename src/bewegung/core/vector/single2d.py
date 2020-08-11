@@ -81,7 +81,7 @@ class Vector2D(Vector2DABC):
     def as_tuple(self) -> Tuple[float, float]:
         return self._x, self._y
 
-    def copy(self):
+    def copy(self) -> Vector2DABC:
         return Vector2D(self._x, self._y)
 
     def update(self, x: float, y: float):

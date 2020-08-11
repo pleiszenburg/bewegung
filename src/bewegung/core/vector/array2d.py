@@ -109,7 +109,7 @@ class VectorArray2D(VectorArray2DABC):
             self._x.astype(dtype), self._y.astype(dtype),
         )
 
-    def copy(self):
+    def copy(self) -> VectorArray2DABC:
         return VectorArray2D(self._x.copy(), self._y.copy())
 
     # def update(self, x: float, y: float):

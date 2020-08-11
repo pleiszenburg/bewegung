@@ -86,7 +86,7 @@ class Vector3D(Vector3DABC):
     def as_tuple(self) -> Tuple[float, float, float]:
         return (self._x, self._y, self._z)
 
-    def copy(self):
+    def copy(self) -> Vector3DABC:
         return Vector3D(self._x, self._y, self._z)
 
     def update(self, x: float, y: float, z: float):

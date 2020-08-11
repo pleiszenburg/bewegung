@@ -53,7 +53,7 @@ class Vector2Ddist(Vector2D):
     def as_vector(self) -> Vector2DABC:
         return Vector2D(self._x, self._y)
 
-    def copy(self):
+    def copy(self) -> Vector2DABC:
         return Vector2Ddist(self._x, self._y, self._dist)
 
     def update(self, x: float, y: float):

@@ -115,7 +115,7 @@ class VectorArray3D(VectorArray3DABC):
             self._x.astype(dtype), self._y.astype(dtype), self._z.astype(dtype),
         )
 
-    def copy(self):
+    def copy(self) -> VectorArray3DABC:
         return VectorArray3D(self._x.copy(), self._y.copy(), self._z.copy())
 
     # def update(self, x: float, y: float, z: float):
