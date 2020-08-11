@@ -40,10 +40,10 @@ import numpy as np
 class CameraABC(ABC):
     pass
 
-class FrameSizeABC(ABC):
+class DrawingBoardABC(ABC):
     pass
 
-class ImageABC(ABC):
+class FrameSizeABC(ABC):
     pass
 
 class IndexPoolABC(ABC):

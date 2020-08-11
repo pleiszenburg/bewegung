@@ -43,7 +43,7 @@ from gi.repository import Pango, PangoCairo
 
 import IPython.display
 
-from .abc import Color, ImageABC, Vector2DABC
+from .abc import Color, DrawingBoardABC, Vector2DABC
 from .vector import Vector2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -61,7 +61,7 @@ def _geometry(func: Callable) -> Callable:
     return wrapper
 
 @typechecked
-class Image(ImageABC):
+class DrawingBoard(DrawingBoardABC):
 
     def __init__(self,
         width: int,
