@@ -43,6 +43,9 @@ from ..const import FLOAT_DEFAULT
 
 @typechecked
 class Vector2D(Vector2DABC):
+    """
+    Mutable
+    """
 
     def __init__(self, x: float, y: float):
         self._x, self._y = x, y
