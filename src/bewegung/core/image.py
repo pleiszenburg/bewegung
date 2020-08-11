@@ -43,7 +43,7 @@ from gi.repository import Pango, PangoCairo
 
 import IPython.display
 
-from .abc import ImageABC
+from .abc import Color, ImageABC
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -66,7 +66,7 @@ class Image(ImageABC):
         width: int,
         height: int,
         subpixels: int = 1,
-        background_color: typing.Tuple[float, float, float, float] = (1.0, 1.0, 1.0, 0.0),
+        background_color: Color = (1.0, 1.0, 1.0, 0.0),
         ):
 
         self._width, self._height, self._subpixels = width, height, subpixels
@@ -119,7 +119,7 @@ class Image(ImageABC):
         text: str = '',
         x: float = 0.0, y: float = 0.0, angle: float = 0.0,
         font: typing.Union[Pango.FontDescription, None] = None,
-        font_color: typing.Tuple[float, float, float, float] = (1.0, 1.0, 1.0, 0.0),
+        font_color: Color = (1.0, 1.0, 1.0, 0.0),
         alignment: str = 'cc',
         ):
 
@@ -191,7 +191,7 @@ class Image(ImageABC):
         x: float = 0.0,
         y: float = 0.0,
         r: float = 1.0,
-        fill_color: typing.Tuple[float, float, float, float] = (1.0, 1.0, 1.0, 0.0),
+        fill_color: Color = (1.0, 1.0, 1.0, 0.0),
         ):
 
         self._ctx.arc(
@@ -202,7 +202,7 @@ class Image(ImageABC):
         self._ctx.fill()
 
     def _stroke(self,
-        line_color: typing.Tuple[float, float, float, float] = (1.0, 1.0, 1.0, 0.0),
+        line_color: Color = (1.0, 1.0, 1.0, 0.0),
         line_width: float = 1.0,
         **kwargs,
         ):
@@ -212,7 +212,7 @@ class Image(ImageABC):
         self._ctx.stroke()
 
     def _set_background_color(self,
-        fill_color: typing.Tuple[float, float, float, float] = (1.0, 1.0, 1.0, 0.0),
+        fill_color: Color = (1.0, 1.0, 1.0, 0.0),
         ):
 
         self._ctx.set_source_rgba(*fill_color)
