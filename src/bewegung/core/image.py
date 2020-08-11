@@ -52,10 +52,10 @@ from .abc import Color, ImageABC
 @typechecked
 def _geometry(func: typing.Callable) -> typing.Callable:
     def wrapper(self, *args, **kwargs):
-        self._ctx.save()
-        self._ctx.new_path()
+        self.ctx.save()
+        self.ctx.new_path()
         ret = func(self, *args, **kwargs)
-        self._ctx.restore()
+        self.ctx.restore()
         return ret
     return wrapper
 
@@ -218,3 +218,11 @@ class Image(ImageABC):
         self._ctx.set_source_rgba(*fill_color)
         self._ctx.rectangle(0, 0, self._width, self._height)
         self._ctx.fill()
+
+    @property
+    def ctx(self) -> cairo.Context:
+        return self._ctx
+
+    @property
+    def surface(self) -> cairo.ImageSurface:
+        return self._surface
