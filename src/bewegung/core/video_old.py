@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/video.py: Parallel video frame renderer
+    src/bewegung/core/video_old.py: Parallel video frame renderer
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
