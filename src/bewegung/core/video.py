@@ -153,7 +153,7 @@ class Video:
         # TODO optionally write frames to files
         # TODO optionally pipe frames to ffmpeg
 
-    def render_frame(self, time):
+    def render_frame(self, time: Time):
 
         layers = [
             layer(time)
