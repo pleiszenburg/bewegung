@@ -92,7 +92,7 @@ class Video:
             class wrapper(cls, SequenceABC): # sequence class, setting time properties
                 def __init__(other, *args, **kwargs):
                     other._start, other._stop = start, stop
-                    super().__init__(*args, **kwargs)
+                    super().__init__(*args, **kwargs) # TODO super/cls?
                 def __contains__(other, time: Time) -> bool:
                     return other._start <= time and time < other._stop
                 @property
