@@ -32,6 +32,7 @@ from typing import Callable
 
 from typeguard import typechecked
 
+from .abc import SequenceABC
 from .indexpool import IndexPool
 from .time import Time
 
@@ -88,7 +89,7 @@ class Video:
         def decorator(cls: type):
 
             @typechecked
-            class wrapper(cls): # sequence class, setting time properties
+            class wrapper(cls, SequenceABC): # sequence class, setting time properties
                 def __init__(other, *args, **kwargs):
                     other._start, other._stop = start, stop
                     super().__init__(*args, **kwargs)
@@ -106,7 +107,9 @@ class Video:
 
         return decorator
 
-    def layer(self, zindex: int) -> Callable:
+    def layer(self,
+        zindex: int, # TODO add canvas type & size param
+    ) -> Callable:
 
         self._zindex.register(zindex) # ensure unique z-index
 
@@ -114,14 +117,17 @@ class Video:
         def decorator(func: Callable):
 
             @typechecked
-            def wrapper(other, time: Time): # TODO add canvas type & size param
-                func.__globals__['time'] = time # inject time into namespace
-                # TODO inject newly created canvas and relative time?
-                try:
-                    ret = func(other)
-                finally:
-                    func.__globals__.pop('time') # cleanup namespace
+            def wrapper(other, sequence: SequenceABC, time: Time):
+
+                # TODO inject newly created canvas and relative time
+
+                ret = func(other,
+                    time = time,
+                    reltime = time - sequence.start,
+                )
+
                 # TODO convert whatever image type "ret" has to PIL
+
                 return ret
 
             wrapper.layer = zindex # tag wrapper function
@@ -156,7 +162,7 @@ class Video:
     def render_frame(self, time: Time):
 
         layers = [
-            layer(time)
+            layer(sequence, time)
             for sequence, _, layer in self._layers
             if time in sequence
         ] # call layer render functions
