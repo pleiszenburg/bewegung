@@ -108,7 +108,7 @@ class Video:
         return decorator
 
     def layer(self,
-        zindex: int, # TODO add canvas type & size param
+        zindex: int, # TODO add canvas type & size param, offset param
     ) -> Callable:
 
         self._zindex.register(zindex) # ensure unique z-index
