@@ -32,7 +32,7 @@ from typing import Callable
 
 from typeguard import typechecked
 
-from .abc import LayerTypes, SequenceABC, TaskABC, TimeABC
+from .abc import CanvasTypes, SequenceABC, TaskABC, TimeABC
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -47,7 +47,7 @@ class Task(TaskABC):
     def __init__(self,
         sequence: SequenceABC,
         index: int,
-        task: Callable[[SequenceABC, TimeABC], LayerTypes],
+        task: Callable[[SequenceABC, TimeABC], CanvasTypes],
     ):
 
         self._sequence = sequence
@@ -58,7 +58,7 @@ class Task(TaskABC):
 
         return f'<Task index={self._index:d}>'
 
-    def __call__(self, time: TimeABC) -> LayerTypes:
+    def __call__(self, time: TimeABC) -> CanvasTypes:
 
         return self._task(self._sequence, time)
 
