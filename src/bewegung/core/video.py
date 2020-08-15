@@ -30,12 +30,13 @@ specific language governing rights and limitations under the License.
 
 from typing import Callable, Dict, Union
 
-from cairo import FORMAT_ARGB32, ImageSurface
+from cairo import FORMAT_ARGB32, ImageSurface, Format
 from datashader import Canvas
-from PIL import Image
+from datashader.transfer_functions import Image as DS_Image
+from PIL import Image as PIL_Image, ImageOps as PIL_ImageOps
 from typeguard import typechecked
 
-from .abc import CanvasTypes, SequenceABC
+from .abc import CanvasTypes, SequenceABC, VideoABC
 from .drawingboard import DrawingBoard
 from .indexpool import IndexPool
 from .task import Task
@@ -52,7 +53,7 @@ from .time import Time
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-class Video:
+class Video(VideoABC):
     """
     Mutable. Decorators ...
     """
@@ -127,15 +128,22 @@ class Video:
             class wrapper(cls, SequenceABC): # sequence class, setting time properties
                 def __init__(other, *args, **kwargs):
                     other._start, other._stop = start, stop
+                    other._video, other._ctx = self, self._ctx
                     super().__init__(*args, **kwargs) # TODO super/cls?
                 def __contains__(other, time: Time) -> bool:
                     return other._start <= time and time < other._stop
                 @property
                 def start(other) -> Time:
-                    return self._start
+                    return other._start
                 @property
                 def stop(other) -> Time:
-                    return self._stop
+                    return other._stop
+                @property
+                def video(other) -> VideoABC:
+                    return other._video
+                @property
+                def ctx(other) -> Dict:
+                    return other._ctx
 
             self._sequences.append(wrapper) # track sequence classes
             return None # wrapper # HACK remove original class?
@@ -183,7 +191,7 @@ class Video:
         if 'size' not in kwargs.keys():
             kwargs['size'] = (self._width, self._height)
 
-        return lambda: Image.new(**kwargs)
+        return lambda: PIL_Image.new(**kwargs)
 
     def layer(self,
         zindex: int, # TODO add canvas type & size param, offset param
@@ -204,10 +212,6 @@ class Video:
                         kwargs[param] = time
                     elif param == 'reltime':
                         kwargs[param] = time - other.start
-                    elif param == 'ctx':
-                        kwargs[param] = self._ctx
-                    elif param == 'video':
-                        kwargs[param] = self
                     elif param == 'canvas':
                         if canvas is not None:
                             kwargs[param] = canvas()
@@ -218,11 +222,28 @@ class Video:
                     else:
                         raise ValueError('unknown parameter')
 
-                ret = func(other, **kwargs) # let user draw layer/canvas for frame
+                cvs = func(other, **kwargs) # let user draw layer/canvas for frame
 
-                # TODO convert whatever image type "ret" has to PIL
-
-                return ret
+                if isinstance(cvs, PIL_Image.Image):
+                    return cvs
+                elif isinstance(cvs, DS_Image):
+                    return PIL_ImageOps.flip(cvs.to_pil()) # datashader's y axis must be flipped
+                elif isinstance(cvs, DrawingBoard):
+                    return cvs.as_pil()
+                elif isinstance(cvs, ImageSurface):
+                    if cvs.get_format() == Format.ARGB32:
+                        mode = 'RGBA'
+                    elif cvs.get_format() == Format.RGB24:
+                        mode = 'RGB'
+                    else:
+                        raise ValueError('unsupported cairo format')
+                    return PIL_Image.frombuffer(
+                        mode = mode,
+                        size = (cvs.get_width(), cvs.get_height()),
+                        data = cvs.get_data(),
+                        )
+                else:
+                    raise TypeError('unknown canvas type coming from layer')
 
             wrapper.layer = zindex # tag wrapper function
             return wrapper
