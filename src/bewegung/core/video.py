@@ -228,25 +228,25 @@ class Video(VideoABC):
                 cvs = func(other, **kwargs) # let user draw layer/canvas for frame
 
                 if isinstance(cvs, PIL_Image.Image):
+                    assert cvs.mode == 'RGBA'
                     return cvs
                 elif isinstance(cvs, DS_Image):
-                    return PIL_ImageOps.flip(cvs.to_pil()) # datashader's y axis must be flipped
+                    cvs = cvs.to_pil()
+                    assert cvs.mode == 'RGBA'
+                    return PIL_ImageOps.flip(cvs) # datashader's y axis must be flipped
                 elif isinstance(cvs, DrawingBoard):
                     return cvs.as_pil()
                 elif isinstance(cvs, ImageSurface):
-                    if cvs.get_format() == Format.ARGB32:
-                        mode = 'RGBA'
-                    elif cvs.get_format() == Format.RGB24:
-                        mode = 'RGB'
-                    else:
-                        raise ValueError('unsupported cairo format')
+                    assert cvs.get_format() == Format.ARGB32
                     return PIL_Image.frombuffer(
-                        mode = mode,
+                        mode = 'RGBA',
                         size = (cvs.get_width(), cvs.get_height()),
                         data = cvs.get_data(),
                         )
                 else:
                     raise TypeError('unknown canvas type coming from layer')
+
+                # TODO handle offset and different sizes HERE
 
             wrapper.layer = zindex # tag wrapper function
             return wrapper
@@ -286,9 +286,18 @@ class Video(VideoABC):
         layers = [
             layertask(time)
             for layertask in self._layertasks
-            if time in layertask.sequence
-        ] # call layer render functions
+            if time in layertask.sequence # only render layer if time within sequence
+        ] # call layer render functions, get list of uni-size PIL images
+        assert len(layers) != 0
 
-        # TODO merge layers
+        base_layer = layers.pop(0)
+        for layer in layers:
+            base_layer.paste(im = layer, mask = layer)
 
-        return None # TODO composit image
+        base_layer = base_layer.convert('RGB') # go from RGBA to RGB
+
+        # Optional:
+        # base_layer.save( ... )
+
+        # Optional:
+        # return base_layer # for direct to video
