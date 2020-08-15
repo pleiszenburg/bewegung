@@ -30,9 +30,13 @@ specific language governing rights and limitations under the License.
 
 from typing import Callable, Dict, Union
 
+from cairo import FORMAT_ARGB32, ImageSurface
+from datashader import Canvas
+from PIL import Image
 from typeguard import typechecked
 
 from .abc import SequenceABC
+from .drawingboard import DrawingBoard
 from .indexpool import IndexPool
 from .task import Task
 from .time import Time
@@ -137,6 +141,49 @@ class Video:
             return None # wrapper # HACK remove original class?
 
         return decorator
+
+    def cairo_layer(self, **kwargs):
+
+        if 'format' not in kwargs.keys():
+            kwargs['format'] = FORMAT_ARGB32
+        if 'width' not in kwargs.keys():
+            kwargs['width'] = self._width
+        if 'height' not in kwargs.keys():
+            kwargs['height'] = self._height
+
+        return lambda: ImageSurface(kwargs['format'], kwargs['width'], kwargs['height'])
+
+    def db_layer(self, **kwargs):
+
+        if 'width' not in kwargs.keys():
+            kwargs['width'] = self._width
+        if 'height' not in kwargs.keys():
+            kwargs['height'] = self._height
+
+        return lambda: DrawingBoard(**kwargs)
+
+    def ds_layer(self, **kwargs):
+
+        if 'plot_width' not in kwargs.keys():
+            kwargs['plot_width'] = self._width
+        if 'plot_height' not in kwargs.keys():
+            kwargs['plot_height'] = self._height
+
+        if 'x_range' not in kwargs.keys():
+            kwargs['x_range'] = (0, self._width)
+        if 'y_range' not in kwargs.keys():
+            kwargs['y_range'] = (0, self._height)
+
+        return lambda: Canvas(**kwargs)
+
+    def pil_layer(self, **kwargs):
+
+        if 'mode' not in kwargs.keys():
+            kwargs['mode'] = 'RGBA'
+        if 'size' not in kwargs.keys():
+            kwargs['size'] = (self._width, self._height)
+
+        return lambda: Image(**kwargs)
 
     def layer(self,
         zindex: int, # TODO add canvas type & size param, offset param
