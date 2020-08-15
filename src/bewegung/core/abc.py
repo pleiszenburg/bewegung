@@ -99,7 +99,7 @@ VectorIterable3D = Union[
     Generator[Vector3DABC, None, None],
 ]
 
-LayerTypes = Union[
+CanvasTypes = Union[
     DrawingBoardABC,
     DS_Image, # datashader
     PIL_Image, # PIL
