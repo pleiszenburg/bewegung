@@ -94,7 +94,27 @@ class Video:
     def zindex(self) -> IndexPool:
         return self._zindex
 
-    def sequence(self, start: Time, stop: Time) -> Callable:
+    def sequence(self,
+        start: Union[Time, None] = None,
+        stop: Union[Time, None] = None,
+    ) -> Callable:
+
+        if start is None:
+            start = Time(fps = self._time.fps, index = 0)
+        if stop is None:
+            stop = self._time
+
+        if start.fps != self._time.fps:
+            start = Time.from_time(fps = self._time.fps, time = start.time)
+        if stop.fps != self._time.fps:
+            stop = Time.from_time(fps = self._time.fps, time = stop.time)
+
+        if start < Time(fps = self._time.fps, index = 0):
+            raise ValueError()
+        if stop > self._time:
+            raise ValueError()
+        if start >= stop:
+            raise ValueError()
 
         @typechecked
         def decorator(cls: type):
