@@ -113,6 +113,13 @@ class Video:
 
         self._zindex.register(zindex) # ensure unique z-index
 
+        # Canvas:
+        # - DrawingBoard
+        # - Raw PIL
+        # - Raw Cairo surface
+        # - Datashader
+        # - QGIS / Matplotlib / ... ?
+
         @typechecked
         def decorator(func: Callable):
 
