@@ -34,6 +34,7 @@ from typeguard import typechecked
 
 from .abc import SequenceABC
 from .indexpool import IndexPool
+from .task import Task
 from .time import Time
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -70,7 +71,7 @@ class Video:
 
         self._sequences = [] # list of sequences
 
-        self._layers = [] # list of layers
+        self._layertasks = [] # list of layer render tasks
         self._zindex = IndexPool()
 
     @property
@@ -160,13 +161,17 @@ class Video:
         self._sequences[:] = [sequence() for sequence in self._sequences] # init sequences
         # TODO re-init classes for next renderer run?
 
-        self._layers.clear()
-        self._layers.extend([
-            (sequence, getattr(sequence, attr).layer, getattr(sequence, attr))
+        self._layertasks.clear()
+        self._layertasks.extend([
+            Task(
+                sequence = sequence,
+                index = getattr(sequence, attr).layer,
+                task = getattr(sequence, attr),
+            )
             for sequence in self._sequences for attr in dir(sequence)
             if hasattr(getattr(sequence, attr), 'layer')
         ]) # find layer methods based on tags
-        self._layers.sort(key = lambda x: x[1]) # sort by z-index
+        self._layertasks.sort() # sort by (z-) index
 
         # TODO branch for parallel frame rendering
 
@@ -179,9 +184,9 @@ class Video:
     def render_frame(self, time: Time):
 
         layers = [
-            layer(sequence, time)
-            for sequence, _, layer in self._layers
-            if time in sequence
+            layertask(time)
+            for layertask in self._layertasks
+            if time in layertask.sequence
         ] # call layer render functions
 
         # TODO merge layers

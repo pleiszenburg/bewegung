@@ -70,3 +70,8 @@ class Task(TaskABC):
     def index(self) -> int:
 
         return self._index
+
+    @property
+    def sequence(self) -> SequenceABC:
+
+        return self._sequence
