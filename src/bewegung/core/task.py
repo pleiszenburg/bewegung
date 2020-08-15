@@ -28,11 +28,11 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-# import typing
+from typing import Callable
 
 from typeguard import typechecked
 
-from .abc import TaskABC
+from .abc import LayerTypes, SequenceABC, TaskABC, TimeABC
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -41,9 +41,32 @@ from .abc import TaskABC
 @typechecked
 class Task(TaskABC):
     """
-    Task for video renderer
+    Task for video renderer. Tasks can be ordered.
     """
 
-    def __init__(self):
+    def __init__(self,
+        sequence: SequenceABC,
+        index: int,
+        task: Callable[[SequenceABC, TimeABC], LayerTypes],
+    ):
 
-        pass
+        self._sequence = sequence
+        self._index = index
+        self._task = task
+
+    def __repr__(self):
+
+        return f'<Task index={self._index:d}>'
+
+    def __call__(self, time: TimeABC) -> LayerTypes:
+
+        return self._task(self._sequence, time)
+
+    def __lt__(self, other: TaskABC):
+
+        return self.index < other.index
+
+    @property
+    def index(self) -> int:
+
+        return self._index
