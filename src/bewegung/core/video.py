@@ -35,7 +35,7 @@ from datashader import Canvas
 from PIL import Image
 from typeguard import typechecked
 
-from .abc import SequenceABC
+from .abc import CanvasTypes, SequenceABC
 from .drawingboard import DrawingBoard
 from .indexpool import IndexPool
 from .task import Task
@@ -142,7 +142,7 @@ class Video:
 
         return decorator
 
-    def cairo_layer(self, **kwargs):
+    def cairo_canvas(self, **kwargs):
 
         if 'format' not in kwargs.keys():
             kwargs['format'] = FORMAT_ARGB32
@@ -153,7 +153,7 @@ class Video:
 
         return lambda: ImageSurface(kwargs['format'], kwargs['width'], kwargs['height'])
 
-    def db_layer(self, **kwargs):
+    def db_canvas(self, **kwargs):
 
         if 'width' not in kwargs.keys():
             kwargs['width'] = self._width
@@ -162,7 +162,7 @@ class Video:
 
         return lambda: DrawingBoard(**kwargs)
 
-    def ds_layer(self, **kwargs):
+    def ds_canvas(self, **kwargs):
 
         if 'plot_width' not in kwargs.keys():
             kwargs['plot_width'] = self._width
@@ -176,27 +176,21 @@ class Video:
 
         return lambda: Canvas(**kwargs)
 
-    def pil_layer(self, **kwargs):
+    def pil_canvas(self, **kwargs):
 
         if 'mode' not in kwargs.keys():
             kwargs['mode'] = 'RGBA'
         if 'size' not in kwargs.keys():
             kwargs['size'] = (self._width, self._height)
 
-        return lambda: Image(**kwargs)
+        return lambda: Image.new(**kwargs)
 
     def layer(self,
         zindex: int, # TODO add canvas type & size param, offset param
+        canvas: Union[Callable[[], CanvasTypes], None],
     ) -> Callable:
 
         self._zindex.register(zindex) # ensure unique z-index
-
-        # Canvas:
-        # - DrawingBoard
-        # - Raw PIL
-        # - Raw Cairo surface
-        # - Datashader
-        # - QGIS / Matplotlib / ... ?
 
         @typechecked
         def decorator(func: Callable):
@@ -204,12 +198,29 @@ class Video:
             @typechecked
             def wrapper(other, sequence: SequenceABC, time: Time):
 
-                # TODO inject newly created canvas and relative time
+                kwargs = {}
+                for param in func.__code__.co_varnames: # parameters requested by user
+                    if param == 'time':
+                        kwargs[param] = time
+                    elif param == 'reltime':
+                        kwargs[param] = time - sequence.start
+                    elif param == 'ctx':
+                        kwargs[param] = self._ctx
+                    elif param == 'video':
+                        kwargs[param] = self
+                    elif param == 'sequence':
+                        kwargs[param] = sequence
+                    elif param == 'canvas':
+                        if canvas is not None:
+                            kwargs[param] = canvas()
+                        else:
+                            raise ValueError('no canvas type defined')
+                    elif param == 'self':
+                        continue
+                    else:
+                        raise ValueError('unknown parameter')
 
-                ret = func(other,
-                    time = time,
-                    reltime = time - sequence.start,
-                )
+                ret = func(other, **kwargs) # let user draw layer/canvas for frame
 
                 # TODO convert whatever image type "ret" has to PIL
 
