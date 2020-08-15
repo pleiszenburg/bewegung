@@ -34,7 +34,7 @@ from typing import Generator, List, Tuple, Union
 from cairo import ImageSurface
 from datashader.transfer_functions import Image as DS_Image
 import numpy as np
-from PIL import Image as PIL_Image
+from PIL.Image import Image as PIL_Image
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASSES
