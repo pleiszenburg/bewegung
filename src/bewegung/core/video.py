@@ -194,11 +194,14 @@ class Video(VideoABC):
         return lambda: PIL_Image.new(**kwargs)
 
     def layer(self,
-        zindex: int, # TODO add canvas type & size param, offset param
+        zindex: int, # TODO add offset param
         canvas: Union[Callable[[], CanvasTypes], None],
     ) -> Callable:
 
         self._zindex.register(zindex) # ensure unique z-index
+
+        if canvas is None:
+            canvas = self.db_canvas()
 
         @typechecked
         def decorator(func: Callable):
