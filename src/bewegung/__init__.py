@@ -33,5 +33,10 @@ __version__ = '0.0.1'
 from .core.camera import Camera
 from .core.const import FPS_DEFAULT, FLOAT_DEFAULT
 from .core.drawingboard import DrawingBoard
+from .core.indexpool import IndexPool
 from .core.vector import *
 # TODO ...
+from .core.task import Task
+from .core.time import Time
+from .core.timescale import TimeScale
+from .core.video import Video
