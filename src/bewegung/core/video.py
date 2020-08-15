@@ -256,7 +256,11 @@ class Video(VideoABC):
     # TODO prepare - similar to "layer"
     # TODO "after effects" - similar to "layer"
 
-    def render(self, parallel: bool = False):
+    def render(self,
+        parallel: bool = False,
+        frame_fn: Union[str, None] = None,
+        video_fn: Union[str, None] = None,
+        ):
 
         self._sequences[:] = [sequence() for sequence in self._sequences] # init sequences
         # TODO re-init classes for next renderer run?
@@ -276,12 +280,20 @@ class Video(VideoABC):
         # TODO branch for parallel frame rendering
 
         for time in Time.range(Time(fps = self._time.fps, index = 0), self._time):
-            frame = self.render_frame(time)
+            frame = self.render_frame(
+                time = time,
+                return_frame = video_fn is not None,
+                frame_fn = frame_fn,
+                )
 
-        # TODO optionally write frames to files
+        # if video_fn is not None:
         # TODO optionally pipe frames to ffmpeg
 
-    def render_frame(self, time: Time):
+    def render_frame(self,
+        time: Time,
+        return_frame: bool,
+        frame_fn: Union[str, None] = None,
+        ) -> Union[PIL_Image.Image, None]:
 
         layers = [
             layertask(time)
@@ -296,8 +308,8 @@ class Video(VideoABC):
 
         base_layer = base_layer.convert('RGB') # go from RGBA to RGB
 
-        # Optional:
-        # base_layer.save( ... )
+        if frame_fn is not None:
+            base_layer.save(frame_fn.format(index = time.index))
 
-        # Optional:
-        # return base_layer # for direct to video
+        if return_frame:
+            return base_layer # for direct to video
