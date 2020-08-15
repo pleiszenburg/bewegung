@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/abc.py: Abstract base classes
+    src/bewegung/core/task.py: Render task
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -28,70 +28,22 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from abc import ABC
-from typing import Generator, List, Tuple, Union
+# import typing
 
-import numpy as np
+from typeguard import typechecked
 
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# CLASSES
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-class CameraABC(ABC):
-    pass
-
-class DrawingBoardABC(ABC):
-    pass
-
-class FrameSizeABC(ABC):
-    pass
-
-class IndexPoolABC(ABC):
-    pass
-
-class SequenceABC(ABC):
-    pass
-
-class TaskABC(ABC):
-    pass
-
-class TimeABC(ABC):
-    pass
-
-class TimeScaleABC(ABC):
-    pass
-
-class VectorArray2DABC(ABC):
-    pass
-
-class VectorArray3DABC(ABC):
-    pass
-
-class Vector2DABC(ABC):
-    pass
-
-class Vector3DABC(ABC):
-    pass
-
-class VideoABC(ABC):
-    pass
+from .abc import TaskABC
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# Types
+# CLASS
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-Color = Tuple[float, float, float, float]
-Number = Union[int, float, np.number]
-Dtype = Union[str, np.dtype]
+@typechecked
+class Task(TaskABC):
+    """
+    Task for video renderer
+    """
 
-VectorIterable2D = Union[
-    List[Vector2DABC],
-    Tuple[Vector2DABC],
-    Generator[Vector2DABC, None, None],
-]
+    def __init__(self):
 
-VectorIterable3D = Union[
-    List[Vector3DABC],
-    Tuple[Vector3DABC],
-    Generator[Vector3DABC, None, None],
-]
+        pass
