@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Callable
+from typing import Callable, Dict, Union
 
 from typeguard import typechecked
 
@@ -52,7 +52,12 @@ class Video:
     Mutable. Decorators ...
     """
 
-    def __init__(self, time: Time, width: int, height: int):
+    def __init__(self,
+        time: Time, # video length and frame rate
+        width: int, # video width
+        height: int, # video height
+        ctx: Union[Dict, None] = None, # store for video context data
+    ):
 
         assert time.index > 0
         assert width > 0
@@ -61,6 +66,7 @@ class Video:
         self._time = time
         self._width = width
         self._height = height
+        self._ctx = ctx if ctx is not None else {}
 
         self._sequences = [] # list of sequences
 
@@ -78,6 +84,10 @@ class Video:
     @property
     def height(self) -> int:
         return self._height
+
+    @property
+    def ctx(self) -> Dict:
+        return self._ctx
 
     @property
     def zindex(self) -> IndexPool:
