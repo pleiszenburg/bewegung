@@ -196,20 +196,18 @@ class Video:
         def decorator(func: Callable):
 
             @typechecked
-            def wrapper(other, sequence: SequenceABC, time: Time):
+            def wrapper(other, time: Time): # other is the current sequence
 
                 kwargs = {}
                 for param in func.__code__.co_varnames: # parameters requested by user
                     if param == 'time':
                         kwargs[param] = time
                     elif param == 'reltime':
-                        kwargs[param] = time - sequence.start
+                        kwargs[param] = time - other.start
                     elif param == 'ctx':
                         kwargs[param] = self._ctx
                     elif param == 'video':
                         kwargs[param] = self
-                    elif param == 'sequence':
-                        kwargs[param] = sequence
                     elif param == 'canvas':
                         if canvas is not None:
                             kwargs[param] = canvas()
