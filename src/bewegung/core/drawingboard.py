@@ -120,7 +120,7 @@ class DrawingBoard(DrawingBoardABC):
 
     def save(self, fn: str):
 
-        self._surface.write_to_png(fn)
+        self.as_pil().save(fn)
 
     @_geometry
     def draw_text(self,
