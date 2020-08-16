@@ -43,6 +43,9 @@ from PIL.Image import Image as PIL_Image
 class CameraABC(ABC):
     pass
 
+class ColorABC(ABC):
+    pass
+
 class DrawingBoardABC(ABC):
     pass
 
