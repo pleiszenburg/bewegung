@@ -79,7 +79,9 @@ class Video(VideoABC):
 
         self._sequences = [] # list of sequences
 
+        self._preptasks = [] # list of sequence prepare tasks
         self._layertasks = [] # list of layer render tasks
+        self._preporder = IndexPool()
         self._zindex = IndexPool()
 
     def __repr__(self) -> str:
@@ -105,6 +107,10 @@ class Video(VideoABC):
     @property
     def ctx(self) -> Dict:
         return self._ctx
+
+    @property
+    def preporder(self) -> IndexPool:
+        return self._preporder
 
     @property
     def zindex(self) -> IndexPool:
@@ -206,6 +212,36 @@ class Video(VideoABC):
 
         return lambda: PIL_Image.new(**kwargs)
 
+    def prepare(self,
+        preporder: int,
+    ) -> Callable:
+
+        self._preporder.register(preporder) # ensure unique preporder
+
+        @typechecked
+        def decorator(func: Callable) -> Callable:
+
+            @typechecked
+            def wrapper(other, time: Time): # other is the current sequence
+
+                kwargs = {}
+                for param in func.__code__.co_varnames: # parameters requested by user
+                    if param == 'time':
+                        kwargs[param] = time
+                    elif param == 'reltime':
+                        kwargs[param] = time - other.start
+                    elif param == 'self':
+                        continue
+                    else:
+                        raise ValueError('unknown parameter')
+
+                func(other, **kwargs) # let user draw layer/canvas for frame
+
+            wrapper.preporder_tag = preporder # tag wrapper function
+            return wrapper
+
+        return decorator
+
     def layer(self,
         zindex: int,
         canvas: Union[Callable[[], CanvasTypes], None],
@@ -268,7 +304,6 @@ class Video(VideoABC):
 
         return decorator
 
-    # TODO prepare - similar to "layer"
     # TODO "after effects" - similar to "layer"
 
     def render(self,
@@ -282,6 +317,18 @@ class Video(VideoABC):
         assert 0 < batchsize
 
         self._sequences[:] = [(cls, cls()) for cls, _ in self._sequences] # (re-)init sequences, keep class
+
+        self._preptasks.clear()
+        self._preptasks.extend([
+            Task(
+                sequence = sequence,
+                index = getattr(sequence, attr).preporder_tag,
+                task = getattr(sequence, attr),
+            )
+            for _, sequence in self._sequences for attr in dir(sequence)
+            if hasattr(getattr(sequence, attr), 'preporder_tag')
+        ]) # find prepare methods based on tags
+        self._preptasks.sort() # sort by preporder
 
         self._layertasks.clear()
         self._layertasks.extend([
@@ -345,6 +392,10 @@ class Video(VideoABC):
         return_frame: bool,
         frame_fn: Union[str, None] = None,
         ) -> Union[PIL_Image.Image, None]:
+
+        for preptask in self._preptasks:
+            if time in preptask.sequence:
+                preptask(time)
 
         layers = [
             layertask(time)

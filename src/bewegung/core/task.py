@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Callable
+from typing import Callable, Union
 
 from typeguard import typechecked
 
@@ -58,7 +58,7 @@ class Task(TaskABC):
 
         return f'<Task index={self._index:d}>'
 
-    def __call__(self, time: TimeABC) -> CanvasTypes:
+    def __call__(self, time: TimeABC) -> Union[CanvasTypes, None]:
 
         return self._task(time)
 
