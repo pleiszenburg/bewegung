@@ -141,6 +141,8 @@ class Video(VideoABC):
                     other._start, other._stop = start, stop
                     other._video, other._ctx = self, self._ctx
                     super().__init__()
+                def __repr__(other) -> str:
+                    return f'<Sequence name={cls.__name__:s}>'
                 def __contains__(other, time: Time) -> bool:
                     return other._start <= time and time < other._stop
                 @property
@@ -261,7 +263,7 @@ class Video(VideoABC):
 
                 return cvs
 
-            wrapper.layer = zindex # tag wrapper function
+            wrapper.zindex_tag = zindex # tag wrapper function
             return wrapper
 
         return decorator
@@ -285,11 +287,11 @@ class Video(VideoABC):
         self._layertasks.extend([
             Task(
                 sequence = sequence,
-                index = getattr(sequence, attr).layer,
+                index = getattr(sequence, attr).zindex_tag,
                 task = getattr(sequence, attr),
             )
             for _, sequence in self._sequences for attr in dir(sequence)
-            if hasattr(getattr(sequence, attr), 'layer')
+            if hasattr(getattr(sequence, attr), 'zindex_tag')
         ]) # find layer methods based on tags
         self._layertasks.sort() # sort by (z-) index
 
