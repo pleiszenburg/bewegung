@@ -28,6 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+import multiprocessing as mp
 from typing import Callable, Dict, Union, Tuple
 
 from cairo import FORMAT_ARGB32, ImageSurface, Format
@@ -259,10 +260,12 @@ class Video(VideoABC):
     # TODO "after effects" - similar to "layer"
 
     def render(self,
-        parallel: bool = False,
+        processes: int = 1,
         frame_fn: Union[str, None] = None,
         video_fn: Union[str, None] = None,
         ):
+
+        assert 0 < processes <= mp.cpu_count()
 
         self._sequences[:] = [(cls, cls()) for cls, _ in self._sequences] # (re-)init sequences, keep class
 

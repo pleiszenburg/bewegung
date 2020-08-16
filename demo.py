@@ -54,7 +54,7 @@ def main():
         def empty(self, canvas):
             return canvas
 
-    v.render(parallel = False)
+    v.render(processes = 1)
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ENTRY
