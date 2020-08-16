@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from bewegung import Time, Video
+from bewegung import Color, Time, Video
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ROUTINES
@@ -41,7 +41,7 @@ def main():
         width = 1920,
         height = 1080,
         ctx = {
-            'background_color': (0.1, 0.1, 0.1, 1.0),
+            'background_color': Color(26, 26, 26),
         }
     )
 

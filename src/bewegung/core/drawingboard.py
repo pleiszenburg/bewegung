@@ -43,7 +43,8 @@ from gi.repository import Pango, PangoCairo
 
 import IPython.display
 
-from .abc import Color, DrawingBoardABC, Vector2DABC
+from .abc import DrawingBoardABC, Vector2DABC
+from .color import Color
 from .vector import Vector2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -67,8 +68,11 @@ class DrawingBoard(DrawingBoardABC):
         width: int,
         height: int,
         subpixels: int = 1,
-        background_color: Color = (1.0, 1.0, 1.0, 0.0),
+        background_color: Union[Color, None] = None,
         ):
+
+        if background_color is None:
+            background_color = Color(255, 255, 255, 0) # transparent white
 
         self._width, self._height, self._subpixels = width, height, subpixels
 
@@ -124,7 +128,7 @@ class DrawingBoard(DrawingBoardABC):
         point: Union[Vector2DABC, None] = None,
         angle: float = 0.0,
         font: Union[Pango.FontDescription, None] = None,
-        font_color: Color = (1.0, 1.0, 1.0, 0.0),
+        font_color: Union[Color, None] = None,
         alignment: str = 'cc',
         ):
 
@@ -132,12 +136,14 @@ class DrawingBoard(DrawingBoardABC):
             point = Vector2D(0.0, 0.0)
         if font is None:
             font = self.make_font('Arial', 10.0)
+        if font_color is None:
+            font_color = Color(0, 0, 0, 255) # opaque black
 
         layout = PangoCairo.create_layout(self._ctx)
         layout.set_font_description(font)
         layout.set_markup(text, -1)
 
-        self._ctx.set_source_rgba(*font_color)
+        self._ctx.set_source_rgba(*font_color.as_bgra_float())
 
         _, text_extents = layout.get_pixel_extents()
         text_width, text_height = text_extents.width, text_extents.height
@@ -196,31 +202,40 @@ class DrawingBoard(DrawingBoardABC):
     def draw_filledcircle(self,
         point: Vector2DABC,
         r: float = 1.0,
-        fill_color: Color = (1.0, 1.0, 1.0, 0.0),
+        fill_color: Union[Color, None] = None,
         ):
+
+        if fill_color is None:
+            fill_color = Color(0, 0, 0, 255) # opaque black
 
         self._ctx.arc(
             point.x, point.y, r,
             0, 2 * math.pi,
         )
-        self._ctx.set_source_rgba(*fill_color)
+        self._ctx.set_source_rgba(*fill_color.as_bgra_float())
         self._ctx.fill()
 
     def _stroke(self,
-        line_color: Color = (1.0, 1.0, 1.0, 0.0),
+        line_color: Union[Color, None] = None,
         line_width: float = 1.0,
         **kwargs,
         ):
 
-        self._ctx.set_source_rgba(*line_color)
+        if line_color is None:
+            line_color = Color(0, 0, 0, 255) # opaque black
+
+        self._ctx.set_source_rgba(*line_color.as_bgra_float())
         self._ctx.set_line_width(line_width)
         self._ctx.stroke()
 
     def _set_background_color(self,
-        fill_color: Color = (1.0, 1.0, 1.0, 0.0),
+        fill_color: Union[Color, None] = None,
         ):
 
-        self._ctx.set_source_rgba(*fill_color)
+        if fill_color is None:
+            fill_color = Color(255, 255, 255, 0) # transparent white
+
+        self._ctx.set_source_rgba(*fill_color.as_bgra_float())
         self._ctx.rectangle(0, 0, self._width, self._height)
         self._ctx.fill()
 

@@ -83,7 +83,6 @@ class VideoABC(ABC):
 # Types
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-Color = Tuple[float, float, float, float]
 Number = Union[int, float, np.number]
 Dtype = Union[str, np.dtype]
 
