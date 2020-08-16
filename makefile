@@ -32,6 +32,6 @@ upload:
 	done
 
 test:
-	-rm -r test/
-	mkdir test
+	-rm -r frames/
+	mkdir frames
 	python demo.py

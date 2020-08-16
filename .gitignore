@@ -10,3 +10,6 @@ config.yaml
 dist/
 build/
 test/
+*.png
+*.bmp
+*.mp4
