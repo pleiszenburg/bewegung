@@ -80,6 +80,14 @@ class Video(VideoABC):
         self._layertasks = [] # list of layer render tasks
         self._zindex = IndexPool()
 
+    def __repr__(self) -> str:
+
+        return f'<Video frames={self._time.index:d} length={self._time.time:.03f}s fps={self._time.fps:d}>'
+
+    def __len__(self) -> int:
+
+        return self._time.index
+
     @property
     def time(self) -> Time:
         return self._time
