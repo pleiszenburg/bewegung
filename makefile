@@ -30,3 +30,8 @@ upload:
 	for filename in $$(ls dist/*.tar.gz dist/*.whl) ; do \
 		twine upload $$filename $$filename.asc ; \
 	done
+
+test:
+	-rm -r test/
+	mkdir test
+	python demo.py
