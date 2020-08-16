@@ -169,8 +169,9 @@ class DrawingBoard(DrawingBoardABC):
     }
 
     @staticmethod
-    def make_font(family: str, size: float):
+    def make_font(family: str, size: float) -> Pango.FontDescription:
 
+        # TODO https://developer.gnome.org/pango/stable/pango-Fonts.html#pango-font-description-from-string
         return Pango.font_description_from_string(f'{family:s} {size:.2f}')
 
     @_geometry
