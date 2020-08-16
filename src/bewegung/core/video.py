@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Callable, Dict, Union
+from typing import Callable, Dict, Union, Tuple
 
 from cairo import FORMAT_ARGB32, ImageSurface, Format
 from datashader import Canvas
@@ -194,8 +194,9 @@ class Video(VideoABC):
         return lambda: PIL_Image.new(**kwargs)
 
     def layer(self,
-        zindex: int, # TODO add offset param
+        zindex: int,
         canvas: Union[Callable[[], CanvasTypes], None],
+        box: Tuple[int, int] = (0, 0),
     ) -> Callable:
 
         self._zindex.register(zindex) # ensure unique z-index
@@ -204,10 +205,10 @@ class Video(VideoABC):
             canvas = self.db_canvas()
 
         @typechecked
-        def decorator(func: Callable):
+        def decorator(func: Callable) -> Callable:
 
             @typechecked
-            def wrapper(other, time: Time): # other is the current sequence
+            def wrapper(other, time: Time) -> PIL_Image.Image: # other is the current sequence
 
                 kwargs = {}
                 for param in func.__code__.co_varnames: # parameters requested by user
@@ -229,16 +230,15 @@ class Video(VideoABC):
 
                 if isinstance(cvs, PIL_Image.Image):
                     assert cvs.mode == 'RGBA'
-                    return cvs
                 elif isinstance(cvs, DS_Image):
                     cvs = cvs.to_pil()
                     assert cvs.mode == 'RGBA'
-                    return PIL_ImageOps.flip(cvs) # datashader's y axis must be flipped
+                    cvs = PIL_ImageOps.flip(cvs) # datashader's y axis must be flipped
                 elif isinstance(cvs, DrawingBoard):
-                    return cvs.as_pil()
+                    cvs = cvs.as_pil()
                 elif isinstance(cvs, ImageSurface):
                     assert cvs.get_format() == Format.ARGB32
-                    return PIL_Image.frombuffer(
+                    cvs = PIL_Image.frombuffer(
                         mode = 'RGBA',
                         size = (cvs.get_width(), cvs.get_height()),
                         data = cvs.get_data(),
@@ -246,7 +246,9 @@ class Video(VideoABC):
                 else:
                     raise TypeError('unknown canvas type coming from layer')
 
-                # TODO handle offset and different sizes HERE
+                cvs.box = box # annotate offset for later use
+
+                return cvs
 
             wrapper.layer = zindex # tag wrapper function
             return wrapper
@@ -302,9 +304,9 @@ class Video(VideoABC):
         ] # call layer render functions, get list of uni-size PIL images
         assert len(layers) != 0
 
-        base_layer = layers.pop(0)
+        base_layer = PIL_Image.new('RGBA', (self._width, self._height), (0, 0, 0, 0))
         for layer in layers:
-            base_layer.paste(im = layer, mask = layer)
+            base_layer.paste(im = layer, box = layer.box, mask = layer)
 
         base_layer = base_layer.convert('RGB') # go from RGBA to RGB
 
