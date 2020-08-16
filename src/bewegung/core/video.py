@@ -47,7 +47,7 @@ from .time import Time
 # "GLOBALS" (FOR WORKERS)
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-# _context = {}
+_workers = {}
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -327,3 +327,18 @@ class Video(VideoABC):
 
         if return_frame:
             return base_layer # for direct to video
+
+    @staticmethod
+    def _worker_error(err: Exception):
+
+        raise err
+
+    @staticmethod
+    def _worker_init(video: VideoABC):
+
+        _workers[mp.current_process().name] = video
+
+    @classmethod
+    def _worker_render_frame(cls, time: Time):
+
+        _workers[mp.current_process().name].render_frame(time)
