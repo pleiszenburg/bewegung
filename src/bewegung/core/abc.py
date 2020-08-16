@@ -46,9 +46,6 @@ class CameraABC(ABC):
 class DrawingBoardABC(ABC):
     pass
 
-class FrameSizeABC(ABC):
-    pass
-
 class IndexPoolABC(ABC):
     pass
 
