@@ -126,10 +126,10 @@ class Video(VideoABC):
 
             @typechecked
             class wrapper(cls, SequenceABC): # sequence class, setting time properties
-                def __init__(other, *args, **kwargs):
+                def __init__(other):
                     other._start, other._stop = start, stop
                     other._video, other._ctx = self, self._ctx
-                    super().__init__(*args, **kwargs) # TODO super/cls?
+                    super().__init__() # TODO super/cls?
                 def __contains__(other, time: Time) -> bool:
                     return other._start <= time and time < other._stop
                 @property
@@ -145,7 +145,7 @@ class Video(VideoABC):
                 def ctx(other) -> Dict:
                     return other._ctx
 
-            self._sequences.append(wrapper) # track sequence classes
+            self._sequences.append((wrapper, None)) # track sequence classes and objects
             return None # wrapper # HACK remove original class?
 
         return decorator
@@ -264,8 +264,7 @@ class Video(VideoABC):
         video_fn: Union[str, None] = None,
         ):
 
-        self._sequences[:] = [sequence() for sequence in self._sequences] # init sequences
-        # TODO re-init classes for next renderer run?
+        self._sequences[:] = [(cls, cls()) for cls, _ in self._sequences] # (re-)init sequences, keep class
 
         self._layertasks.clear()
         self._layertasks.extend([
@@ -274,7 +273,7 @@ class Video(VideoABC):
                 index = getattr(sequence, attr).layer,
                 task = getattr(sequence, attr),
             )
-            for sequence in self._sequences for attr in dir(sequence)
+            for _, sequence in self._sequences for attr in dir(sequence)
             if hasattr(getattr(sequence, attr), 'layer')
         ]) # find layer methods based on tags
         self._layertasks.sort() # sort by (z-) index
