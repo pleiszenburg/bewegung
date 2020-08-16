@@ -29,6 +29,7 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 import multiprocessing as mp
+from subprocess import Popen, PIPE
 from typing import Callable, Dict, Union, Tuple
 
 from cairo import FORMAT_ARGB32, ImageSurface, Format
@@ -306,11 +307,36 @@ class Video(VideoABC):
             ) for time in Time.range(Time(fps = self._time.fps, index = 0), self._time)
         ]
 
+        if video_fn is not None:
+            codec = Popen([
+                'ffmpeg',
+                '-y', # force overwrite of output file
+                '-framerate', f'{self._time.fps:d}',
+                '-f', 'image2pipe', # force input format
+                '-i', '-', # data from stdin
+                '-vcodec', 'bmp', # input codec
+                '-s:v', f'{self._width:d}x{self._height:d}',
+                '-c:v', 'libx264',
+                '-preset', 'veryslow',
+                '-crf', '0',
+                video_fn,
+            ], stdin = PIPE)
+
         for promise in tqdm(workers_promises):
             frame = promise.get()
             if video_fn is None:
                 continue
-            # pass to ffmpeg
+            frame.save(codec.stdin, 'bmp')
+
+        workers.close()
+        workers.terminate()
+        workers.join()
+
+        if video_fn is None:
+            return
+
+        codec.stdin.close()
+        codec.wait()
 
     def render_frame(self,
         time: Time,
