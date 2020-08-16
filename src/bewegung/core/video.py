@@ -269,11 +269,13 @@ class Video(VideoABC):
 
     def render(self,
         processes: int = 1,
+        batchsize: int = 256,
         frame_fn: Union[str, None] = None,
         video_fn: Union[str, None] = None,
         ):
 
         assert 0 < processes <= mp.cpu_count()
+        assert 0 < batchsize
 
         self._sequences[:] = [(cls, cls()) for cls, _ in self._sequences] # (re-)init sequences, keep class
 
