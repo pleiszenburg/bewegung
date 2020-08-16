@@ -376,6 +376,6 @@ class Video(VideoABC):
         _workers[mp.current_process().name] = video
 
     @staticmethod
-    def _worker_render_frame(*args, **kwargs):
+    def _worker_render_frame(*args, **kwargs): # transparent wrapper for `render_frame`
 
-        _workers[mp.current_process().name].render_frame(*args, **kwargs)
+        return _workers[mp.current_process().name].render_frame(*args, **kwargs)
