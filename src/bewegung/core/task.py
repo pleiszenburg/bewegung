@@ -47,7 +47,7 @@ class Task(TaskABC):
     def __init__(self,
         sequence: SequenceABC,
         index: int,
-        task: Callable[[SequenceABC, TimeABC], CanvasTypes],
+        task: Callable[[TimeABC], CanvasTypes],
     ):
 
         self._sequence = sequence
@@ -60,7 +60,7 @@ class Task(TaskABC):
 
     def __call__(self, time: TimeABC) -> CanvasTypes:
 
-        return self._task(self._sequence, time)
+        return self._task(time)
 
     def __lt__(self, other: TaskABC):
 
