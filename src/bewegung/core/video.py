@@ -129,7 +129,7 @@ class Video(VideoABC):
                 def __init__(other):
                     other._start, other._stop = start, stop
                     other._video, other._ctx = self, self._ctx
-                    super().__init__() # TODO super/cls?
+                    super().__init__()
                 def __contains__(other, time: Time) -> bool:
                     return other._start <= time and time < other._stop
                 @property
