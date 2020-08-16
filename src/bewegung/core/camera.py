@@ -30,6 +30,7 @@ specific language governing rights and limitations under the License.
 
 import math
 import sys
+from typing import Union
 
 from typeguard import typechecked
 
@@ -117,23 +118,31 @@ def _get_points_jit(
 @typechecked
 class Camera(CameraABC):
 
-    def __init__(self):
+    def __init__(self,
+        position: Union[Vector3D, None] = None,
+        direction: Union[Vector3D, None] = None,
+        planeOffset: Union[Vector2D, None] = None,
+        planeFactor: float = 1.0,
+        planeYFlip: bool = False,
+    ):
 
         # camera position
-        self._position = Vector3D(0.0, 0.0, 0.0)
+        self._position = Vector3D(0.0, 0.0, 0.0) if position is None else position
         # 3D view vector
-        self._direction = Vector3D(1.0, 0.0, 0.0)
+        self._direction = Vector3D(1.0, 0.0, 0.0) if direction is None else direction
+        if not math.isclose(self._direction.mag, 1.0):
+            self._direction.mul(1.0 / self._direction.mag)
+
+        # Center offset on 2D rendering plane
+        self._planeOffset = Vector2D(0.0, 0.0) if planeOffset is None else planeOffset
+        # plane scale factor
+        self._planeFactor = planeFactor
+        # place Y flip
+        self._planeYFlip = planeYFlip
 
         # 2D rendering plane in 3D space
         self._planeX = Vector3D(0.0, 0.0, 0.0)
         self._planeY = Vector3D(0.0, 0.0, 0.0)
-        # Center offset on 2D rendering plane
-        self._planeOffset = Vector2D(0.0, 0.0)
-        # plane scale factor
-        self._planeFactor = 1.0
-        # place Y flip
-        self._planeYFlip = False
-
         # compute rendering plane
         self._update_plane()
 
@@ -181,7 +190,8 @@ class Camera(CameraABC):
     @direction.setter
     def direction(self, value: Vector3D):
         self._direction.update_from_vector(value)
-        assert math.isclose(self._direction.mag, 1.0)
+        if not math.isclose(self._direction.mag, 1.0):
+            self._direction.mul(1.0 / self._direction.mag)
         self._update_plane()
 
     @property
