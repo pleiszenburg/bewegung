@@ -35,6 +35,7 @@ from cairo import FORMAT_ARGB32, ImageSurface, Format
 from datashader import Canvas
 from datashader.transfer_functions import Image as DS_Image
 from PIL import Image as PIL_Image, ImageOps as PIL_ImageOps
+from tqdm import tqdm
 from typeguard import typechecked
 
 from .abc import CanvasTypes, SequenceABC, VideoABC
@@ -291,17 +292,25 @@ class Video(VideoABC):
         ]) # find layer methods based on tags
         self._layertasks.sort() # sort by (z-) index
 
-        # TODO branch for parallel frame rendering
+        workers = mp.Pool(
+            processes = processes,
+            initializer = self._worker_init,
+            initargs = (self,),
+            maxtasksperchild = batchsize,
+        )
+        workers_promises = [
+            workers.apply_async(
+                func = self._worker_render_frame,
+                args = (time, video_fn is not None, frame_fn),
+                error_callback = self._worker_error,
+            ) for time in Time.range(Time(fps = self._time.fps, index = 0), self._time)
+        ]
 
-        for time in Time.range(Time(fps = self._time.fps, index = 0), self._time):
-            frame = self.render_frame(
-                time = time,
-                return_frame = video_fn is not None,
-                frame_fn = frame_fn,
-                )
-
-        # if video_fn is not None:
-        # TODO optionally pipe frames to ffmpeg
+        for promise in tqdm(workers_promises):
+            frame = promise.get()
+            if video_fn is None:
+                continue
+            # pass to ffmpeg
 
     def render_frame(self,
         time: Time,
@@ -316,7 +325,7 @@ class Video(VideoABC):
         ] # call layer render functions, get list of uni-size PIL images
         assert len(layers) != 0
 
-        base_layer = PIL_Image.new('RGBA', (self._width, self._height), (0, 0, 0, 0))
+        base_layer = PIL_Image.new('RGBA', (self._width, self._height), (0, 0, 0, 0)) # transparent black
         for layer in layers:
             base_layer.paste(im = layer, box = layer.box, mask = layer)
 
@@ -338,7 +347,7 @@ class Video(VideoABC):
 
         _workers[mp.current_process().name] = video
 
-    @classmethod
-    def _worker_render_frame(cls, time: Time):
+    @staticmethod
+    def _worker_render_frame(*args, **kwargs):
 
-        _workers[mp.current_process().name].render_frame(time)
+        _workers[mp.current_process().name].render_frame(*args, **kwargs)
