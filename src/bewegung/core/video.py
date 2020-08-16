@@ -225,7 +225,7 @@ class Video(VideoABC):
             def wrapper(other, time: Time): # other is the current sequence
 
                 kwargs = {}
-                for param in func.__code__.co_varnames: # parameters requested by user
+                for param in func.__code__.co_varnames[:func.__code__.co_argcount]: # parameters requested by user
                     if param == 'time':
                         kwargs[param] = time
                     elif param == 'reltime':
@@ -233,7 +233,7 @@ class Video(VideoABC):
                     elif param == 'self':
                         continue
                     else:
-                        raise ValueError('unknown parameter')
+                        raise ValueError('unknown parameter', param)
 
                 func(other, **kwargs) # let user draw layer/canvas for frame
 
@@ -260,7 +260,7 @@ class Video(VideoABC):
             def wrapper(other, time: Time) -> PIL_Image.Image: # other is the current sequence
 
                 kwargs = {}
-                for param in func.__code__.co_varnames: # parameters requested by user
+                for param in func.__code__.co_varnames[:func.__code__.co_argcount]: # parameters requested by user
                     if param == 'time':
                         kwargs[param] = time
                     elif param == 'reltime':
