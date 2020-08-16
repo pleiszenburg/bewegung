@@ -9,3 +9,4 @@ notes.md
 config.yaml
 dist/
 build/
+test/
