@@ -54,7 +54,11 @@ def main():
         def empty(self, canvas):
             return canvas
 
-    v.render(processes = 1)
+    v.render(
+        processes = 1,
+        frame_fn = 'test/frame_{index:07d}.png',
+        video_fn = 'test/video.mp4',
+        )
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ENTRY
