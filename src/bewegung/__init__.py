@@ -31,6 +31,7 @@ specific language governing rights and limitations under the License.
 __version__ = '0.0.1'
 
 from .core.camera import Camera
+from .core.color import Color
 from .core.const import FPS_DEFAULT, FLOAT_DEFAULT
 from .core.drawingboard import DrawingBoard
 from .core.indexpool import IndexPool
