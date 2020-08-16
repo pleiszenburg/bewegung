@@ -56,7 +56,7 @@ def main():
 
     v.render(
         processes = 1,
-        frame_fn = 'frames/frame_{index:07d}.png',
+        # frame_fn = 'frames/frame_{index:07d}.png',
         video_fn = 'video.mp4',
         )
 
