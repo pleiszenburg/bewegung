@@ -322,7 +322,7 @@ class Video(VideoABC):
                 '-preset', 'veryslow',
                 '-crf', '0',
                 video_fn,
-            ], stdin = PIPE)
+            ], stdin = PIPE, stdout = PIPE, stderr = PIPE,)
 
         for promise in tqdm(workers_promises):
             frame = promise.get()
