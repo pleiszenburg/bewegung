@@ -79,7 +79,7 @@ class VectorArray3D(VectorArray3DABC):
         assert self.dtype == other.dtype
         return VectorArray3D(self.x - other.x, self.y - other.y, self.z - other.z)
 
-    def __mul__(self, other: Number):
+    def __mul__(self, other: Number) -> VectorArray3DABC:
         return VectorArray3D(self._x * other, self._y * other, self._z * other)
 
     def mul(self, scalar: Number):

@@ -65,7 +65,7 @@ class Vector3D(Vector3DABC):
     def __sub__(self, other: Vector3DABC) -> Vector3DABC:
         return Vector3D(self.x - other.x, self.y - other.y, self.z - other.z)
 
-    def __mul__(self, other: float):
+    def __mul__(self, other: float) -> Vector3DABC:
         return Vector3D(self._x * other, self._y * other, self._z * other)
 
     def mul(self, scalar: float):

@@ -65,7 +65,7 @@ class Vector2D(Vector2DABC):
     def __sub__(self, other: Vector2DABC) -> Vector2DABC:
         return Vector2D(self.x - other.x, self.y - other.y)
 
-    def __mul__(self, other: float):
+    def __mul__(self, other: float) -> Vector2DABC:
         return Vector2D(self._x * other, self._y * other)
 
     def mul(self, scalar: float):

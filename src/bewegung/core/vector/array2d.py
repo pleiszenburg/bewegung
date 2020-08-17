@@ -78,7 +78,7 @@ class VectorArray2D(VectorArray2DABC):
         assert self.dtype == other.dtype
         return VectorArray2D(self.x - other.x, self.y - other.y)
 
-    def __mul__(self, other: Number):
+    def __mul__(self, other: Number) -> VectorArray2DABC:
         return VectorArray2D(self._x * other, self._y * other)
 
     def mul(self, scalar: Number):
