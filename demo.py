@@ -30,7 +30,7 @@ specific language governing rights and limitations under the License.
 
 import math
 
-from bewegung import Camera, Color, Time, Video, Vector2D, Vector3D, VectorArray3D
+from bewegung import Camera, Color, Time, Video, Vector2D, Vector3D, VectorArray3D, fade_in, fade_out
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ROUTINES
@@ -113,6 +113,8 @@ def main():
             maximum = self._lines2d[-1][0].dist
             self._factor = lambda x: (x - minimum) / (maximum - minimum)
 
+        @fade_in(Time.from_time(fps = 60, time = 2.0))
+        @fade_out(Time.from_time(fps = 60, time = 2.0))
         @v.layer(
             zindex = v.zindex.on_top(),
             canvas = v.db_canvas(background_color = Color(26, 26, 26, 0)),
