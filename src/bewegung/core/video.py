@@ -121,6 +121,38 @@ class Video(VideoABC):
         return self._zindex
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# RESET TASKS
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    def reset(self):
+
+        self._sequences[:] = [(cls, cls()) for cls, _ in self._sequences] # (re-)init sequences, keep class
+
+        self._preptasks.clear()
+        self._preptasks.extend([
+            Task(
+                sequence = sequence,
+                index = getattr(sequence, attr).preporder_tag,
+                task = getattr(sequence, attr),
+            )
+            for _, sequence in self._sequences for attr in dir(sequence)
+            if hasattr(getattr(sequence, attr), 'preporder_tag')
+        ]) # find prepare methods based on tags
+        self._preptasks.sort() # sort by preporder
+
+        self._layertasks.clear()
+        self._layertasks.extend([
+            Task(
+                sequence = sequence,
+                index = getattr(sequence, attr).zindex_tag,
+                task = getattr(sequence, attr),
+            )
+            for _, sequence in self._sequences for attr in dir(sequence)
+            if hasattr(getattr(sequence, attr), 'zindex_tag')
+        ]) # find layer methods based on tags
+        self._layertasks.sort() # sort by (z-) index
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # DECORATOR: SEQUENCE
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -340,31 +372,7 @@ class Video(VideoABC):
         assert 0 < processes <= mp.cpu_count()
         assert 0 < batchsize
 
-        self._sequences[:] = [(cls, cls()) for cls, _ in self._sequences] # (re-)init sequences, keep class
-
-        self._preptasks.clear()
-        self._preptasks.extend([
-            Task(
-                sequence = sequence,
-                index = getattr(sequence, attr).preporder_tag,
-                task = getattr(sequence, attr),
-            )
-            for _, sequence in self._sequences for attr in dir(sequence)
-            if hasattr(getattr(sequence, attr), 'preporder_tag')
-        ]) # find prepare methods based on tags
-        self._preptasks.sort() # sort by preporder
-
-        self._layertasks.clear()
-        self._layertasks.extend([
-            Task(
-                sequence = sequence,
-                index = getattr(sequence, attr).zindex_tag,
-                task = getattr(sequence, attr),
-            )
-            for _, sequence in self._sequences for attr in dir(sequence)
-            if hasattr(getattr(sequence, attr), 'zindex_tag')
-        ]) # find layer methods based on tags
-        self._layertasks.sort() # sort by (z-) index
+        self.reset()
 
         workers = mp.Pool(
             processes = processes,
@@ -457,4 +465,4 @@ class Video(VideoABC):
     @staticmethod
     def _worker_render_frame(*args, **kwargs): # transparent wrapper for `render_frame`
 
-        return _workers[mp.current_process().name].render_frame(*args, **kwargs)
+        return _workers[mp.current_process().name]._render_frame(*args, **kwargs)
