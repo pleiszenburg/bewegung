@@ -129,7 +129,7 @@ def main():
             return canvas
 
     v.render(
-        processes = 4,
+        processes = 1,
         # frame_fn = 'frames/frame_{index:07d}.png',
         video_fn = 'video.mp4',
         )
