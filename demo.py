@@ -57,16 +57,6 @@ def main():
     @v.sequence()
     class Background:
 
-        @v.prepare(
-            preporder = v.preporder.on_bottom(),
-        )
-        def move_camera(self, time):
-            angle = 2 * math.pi * time.time / 120.0
-            position2d = Vector2D.from_polar(radius = v.ctx['camera_dist'], angle = angle)
-            direction2d = Vector2D.from_polar(radius = 1.0, angle = math.pi + angle)
-            v.ctx['camera'].position = Vector3D(x = position2d.x, y = position2d.y, z = 0.0)
-            v.ctx['camera'].direction = Vector3D(x = direction2d.x, y = direction2d.y, z = 0.0)
-
         @v.layer(
             zindex = v.zindex.on_bottom(),
             canvas = v.db_canvas(background_color = v.ctx['background_color']),
@@ -94,6 +84,16 @@ def main():
             ])
             self._lines2d = None
             self._factor = None
+
+        @v.prepare(
+            preporder = v.preporder.on_bottom(),
+        )
+        def move_camera(self, time):
+            angle = 2 * math.pi * time.time / 120.0
+            position2d = Vector2D.from_polar(radius = v.ctx['camera_dist'], angle = angle)
+            direction2d = Vector2D.from_polar(radius = 1.0, angle = math.pi + angle)
+            v.ctx['camera'].position = Vector3D(x = position2d.x, y = position2d.y, z = 0.0)
+            v.ctx['camera'].direction = Vector3D(x = direction2d.x, y = direction2d.y, z = 0.0)
 
         @v.prepare(
             preporder = v.preporder.on_top(),
