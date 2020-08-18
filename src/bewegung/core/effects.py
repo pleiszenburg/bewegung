@@ -29,76 +29,114 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 import math
-from typing import Callable
 
 from PIL import Image as PIL_Image
 from typeguard import typechecked
 
-from .abc import SequenceABC, TimeABC
+from .abc import EffectABC, LayerABC, SequenceABC, TimeABC, VideoABC
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# ROUTINES
+# CLASS: BASE
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-def fade_in(
-    blend_time: TimeABC,
-) -> Callable:
+class BaseEffect(EffectABC):
+    """
+    Mutable. Base for all effect classes - not effect on its own.
+    """
 
-    @typechecked
-    def decorator(func: Callable) -> Callable:
+    def __init__(self):
 
-        @typechecked
-        def wrapper(sequence: SequenceABC, time: TimeABC) -> PIL_Image.Image:
+        self._args = self.apply.__wrapped__.__code__.co_varnames[
+            1:self.apply.__wrapped__.__code__.co_argcount # excluding self and internal namespace
+            ] # parameters requested by user
+        assert self._args[0] == 'cvs' # canvas
 
-            cvs = func(sequence, time)
+    def __call__(self, layer: LayerABC) -> LayerABC:
+        """
+        Decorator function.
+        """
 
-            reltime = time - sequence.start
-            if reltime > blend_time:
-                return cvs
+        layer.register_effect(self)
+        return layer
 
-            r, g, b, a = cvs.split()
-            factor = _sin_fade(reltime.index / blend_time.index)
-            a = a.point(lambda i: i * factor)
-            new_cvs = PIL_Image.merge('RGBA', (r, g, b, a))
+    def apply_(self,
+        cvs: PIL_Image.Image,
+        video: VideoABC,
+        sequence: SequenceABC,
+        time: TimeABC,
+        ) -> PIL_Image.Image:
+        """
+        Internal interface for layer. Do not re-implement.
+        """
 
-            new_cvs.box = cvs.box # maintain tag
-            return new_cvs
+        kwargs = {}
+        for arg in self._args[1:]:
+            if arg == 'video':
+                kwargs['video'] = video
+            elif arg == 'sequence':
+                kwargs['sequence'] = sequence
+            elif arg == 'time':
+                kwargs['time'] = time
+            else:
+                raise ValueError('unknown argument')
 
-        wrapper.zindex_tag = func.zindex_tag # maintain tag
-        return wrapper
+        return self.apply(cvs = cvs, **kwargs)
 
-    return decorator
+    def apply(self, cvs: PIL_Image.Image):
+        """
+        Re-implement this for effects.
+        """
+
+        raise NotImplementedError()
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# CLASSES: EFFECTS
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-def fade_out(
-    blend_time: TimeABC,
-) -> Callable:
+class FadeInEffect(BaseEffect):
 
-    @typechecked
-    def decorator(func: Callable) -> Callable:
+    def __init__(self, blend_time: TimeABC):
 
-        @typechecked
-        def wrapper(sequence: SequenceABC, time: TimeABC) -> PIL_Image.Image:
+        super().__init__()
+        self._blend_time = blend_time
 
-            cvs = func(sequence, time)
+    def apply(self, cvs: PIL_Image.Image, sequence: SequenceABC, time: TimeABC,) -> PIL_Image.Image:
 
-            if time < sequence.stop - blend_time:
-                return cvs
-            nreltime = sequence.stop - time
+        reltime = time - sequence.start
+        if reltime > self._blend_time:
+            return cvs
 
-            r, g, b, a = cvs.split()
-            factor = _sin_fade(nreltime.index / blend_time.index)
-            a = a.point(lambda i: i * factor)
-            new_cvs = PIL_Image.merge('RGBA', (r, g, b, a))
+        r, g, b, a = cvs.split()
+        factor = _sin_fade(reltime.index / self._blend_time.index)
+        a = a.point(lambda i: i * factor)
 
-            new_cvs.box = cvs.box # maintain tag
-            return new_cvs
+        return PIL_Image.merge('RGBA', (r, g, b, a))
 
-        wrapper.zindex_tag = func.zindex_tag # maintain tag
-        return wrapper
+@typechecked
+class FadeOutEffect(BaseEffect):
 
-    return decorator
+    def __init__(self, blend_time: TimeABC):
+
+        super().__init__()
+        self._blend_time = blend_time
+
+    def apply(self, cvs: PIL_Image.Image, sequence: SequenceABC, time: TimeABC,) -> PIL_Image.Image:
+
+        if time < sequence.stop - self._blend_time:
+            return cvs
+        nreltime = sequence.stop - time
+
+        r, g, b, a = cvs.split()
+        factor = _sin_fade(nreltime.index / self._blend_time.index)
+        a = a.point(lambda i: i * factor)
+
+        return PIL_Image.merge('RGBA', (r, g, b, a))
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# ROUTINES: HELPER
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
 def _sin_fade(factor: float) -> float:
