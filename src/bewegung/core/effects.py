@@ -28,6 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+import math
 from typing import Callable
 
 from PIL import Image as PIL_Image
@@ -57,7 +58,7 @@ def fade_in(
                 return cvs
 
             r, g, b, a = cvs.split()
-            factor = reltime.index / blend_time.index
+            factor = _sin_fade(reltime.index / blend_time.index)
             a = a.point(lambda i: i * factor)
             new_cvs = PIL_Image.merge('RGBA', (r, g, b, a))
 
@@ -87,7 +88,7 @@ def fade_out(
             nreltime = sequence.stop - time
 
             r, g, b, a = cvs.split()
-            factor = nreltime.index / blend_time.index
+            factor = _sin_fade(nreltime.index / blend_time.index)
             a = a.point(lambda i: i * factor)
             new_cvs = PIL_Image.merge('RGBA', (r, g, b, a))
 
@@ -98,3 +99,10 @@ def fade_out(
         return wrapper
 
     return decorator
+
+@typechecked
+def _sin_fade(factor: float) -> float:
+
+    assert 0.0 <= factor <= 1.0
+
+    return -math.cos(factor * math.pi) / 2 + 0.5
