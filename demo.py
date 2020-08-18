@@ -30,7 +30,7 @@ specific language governing rights and limitations under the License.
 
 import math
 
-from bewegung import Camera, Color, Time, Video, Vector2D, Vector3D, VectorArray3D, FadeInEffect, FadeOutEffect
+from bewegung import Camera, Color, Video, Vector2D, Vector3D, VectorArray3D, FadeInEffect, FadeOutEffect
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ROUTINES
@@ -39,9 +39,9 @@ from bewegung import Camera, Color, Time, Video, Vector2D, Vector3D, VectorArray
 def main():
 
     v = Video(
-        time = Time.from_time(fps = 60, time = 10.0),
         width = 1920,
         height = 1080,
+        seconds = 10.0,
         ctx = {
             'background_color': Color(26, 26, 26),
             'camera_dist': 30,
@@ -51,7 +51,7 @@ def main():
                 planeOffset = Vector2D(1920 / 2, 1080 / 2),
                 planeFactor = 1000.0,
             ),
-        }
+        },
     )
 
     @v.sequence()
@@ -65,8 +65,8 @@ def main():
             return canvas
 
     @v.sequence(
-        start = Time.from_time(fps = 60, time = 1.0),
-        stop = v.time - Time.from_time(fps = 60, time = 1.0),
+        start = v.time_from_seconds(1.0),
+        stop = v.length - v.time_from_seconds(1.0),
     )
     class Sphere:
 
@@ -92,7 +92,7 @@ def main():
             preporder = v.preporder.on_bottom(),
         )
         def move_camera(self, time):
-            angle = 2 * math.pi * time.time / 120.0
+            angle = 2 * math.pi * time.seconds / 120.0
             position2d = Vector2D.from_polar(radius = v.ctx['camera_dist'], angle = angle)
             direction2d = Vector2D.from_polar(radius = 1.0, angle = math.pi + angle)
             v.ctx['camera'].position = Vector3D(x = position2d.x, y = position2d.y, z = 0.0)
@@ -116,8 +116,8 @@ def main():
             maximum = self._lines2d[-1][0].dist
             self._factor = lambda x: (x - minimum) / (maximum - minimum)
 
-        @FadeInEffect(Time.from_time(fps = 60, time = 4.0))
-        @FadeOutEffect(Time.from_time(fps = 60, time = 2.0))
+        @FadeInEffect(v.time_from_seconds(4.0))
+        @FadeOutEffect(v.time_from_seconds(2.0))
         @v.layer(
             zindex = v.zindex.on_top(),
             canvas = v.db_canvas(background_color = Color(26, 26, 26, 0)),
