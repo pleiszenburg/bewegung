@@ -21,3 +21,5 @@ See [`demo.py`](https://github.com/pleiszenburg/bewegung/blob/master/demo.py).
 ## USAGE
 
 The API is not stable yet. It will remain subject to changes until the project is labeled "beta" or better.
+
+By default, `bewegung` enforces [type hints](https://www.python.org/dev/peps/pep-0484/) with [`typeguard`](https://typeguard.readthedocs.io), which is very slow but useful for debugging. For significantly more speed, please deactivate `typeguard` by running Python in "optimized mode 1" (`opt-1`), see [here](https://docs.python.org/3/using/cmdline.html#cmdoption-o) and [here](https://docs.python.org/3/using/cmdline.html#envvar-PYTHONOPTIMIZE). Do not use "optimized mode 2" (`opt-2`) because it will cause incompatibilities and crashes.
