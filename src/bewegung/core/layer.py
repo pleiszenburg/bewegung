@@ -28,6 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+from types import MethodType
 # from typing import Callable, Union
 
 from typeguard import typechecked
@@ -47,3 +48,14 @@ class Layer(LayerABC):
     def __init__(self):
 
         pass
+
+    def __get__(self, obj, objtype = None):
+        """
+        Simulate func_descr_get() in Objects/funcobject.c
+        https://stackoverflow.com/q/26226604/1672565
+        """
+
+        if obj is None:
+            return self
+
+        return MethodType(self, obj)
