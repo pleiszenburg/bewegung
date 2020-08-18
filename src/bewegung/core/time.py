@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Generator
+from typing import Generator, Union
 
 from typeguard import typechecked
 
@@ -51,7 +51,7 @@ class Time(TimeABC):
         self._fps, self._index = fps, index
 
     def __repr__(self):
-        return f'<Time index={self._index:d} time={self.time:.03f}s fps={self._fps:d}>'
+        return f'<Time index={self._index:d} seconds={self.seconds:.03f}s fps={self._fps:d}>'
 
     def __eq__(self, other: TimeABC):
         self._assert_fps(other)
@@ -94,12 +94,14 @@ class Time(TimeABC):
         return self._index
 
     @property
-    def time(self):
+    def seconds(self):
         return self._index / self._fps # float
 
     @classmethod
-    def from_time(cls, fps: int = FPS_DEFAULT, time: float = 1.0):
-        return cls(fps = fps, index = round(time * fps))
+    def from_seconds(cls, fps: int = FPS_DEFAULT, seconds: Union[float, int] = 1.0):
+        if isinstance(seconds, int):
+            seconds = float(seconds)
+        return cls(fps = fps, index = round(seconds * fps))
 
     @classmethod
     def range(cls, start: TimeABC, stop: TimeABC) -> Generator[TimeABC, None, None]:
