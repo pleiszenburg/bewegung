@@ -129,7 +129,8 @@ class DrawingBoard(DrawingBoardABC):
         angle: float = 0.0,
         font: Union[Pango.FontDescription, None] = None,
         font_color: Union[Color, None] = None,
-        alignment: str = 'cc',
+        alignment: str = 'l',
+        anchor: str = 'cc',
         ):
 
         if point is None:
@@ -141,6 +142,7 @@ class DrawingBoard(DrawingBoardABC):
 
         layout = PangoCairo.create_layout(self._ctx)
         layout.set_font_description(font)
+        layout.set_alignment(self._alignment[alignment])
         layout.set_markup(text, -1)
 
         self._ctx.set_source_rgba(*font_color.as_bgra_float())
@@ -151,12 +153,12 @@ class DrawingBoard(DrawingBoardABC):
         self._ctx.translate(point.x, point.y)
         if angle != 0.0:
             self._ctx.rotate(angle)
-        self._ctx.translate(*self._alignments[alignment](text_width, text_height))
+        self._ctx.translate(*self._anchor[anchor](text_width, text_height))
         self._ctx.move_to(0, 0)
 
         PangoCairo.show_layout(self._ctx, layout)
 
-    _alignments = {
+    _anchor = {
         'tl': lambda width, height: (0.0, 0.0), # top left
         'tc': lambda width, height: (-width / 2, 0.0), # top center
         'tr': lambda width, height: (-width, 0.0), # top right
@@ -166,6 +168,11 @@ class DrawingBoard(DrawingBoardABC):
         'bl': lambda width, height: (0.0, -height), # bottom left
         'bc': lambda width, height: (-width / 2, -height), # bottom center
         'br': lambda width, height: (-width, -height), # bottom right
+    }
+    _alignment = {
+        'l': Pango.Alignment.LEFT,
+        'c': Pango.Alignment.CENTER,
+        'r': Pango.Alignment.RIGHT,
     }
 
     @staticmethod
