@@ -102,6 +102,7 @@ def main():
             direction2d = Vector2D.from_polar(radius = 1.0, angle = math.pi + angle)
             v.ctx['camera'].position = Vector3D(x = position2d.x, y = position2d.y, z = 0.0)
             v.ctx['camera'].direction = Vector3D(x = direction2d.x, y = direction2d.y, z = 0.0)
+            v.ctx['camera'].roll = angle
 
         @v.prepare(
             preporder = v.preporder.on_top(),
@@ -157,7 +158,7 @@ def main():
         def text(self, canvas):
 
             canvas.draw_text(
-                text = 'bewegung -  a versatile video renderer\nDEMO',
+                text = 'bewegung - a versatile video renderer\nDEMO',
                 point = Vector2D(0.0, 0.0),
                 font = self._font,
                 font_color = Color(180, 180, 180),
