@@ -97,6 +97,14 @@ class Time(TimeABC):
     def seconds(self):
         return self._index / self._fps # float
 
+    def time(self, index: int) -> TimeABC:
+
+        return type(self)(fps = self._fps, index = index)
+
+    def time_from_seconds(self, seconds: Union[float, int]) -> TimeABC:
+
+        return type(self).from_seconds(fps = self._fps, seconds = seconds)
+
     @classmethod
     def from_seconds(cls, fps: int = FPS_DEFAULT, seconds: Union[float, int] = 1.0):
         if isinstance(seconds, int):

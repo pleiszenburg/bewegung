@@ -79,16 +79,15 @@ class Video(VideoABC):
         self._ctx = ctx if ctx is not None else {}
 
         assert fps > 0
-        self._fps = fps
         assert (seconds is not None) ^ (frames is not None)
         if seconds is not None:
             assert seconds > 0
         if frames is not None:
             assert frames > 0
         self._length = Time(
-            fps = self._fps, index = frames,
+            fps = fps, index = frames,
             ) if seconds is None else Time.from_seconds(
-            fps = self._fps, seconds = seconds,
+            fps = fps, seconds = seconds,
         )
 
         self._sequences = [] # list of sequences
@@ -100,7 +99,7 @@ class Video(VideoABC):
 
     def __repr__(self) -> str:
 
-        return f'<Video frames={self._length.index:d} seconds={self._length.seconds:.03f}s fps={self._fps:d}>'
+        return f'<Video frames={self._length.index:d} seconds={self._length.seconds:.03f}s fps={self.fps:d}>'
 
     def __len__(self) -> int:
 
@@ -116,7 +115,7 @@ class Video(VideoABC):
 
     @property
     def fps(self) -> int:
-        return self._fps
+        return self._length.fps
 
     @property
     def width(self) -> int:
@@ -144,11 +143,11 @@ class Video(VideoABC):
 
     def time(self, index: int) -> Time:
 
-        return Time(fps = self._fps, index = index)
+        return self._length.time(index = index)
 
     def time_from_seconds(self, seconds: Union[float, int]) -> Time:
 
-        return Time.from_seconds(fps = self._fps, seconds = seconds)
+        return self._length.time_from_seconds(seconds = seconds)
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # RESET TASKS
@@ -196,9 +195,9 @@ class Video(VideoABC):
         if stop is None:
             stop = self._length
 
-        if start.fps != self._fps:
+        if start.fps != self.fps:
             start = self.time_from_seconds(seconds = start.seconds)
-        if stop.fps != self._fps:
+        if stop.fps != self.fps:
             stop = self.time_from_seconds(seconds = stop.seconds)
 
         if start < self.time(0):
