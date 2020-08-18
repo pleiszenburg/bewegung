@@ -55,6 +55,9 @@ class EffectABC(ABC):
 class IndexPoolABC(ABC):
     pass
 
+class MatrixABC(ABC):
+    pass
+
 class LayerABC(ABC):
     pass
 
