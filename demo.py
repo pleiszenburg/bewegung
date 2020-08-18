@@ -64,7 +64,10 @@ def main():
         def empty(self, canvas):
             return canvas
 
-    @v.sequence()
+    @v.sequence(
+        start = Time.from_time(fps = 60, time = 1.0),
+        stop = v.time - Time.from_time(fps = 60, time = 1.0),
+    )
     class Sphere:
 
         def __init__(self):
@@ -113,7 +116,7 @@ def main():
             maximum = self._lines2d[-1][0].dist
             self._factor = lambda x: (x - minimum) / (maximum - minimum)
 
-        @fade_in(Time.from_time(fps = 60, time = 2.0))
+        @fade_in(Time.from_time(fps = 60, time = 4.0))
         @fade_out(Time.from_time(fps = 60, time = 2.0))
         @v.layer(
             zindex = v.zindex.on_top(),
