@@ -39,6 +39,7 @@ import numba as nb
 
 from .abc import CameraABC
 from .vector import (
+    Matrix,
     Vector2D,
     Vector2Ddist,
     Vector3D,
@@ -121,6 +122,7 @@ class Camera(CameraABC):
     def __init__(self,
         position: Union[Vector3D, None] = None,
         direction: Union[Vector3D, None] = None,
+        roll: float = 0.0,
         planeOffset: Union[Vector2D, None] = None,
         planeFactor: float = 1.0,
         planeYFlip: bool = False,
@@ -132,6 +134,7 @@ class Camera(CameraABC):
         self._direction = Vector3D(1.0, 0.0, 0.0) if direction is None else direction
         if not math.isclose(self._direction.mag, 1.0):
             self._direction.mul(1.0 / self._direction.mag)
+        self._roll = roll
 
         # Center offset on 2D rendering plane
         self._planeOffset = Vector2D(0.0, 0.0) if planeOffset is None else planeOffset
@@ -184,6 +187,13 @@ class Camera(CameraABC):
         assert math.isclose(self._planeX.mag, 1.0)
         assert math.isclose(self._planeY.mag, 1.0)
 
+        if self._roll == 0:
+            return
+
+        R = Matrix.from_3d_rotation(v = self._direction, a = self._roll)
+        self._planeX = R @ self._planeX
+        self._planeY = R @ self._planeY
+
     @property
     def direction(self) -> Vector3D:
         return self._direction
@@ -192,6 +202,14 @@ class Camera(CameraABC):
         self._direction.update_from_vector(value)
         if not math.isclose(self._direction.mag, 1.0):
             self._direction.mul(1.0 / self._direction.mag)
+        self._update_plane()
+
+    @property
+    def roll(self) -> float:
+        return self._roll
+    @roll.setter
+    def roll(self, value: float):
+        self._roll = value
         self._update_plane()
 
     @property
