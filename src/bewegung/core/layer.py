@@ -29,11 +29,14 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from types import MethodType
-# from typing import Callable, Union
+from typing import Callable, Tuple, Union
 
+from cairo import ImageSurface, Format
+from datashader.transfer_functions import Image as DS_Image
+from PIL import Image as PIL_Image, ImageOps as PIL_ImageOps
 from typeguard import typechecked
 
-from .abc import LayerABC
+from .abc import CanvasTypes, DrawingBoardABC, EffectABC, LayerABC, SequenceABC, TimeABC, VideoABC
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -45,9 +48,73 @@ class Layer(LayerABC):
     Mutable. Callable Layer Function/Method Wrapper, handling effects
     """
 
-    def __init__(self):
+    def __init__(self,
+        method: Callable,
+        zindex: int,
+        video: VideoABC,
+        canvas: Union[Callable[[], CanvasTypes], None] = None,
+        box: Tuple[int, int] = (0, 0),
+    ):
 
-        pass
+        self._method = method
+        self._zindex_tag = zindex
+        self._video = video
+        self._canvas = self._video.db_canvas() if canvas is None else canvas
+        self._box = box
+        self._effects = []
+
+        self._args = self._method.__code__.co_varnames[
+            1:self._method.__code__.co_argcount # excluding self and internal namespace
+            ] # parameters requested by user
+
+    def __repr__(self) -> str:
+
+        return f'<Layer name={self._method.__name__:s} zindex={self._zindex_tag:d}>'
+
+    def __call__(self, sequence: SequenceABC, time: TimeABC) -> PIL_Image.Image:
+
+        kwargs = {}
+        for param in self._args:
+            if param == 'time':
+                kwargs[param] = time
+            elif param == 'reltime':
+                kwargs[param] = time - sequence.start
+            elif param == 'canvas':
+                kwargs[param] = self._canvas()
+            else:
+                raise ValueError('unknown parameter')
+
+        cvs = self._method(sequence, **kwargs)
+
+        if isinstance(cvs, PIL_Image.Image):
+            assert cvs.mode == 'RGBA'
+        elif isinstance(cvs, DS_Image):
+            cvs = cvs.to_pil()
+            assert cvs.mode == 'RGBA'
+            cvs = PIL_ImageOps.flip(cvs) # datashader's y axis must be flipped
+        elif isinstance(cvs, DrawingBoardABC):
+            cvs = cvs.as_pil()
+        elif isinstance(cvs, ImageSurface):
+            assert cvs.get_format() == Format.ARGB32
+            cvs = PIL_Image.frombuffer(
+                mode = 'RGBA',
+                size = (cvs.get_width(), cvs.get_height()),
+                data = cvs.get_data(),
+                )
+        else:
+            raise TypeError('unknown canvas type coming from layer')
+
+        for effect in self._effects:
+            cvs = effect.apply_(
+                cvs = cvs,
+                video = self._video,
+                sequence = sequence,
+                time = time,
+            )
+
+        cvs.box = self._box # annotate offset for later use
+
+        return cvs
 
     def __get__(self, obj, objtype = None):
         """
@@ -59,3 +126,12 @@ class Layer(LayerABC):
             return self
 
         return MethodType(self, obj)
+
+    @property
+    def zindex_tag(self):
+
+        return self._zindex_tag
+
+    def register_effect(self, effect: EffectABC):
+
+        self._effects.append(effect)
