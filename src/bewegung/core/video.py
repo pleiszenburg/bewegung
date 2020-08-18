@@ -32,16 +32,16 @@ import multiprocessing as mp
 from subprocess import Popen, PIPE
 from typing import Callable, Dict, Union, Tuple
 
-from cairo import FORMAT_ARGB32, ImageSurface, Format
+from cairo import FORMAT_ARGB32, ImageSurface
 from datashader import Canvas
-from datashader.transfer_functions import Image as DS_Image
-from PIL import Image as PIL_Image, ImageOps as PIL_ImageOps
+from PIL import Image as PIL_Image
 from tqdm import tqdm
 from typeguard import typechecked
 
-from .abc import CanvasTypes, SequenceABC, VideoABC
+from .abc import CanvasTypes, LayerABC, SequenceABC, VideoABC
 from .drawingboard import DrawingBoard
 from .indexpool import IndexPool
+from .layer import Layer
 from .task import Task
 from .time import Time
 
@@ -267,23 +267,23 @@ class Video(VideoABC):
         self._preporder.register(preporder) # ensure unique preporder
 
         @typechecked
-        def decorator(func: Callable) -> Callable:
+        def decorator(method: Callable) -> Callable:
 
             @typechecked
-            def wrapper(other, time: Time): # other is the current sequence
+            def wrapper(sequence: SequenceABC, time: Time):
 
                 kwargs = {}
-                for param in func.__code__.co_varnames[:func.__code__.co_argcount]: # parameters requested by user
+                for param in method.__code__.co_varnames[
+                    1:method.__code__.co_argcount # excluding self and internal namespace
+                ]: # parameters requested by user
                     if param == 'time':
                         kwargs[param] = time
                     elif param == 'reltime':
-                        kwargs[param] = time - other.start
-                    elif param == 'self':
-                        continue
+                        kwargs[param] = time - sequence.start
                     else:
                         raise ValueError('unknown parameter', param)
 
-                func(other, **kwargs) # let user draw layer/canvas for frame
+                method(sequence, **kwargs) # let user draw layer/canvas for frame
 
             wrapper.preporder_tag = preporder # tag wrapper function
             return wrapper
@@ -302,57 +302,16 @@ class Video(VideoABC):
 
         self._zindex.register(zindex) # ensure unique z-index
 
-        if canvas is None:
-            canvas = self.db_canvas()
-
         @typechecked
-        def decorator(func: Callable) -> Callable:
+        def decorator(method: Callable) -> LayerABC:
 
-            @typechecked
-            def wrapper(other, time: Time) -> PIL_Image.Image: # other is the current sequence
-
-                kwargs = {}
-                for param in func.__code__.co_varnames[:func.__code__.co_argcount]: # parameters requested by user
-                    if param == 'time':
-                        kwargs[param] = time
-                    elif param == 'reltime':
-                        kwargs[param] = time - other.start
-                    elif param == 'canvas':
-                        if canvas is not None:
-                            kwargs[param] = canvas()
-                        else:
-                            raise ValueError('no canvas type defined')
-                    elif param == 'self':
-                        continue
-                    else:
-                        raise ValueError('unknown parameter')
-
-                cvs = func(other, **kwargs) # let user draw layer/canvas for frame
-
-                if isinstance(cvs, PIL_Image.Image):
-                    assert cvs.mode == 'RGBA'
-                elif isinstance(cvs, DS_Image):
-                    cvs = cvs.to_pil()
-                    assert cvs.mode == 'RGBA'
-                    cvs = PIL_ImageOps.flip(cvs) # datashader's y axis must be flipped
-                elif isinstance(cvs, DrawingBoard):
-                    cvs = cvs.as_pil()
-                elif isinstance(cvs, ImageSurface):
-                    assert cvs.get_format() == Format.ARGB32
-                    cvs = PIL_Image.frombuffer(
-                        mode = 'RGBA',
-                        size = (cvs.get_width(), cvs.get_height()),
-                        data = cvs.get_data(),
-                        )
-                else:
-                    raise TypeError('unknown canvas type coming from layer')
-
-                cvs.box = box # annotate offset for later use
-
-                return cvs
-
-            wrapper.zindex_tag = zindex # tag wrapper function
-            return wrapper
+            return Layer(
+                method = method,
+                zindex = zindex,
+                video = self,
+                canvas = canvas,
+                box = box,
+            ) # callable object (pretending to be a method)
 
         return decorator
 
