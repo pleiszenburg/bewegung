@@ -30,7 +30,11 @@ specific language governing rights and limitations under the License.
 
 import math
 
-from bewegung import Camera, Color, Video, Vector2D, Vector3D, VectorArray3D, FadeInEffect, FadeOutEffect
+from bewegung import (
+    Camera, Color, DrawingBoard, Video,
+    Vector2D, Vector3D, VectorArray3D,
+    FadeInEffect, FadeOutEffect,
+    )
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ROUTINES
@@ -43,7 +47,8 @@ def main():
         height = 1080,
         seconds = 10.0,
         ctx = {
-            'background_color': Color(26, 26, 26),
+            'bg_color': Color(26, 26, 26),
+            'bg_color_transparent': Color(26, 26, 26, 0),
             'camera_dist': 30,
             'camera': Camera(
                 position = Vector3D(30.0, 0, 0),
@@ -59,7 +64,7 @@ def main():
 
         @v.layer(
             zindex = v.zindex.on_bottom(),
-            canvas = v.db_canvas(background_color = v.ctx['background_color']),
+            canvas = v.db_canvas(background_color = v.ctx['bg_color']),
         )
         def empty(self, canvas):
             return canvas
@@ -120,7 +125,7 @@ def main():
         @FadeOutEffect(v.time_from_seconds(2.0))
         @v.layer(
             zindex = v.zindex.on_top(),
-            canvas = v.db_canvas(background_color = Color(26, 26, 26, 0)),
+            canvas = v.db_canvas(background_color = v.ctx['bg_color_transparent']),
         )
         def wiremesh(self, canvas):
             for line in self._lines2d:
@@ -131,6 +136,63 @@ def main():
                     line_color = Color(gray, gray, gray),
                     line_width = 1.6 + 1.6 * factor,
                 )
+            return canvas
+
+    @v.sequence(
+        stop = v.time_from_seconds(3.0),
+    )
+    class Intro:
+
+        def __init__(self):
+
+            self._font = DrawingBoard.make_font('Arial', 40.0)
+
+        @FadeInEffect(v.time_from_seconds(1.6))
+        @FadeOutEffect(v.time_from_seconds(0.8))
+        @v.layer(
+            zindex = v.zindex.on_top(),
+            canvas = v.db_canvas(background_color = v.ctx['bg_color_transparent'], height = 200),
+            box = (20, 20),
+        )
+        def text(self, canvas):
+
+            canvas.draw_text(
+                text = 'bewegung -  a versatile video renderer\nDEMO',
+                point = Vector2D(0.0, 0.0),
+                font = self._font,
+                font_color = Color(180, 180, 180),
+                anchor = 'tl',
+                )
+
+            return canvas
+
+    @v.sequence(
+        start = v.length - v.time_from_seconds(4.0),
+    )
+    class Credits:
+
+        def __init__(self):
+
+            self._font = DrawingBoard.make_font('Arial', 40.0)
+
+        @FadeInEffect(v.time_from_seconds(2.2))
+        @FadeOutEffect(v.time_from_seconds(0.4))
+        @v.layer(
+            zindex = v.zindex.on_top(),
+            canvas = v.db_canvas(background_color = v.ctx['bg_color_transparent'], height = 200),
+            box = (-20, v.height - 20 - 200),
+        )
+        def text(self, canvas):
+
+            canvas.draw_text(
+                text = 'github.com/pleiszenburg/bewegung\npleiszenburg.de - Independent Scientific Services',
+                point = Vector2D(v.width, 200),
+                font = self._font,
+                font_color = Color(180, 180, 180),
+                alignment = 'r',
+                anchor = 'br',
+                )
+
             return canvas
 
     v.render(
