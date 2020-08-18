@@ -49,6 +49,9 @@ class ColorABC(ABC):
 class DrawingBoardABC(ABC):
     pass
 
+class EffectABC(ABC):
+    pass
+
 class IndexPoolABC(ABC):
     pass
 
