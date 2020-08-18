@@ -39,6 +39,7 @@ from tqdm import tqdm
 from typeguard import typechecked
 
 from .abc import CanvasTypes, LayerABC, SequenceABC, VideoABC
+from .const import FPS_DEFAULT
 from .drawingboard import DrawingBoard
 from .indexpool import IndexPool
 from .layer import Layer
@@ -62,20 +63,33 @@ class Video(VideoABC):
     """
 
     def __init__(self,
-        time: Time, # video length and frame rate
         width: int, # video width
         height: int, # video height
         ctx: Union[Dict, None] = None, # store for video context data
+        fps: int = FPS_DEFAULT,
+        seconds: Union[float, int, None] = None,
+        frames: Union[int, None] = None,
     ):
 
-        assert time.index > 0
         assert width > 0
         assert height > 0
 
-        self._time = time
         self._width = width
         self._height = height
         self._ctx = ctx if ctx is not None else {}
+
+        assert fps > 0
+        self._fps = fps
+        assert (seconds is not None) ^ (frames is not None)
+        if seconds is not None:
+            assert seconds > 0
+        if frames is not None:
+            assert frames > 0
+        self._length = Time(
+            fps = self._fps, index = frames,
+            ) if seconds is None else Time.from_seconds(
+            fps = self._fps, seconds = seconds,
+        )
 
         self._sequences = [] # list of sequences
 
@@ -86,19 +100,23 @@ class Video(VideoABC):
 
     def __repr__(self) -> str:
 
-        return f'<Video frames={self._time.index:d} length={self._time.time:.03f}s fps={self._time.fps:d}>'
+        return f'<Video frames={self._length.index:d} seconds={self._length.seconds:.03f}s fps={self._fps:d}>'
 
     def __len__(self) -> int:
 
-        return self._time.index
+        return self._length.index
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # PROPERTIES
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     @property
-    def time(self) -> Time:
-        return self._time
+    def length(self) -> Time:
+        return self._length
+
+    @property
+    def fps(self) -> int:
+        return self._fps
 
     @property
     def width(self) -> int:
@@ -119,6 +137,18 @@ class Video(VideoABC):
     @property
     def zindex(self) -> IndexPool:
         return self._zindex
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# RESET TASKS
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    def time(self, index: int) -> Time:
+
+        return Time(fps = self._fps, index = index)
+
+    def time_from_seconds(self, seconds: Union[float, int]) -> Time:
+
+        return Time.from_seconds(fps = self._fps, seconds = seconds)
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # RESET TASKS
@@ -162,18 +192,18 @@ class Video(VideoABC):
     ) -> Callable:
 
         if start is None:
-            start = Time(fps = self._time.fps, index = 0)
+            start = self.time(0)
         if stop is None:
-            stop = self._time
+            stop = self._length
 
-        if start.fps != self._time.fps:
-            start = Time.from_time(fps = self._time.fps, time = start.time)
-        if stop.fps != self._time.fps:
-            stop = Time.from_time(fps = self._time.fps, time = stop.time)
+        if start.fps != self._fps:
+            start = self.time_from_seconds(seconds = start.seconds)
+        if stop.fps != self._fps:
+            stop = self.time_from_seconds(seconds = stop.seconds)
 
-        if start < Time(fps = self._time.fps, index = 0):
+        if start < self.time(0):
             raise ValueError()
-        if stop > self._time:
+        if stop > self._length:
             raise ValueError()
         if start >= stop:
             raise ValueError()
@@ -181,28 +211,30 @@ class Video(VideoABC):
         @typechecked
         def decorator(cls: type):
 
+            self_ = self # make the linter happy
+
             @typechecked
             class wrapper(cls, SequenceABC): # sequence class, setting time properties
-                def __init__(other):
-                    other._start, other._stop = start, stop
-                    other._video, other._ctx = self, self._ctx
+                def __init__(self):
+                    self._start, self._stop = start, stop
+                    self._video, self._ctx = self_, self_._ctx
                     super().__init__()
-                def __repr__(other) -> str:
+                def __repr__(self) -> str:
                     return f'<Sequence name={cls.__name__:s}>'
-                def __contains__(other, time: Time) -> bool:
-                    return other._start <= time and time < other._stop
+                def __contains__(self, time: Time) -> bool:
+                    return self._start <= time and time < self._stop
                 @property
-                def start(other) -> Time:
-                    return other._start
+                def start(self) -> Time:
+                    return self._start
                 @property
-                def stop(other) -> Time:
-                    return other._stop
+                def stop(self) -> Time:
+                    return self._stop
                 @property
-                def video(other) -> VideoABC:
-                    return other._video
+                def video(self) -> VideoABC:
+                    return self._video
                 @property
-                def ctx(other) -> Dict:
-                    return other._ctx
+                def ctx(self) -> Dict:
+                    return self._ctx
 
             self._sequences.append((wrapper, None)) # track sequence classes and objects
             return None # wrapper # HACK remove original class?
@@ -342,14 +374,14 @@ class Video(VideoABC):
                 func = self._worker_render_frame,
                 args = (time, video_fn is not None, frame_fn),
                 error_callback = self._worker_error,
-            ) for time in Time.range(Time(fps = self._time.fps, index = 0), self._time)
+            ) for time in Time.range(self.time(0), self._length)
         ]
 
         if video_fn is not None:
             codec = Popen([
                 'ffmpeg',
                 '-y', # force overwrite of output file
-                '-framerate', f'{self._time.fps:d}',
+                '-framerate', f'{self.fps:d}',
                 '-f', 'image2pipe', # force input format
                 '-i', '-', # data from stdin
                 '-vcodec', 'bmp', # input codec
