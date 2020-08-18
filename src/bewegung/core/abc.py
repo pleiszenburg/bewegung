@@ -52,6 +52,9 @@ class DrawingBoardABC(ABC):
 class IndexPoolABC(ABC):
     pass
 
+class LayerABC(ABC):
+    pass
+
 class SequenceABC(ABC):
     pass
 
