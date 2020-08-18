@@ -34,3 +34,4 @@ from .single3d import Vector3D
 from .array2d import VectorArray2D
 from .array2ddist import VectorArray2Ddist
 from .array3d import VectorArray3D
+from .matrix import Matrix
