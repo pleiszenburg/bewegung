@@ -47,8 +47,9 @@ class BaseEffect(EffectABC):
 
     def __init__(self):
 
-        self._args = self.apply.__wrapped__.__code__.co_varnames[
-            1:self.apply.__wrapped__.__code__.co_argcount # excluding self and internal namespace
+        apply = getattr(self.apply, '__wrapped__', self.apply) # typeguard
+        self._args = apply.__code__.co_varnames[
+            1:apply.__code__.co_argcount # excluding self and internal namespace
             ] # parameters requested by user
         assert self._args[0] == 'cvs' # canvas
 
