@@ -122,7 +122,7 @@ setup(
     zip_safe=False,
     entry_points={},
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "Intended Audience :: Education",
         "Intended Audience :: Financial and Insurance Industry",
