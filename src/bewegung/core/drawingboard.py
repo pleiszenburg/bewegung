@@ -39,13 +39,14 @@ from typeguard import typechecked
 import gi
 gi.require_version('Pango', '1.0')
 gi.require_version('PangoCairo', '1.0')
-from gi.repository import Pango, PangoCairo
+gi.require_version('Rsvg', '2.0')
+from gi.repository import Pango, PangoCairo, Rsvg
 
 import IPython.display
 
 from .abc import DrawingBoardABC, Vector2DABC
 from .color import Color
-from .vector import Vector2D
+from .vector import Vector2D, Matrix
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -127,6 +128,55 @@ class DrawingBoard(DrawingBoardABC):
     def save(self, fn: str):
 
         self.as_pil().save(fn)
+
+    @_geometry
+    def draw_svg(self,
+        fn: Union[str, None] = None,
+        raw: Union[bytes, None] = None,
+        svg: Union[Rsvg.Handle, None] = None,
+        point: Union[Vector2DABC, None] = None,
+        scale: Union[Vector2DABC, None] = None,
+        angle: float = 0.0,
+        anchor: str = 'cc',
+    ):
+
+        assert (fn is not None) ^ (raw is not None) ^ (svg is not None)
+
+        if svg is None:
+            if raw is None:
+                with open(fn, 'rb') as f:
+                    raw = f.read()
+                svg = Rsvg.Handle.new_from_data(raw)
+            else:
+                svg = Rsvg.Handle.new_from_file(fn)
+
+        if point is None:
+            point = Vector2D(0.0, 0.0)
+        if scale is None:
+            scale = Vector2D(1.0, 1.0)
+
+        svg_dim = svg.get_dimensions()
+        svg_dim = Vector2D(svg_dim.width, svg_dim.height)
+
+        anchor = Vector2D(*self._anchor[anchor](*svg_dim.as_tuple()))
+
+        self._ctx.translate(
+            point.x - svg_dim.x * scale.x / 2,
+            point.y - svg_dim.y * scale.y / 2,
+        )
+        self._ctx.scale(*scale.as_tuple())
+        self._ctx.rotate(angle)
+
+        d = anchor * -1.0
+        s = (Matrix.from_2d_rotation(-angle) @ d) - d
+        self._ctx.translate(*s.as_tuple())
+
+        svg.render_cairo(self._ctx)
+
+    @staticmethod
+    def make_svg(fn: str) -> Rsvg.Handle:
+
+        return Rsvg.Handle.new_from_file(fn)
 
     @_geometry
     def draw_text(self,
