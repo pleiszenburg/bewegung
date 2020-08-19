@@ -31,16 +31,16 @@ specific language governing rights and limitations under the License.
 from abc import ABC
 from typing import Generator, List, Tuple, Union
 
-from cairo import ImageSurface
-from datashader.transfer_functions import Image as DS_Image
 import numpy as np
-from PIL.Image import Image as PIL_Image
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASSES
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 class CameraABC(ABC):
+    pass
+
+class CanvasABC(ABC):
     pass
 
 class ColorABC(ABC):
@@ -105,11 +105,4 @@ VectorIterable3D = Union[
     List[Vector3DABC],
     Tuple[Vector3DABC],
     Generator[Vector3DABC, None, None],
-]
-
-CanvasTypes = Union[
-    DrawingBoardABC,
-    DS_Image, # datashader
-    PIL_Image, # PIL
-    ImageSurface, # Cairo
 ]
