@@ -28,11 +28,11 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Callable, Union
+from typing import Any, Callable, Union
 
 from typeguard import typechecked
 
-from .abc import CanvasTypes, SequenceABC, TaskABC, TimeABC
+from .abc import SequenceABC, TaskABC, TimeABC
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -47,7 +47,7 @@ class Task(TaskABC):
     def __init__(self,
         sequence: SequenceABC,
         index: int,
-        task: Callable[[TimeABC], CanvasTypes],
+        task: Callable,
     ):
 
         self._sequence = sequence
@@ -58,7 +58,7 @@ class Task(TaskABC):
 
         return f'<Task index={self._index:d}>'
 
-    def __call__(self, time: TimeABC) -> Union[CanvasTypes, None]:
+    def __call__(self, time: TimeABC) -> Any:
 
         return self._task(time)
 
