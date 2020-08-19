@@ -158,14 +158,16 @@ class DrawingBoard(DrawingBoardABC):
         svg_dim = svg.get_dimensions()
         svg_dim = Vector2D(svg_dim.width, svg_dim.height)
 
+        anchor = Vector2D(*self._anchor[anchor](*svg_dim.as_tuple()))
+
         self._ctx.translate(
-            point.x - svg_dim.x * scale.x / 2,
-            point.y - svg_dim.y * scale.y / 2,
+            point.x + anchor.x * scale.x,
+            point.y + anchor.y * scale.y,
         )
         self._ctx.scale(*scale.as_tuple())
         self._ctx.rotate(angle)
 
-        anchor = Vector2D(*self._anchor[anchor](*svg_dim.as_tuple())) * -1.0
+        anchor = anchor * -1.0
         shift = Matrix.from_2d_rotation(-angle) @ anchor - anchor
         self._ctx.translate(*shift.as_tuple())
 
