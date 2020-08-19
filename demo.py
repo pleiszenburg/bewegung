@@ -64,7 +64,7 @@ def main():
 
         @v.layer(
             zindex = v.zindex.on_bottom(),
-            canvas = v.db_canvas(background_color = v.ctx['bg_color']),
+            canvas = v.canvas(background_color = v.ctx['bg_color']),
         )
         def empty(self, canvas):
             return canvas
@@ -126,7 +126,7 @@ def main():
         @FadeOutEffect(v.time_from_seconds(2.0))
         @v.layer(
             zindex = v.zindex.on_top(),
-            canvas = v.db_canvas(background_color = v.ctx['bg_color_transparent']),
+            canvas = v.canvas(background_color = v.ctx['bg_color_transparent']),
         )
         def wiremesh(self, canvas):
             for line in self._lines2d:
@@ -152,7 +152,7 @@ def main():
         @FadeOutEffect(v.time_from_seconds(0.8))
         @v.layer(
             zindex = v.zindex.on_top(),
-            canvas = v.db_canvas(background_color = v.ctx['bg_color_transparent'], height = 200),
+            canvas = v.canvas(background_color = v.ctx['bg_color_transparent'], height = 200),
             box = (20, 20),
         )
         def text(self, canvas):
@@ -181,7 +181,7 @@ def main():
         @FadeOutEffect(v.time_from_seconds(2.0))
         @v.layer(
             zindex = v.zindex.on_top(),
-            canvas = v.db_canvas(background_color = v.ctx['bg_color_transparent'], height = 200),
+            canvas = v.canvas(background_color = v.ctx['bg_color_transparent'], height = 200),
             box = (-20, v.height - 20 - 200),
         )
         def text(self, canvas):
@@ -211,7 +211,7 @@ def main():
         @FadeOutEffect(v.time_from_seconds(0.3))
         @v.layer(
             zindex = v.zindex.on_top(),
-            canvas = v.db_canvas(background_color = v.ctx['bg_color_transparent']),
+            canvas = v.canvas(background_color = v.ctx['bg_color_transparent']),
         )
         def text(self, canvas):
 
