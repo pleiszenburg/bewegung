@@ -78,16 +78,16 @@ class Color(ColorABC):
     def a(self) -> int:
         return self._a
 
-    def as_bgra_float(self) -> Tuple[float, float, float, float]:
-
-        return self._b / 255, self._g / 255, self._r / 255, self._a / 255
-
     def as_hex(self, alpha: bool = True) -> str:
 
         if not alpha:
             return f'{self._r:02x}{self._g:02x}{self._b:02x}'
 
         return f'{self._r:02x}{self._g:02x}{self._b:02x}{self._a:02x}'
+
+    def as_rgba_float(self) -> Tuple[float, float, float, float]:
+
+        return self._r / 255, self._g / 255, self._b / 255, self._a / 255
 
     def as_rgba_int(self) -> Tuple[int, int, int, int]:
 

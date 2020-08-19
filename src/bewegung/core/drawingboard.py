@@ -90,23 +90,29 @@ class DrawingBoard(DrawingBoardABC):
     def __repr__(self) -> str:
         return f'<DrawingBoard width={self._width:d} height={self._height:d} subpixels={self._subpixels:d}>'
 
-    def as_pil(self) -> Image:
+    def as_pil(self) -> Image.Image:
 
         if self._subpixels == 1:
-            return Image.frombuffer(
+            return self.swap_channels(Image.frombuffer(
                 mode = 'RGBA',
                 size = (self._width, self._height),
                 data = self._surface.get_data(),
-                )
+                ))
 
-        return Image.frombuffer(
+        return self.swap_channels(Image.frombuffer(
             mode = 'RGBA',
             size = (self._width * self._subpixels, self._height * self._subpixels),
             data = self._surface.get_data(),
             ).resize(
                 (self._width, self._height),
                 resample = Image.LANCZOS,
-            )
+            ))
+
+    @staticmethod
+    def swap_channels(image: Image.Image) -> Image.Image:
+
+        b, g, r, a = image.split()
+        return Image.merge('RGBA', (r, g, b, a))
 
     def display(self):
 
@@ -145,7 +151,7 @@ class DrawingBoard(DrawingBoardABC):
         layout.set_alignment(self._alignment[alignment])
         layout.set_markup(text, -1)
 
-        self._ctx.set_source_rgba(*font_color.as_bgra_float())
+        self._ctx.set_source_rgba(*font_color.as_rgba_float())
 
         _, text_extents = layout.get_pixel_extents()
         text_width, text_height = text_extents.width, text_extents.height
@@ -220,7 +226,7 @@ class DrawingBoard(DrawingBoardABC):
             point.x, point.y, r,
             0, 2 * math.pi,
         )
-        self._ctx.set_source_rgba(*fill_color.as_bgra_float())
+        self._ctx.set_source_rgba(*fill_color.as_rgba_float())
         self._ctx.fill()
 
     def _stroke(self,
@@ -232,7 +238,7 @@ class DrawingBoard(DrawingBoardABC):
         if line_color is None:
             line_color = Color(0, 0, 0, 255) # opaque black
 
-        self._ctx.set_source_rgba(*line_color.as_bgra_float())
+        self._ctx.set_source_rgba(*line_color.as_rgba_float())
         self._ctx.set_line_width(line_width)
         self._ctx.stroke()
 
@@ -243,7 +249,7 @@ class DrawingBoard(DrawingBoardABC):
         if fill_color is None:
             fill_color = Color(255, 255, 255, 0) # transparent white
 
-        self._ctx.set_source_rgba(*fill_color.as_bgra_float())
+        self._ctx.set_source_rgba(*fill_color.as_rgba_float())
         self._ctx.rectangle(0, 0, self._width, self._height)
         self._ctx.fill()
 

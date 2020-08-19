@@ -37,6 +37,7 @@ from PIL import Image as PIL_Image, ImageOps as PIL_ImageOps
 from typeguard import typechecked
 
 from .abc import CanvasTypes, DrawingBoardABC, EffectABC, LayerABC, SequenceABC, TimeABC, VideoABC
+from .drawingboard import DrawingBoard
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -96,11 +97,11 @@ class Layer(LayerABC):
             cvs = cvs.as_pil()
         elif isinstance(cvs, ImageSurface):
             assert cvs.get_format() == Format.ARGB32
-            cvs = PIL_Image.frombuffer(
+            cvs = DrawingBoard.swap_channels(PIL_Image.frombuffer(
                 mode = 'RGBA',
                 size = (cvs.get_width(), cvs.get_height()),
                 data = cvs.get_data(),
-                )
+                ))
         else:
             raise TypeError('unknown canvas type coming from layer')
 
