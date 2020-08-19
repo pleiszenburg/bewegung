@@ -135,7 +135,7 @@ class DrawingBoard(DrawingBoardABC):
         raw: Union[bytes, None] = None,
         svg: Union[Rsvg.Handle, None] = None,
         point: Union[Vector2DABC, None] = None,
-        scale: Union[Vector2DABC, None] = None,
+        scale: float = 1.0,
         angle: float = 0.0,
         anchor: Union[Vector2D, str] = 'cc',
     ):
@@ -152,8 +152,7 @@ class DrawingBoard(DrawingBoardABC):
 
         if point is None:
             point = Vector2D(0.0, 0.0)
-        if scale is None:
-            scale = Vector2D(1.0, 1.0)
+        scale = Vector2D(scale, scale)
 
         svg_dim = svg.get_dimensions()
         svg_dim = Vector2D(svg_dim.width, svg_dim.height)
