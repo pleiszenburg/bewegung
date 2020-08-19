@@ -137,7 +137,7 @@ class DrawingBoard(DrawingBoardABC):
         point: Union[Vector2DABC, None] = None,
         scale: Union[Vector2DABC, None] = None,
         angle: float = 0.0,
-        anchor: str = 'cc',
+        anchor: Union[Vector2D, str] = 'cc',
     ):
 
         assert (fn is not None) ^ (raw is not None) ^ (svg is not None)
@@ -158,7 +158,10 @@ class DrawingBoard(DrawingBoardABC):
         svg_dim = svg.get_dimensions()
         svg_dim = Vector2D(svg_dim.width, svg_dim.height)
 
-        anchor = Vector2D(*self._anchor[anchor](*svg_dim.as_tuple()))
+        if isinstance(anchor, str):
+            anchor = self._anchor[anchor](*svg_dim.as_tuple())
+        else:
+            anchor = anchor * -1.0
 
         self._ctx.translate(
             point.x + anchor.x * scale.x,
@@ -186,7 +189,7 @@ class DrawingBoard(DrawingBoardABC):
         font: Union[Pango.FontDescription, None] = None,
         font_color: Union[Color, None] = None,
         alignment: str = 'l',
-        anchor: str = 'cc',
+        anchor: Union[Vector2D, str] = 'cc',
         ):
 
         if point is None:
@@ -203,27 +206,30 @@ class DrawingBoard(DrawingBoardABC):
 
         self._ctx.set_source_rgba(*font_color.as_rgba_float())
 
-        _, text_extents = layout.get_pixel_extents()
-        text_width, text_height = text_extents.width, text_extents.height
+        if isinstance(anchor, str):
+            _, text_extents = layout.get_pixel_extents()
+            anchor = self._anchor[anchor](text_extents.width, text_extents.height)
+        else:
+            anchor = anchor * -1
 
         self._ctx.translate(point.x, point.y)
         if angle != 0.0:
             self._ctx.rotate(angle)
-        self._ctx.translate(*self._anchor[anchor](text_width, text_height))
+        self._ctx.translate(*anchor.as_tuple())
         self._ctx.move_to(0, 0)
 
         PangoCairo.show_layout(self._ctx, layout)
 
     _anchor = {
-        'tl': lambda width, height: (0.0, 0.0), # top left
-        'tc': lambda width, height: (-width / 2, 0.0), # top center
-        'tr': lambda width, height: (-width, 0.0), # top right
-        'cl': lambda width, height: (0.0, -height / 2), # center left
-        'cc': lambda width, height: (-width / 2, -height / 2), # center center
-        'cr': lambda width, height: (-width, -height / 2), # center right
-        'bl': lambda width, height: (0.0, -height), # bottom left
-        'bc': lambda width, height: (-width / 2, -height), # bottom center
-        'br': lambda width, height: (-width, -height), # bottom right
+        'tl': lambda width, height: Vector2D(0.0, 0.0), # top left
+        'tc': lambda width, height: Vector2D(-width / 2, 0.0), # top center
+        'tr': lambda width, height: Vector2D(-width, 0.0), # top right
+        'cl': lambda width, height: Vector2D(0.0, -height / 2), # center left
+        'cc': lambda width, height: Vector2D(-width / 2, -height / 2), # center center
+        'cr': lambda width, height: Vector2D(-width, -height / 2), # center right
+        'bl': lambda width, height: Vector2D(0.0, -height), # bottom left
+        'bc': lambda width, height: Vector2D(-width / 2, -height), # bottom center
+        'br': lambda width, height: Vector2D(-width, -height), # bottom right
     }
     _alignment = {
         'l': Pango.Alignment.LEFT,
