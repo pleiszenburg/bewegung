@@ -163,12 +163,13 @@ def main():
                 font = self._font,
                 font_color = Color(180, 180, 180),
                 anchor = 'tl',
-                )
+            )
 
             return canvas
 
     @v.sequence(
-        start = v.length - v.time_from_seconds(4.0),
+        start = v.length - v.time_from_seconds(5.0),
+        stop = v.length - v.time_from_seconds(1.0),
     )
     class Credits:
 
@@ -176,8 +177,8 @@ def main():
 
             self._font = DrawingBoard.make_font('Arial', 40.0)
 
-        @FadeInEffect(v.time_from_seconds(2.2))
-        @FadeOutEffect(v.time_from_seconds(0.4))
+        @FadeInEffect(v.time_from_seconds(2.0))
+        @FadeOutEffect(v.time_from_seconds(2.0))
         @v.layer(
             zindex = v.zindex.on_top(),
             canvas = v.db_canvas(background_color = v.ctx['bg_color_transparent'], height = 200),
@@ -186,18 +187,53 @@ def main():
         def text(self, canvas):
 
             canvas.draw_text(
-                text = 'github.com/pleiszenburg/bewegung\npleiszenburg.de - Independent Scientific Services',
+                text = 'github.com/pleiszenburg/bewegung',
                 point = Vector2D(v.width, 200),
                 font = self._font,
                 font_color = Color(180, 180, 180),
                 alignment = 'r',
                 anchor = 'br',
-                )
+            )
+
+            return canvas
+
+    @v.sequence(
+        start = v.length - v.time_from_seconds(1.2),
+    )
+    class CreditsLogo:
+
+        def __init__(self):
+
+            self._svg = DrawingBoard.make_svg('demo.svg')
+            self._font = DrawingBoard.make_font('Arial', 25.0)
+
+        @FadeInEffect(v.time_from_seconds(0.8))
+        @FadeOutEffect(v.time_from_seconds(0.3))
+        @v.layer(
+            zindex = v.zindex.on_top(),
+            canvas = v.db_canvas(background_color = v.ctx['bg_color_transparent']),
+        )
+        def text(self, canvas):
+
+            canvas.draw_svg(
+                svg = self._svg,
+                point = Vector2D(v.width / 2, v.height / 2 - 50),
+                scale = 2.0,
+                anchor = 'cc',
+            )
+            canvas.draw_text(
+                text = 'pleiszenburg.de - Independent Scientific Services\n2020',
+                point = Vector2D(v.width / 2, v.height / 2 + 135),
+                font = self._font,
+                font_color = Color(180, 180, 180),
+                alignment = 'c',
+                anchor = 'tc',
+            )
 
             return canvas
 
     v.render(
-        processes = 1,
+        processes = 2,
         # frame_fn = 'frames/frame_{index:07d}.png',
         video_fn = 'video.mp4',
         )
