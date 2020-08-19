@@ -29,15 +29,13 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from types import MethodType
-from typing import Callable, Tuple, Union
+from typing import Any, Callable, Tuple, Union
 
-from cairo import ImageSurface, Format
-from datashader.transfer_functions import Image as DS_Image
-from PIL import Image as PIL_Image, ImageOps as PIL_ImageOps
+from PIL import Image as PIL_Image
 from typeguard import typechecked
 
-from .abc import CanvasTypes, DrawingBoardABC, EffectABC, LayerABC, SequenceABC, TimeABC, VideoABC
-from .drawingboard import DrawingBoard
+from .abc import EffectABC, LayerABC, SequenceABC, TimeABC, VideoABC
+from .canvas import inventory
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -53,7 +51,7 @@ class Layer(LayerABC):
         method: Callable,
         zindex: int,
         video: VideoABC,
-        canvas: Union[Callable[[], CanvasTypes], None] = None,
+        canvas: Union[Callable, None] = None,
         box: Tuple[int, int] = (0, 0),
     ):
 
@@ -86,24 +84,7 @@ class Layer(LayerABC):
                 raise ValueError('unknown parameter')
 
         cvs = self._method(sequence, **kwargs)
-
-        if isinstance(cvs, PIL_Image.Image):
-            assert cvs.mode == 'RGBA'
-        elif isinstance(cvs, DS_Image):
-            cvs = cvs.to_pil()
-            assert cvs.mode == 'RGBA'
-            cvs = PIL_ImageOps.flip(cvs) # datashader's y axis must be flipped
-        elif isinstance(cvs, DrawingBoardABC):
-            cvs = cvs.as_pil()
-        elif isinstance(cvs, ImageSurface):
-            assert cvs.get_format() == Format.ARGB32
-            cvs = DrawingBoard.swap_channels(PIL_Image.frombuffer(
-                mode = 'RGBA',
-                size = (cvs.get_width(), cvs.get_height()),
-                data = cvs.get_data(),
-                ))
-        else:
-            raise TypeError('unknown canvas type coming from layer')
+        cvs = self._to_pil(cvs)
 
         for effect in self._effects:
             cvs = effect.apply_(
@@ -136,3 +117,11 @@ class Layer(LayerABC):
     def register_effect(self, effect: EffectABC):
 
         self._effects.append(effect)
+
+    def _to_pil(self, obj: Any) -> PIL_Image.Image:
+
+        for canvas in inventory.values():
+            if canvas.isinstance(obj):
+                return canvas.to_pil(obj)
+
+        raise TypeError('unknown canvas type coming from layer')
