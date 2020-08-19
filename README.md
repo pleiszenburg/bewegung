@@ -6,7 +6,7 @@
 
 ## INSTALLATION
 
-The prerequisites of [PyQObject](https://pygobject.readthedocs.io/en/latest/getting_started.html) have to be fulfilled. In addition, [Pango](https://pango.gnome.org/), its headers (development package) and [ffmpeg](https://ffmpeg.org/download.html) must be installed. Once all prerequisites are met, `bewegung` can be installed with Python's package manager `pip`:
+The prerequisites of [PyQObject](https://pygobject.readthedocs.io/en/latest/getting_started.html) have to be fulfilled. In addition, [Pango](https://pango.gnome.org/), its headers (development package), [librsvg](https://wiki.gnome.org/Projects/LibRsvg), its headers (development package) and [ffmpeg](https://ffmpeg.org/download.html) must be installed. Once all prerequisites are met, `bewegung` can be installed with Python's package manager `pip`:
 
 ```bash
 pip install -vU git+https://github.com/pleiszenburg/bewegung.git@master
