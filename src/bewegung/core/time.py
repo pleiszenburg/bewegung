@@ -50,34 +50,34 @@ class Time(TimeABC):
             raise ValueError()
         self._fps, self._index = fps, index
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<Time index={self._index:d} seconds={self.seconds:.03f}s fps={self._fps:d}>'
 
-    def __eq__(self, other: TimeABC):
+    def __eq__(self, other: TimeABC) -> bool:
         self._assert_fps(other)
         return self.index == other.index
 
-    def __lt__(self, other: TimeABC):
+    def __lt__(self, other: TimeABC) -> bool:
         self._assert_fps(other)
         return self.index < other.index
 
-    def __le__(self, other: TimeABC):
+    def __le__(self, other: TimeABC) -> bool:
         self._assert_fps(other)
         return self.index <= other.index
 
-    def __gt__(self, other: TimeABC):
+    def __gt__(self, other: TimeABC) -> bool:
         self._assert_fps(other)
         return self.index > other.index
 
-    def __ge__(self, other: TimeABC):
+    def __ge__(self, other: TimeABC) -> bool:
         self._assert_fps(other)
         return self.index >= other.index
 
-    def __add__(self, other: TimeABC):
+    def __add__(self, other: TimeABC) -> bool:
         self._assert_fps(other)
         return type(self)(self.fps, self.index + other.index)
 
-    def __sub__(self, other: TimeABC):
+    def __sub__(self, other: TimeABC) -> bool:
         self._assert_fps(other)
         return type(self)(self.fps, self.index - other.index)
 
@@ -86,15 +86,15 @@ class Time(TimeABC):
             raise ValueError()
 
     @property
-    def fps(self):
+    def fps(self) -> int:
         return self._fps
 
     @property
-    def index(self):
+    def index(self) -> int:
         return self._index
 
     @property
-    def seconds(self):
+    def seconds(self) -> float:
         return self._index / self._fps # float
 
     def time(self, index: int) -> TimeABC:
@@ -106,7 +106,7 @@ class Time(TimeABC):
         return type(self).from_seconds(fps = self._fps, seconds = seconds)
 
     @classmethod
-    def from_seconds(cls, fps: int = FPS_DEFAULT, seconds: Union[float, int] = 1.0):
+    def from_seconds(cls, fps: int = FPS_DEFAULT, seconds: Union[float, int] = 1.0) -> TimeABC:
         if isinstance(seconds, int):
             seconds = float(seconds)
         return cls(fps = fps, index = round(seconds * fps))

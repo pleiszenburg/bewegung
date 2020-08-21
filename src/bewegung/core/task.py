@@ -54,7 +54,7 @@ class Task(TaskABC):
         self._index = index
         self._task = task
 
-    def __repr__(self):
+    def __repr__(self) -> str:
 
         return f'<Task index={self._index:d}>'
 
@@ -62,7 +62,7 @@ class Task(TaskABC):
 
         return self._task(time)
 
-    def __lt__(self, other: TaskABC):
+    def __lt__(self, other: TaskABC) -> bool:
 
         return self.index < other.index
 
