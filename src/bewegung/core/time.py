@@ -73,11 +73,11 @@ class Time(TimeABC):
         self._assert_fps(other)
         return self.index >= other.index
 
-    def __add__(self, other: TimeABC) -> bool:
+    def __add__(self, other: TimeABC) -> TimeABC:
         self._assert_fps(other)
         return type(self)(self.fps, self.index + other.index)
 
-    def __sub__(self, other: TimeABC) -> bool:
+    def __sub__(self, other: TimeABC) -> TimeABC:
         self._assert_fps(other)
         return type(self)(self.fps, self.index - other.index)
 
