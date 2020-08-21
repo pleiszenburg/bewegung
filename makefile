@@ -4,10 +4,10 @@ black:
 
 clean:
 	-rm -r build/*
-	find src/ -name '*.pyc' -exec sudo rm -f {} +
-	find src/ -name '*.pyo' -exec sudo rm -f {} +
+	find src/ -name '*.pyc' -exec rm -f {} +
+	find src/ -name '*.pyo' -exec rm -f {} +
 	find src/ -name '*~' -exec rm -f {} +
-	find src/ -name '__pycache__' -exec sudo rm -fr {} +
+	find src/ -name '__pycache__' -exec rm -fr {} +
 	find src/ -name '*.htm' -exec rm -f {} +
 	find src/ -name '*.html' -exec rm -f {} +
 	find src/ -name '*.so' -exec rm -f {} +
