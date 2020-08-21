@@ -94,7 +94,12 @@ class Color(ColorABC):
         return self._r, self._g, self._b, self._a
 
     @classmethod
-    def from_bgra_float(cls, b, g, r, a = 1.0) -> ColorABC:
+    def from_rgba_float(cls,
+        r: float,
+        g: float,
+        b: float,
+        a: float = 1.0,
+    ) -> ColorABC:
 
         assert 0.0 <= r <= 1.0
         assert 0.0 <= g <= 1.0
