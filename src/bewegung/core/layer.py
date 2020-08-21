@@ -52,14 +52,14 @@ class Layer(LayerABC):
         zindex: int,
         video: VideoABC,
         canvas: Union[Callable, None] = None,
-        box: Tuple[int, int] = (0, 0),
+        offset: Tuple[int, int] = (0, 0),
     ):
 
         self._method = method
         self._zindex_tag = zindex
         self._video = video
         self._canvas = self._video.db_canvas() if canvas is None else canvas
-        self._box = box
+        self._offset = offset
         self._effects = []
 
         self._args = self._method.__code__.co_varnames[
@@ -94,7 +94,7 @@ class Layer(LayerABC):
                 time = time,
             )
 
-        cvs.box = self._box # annotate offset for later use
+        cvs.offset = self._offset # annotate offset for later use
 
         return cvs
 

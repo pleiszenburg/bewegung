@@ -153,7 +153,7 @@ def main():
         @v.layer(
             zindex = v.zindex.on_top(),
             canvas = v.canvas(background_color = v.ctx['bg_color_transparent'], height = 200),
-            box = (20, 20),
+            offset = (20, 20),
         )
         def text(self, canvas):
 
@@ -182,7 +182,7 @@ def main():
         @v.layer(
             zindex = v.zindex.on_top(),
             canvas = v.canvas(background_color = v.ctx['bg_color_transparent'], height = 200),
-            box = (-20, v.height - 20 - 200),
+            offset = (-20, v.height - 20 - 200),
         )
         def text(self, canvas):
 

@@ -279,7 +279,7 @@ class Video(VideoABC):
     def layer(self,
         zindex: int,
         canvas: Union[Callable, None],
-        box: Tuple[int, int] = (0, 0),
+        offset: Tuple[int, int] = (0, 0),
     ) -> Callable:
 
         self._zindex.register(zindex) # ensure unique z-index
@@ -292,7 +292,7 @@ class Video(VideoABC):
                 zindex = zindex,
                 video = self,
                 canvas = canvas,
-                box = box,
+                offset = offset,
             ) # callable object (pretending to be a method)
 
         return decorator
@@ -385,7 +385,7 @@ class Video(VideoABC):
 
         base_layer = PIL_Image.new('RGBA', (self._width, self._height), (0, 0, 0, 0)) # transparent black
         for layer in layers:
-            base_layer.paste(im = layer, box = layer.box, mask = layer)
+            base_layer.paste(im = layer, box = layer.offset, mask = layer)
 
         base_layer = base_layer.convert('RGB') # go from RGBA to RGB
 
