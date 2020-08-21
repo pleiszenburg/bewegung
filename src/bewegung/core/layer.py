@@ -58,7 +58,7 @@ class Layer(LayerABC):
         self._method = method
         self._zindex_tag = zindex
         self._video = video
-        self._canvas = self._video.db_canvas() if canvas is None else canvas
+        self._canvas = self._video.canvas() if canvas is None else canvas
         self._offset = offset
         self._effects = []
 
