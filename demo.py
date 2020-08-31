@@ -71,7 +71,7 @@ def main():
 
     @v.sequence(
         start = v.time_from_seconds(1.0),
-        stop = v.length - v.time_from_seconds(1.0),
+        stop = v.time_from_seconds(-1.0),
     )
     class Sphere:
 
@@ -168,8 +168,8 @@ def main():
             return canvas
 
     @v.sequence(
-        start = v.length - v.time_from_seconds(5.0),
-        stop = v.length - v.time_from_seconds(1.0),
+        start = v.time_from_seconds(-5.0),
+        stop = v.time_from_seconds(-1.0),
     )
     class Credits:
 
@@ -198,7 +198,7 @@ def main():
             return canvas
 
     @v.sequence(
-        start = v.length - v.time_from_seconds(1.2),
+        start = v.time_from_seconds(-1.2),
     )
     class CreditsLogo:
 

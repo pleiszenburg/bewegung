@@ -202,9 +202,14 @@ class Video(VideoABC):
             stop = self.time_from_seconds(seconds = stop.seconds)
 
         if start < self.time(0):
+            start = self._length + start
+        if not (self.time(0) <= start <= self._length):
             raise ValueError()
-        if stop > self._length:
+        if stop < self.time(0):
+            stop = self._length + stop
+        if not (self.time(0) <= stop <= self._length):
             raise ValueError()
+
         if start >= stop:
             raise ValueError()
 
