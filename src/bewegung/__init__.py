@@ -38,6 +38,7 @@ from .core.drawingboard import DrawingBoard
 from .core.effects import BaseEffect, FadeInEffect, FadeOutEffect
 from .core.indexpool import IndexPool
 from .core.layer import Layer
+from .core.sequence import Sequence
 from .core.task import Task
 from .core.time import Time
 from .core.timescale import TimeScale

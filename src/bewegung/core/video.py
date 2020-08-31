@@ -28,6 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+import inspect
 import multiprocessing as mp
 from subprocess import Popen, PIPE
 from typing import Callable, Dict, Union, Tuple
@@ -41,6 +42,7 @@ from .canvas import inventory
 from .const import FPS_DEFAULT
 from .indexpool import IndexPool
 from .layer import Layer
+from .sequence import Sequence
 from .task import Task
 from .time import Time
 
@@ -153,7 +155,8 @@ class Video(VideoABC):
 
     def reset(self):
 
-        self._sequences[:] = [(cls, cls()) for cls, _ in self._sequences] # (re-)init sequences, keep class
+        for sequence in self._sequences:
+            sequence.reset()
 
         self._preptasks.clear()
         self._preptasks.extend([
@@ -162,7 +165,7 @@ class Video(VideoABC):
                 index = getattr(sequence, attr).preporder_tag,
                 task = getattr(sequence, attr),
             )
-            for _, sequence in self._sequences for attr in dir(sequence)
+            for sequence in self._sequences for attr in dir(sequence)
             if hasattr(getattr(sequence, attr), 'preporder_tag')
         ]) # find prepare methods based on tags
         self._preptasks.sort() # sort by preporder
@@ -174,13 +177,13 @@ class Video(VideoABC):
                 index = getattr(sequence, attr).zindex_tag,
                 task = getattr(sequence, attr),
             )
-            for _, sequence in self._sequences for attr in dir(sequence)
+            for sequence in self._sequences for attr in dir(sequence)
             if hasattr(getattr(sequence, attr), 'zindex_tag')
         ]) # find layer methods based on tags
         self._layertasks.sort() # sort by (z-) index
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# DECORATOR: SEQUENCE
+# DECORATOR: SEQUENCE (TYPE)
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     def sequence(self,
@@ -208,33 +211,13 @@ class Video(VideoABC):
         @typechecked
         def decorator(cls: type):
 
-            self_ = self # make the linter happy
+            cls_bases, sequence_bases = inspect.getmro(cls), inspect.getmro(Sequence)
+            bases = tuple([item for item in sequence_bases if item not in cls_bases]) + cls_bases
+            SequenceCls = type(cls.__name__, bases, Sequence.__dict__.copy())
+            sequence = SequenceCls(start = start, stop = stop, video = self)
 
-            @typechecked
-            class wrapper(cls, SequenceABC): # sequence class, setting time properties
-                def __init__(self):
-                    self._start, self._stop = start, stop
-                    self._video, self._ctx = self_, self_._ctx
-                    super().__init__()
-                def __repr__(self) -> str:
-                    return f'<Sequence name={cls.__name__:s}>'
-                def __contains__(self, time: Time) -> bool:
-                    return self._start <= time and time < self._stop
-                @property
-                def start(self) -> Time:
-                    return self._start
-                @property
-                def stop(self) -> Time:
-                    return self._stop
-                @property
-                def video(self) -> VideoABC:
-                    return self._video
-                @property
-                def ctx(self) -> Dict:
-                    return self._ctx
-
-            self._sequences.append((wrapper, None)) # track sequence classes and objects
-            return None # wrapper # HACK remove original class?
+            self._sequences.append(sequence)
+            return sequence # HACK return object, not class
 
         return decorator
 
