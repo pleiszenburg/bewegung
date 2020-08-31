@@ -73,6 +73,8 @@ class Layer(LayerABC):
     def __call__(self, sequence: SequenceABC, time: TimeABC) -> PIL_Image.Image:
 
         kwargs = {}
+        cvs_start = None
+
         for param in self._args:
             if param == 'time':
                 kwargs[param] = time
@@ -80,10 +82,16 @@ class Layer(LayerABC):
                 kwargs[param] = time - sequence.start
             elif param == 'canvas':
                 kwargs[param] = self._canvas()
+                cvs_start = kwargs[param]
             else:
                 raise ValueError('unknown parameter')
 
         cvs = self._method(sequence, **kwargs)
+        if cvs is None:
+            if cvs_start is not None:
+                cvs = cvs_start
+            else:
+                raise ValueError('layer is missing a canvas')
         cvs = self._to_pil(cvs)
 
         for effect in self._effects:
