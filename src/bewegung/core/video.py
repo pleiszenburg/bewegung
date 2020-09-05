@@ -266,7 +266,7 @@ class Video(VideoABC):
 
     def layer(self,
         zindex: int,
-        canvas: Union[Callable, None],
+        canvas: Union[Callable, None] = None,
         offset: Tuple[int, int] = (0, 0),
     ) -> Callable:
 
