@@ -93,6 +93,10 @@ class Color(ColorABC):
 
         return self._r, self._g, self._b, self._a
 
+    def as_transparent(self) -> ColorABC:
+
+        return type(self)(self._r, self._g, self._b, 0)
+
     @classmethod
     def from_rgba_float(cls,
         r: float,
