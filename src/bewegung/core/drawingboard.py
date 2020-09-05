@@ -31,7 +31,7 @@ specific language governing rights and limitations under the License.
 from functools import wraps
 import io
 import math
-from typing import Callable, Tuple, Union
+from typing import Callable, Union
 
 import cairo
 from PIL import Image
