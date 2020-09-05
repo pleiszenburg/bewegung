@@ -94,7 +94,7 @@ class _Background(DrawingBoard):
                 text = label,
                 point = Vector2D.from_polar(r, angle),
                 font = font,
-                font_color = Color(255, 0, 0),
+                font_color = font_color,
             )
 
 @typechecked
