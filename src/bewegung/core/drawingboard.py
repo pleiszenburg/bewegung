@@ -28,9 +28,10 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+from functools import wraps
 import io
 import math
-from typing import Callable, Union
+from typing import Callable, Tuple, Union
 
 import cairo
 from PIL import Image
@@ -54,6 +55,7 @@ from .vector import Vector2D, Matrix
 
 @typechecked
 def _geometry(func: Callable) -> Callable:
+    @wraps(func)
     def wrapper(self, *args, **kwargs):
         self.ctx.save()
         self.ctx.new_path()
@@ -68,14 +70,17 @@ class DrawingBoard(DrawingBoardABC):
     def __init__(self,
         width: int,
         height: int,
+        offset: Union[Vector2D, None] = None,
         subpixels: int = 1,
         background_color: Union[Color, None] = None,
         ):
 
+        if offset is None:
+            offset = Vector2D(0.0, 0.0)
         if background_color is None:
             background_color = Color(255, 255, 255, 0) # transparent white
 
-        self._width, self._height, self._subpixels = width, height, subpixels
+        self._width, self._height, self._subpixels, self._offset = width, height, subpixels, offset
 
         self._surface = cairo.ImageSurface(
             cairo.FORMAT_ARGB32,
@@ -83,10 +88,13 @@ class DrawingBoard(DrawingBoardABC):
             self._height * self._subpixels,
             )
         if self._subpixels != 1:
-             self._surface.set_device_scale(float(self._subpixels), float(self._subpixels))
+            self._surface.set_device_scale(float(self._subpixels), float(self._subpixels))
 
         self._ctx = cairo.Context(self._surface)
         self._set_background_color(background_color)
+
+        if self._offset != Vector2D(0.0, 0.0):
+            self._surface.set_device_offset(*self._offset.as_tuple())
 
     def __repr__(self) -> str:
         return f'<DrawingBoard width={self._width:d} height={self._height:d} subpixels={self._subpixels:d}>'
