@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/lib/calendar1.py: Circular calendar
+    src/bewegung/lib/calendar1.py: Circular calendar #1
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -33,7 +33,7 @@ from datetime import datetime
 import math
 from typing import List, Union
 
-from PIL.Image import Image, new
+from PIL.Image import Image, new, LANCZOS
 from typeguard import typechecked
 
 from ..core.color import Color
@@ -192,6 +192,7 @@ class Calendar1:
 
     def __init__(self,
         side: int = 450,
+        subpixels: int = 1,
         background_color: Union[Color, None] = None,
         foreground_color: Union[Color, None] = None,
     ):
@@ -201,10 +202,12 @@ class Calendar1:
         if foreground_color is None:
             foreground_color = Color(255, 0, 0)
 
-        self._side = side
+        self._actual_side = side
+        self._subpixels = subpixels
         self._background_color = background_color
         self._foreground_color = foreground_color
 
+        self._side = self._actual_side * subpixels
         self._center = Vector2D(self._side / 2, self._side / 2)
         self._factor = self._side / 450
 
@@ -246,7 +249,10 @@ class Calendar1:
         image.paste(im = self._background, mask = self._background)
         image.paste(im = foreground, mask = foreground)
 
-        return image
+        return image.resize(
+            (self._actual_side, self._actual_side),
+            resample = LANCZOS,
+        )
 
     def _draw_background(self) -> Image:
 
