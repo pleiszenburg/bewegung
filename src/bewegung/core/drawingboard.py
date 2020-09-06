@@ -263,6 +263,19 @@ class DrawingBoard(DrawingBoardABC):
         self._stroke(**kwargs)
 
     @_geometry
+    def draw_filledpolygon(self,
+        *points: Vector2DABC,
+        fill_color: Union[Color, None] = None,
+        ):
+
+        assert len(points) > 1
+        self._ctx.move_to(points[0].x, points[0].y)
+        for point in points[1:]:
+            self._ctx.line_to(point.x, point.y)
+        self._ctx.set_source_rgba(*fill_color.as_rgba_float())
+        self._ctx.fill()
+
+    @_geometry
     def draw_circle(self,
         point: Vector2DABC,
         r: float = 1.0,
