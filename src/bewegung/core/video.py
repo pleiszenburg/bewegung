@@ -30,7 +30,7 @@ specific language governing rights and limitations under the License.
 
 import inspect
 import multiprocessing as mp
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, DEVNULL
 from typing import Callable, Dict, Union, Tuple
 
 from PIL import Image as PIL_Image
@@ -336,7 +336,7 @@ class Video(VideoABC):
                 '-preset', 'veryslow',
                 '-crf', '0',
                 video_fn,
-            ], stdin = PIPE, stdout = PIPE, stderr = PIPE,)
+            ], stdin = PIPE, stdout = DEVNULL, stderr = DEVNULL,)
 
         for promise in tqdm(workers_promises):
             frame = promise.get()
