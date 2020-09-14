@@ -336,13 +336,18 @@ class Video(VideoABC):
                 '-preset', 'veryslow',
                 '-crf', '0',
                 video_fn,
-            ], stdin = PIPE, stdout = DEVNULL, stderr = DEVNULL,)
+            ],
+            stdin = PIPE, stdout = DEVNULL, stderr = DEVNULL,
+            bufsize = 128 * (1024 ** 2),
+            )
 
         for promise in tqdm(workers_promises):
             frame = promise.get()
             if video_fn is None:
                 continue
             frame.save(codec.stdin, 'bmp')
+            codec.stdin.flush()
+            frame.close()
 
         workers.close()
         workers.terminate()
