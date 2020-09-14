@@ -300,12 +300,14 @@ class Video(VideoABC):
     def render(self,
         processes: int = 1,
         batchsize: int = 256,
+        buffersize: int = 134217728,
         frame_fn: Union[str, None] = None,
         video_fn: Union[str, None] = None,
         ):
 
         assert 0 < processes <= mp.cpu_count()
         assert 0 < batchsize
+        assert 0 < buffersize
 
         self.reset()
 
@@ -338,7 +340,7 @@ class Video(VideoABC):
                 video_fn,
             ],
             stdin = PIPE, stdout = DEVNULL, stderr = DEVNULL,
-            bufsize = 128 * (1024 ** 2),
+            bufsize = buffersize,
             )
 
         for promise in tqdm(workers_promises):
