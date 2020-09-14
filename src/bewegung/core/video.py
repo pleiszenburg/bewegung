@@ -30,7 +30,7 @@ specific language governing rights and limitations under the License.
 
 import inspect
 import multiprocessing as mp
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, DEVNULL
 from typing import Callable, Dict, Union, Tuple
 
 from PIL import Image as PIL_Image
@@ -300,12 +300,14 @@ class Video(VideoABC):
     def render(self,
         processes: int = 1,
         batchsize: int = 256,
+        buffersize: int = 134217728,
         frame_fn: Union[str, None] = None,
         video_fn: Union[str, None] = None,
         ):
 
-        assert 0 < processes <= mp.cpu_count()
+        assert 0 < processes
         assert 0 < batchsize
+        assert 0 < buffersize
 
         self.reset()
 
@@ -336,13 +338,18 @@ class Video(VideoABC):
                 '-preset', 'veryslow',
                 '-crf', '0',
                 video_fn,
-            ], stdin = PIPE, stdout = PIPE, stderr = PIPE,)
+            ],
+            stdin = PIPE, stdout = DEVNULL, stderr = DEVNULL,
+            bufsize = buffersize,
+            )
 
         for promise in tqdm(workers_promises):
             frame = promise.get()
             if video_fn is None:
                 continue
             frame.save(codec.stdin, 'bmp')
+            codec.stdin.flush()
+            frame.close()
 
         workers.close()
         workers.terminate()
