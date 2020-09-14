@@ -305,7 +305,7 @@ class Video(VideoABC):
         video_fn: Union[str, None] = None,
         ):
 
-        assert 0 < processes <= mp.cpu_count()
+        assert 0 < processes
         assert 0 < batchsize
         assert 0 < buffersize
 
