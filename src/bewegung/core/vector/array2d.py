@@ -102,7 +102,7 @@ class VectorArray2D(VectorArray2DABC):
         return a if a.dtype == np.dtype(dtype) else a.astype(dtype)
 
     def as_polar_tuple(self) -> Tuple[np.ndarray, np.ndarray]:
-        return self.mag, np.atan2(self._y, self._x)
+        return self.mag, np.arctan2(self._y, self._x)
 
     def as_tuple(self) -> Tuple[np.ndarray, np.ndarray]:
         return self._x.copy(), self._y.copy()

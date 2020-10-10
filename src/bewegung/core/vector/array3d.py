@@ -106,8 +106,8 @@ class VectorArray3D(VectorArray3DABC):
     def as_polar_tuple(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         return (
             self.mag,
-            np.acos(self._z / self.mag),
-            np.atan2(self._y, self._x),
+            np.arccos(self._z / self.mag),
+            np.arctan2(self._y, self._x),
             )
 
     def as_tuple(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
