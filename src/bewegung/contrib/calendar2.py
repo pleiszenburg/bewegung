@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/lib/calendar2.py: Circular calendar #2
+    src/bewegung/contrib/calendar2.py: Circular calendar #2
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 

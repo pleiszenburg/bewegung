@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/lib/__init__.py: Package library root
+    src/bewegung/contrib/__init__.py: Package library root
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
