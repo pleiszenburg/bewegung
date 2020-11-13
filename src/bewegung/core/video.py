@@ -31,13 +31,13 @@ specific language governing rights and limitations under the License.
 import inspect
 import multiprocessing as mp
 from subprocess import Popen, PIPE, DEVNULL
-from typing import Callable, Dict, Union, Tuple
+from typing import Callable, Dict, Union
 
 from PIL import Image as PIL_Image
 from tqdm import tqdm
 from typeguard import typechecked
 
-from .abc import LayerABC, SequenceABC, VideoABC
+from .abc import LayerABC, SequenceABC, VideoABC, Vector2DABC
 from .canvas import inventory
 from .const import FPS_DEFAULT
 from .indexpool import IndexPool
@@ -45,6 +45,7 @@ from .layer import Layer
 from .sequence import Sequence
 from .task import Task
 from .time import Time
+from .vector import Vector2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # "GLOBALS" (FOR WORKERS)
@@ -341,7 +342,7 @@ class Video(VideoABC):
     def layer(self,
         zindex: int,
         canvas: Union[Callable, None] = None,
-        offset: Tuple[int, int] = (0, 0),
+        offset: Union[Vector2DABC, None] = None,
     ) -> Callable:
         """
         A **decorator** for decorating ``layer`` methods (tasks) within ``sequence`` classes.
@@ -351,6 +352,9 @@ class Video(VideoABC):
             canvas : A function pointer, generating a new canvas once per frame for the ``layer`` task.
             offset : The layer's offset relative to the top-left corner of the video. The y-axis is downwards positive.
         """
+
+        if offset is None:
+            offset = Vector2D(0, 0)
 
         self._zindex.register(zindex) # ensure unique z-index
 
@@ -534,7 +538,7 @@ class Video(VideoABC):
 
         base_layer = PIL_Image.new('RGBA', (self._width, self._height), (0, 0, 0, 0)) # transparent black
         for layer in layers:
-            base_layer.paste(im = layer, box = layer.offset, mask = layer)
+            base_layer.paste(im = layer, box = layer.offset.as_tuple(), mask = layer)
 
         base_layer = base_layer.convert('RGB') # go from RGBA to RGB
 
