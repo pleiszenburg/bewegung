@@ -89,3 +89,7 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
 always_document_param_types = True # sphinx_autodoc_typehints
+
+napoleon_include_special_with_doc = True # napoleon
+# napoleon_use_param = True
+# napoleon_type_aliases = True
