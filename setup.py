@@ -67,6 +67,7 @@ extras_require = {
         "psutil",
         "setuptools",
         "Sphinx",
+        "sphinx-autodoc-typehints",
         "sphinx-rtd-theme",
         "twine",
         "wheel",
