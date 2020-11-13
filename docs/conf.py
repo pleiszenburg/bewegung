@@ -1,3 +1,29 @@
+# -*- coding: utf-8 -*-
+
+"""
+
+BEWEGUNG
+a versatile video renderer
+https://github.com/pleiszenburg/bewegung
+
+    docs/config.py: Docs config
+
+    Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
+
+<LICENSE_BLOCK>
+The contents of this file are subject to the GNU Lesser General Public License
+Version 2.1 ("LGPL" or "License"). You may not use this file except in
+compliance with the License. You may obtain a copy of the License at
+https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
+https://github.com/pleiszenburg/bewegung/blob/master/LICENSE
+
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the
+specific language governing rights and limitations under the License.
+</LICENSE_BLOCK>
+
+"""
+
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -9,10 +35,14 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-# import os
-# import sys
+
+import os
+import sys
+
 # sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.dirname(__file__))
+
+from version import get_version
 
 
 # -- Project information -----------------------------------------------------
@@ -22,7 +52,7 @@ copyright = '2020, Sebastian M. Ernst'
 author = 'Sebastian M. Ernst'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = get_version()
 
 
 # -- General configuration ---------------------------------------------------
