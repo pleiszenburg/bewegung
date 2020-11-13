@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/contrib/calendar2.py: Circular calendar #2
+    src/bewegung/contrib/circular_century_calendar.py: Circular Century Calendar
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -174,7 +174,7 @@ class _Foreground(DrawingBoard):
         return 10 * fraction * cls._twopi / 170
 
 @typechecked
-class Calendar2:
+class CircularCenturyCalendar:
 
     def __init__(self,
         side: int = 450,
