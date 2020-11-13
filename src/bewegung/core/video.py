@@ -301,6 +301,9 @@ class Video(VideoABC):
         processes: int = 1,
         batchsize: int = 256,
         buffersize: int = 134217728,
+        ffmpeg_preset: str = "slow",
+        ffmpeg_crf: int = 17,
+        ffmpeg_tune: str = "animation",
         frame_fn: Union[str, None] = None,
         video_fn: Union[str, None] = None,
         ):
@@ -308,6 +311,26 @@ class Video(VideoABC):
         assert 0 < processes
         assert 0 < batchsize
         assert 0 < buffersize
+        assert ffmpeg_preset in (
+            "ultrafast",
+            "superfast",
+            "veryfast",
+            "faster",
+            "fast",
+            "medium",
+            "slow",
+            "slower",
+            "veryslow",
+            )
+        assert 0 <= ffmpeg_crf <= 51
+        assert ffmpeg_tune in (
+            "film",
+            "animation",
+            "grain",
+            "stillimage",
+            "fastdecode",
+            "zerolatency",
+            )
 
         self.reset()
 
@@ -335,8 +358,9 @@ class Video(VideoABC):
                 '-vcodec', 'bmp', # input codec
                 '-s:v', f'{self._width:d}x{self._height:d}',
                 '-c:v', 'libx264',
-                '-preset', 'veryslow',
-                '-crf', '0',
+                '-preset', ffmpeg_preset,
+                '-crf', f'{ffmpeg_crf:d}',
+                '-tune', ffmpeg_tune,
                 video_fn,
             ],
             stdin = PIPE, stdout = DEVNULL, stderr = DEVNULL,
