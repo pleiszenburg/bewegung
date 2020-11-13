@@ -29,6 +29,7 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 import math
+import os
 
 from bewegung import (
     Camera, Color, DrawingBoard, Video,
@@ -204,7 +205,7 @@ def main():
 
         def __init__(self):
 
-            self._svg = DrawingBoard.make_svg('demo.svg')
+            self._svg = DrawingBoard.make_svg(os.path.join(os.path.dirname(__file__), "demo.svg"))
             self._font = DrawingBoard.make_font('Arial', 25.0)
 
         @FadeInEffect(v.time_from_seconds(0.8))

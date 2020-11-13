@@ -16,7 +16,7 @@ In principle, `bewegung` works across all modern operating systems. In terms of 
 
 ## EXAMPLE
 
-See [`demo.py`](https://github.com/pleiszenburg/bewegung/blob/master/demo.py).
+See [`demo.py`](https://github.com/pleiszenburg/bewegung/blob/master/demo/demo.py).
 
 ## USAGE
 
