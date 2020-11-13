@@ -73,7 +73,16 @@ with open(os.path.join(SRC_DIR, "bewegung", "__init__.py"), "r", encoding="utf-8
 
 # Requirements
 extras_require = {
-    "dev": ["black", "python-language-server[all]", "psutil", "setuptools", "twine", "wheel",],
+    "dev": [
+        "black",
+        "python-language-server[all]",
+        "psutil",
+        "setuptools",
+        "Sphinx",
+        "sphinx-rtd-theme",
+        "twine",
+        "wheel",
+    ],
 }
 extras_require["all"] = list(
     {rq for target in extras_require.keys() for rq in extras_require[target]}
