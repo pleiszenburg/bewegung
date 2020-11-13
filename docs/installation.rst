@@ -1,0 +1,4 @@
+Installation
+============
+
+Foo bar.
