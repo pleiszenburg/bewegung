@@ -31,6 +31,8 @@ specific language governing rights and limitations under the License.
 import math
 import os
 
+import psutil
+
 from bewegung import (
     Camera, Color, DrawingBoard, Video,
     Vector2D, Vector3D, VectorArray3D,
@@ -234,8 +236,7 @@ def main():
             return canvas
 
     v.render(
-        processes = 2,
-        # frame_fn = 'frames/frame_{index:07d}.png',
+        processes = psutil.cpu_count(logical = False),
         video_fn = 'video.mp4',
         )
 
