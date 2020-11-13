@@ -48,71 +48,6 @@ from .vector import (
     )
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# ROUTINES (JIT)
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-@nb.jit(
-    [
-        (
-            nb.float32[:, :], nb.float32[:, :],
-            nb.float32[:, :], nb.float32[:], nb.float32[:], nb.float32[:],
-            nb.float32, nb.boolean,
-        ), (
-            nb.float64[:, :], nb.float64[:, :],
-            nb.float64[:, :], nb.float64[:], nb.float64[:], nb.float64[:],
-            nb.float64, nb.boolean,
-        )
-    ],
-    nopython = True,
-)
-def _get_points_jit(
-    points_3d, points_2d,
-    ma, position, empty, planeOffset,
-    planeFactor, planeYFlip,
-    ):
-
-    for index in range(0, points_3d.shape[0]):
-
-        ma[:, 2] = position - points_3d[index, :]
-
-        determ = (
-              ma[0][0] * ma[1][1] * ma[2][2]
-            + ma[0][1] * ma[1][2] * ma[2][0]
-            + ma[0][2] * ma[1][0] * ma[2][1]
-            - ma[0][2] * ma[1][1] * ma[2][0]
-            - ma[0][0] * ma[1][2] * ma[2][1]
-            - ma[0][1] * ma[1][0] * ma[2][2]
-            )
-
-        if determ == 0:
-            points_2d[index, :] = empty
-            continue
-
-        points_2d[index, 0] = (
-              ma[0][3] * ma[1][1] * ma[2][2]
-            + ma[0][1] * ma[1][2] * ma[2][3]
-            + ma[0][2] * ma[1][3] * ma[2][1]
-            - ma[0][2] * ma[1][1] * ma[2][3]
-            - ma[0][3] * ma[1][2] * ma[2][1]
-            - ma[0][1] * ma[1][3] * ma[2][2]
-            )
-        points_2d[index, 1] = (
-              ma[0][0] * ma[1][3] * ma[2][2]
-            + ma[0][3] * ma[1][2] * ma[2][0]
-            + ma[0][2] * ma[1][0] * ma[2][3]
-            - ma[0][2] * ma[1][3] * ma[2][0]
-            - ma[0][0] * ma[1][2] * ma[2][3]
-            - ma[0][3] * ma[1][0] * ma[2][2]
-            )
-
-        points_2d[index, :2] *= planeFactor / determ
-        if planeYFlip:
-            points_2d[index, 1] = -points_2d[index, 1]
-        points_2d[index, :2] += planeOffset
-
-        points_2d[index, 2] = np.sqrt(np.sum(np.power(points_3d[index, :] - position, 2))) # distance
-
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -311,7 +246,7 @@ class Camera(CameraABC):
             ], dtype = points_3d.dtype) # NaN placeholder
         points_2d = np.zeros(points_3d.shape, dtype = points_3d.dtype) # type / target
 
-        _get_points_jit(
+        self._get_points_jit(
             points_3d, points_2d,
             ma, position, empty, planeOffset,
             planeFactor, self._planeYFlip,
@@ -322,3 +257,65 @@ class Camera(CameraABC):
             y = points_2d[:, 1],
             dist = points_2d[:, 2],
             )
+
+    @staticmethod
+    @nb.jit(
+        [
+            (
+                nb.float32[:, :], nb.float32[:, :],
+                nb.float32[:, :], nb.float32[:], nb.float32[:], nb.float32[:],
+                nb.float32, nb.boolean,
+            ), (
+                nb.float64[:, :], nb.float64[:, :],
+                nb.float64[:, :], nb.float64[:], nb.float64[:], nb.float64[:],
+                nb.float64, nb.boolean,
+            )
+        ],
+        nopython = True,
+    )
+    def _get_points_jit(
+        points_3d, points_2d,
+        ma, position, empty, planeOffset,
+        planeFactor, planeYFlip,
+        ):
+
+        for index in range(0, points_3d.shape[0]):
+
+            ma[:, 2] = position - points_3d[index, :]
+
+            determ = (
+                  ma[0][0] * ma[1][1] * ma[2][2]
+                + ma[0][1] * ma[1][2] * ma[2][0]
+                + ma[0][2] * ma[1][0] * ma[2][1]
+                - ma[0][2] * ma[1][1] * ma[2][0]
+                - ma[0][0] * ma[1][2] * ma[2][1]
+                - ma[0][1] * ma[1][0] * ma[2][2]
+                )
+
+            if determ == 0:
+                points_2d[index, :] = empty
+                continue
+
+            points_2d[index, 0] = (
+                  ma[0][3] * ma[1][1] * ma[2][2]
+                + ma[0][1] * ma[1][2] * ma[2][3]
+                + ma[0][2] * ma[1][3] * ma[2][1]
+                - ma[0][2] * ma[1][1] * ma[2][3]
+                - ma[0][3] * ma[1][2] * ma[2][1]
+                - ma[0][1] * ma[1][3] * ma[2][2]
+                )
+            points_2d[index, 1] = (
+                  ma[0][0] * ma[1][3] * ma[2][2]
+                + ma[0][3] * ma[1][2] * ma[2][0]
+                + ma[0][2] * ma[1][0] * ma[2][3]
+                - ma[0][2] * ma[1][3] * ma[2][0]
+                - ma[0][0] * ma[1][2] * ma[2][3]
+                - ma[0][3] * ma[1][0] * ma[2][2]
+                )
+
+            points_2d[index, :2] *= planeFactor / determ
+            if planeYFlip:
+                points_2d[index, 1] = -points_2d[index, 1]
+            points_2d[index, :2] += planeOffset
+
+            points_2d[index, 2] = np.sqrt(np.sum(np.power(points_3d[index, :] - position, 2))) # distance

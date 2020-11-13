@@ -15,6 +15,9 @@ clean:
 	-rm -r dist/*
 	-rm -r src/*.egg-info
 
+docs:
+	@(cd docs; make clean; make html)
+
 release:
 	make clean
 	python setup.py sdist bdist_wheel
@@ -35,3 +38,5 @@ test:
 	-rm -r frames/
 	mkdir frames
 	python demo.py
+
+.PHONY: clean docs release test

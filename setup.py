@@ -33,8 +33,9 @@ from setuptools import (
     find_packages,
     setup,
 )
-import ast
 import os
+
+from docs.version import get_version
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # SETUP
@@ -56,20 +57,7 @@ with open(os.path.join(os.path.dirname(__file__), "README.md")) as f:
 SRC_DIR = "src"
 
 # Version
-def get_version(code):
-    tree = ast.parse(code)
-    for item in tree.body:
-        if not isinstance(item, ast.Assign):
-            continue
-        if len(item.targets) != 1:
-            continue
-        if item.targets[0].id != "__version__":
-            continue
-        return item.value.s
-
-
-with open(os.path.join(SRC_DIR, "bewegung", "__init__.py"), "r", encoding="utf-8") as f:
-    __version__ = get_version(f.read())
+__version__ = get_version()
 
 # Requirements
 extras_require = {
@@ -79,6 +67,7 @@ extras_require = {
         "psutil",
         "setuptools",
         "Sphinx",
+        "sphinx-autodoc-typehints",
         "sphinx-rtd-theme",
         "twine",
         "wheel",

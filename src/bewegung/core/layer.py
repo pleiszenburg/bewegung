@@ -29,13 +29,14 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from types import MethodType
-from typing import Any, Callable, Tuple, Union
+from typing import Any, Callable, Union
 
 from PIL import Image as PIL_Image
 from typeguard import typechecked
 
-from .abc import EffectABC, LayerABC, SequenceABC, TimeABC, VideoABC
+from .abc import EffectABC, LayerABC, SequenceABC, TimeABC, VideoABC, Vector2DABC
 from .canvas import inventory
+from .vector import Vector2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -52,8 +53,11 @@ class Layer(LayerABC):
         zindex: int,
         video: VideoABC,
         canvas: Union[Callable, None] = None,
-        offset: Tuple[int, int] = (0, 0),
+        offset: Union[Vector2DABC, None] = None,
     ):
+
+        if offset is None:
+            offset = Vector2D(0, 0)
 
         self._method = method
         self._zindex_tag = zindex
