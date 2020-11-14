@@ -29,12 +29,12 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 import math
-from typing import Tuple
+from typing import Tuple, Type, Union
 
 import numpy as np
 from typeguard import typechecked
 
-from ..abc import Dtype, Vector2DABC
+from ..abc import Dtype, PyNumber, PyNumber2D, Vector2DABC
 from ..const import FLOAT_DEFAULT
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -47,8 +47,15 @@ class Vector2D(Vector2DABC):
     Mutable
     """
 
-    def __init__(self, x: float, y: float):
-        self._x, self._y = x, y
+    def __init__(self, x: PyNumber, y: PyNumber, dtype: Union[Type, None] = None):
+
+        if dtype is None:
+            dtype = type(x)
+        else:
+            assert dtype == type(x)
+        assert type(x) == type(y)
+
+        self._x, self._y, self._dtype = x, y, dtype
 
     def __repr__(self) -> str:
         return f'<Vector2D x={self._x:e} y={self._y:e}>'
@@ -60,19 +67,21 @@ class Vector2D(Vector2DABC):
         return math.isclose(self.x, other.x) and math.isclose(self.y, other.y)
 
     def __add__(self, other: Vector2DABC) -> Vector2DABC:
-        return Vector2D(self.x + other.x, self.y + other.y)
+        return type(self)(self.x + other.x, self.y + other.y)
 
     def __sub__(self, other: Vector2DABC) -> Vector2DABC:
-        return Vector2D(self.x - other.x, self.y - other.y)
+        return type(self)(self.x - other.x, self.y - other.y)
 
-    def __mul__(self, other: float) -> Vector2DABC:
-        return Vector2D(self._x * other, self._y * other)
+    def __mul__(self, other: PyNumber) -> Vector2DABC:
+        return type(self)(self._x * other, self._y * other)
 
-    def mul(self, scalar: float):
+    def mul(self, scalar: PyNumber):
         self._x *= scalar
         self._y *= scalar
+        assert type(self._x) == type(self._y)
+        self._dtype = type(self._x)
 
-    def __matmul__(self, other: Vector2DABC) -> float:
+    def __matmul__(self, other: Vector2DABC) -> PyNumber:
         return self.x * other.x + self.y * other.y
 
     def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> np.ndarray:
@@ -81,38 +90,51 @@ class Vector2D(Vector2DABC):
     def as_polar_tuple(self) -> Tuple[float, float]:
         return self.mag, math.atan2(self._y, self._x)
 
-    def as_tuple(self) -> Tuple[float, float]:
+    def as_tuple(self) -> PyNumber2D:
         return self._x, self._y
 
-    def copy(self) -> Vector2DABC:
-        return Vector2D(self._x, self._y)
+    def as_dtype(self, dtype = Union[Type, None]) -> Vector2DABC:
+        return type(self)(dtype(self._x), dtype(self._y), dtype)
 
-    def update(self, x: float, y: float):
+    def copy(self) -> Vector2DABC:
+        return type(self)(self._x, self._y, self._dtype)
+
+    def update(self, x: PyNumber, y: PyNumber):
         self._x, self._y = x, y
+        assert type(self._x) == type(self._y)
+        self._dtype = type(self._x)
 
     def update_from_vector(self, other: Vector2DABC):
         self._x, self._y = other.x, other.y
+        assert type(self._x) == type(self._y)
+        self._dtype = type(self._x)
 
     @property
     def mag(self) -> float:
         return math.sqrt(self._x ** 2 + self._y ** 2)
 
     @property
-    def x(self) -> float:
+    def x(self) -> PyNumber:
         return self._x
     @x.setter
-    def x(self, value: float):
+    def x(self, value: PyNumber):
         self._x = value
+        assert type(self._x) == type(self._y)
 
     @property
-    def y(self) -> float:
+    def y(self) -> PyNumber:
         return self._y
     @y.setter
-    def y(self, value: float):
+    def y(self, value: PyNumber):
         self._y = value
+        assert type(self._x) == type(self._y)
+
+    @property
+    def dtype(self) -> Type:
+        return self._dtype
 
     @classmethod
-    def from_polar(cls, radius: float, angle: float) -> Vector2DABC:
+    def from_polar(cls, radius: PyNumber, angle: PyNumber) -> Vector2DABC:
         return cls(
             x = radius * math.cos(angle),
             y = radius * math.sin(angle),

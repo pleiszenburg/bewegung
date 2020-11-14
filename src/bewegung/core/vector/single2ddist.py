@@ -30,8 +30,10 @@ specific language governing rights and limitations under the License.
 
 from typeguard import typechecked
 
+from typing import Type, Union
+
 from .single2d import Vector2D
-from ..abc import Vector2DABC
+from ..abc import PyNumber, Vector2DABC
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -43,49 +45,50 @@ class Vector2Ddist(Vector2D):
     Immutable version of Vector2D with distance parameter
     """
 
-    def __init__(self, x: float, y: float, dist: float):
-        super().__init__(x = x, y = y,)
+    def __init__(self, x: PyNumber, y: PyNumber, dist: PyNumber, dtype: Union[Type, None] = None):
+        super().__init__(x = x, y = y, dtype = dtype)
+        assert type(dist) == self._dtype
         self._dist = dist
 
     def __repr__(self) -> str:
         return f'<Vector2Ddist x={self._x:e} y={self._y:e} disty={self._dist:e}>'
 
-    def mul(self, scalar: float):
+    def mul(self, scalar: PyNumber):
         raise NotImplementedError()
 
     def as_vector(self) -> Vector2DABC:
-        return Vector2D(self._x, self._y)
+        return Vector2D(self._x, self._y, dtype = self._dtype)
 
     def copy(self) -> Vector2DABC:
-        return Vector2Ddist(self._x, self._y, self._dist)
+        return type(self)(self._x, self._y, self._dist, dtype = self._dtype)
 
-    def update(self, x: float, y: float):
+    def update(self, x: PyNumber, y: PyNumber):
         raise NotImplementedError()
 
     def update_from_vector(self, other: Vector2DABC):
         raise NotImplementedError()
 
     @property
-    def x(self) -> float:
+    def x(self) -> PyNumber:
         return self._x
     @x.setter
-    def x(self, value: float):
+    def x(self, value: PyNumber):
         raise NotImplementedError()
 
     @property
-    def y(self) -> float:
+    def y(self) -> PyNumber:
         return self._y
     @y.setter
-    def y(self, value: float):
+    def y(self, value: PyNumber):
         raise NotImplementedError()
 
     @property
-    def dist(self) -> float:
+    def dist(self) -> PyNumber:
         return self._dist
     @dist.setter
-    def dist(self, value: float):
+    def dist(self, value: PyNumber):
         raise NotImplementedError()
 
     @classmethod
-    def from_polar(cls, radius: float, angle: float) -> Vector2DABC:
+    def from_polar(cls, radius: PyNumber, angle: PyNumber) -> Vector2DABC:
         raise NotImplementedError()

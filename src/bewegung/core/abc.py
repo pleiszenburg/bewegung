@@ -93,6 +93,9 @@ class VideoABC(ABC):
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Number = Union[int, float, np.number]
+PyNumber = Union[int, float]
+PyNumber2D = Union[Tuple[int, int], Tuple[float, float]]
+PyNumber3D = Union[Tuple[int, int, int], Tuple[float, float, float]]
 Dtype = Union[str, np.dtype]
 
 VectorIterable2D = Union[
