@@ -47,11 +47,11 @@ class Vector2Ddist(Vector2D):
 
     def __init__(self, x: PyNumber, y: PyNumber, dist: PyNumber, dtype: Union[Type, None] = None):
         super().__init__(x = x, y = y, dtype = dtype)
-        assert type(dist) == self._dtype
+        assert isinstance(dist, self._dtype)
         self._dist = dist
 
     def __repr__(self) -> str:
-        return f'<Vector2Ddist x={self._x:e} y={self._y:e} disty={self._dist:e}>'
+        return f'<Vector2Ddist x={self._x:e} y={self._y:e} disty={self._dist:e} dtype={self._dtype.__name__:s}>'
 
     def mul(self, scalar: PyNumber):
         raise NotImplementedError()
