@@ -49,16 +49,16 @@ class Vector2D(Vector2DABC):
 
     def __init__(self, x: PyNumber, y: PyNumber, dtype: Union[Type, None] = None):
 
+        assert type(x) == type(y)
         if dtype is None:
             dtype = type(x)
         else:
             assert dtype == type(x)
-        assert type(x) == type(y)
 
         self._x, self._y, self._dtype = x, y, dtype
 
     def __repr__(self) -> str:
-        return f'<Vector2D x={self._x:e} y={self._y:e}>'
+        return f'<Vector2D x={self._x:e} y={self._y:e} dtype={self._dtype.__name__:s}>'
 
     def __eq__(self, other: Vector2DABC) -> bool:
         return (self.x == other.x) and (self.y == other.y)
@@ -84,6 +84,11 @@ class Vector2D(Vector2DABC):
     def __matmul__(self, other: Vector2DABC) -> PyNumber:
         return self.x * other.x + self.y * other.y
 
+    def as_dtype(self, dtype: Type) -> Vector2DABC:
+        if dtype == self._dtype:
+            return self.copy()
+        return type(self)(dtype(self._x), dtype(self._y), dtype)
+
     def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> np.ndarray:
         return np.array(self.as_tuple(), dtype = dtype)
 
@@ -93,20 +98,17 @@ class Vector2D(Vector2DABC):
     def as_tuple(self) -> PyNumber2D:
         return self._x, self._y
 
-    def as_dtype(self, dtype = Union[Type, None]) -> Vector2DABC:
-        return type(self)(dtype(self._x), dtype(self._y), dtype)
-
     def copy(self) -> Vector2DABC:
         return type(self)(self._x, self._y, self._dtype)
 
     def update(self, x: PyNumber, y: PyNumber):
+        assert type(x) == type(y)
         self._x, self._y = x, y
-        assert type(self._x) == type(self._y)
         self._dtype = type(self._x)
 
     def update_from_vector(self, other: Vector2DABC):
+        assert type(other.x) == type(other.y)
         self._x, self._y = other.x, other.y
-        assert type(self._x) == type(self._y)
         self._dtype = type(self._x)
 
     @property
@@ -118,16 +120,16 @@ class Vector2D(Vector2DABC):
         return self._x
     @x.setter
     def x(self, value: PyNumber):
+        assert isinstance(value, self._dtype)
         self._x = value
-        assert type(self._x) == type(self._y)
 
     @property
     def y(self) -> PyNumber:
         return self._y
     @y.setter
     def y(self, value: PyNumber):
+        assert isinstance(value, self._dtype)
         self._y = value
-        assert type(self._x) == type(self._y)
 
     @property
     def dtype(self) -> Type:
