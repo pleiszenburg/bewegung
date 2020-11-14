@@ -54,8 +54,8 @@ def main():
             'bg_color_transparent': Color(26, 26, 26, 0),
             'camera_dist': 30,
             'camera': Camera(
-                position = Vector3D(30.0, 0, 0),
-                direction = Vector3D(-1.0, 0, 0),
+                position = Vector3D(30.0, 0.0, 0.0),
+                direction = Vector3D(-1.0, 0.0, 0.0),
                 planeOffset = Vector2D(1920 / 2, 1080 / 2),
                 planeFactor = 1000.0,
             ),
