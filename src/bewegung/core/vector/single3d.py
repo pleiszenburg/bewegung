@@ -29,12 +29,12 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 import math
-from typing import Tuple
+from typing import Tuple, Type, Union
 
 import numpy as np
 from typeguard import typechecked
 
-from ..abc import Dtype, Vector3DABC
+from ..abc import Dtype, PyNumber, PyNumber3D, Vector3DABC
 from ..const import FLOAT_DEFAULT
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -47,11 +47,18 @@ class Vector3D(Vector3DABC):
     _rad2deg = math.pi / 180.0
     _halfpi = math.pi / 2.0
 
-    def __init__(self, x: float, y: float, z: float):
-        self._x, self._y, self._z = x, y, z
+    def __init__(self, x: PyNumber, y: PyNumber, z: PyNumber, dtype: Union[Type, None] = None):
+
+        assert type(x) == type(y) == type(z)
+        if dtype is None:
+            dtype = type(x)
+        else:
+            assert dtype == type(x)
+
+        self._x, self._y, self._z, self._dtype = x, y, z, dtype
 
     def __repr__(self) -> str:
-        return f'<Vector3D x={self._x:e} y={self._y:e} z={self._z:e}>'
+        return f'<Vector3D x={self._x:e} y={self._y:e} z={self._z:e} dtype={self._dtype.__name__:s}>'
 
     def __eq__(self, other: Vector3DABC) -> bool:
         return (self.x == other.x) and (self.y == other.y) and (self.z == other.z)
@@ -60,21 +67,28 @@ class Vector3D(Vector3DABC):
         return math.isclose(self.x, other.x) and math.isclose(self.y, other.y) and math.isclose(self.z, other.z)
 
     def __add__(self, other: Vector3DABC) -> Vector3DABC:
-        return Vector3D(self.x + other.x, self.y + other.y, self.z + other.z)
+        return type(self)(self.x + other.x, self.y + other.y, self.z + other.z)
 
     def __sub__(self, other: Vector3DABC) -> Vector3DABC:
-        return Vector3D(self.x - other.x, self.y - other.y, self.z - other.z)
+        return type(self)(self.x - other.x, self.y - other.y, self.z - other.z)
 
-    def __mul__(self, other: float) -> Vector3DABC:
-        return Vector3D(self._x * other, self._y * other, self._z * other)
+    def __mul__(self, other: PyNumber) -> Vector3DABC:
+        return type(self)(self._x * other, self._y * other, self._z * other)
 
-    def mul(self, scalar: float):
+    def mul(self, scalar: PyNumber):
         self._x *= scalar
         self._y *= scalar
         self._z *= scalar
+        assert type(self._x) == type(self._y) == type(self._z)
+        self._dtype = type(self._x)
 
-    def __matmul__(self, other: Vector3DABC) -> float:
+    def __matmul__(self, other: Vector3DABC) -> PyNumber:
         return self.x * other.x + self.y * other.y + self.z * other.z
+
+    def as_dtype(self, dtype: Type) -> Vector3DABC:
+        if dtype == self._dtype:
+            return self.copy()
+        return type(self)(dtype(self._x), dtype(self._y), dtype(self._z), dtype)
 
     def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> np.ndarray:
         return np.array(self.as_tuple(), dtype = dtype)
@@ -86,45 +100,56 @@ class Vector3D(Vector3DABC):
             math.atan2(self._y, self._x),
             )
 
-    def as_tuple(self) -> Tuple[float, float, float]:
+    def as_tuple(self) -> PyNumber3D:
         return (self._x, self._y, self._z)
 
     def copy(self) -> Vector3DABC:
-        return Vector3D(self._x, self._y, self._z)
+        return type(self)(self._x, self._y, self._z, self._dtype)
 
-    def update(self, x: float, y: float, z: float):
+    def update(self, x: PyNumber, y: PyNumber, z: PyNumber):
+        assert type(x) == type(y) == type(z)
         self._x, self._y, self._z = x, y, z
+        self._dtype = type(self._x)
 
     def update_from_vector(self, other: Vector3DABC):
+        assert type(other.x) == type(other.y) == type(other.z)
         self._x, self._y, self._z = other.x, other.y, other.z
+        self._dtype = type(self._x)
 
     @property
     def mag(self) -> float:
         return math.sqrt(self._x ** 2 + self._y ** 2 + self._z ** 2)
 
     @property
-    def x(self) -> float:
+    def x(self) -> PyNumber:
         return self._x
     @x.setter
-    def x(self, value: float):
+    def x(self, value: PyNumber):
+        assert isinstance(value, self._dtype)
         self._x = value
 
     @property
-    def y(self) -> float:
+    def y(self) -> PyNumber:
         return self._y
     @y.setter
-    def y(self, value: float):
+    def y(self, value: PyNumber):
+        assert isinstance(value, self._dtype)
         self._y = value
 
     @property
-    def z(self) -> float:
+    def z(self) -> PyNumber:
         return self._z
     @z.setter
-    def z(self, value: float):
+    def z(self, value: PyNumber):
+        assert isinstance(value, self._dtype)
         self._z = value
 
+    @property
+    def dtype(self) -> Type:
+        return self._dtype
+
     @classmethod
-    def from_polar(cls, radius: float, theta: float, phi: float) -> Vector3DABC:
+    def from_polar(cls, radius: PyNumber, theta: PyNumber, phi: PyNumber) -> Vector3DABC:
         RadiusSinTheta = radius * math.sin(theta)
         return cls(
             x = RadiusSinTheta * math.cos(phi),
@@ -133,7 +158,7 @@ class Vector3D(Vector3DABC):
             )
 
     @classmethod
-    def from_geographic(cls, radius: float, lon: float, lat: float) -> Vector3DABC:
+    def from_geographic(cls, radius: PyNumber, lon: PyNumber, lat: PyNumber) -> Vector3DABC:
         return cls.from_polar(
             radius = radius,
             theta = cls._halfpi - (lat * cls._rad2deg),
