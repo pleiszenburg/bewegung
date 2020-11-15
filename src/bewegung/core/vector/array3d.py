@@ -33,6 +33,7 @@ from typing import List, Tuple, Union
 import numpy as np
 from typeguard import typechecked
 
+from .lib import dtype_np2py
 from .single3d import Vector3D
 from ..abc import Dtype, Number, VectorArray3DABC, VectorIterable3D
 from ..const import FLOAT_DEFAULT
@@ -60,7 +61,8 @@ class VectorArray3D(VectorArray3DABC):
 
     def __getitem__(self, idx: Union[int, slice]) -> Union[Vector3D, VectorArray3DABC]:
         if isinstance(idx, int):
-            return Vector3D(float(self._x[idx]), float(self._y[idx]), float(self._z[idx]))
+            dtype = dtype_np2py(self.dtype)
+            return Vector3D(dtype(self._x[idx]), dtype(self._y[idx]), dtype(self._z[idx]), dtype = dtype)
         return VectorArray3D(self._x[idx].copy(), self._y[idx].copy(), self._z[idx].copy())
 
     def __eq__(self, other: VectorArray3DABC) -> bool:
@@ -93,8 +95,9 @@ class VectorArray3D(VectorArray3DABC):
         return self.x * other.x + self.y * other.y + self.z * other.z
 
     def as_list(self) -> List[Vector3D]:
+        dtype = dtype_np2py(self.dtype)
         return [
-            Vector3D(float(self._x[idx]), float(self._y[idx]), float(self._z[idx]))
+            Vector3D(dtype(self._x[idx]), dtype(self._y[idx]), dtype(self._z[idx]), dtype = dtype)
             for idx in range(len(self))
         ]
 
