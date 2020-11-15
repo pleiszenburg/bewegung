@@ -48,13 +48,9 @@ class Canvas(CanvasBase):
         super().__init__()
 
         self._FORMAT_ARGB32 = None
-        self._ImageSurface = None
         self._Format = None
 
-    def prototype(self, video: VideoABC, **kwargs) -> Callable:
-
-        if not self._loaded:
-            self.load()
+    def _prototype(self, video: VideoABC, **kwargs) -> Callable:
 
         if 'format' not in kwargs.keys():
             kwargs['format'] = self._FORMAT_ARGB32
@@ -65,36 +61,20 @@ class Canvas(CanvasBase):
 
         assert len(kwargs) == 3
 
-        return lambda: self._ImageSurface(kwargs['format'], kwargs['width'], kwargs['height'])
+        return lambda: self._type(kwargs['format'], kwargs['width'], kwargs['height'])
 
-    def isinstance(self, obj: Any, hard: bool = True) -> bool:
-
-        if not self._loaded and not hard:
-            return False
-        if not self._loaded:
-            self.load()
-
-        return isinstance(obj, self._ImageSurface)
-
-    def load(self):
-
-        if self._loaded:
-            return
+    def _load(self):
 
         from cairo import FORMAT_ARGB32, ImageSurface, Format
 
+        self._type = ImageSurface
+
         self._FORMAT_ARGB32 = FORMAT_ARGB32
-        self._ImageSurface = ImageSurface
         self._Format = Format
 
-        self._loaded = True
+    def _to_pil(self, obj: Any) -> Image:
 
-    def to_pil(self, obj: Any) -> Image:
-
-        if not self._loaded:
-            self.load()
-
-        assert isinstance(obj, self._ImageSurface)
+        assert isinstance(obj, self._type)
         assert obj.get_format() == self._Format.ARGB32
 
         image = frombuffer(
@@ -104,11 +84,3 @@ class Canvas(CanvasBase):
             )
         b, g, r, a = image.split()
         return merge('RGBA', (r, g, b, a))
-
-    @property
-    def type(self) -> Type:
-
-        if not self._loaded:
-            self.load()
-
-        return self._ImageSurface

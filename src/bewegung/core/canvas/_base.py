@@ -45,20 +45,54 @@ class CanvasBase(CanvasABC):
     def __init__(self):
 
         self._loaded = False
+        self._type = None
 
     def prototype(self, video: VideoABC, **kwargs) -> Callable:
+
+        if not self._loaded:
+            self.load()
+
+        return self._prototype(video, **kwargs)
+
+    def _prototype(self, video: VideoABC, **kwargs) -> Callable:
 
         raise NotImplementedError()
 
     def isinstance(self, obj: Any, hard: bool = True) -> bool:
 
-        raise NotImplementedError()
+        if (not self._loaded) and hard:
+            return False
+        if not self._loaded:
+            self.load()
+
+        return self._isinstance(obj)
+
+    def _isinstance(self, obj: Any) -> bool:
+
+        return isinstance(obj, self._type)
 
     def load(self):
+
+        if self._loaded:
+            return
+
+        self._load()
+        assert self._type is not None
+
+        self._loaded = True
+
+    def _load(self):
 
         raise NotImplementedError()
 
     def to_pil(self, obj: Any) -> Image:
+
+        if not self._loaded:
+            self.load()
+
+        return self._to_pil(obj)
+
+    def _to_pil(self, obj: Any) -> Image:
 
         raise NotImplementedError()
 
@@ -70,4 +104,7 @@ class CanvasBase(CanvasABC):
     @property
     def type(self) -> Type:
 
-        raise NotImplementedError()
+        if not self._loaded:
+            self.load()
+
+        return self._type
