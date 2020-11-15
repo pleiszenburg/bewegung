@@ -29,4 +29,3 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from .canvas import Canvas
-from .core import DrawingBoard

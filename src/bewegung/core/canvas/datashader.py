@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Any, Callable, Type
+from typing import Any, Callable
 
 from PIL.Image import Image
 from PIL import ImageOps

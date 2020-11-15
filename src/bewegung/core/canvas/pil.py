@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Any, Callable, Type
+from typing import Callable
 
 from PIL.Image import Image, new
 from typeguard import typechecked
