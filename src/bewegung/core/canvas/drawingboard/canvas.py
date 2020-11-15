@@ -33,7 +33,6 @@ from typing import Any, Callable, Type
 from PIL.Image import Image
 from typeguard import typechecked
 
-from .core import DrawingBoard
 from .._base import CanvasBase
 from ...abc import VideoABC
 
@@ -44,24 +43,57 @@ from ...abc import VideoABC
 @typechecked
 class Canvas(CanvasBase):
 
+    def __init__(self):
+
+        super().__init__()
+
+        self._DrawingBoard = None
+
     def prototype(self, video: VideoABC, **kwargs) -> Callable:
+
+        if not self._loaded:
+            self.load()
 
         if 'width' not in kwargs.keys():
             kwargs['width'] = video.width
         if 'height' not in kwargs.keys():
             kwargs['height'] = video.height
 
-        return lambda: DrawingBoard(**kwargs)
+        return lambda: self._DrawingBoard(**kwargs)
 
-    def isinstance(self, obj: Any) -> bool:
+    def isinstance(self, obj: Any, hard: bool = True) -> bool:
 
-        return isinstance(obj, DrawingBoard)
+        if not self._loaded and not hard:
+            return False
+        if not self._loaded:
+            self.load()
 
-    def to_pil(self, obj: DrawingBoard) -> Image:
+        return isinstance(obj, self._DrawingBoard)
+
+    def load(self):
+
+        if self._loaded:
+            return
+
+        from .core import DrawingBoard
+
+        self._DrawingBoard = DrawingBoard
+
+        self._loaded = True
+
+    def to_pil(self, obj: Any) -> Image:
+
+        if not self._loaded:
+            self.load()
+
+        assert isinstance(obj, self._DrawingBoard)
 
         return obj.as_pil()
 
     @property
     def type(self) -> Type:
 
-        return DrawingBoard
+        if not self._loaded:
+            self.load()
+
+        return self._DrawingBoard

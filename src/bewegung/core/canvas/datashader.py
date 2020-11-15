@@ -30,8 +30,6 @@ specific language governing rights and limitations under the License.
 
 from typing import Any, Callable, Type
 
-from datashader import Canvas as DS_Canvas
-from datashader.transfer_functions import Image as DS_Image
 from PIL.Image import Image
 from PIL import ImageOps
 from typeguard import typechecked
@@ -46,7 +44,17 @@ from ..abc import VideoABC
 @typechecked
 class Canvas(CanvasBase):
 
+    def __init__(self):
+
+        super().__init__()
+
+        self._DS_Canvas = None
+        self._DS_Image = None
+
     def prototype(self, video: VideoABC, **kwargs) -> Callable:
+
+        if not self._loaded:
+            self.load()
 
         if 'plot_width' not in kwargs.keys():
             kwargs['plot_width'] = video.width
@@ -58,13 +66,36 @@ class Canvas(CanvasBase):
         if 'y_range' not in kwargs.keys():
             kwargs['y_range'] = (0, video.height)
 
-        return lambda: DS_Canvas(**kwargs)
+        return lambda: self._DS_Canvas(**kwargs)
 
-    def isinstance(self, obj: Any) -> bool:
+    def isinstance(self, obj: Any, hard: bool = True) -> bool:
 
-        return isinstance(obj, DS_Image)
+        if not self._loaded and not hard:
+            return False
+        if not self._loaded:
+            self.load()
 
-    def to_pil(self, obj: DS_Image) -> Image:
+        return isinstance(obj, self._DS_Image)
+
+    def load(self):
+
+        if self._loaded:
+            return
+
+        from datashader import Canvas as DS_Canvas
+        from datashader.transfer_functions import Image as DS_Image
+
+        self._DS_Canvas = DS_Canvas
+        self._DS_Image = DS_Image
+
+        self._loaded = True
+
+    def to_pil(self, obj: Any) -> Image:
+
+        if not self._loaded:
+            self.load()
+
+        assert isinstance(obj, self._DS_Image)
 
         cvs = obj.to_pil()
         assert cvs.mode == 'RGBA'
@@ -73,4 +104,7 @@ class Canvas(CanvasBase):
     @property
     def type(self) -> Type:
 
-        return DS_Canvas
+        if not self._loaded:
+            self.load()
+
+        return self._DS_Canvas

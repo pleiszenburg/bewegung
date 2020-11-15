@@ -42,17 +42,30 @@ from ..abc import CanvasABC, VideoABC
 @typechecked
 class CanvasBase(CanvasABC):
 
+    def __init__(self):
+
+        self._loaded = False
+
     def prototype(self, video: VideoABC, **kwargs) -> Callable:
 
         raise NotImplementedError()
 
-    def isinstance(self, obj: Any) -> bool:
+    def isinstance(self, obj: Any, hard: bool = True) -> bool:
+
+        raise NotImplementedError()
+
+    def load(self):
 
         raise NotImplementedError()
 
     def to_pil(self, obj: Any) -> Image:
 
         raise NotImplementedError()
+
+    @property
+    def loaded(self) -> bool:
+
+        return self._loaded
 
     @property
     def type(self) -> Type:

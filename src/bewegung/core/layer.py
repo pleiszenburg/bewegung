@@ -133,7 +133,7 @@ class Layer(LayerABC):
     def _to_pil(self, obj: Any) -> PIL_Image.Image:
 
         for canvas in inventory.values():
-            if canvas.isinstance(obj):
+            if canvas.isinstance(obj, hard = False):
                 return canvas.to_pil(obj)
 
-        raise TypeError('unknown canvas type coming from layer')
+        raise TypeError('unknown or unloaded canvas type coming from layer')

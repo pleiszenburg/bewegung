@@ -43,6 +43,12 @@ from ..abc import VideoABC
 @typechecked
 class Canvas(CanvasBase):
 
+    def __init__(self):
+
+        super().__init__()
+
+        self._loaded = True
+
     def prototype(self, video: VideoABC, **kwargs) -> Callable:
 
         if 'mode' not in kwargs.keys():
@@ -52,9 +58,13 @@ class Canvas(CanvasBase):
 
         return lambda: new(**kwargs)
 
-    def isinstance(self, obj: Any) -> bool:
+    def isinstance(self, obj: Any, hard: bool = True) -> bool:
 
         return isinstance(obj, Image)
+
+    def load(self):
+
+        pass
 
     def to_pil(self, obj: Image) -> Image:
 
