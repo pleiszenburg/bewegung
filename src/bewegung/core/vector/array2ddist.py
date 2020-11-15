@@ -33,10 +33,10 @@ from typing import List, Union
 import numpy as np
 from typeguard import typechecked
 
-from .single2d import Vector2D
+from .lib import dtype_np2py
 from .single2ddist import Vector2Ddist
 from .array2d import VectorArray2D
-from ..abc import Dtype, Number, VectorArray2DABC, VectorIterable2D
+from ..abc import Dtype, Number, Vector2DABC, VectorArray2DABC, VectorIterable2D
 from ..const import FLOAT_DEFAULT
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -64,7 +64,8 @@ class VectorArray2Ddist(VectorArray2D):
 
     def __getitem__(self, idx: Union[int, slice]) -> Union[Vector2Ddist, VectorArray2DABC]:
         if isinstance(idx, int):
-            return Vector2Ddist(float(self._x[idx]), float(self._y[idx]), float(self._dist[idx]))
+            dtype = dtype_np2py(self.dtype)
+            return Vector2Ddist(dtype(self._x[idx]), dtype(self._y[idx]), dtype(self._dist[idx]), dtype = dtype)
         return VectorArray2Ddist(self._x[idx].copy(), self._y[idx].copy(), self._dist[idx].copy())
 
     def mul(self, scalar: Number):
@@ -73,9 +74,10 @@ class VectorArray2Ddist(VectorArray2D):
     def as_vectorarray(self) -> VectorArray2DABC:
         return VectorArray2D(self._x.copy(), self._y.copy())
 
-    def as_list(self) -> List[Vector2D]:
+    def as_list(self) -> List[Vector2DABC]:
+        dtype = dtype_np2py(self.dtype)
         return [
-            Vector2Ddist(float(self._x[idx]), float(self._y[idx]), float(self._dist[idx]))
+            Vector2Ddist(dtype(self._x[idx]), dtype(self._y[idx]), dtype(self._dist[idx]), dtype = dtype)
             for idx in range(len(self))
         ]
 
