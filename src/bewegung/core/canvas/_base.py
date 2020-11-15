@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Any, Callable
+from typing import Any, Callable, Type
 
 from PIL.Image import Image
 from typeguard import typechecked
@@ -51,5 +51,10 @@ class CanvasBase(CanvasABC):
         raise NotImplementedError()
 
     def to_pil(self, obj: Any) -> Image:
+
+        raise NotImplementedError()
+
+    @property
+    def type(self) -> Type:
 
         raise NotImplementedError()
