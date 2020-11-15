@@ -12,7 +12,7 @@ A bare minimum of `bewegung` can be installed with Python's package manager `pip
 pip install -vU bewegung
 ```
 
-A complete installation of all optional components and development tools can be triggered by running:
+A complete installation of all optional Python components and development tools can be triggered by running:
 
 ```bash
 pip install -vU bewegung[all]
