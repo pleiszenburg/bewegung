@@ -36,9 +36,11 @@ from typing import List, Union
 from PIL.Image import Image, new, LANCZOS
 from typeguard import typechecked
 
+from ..core.canvas import inventory
 from ..core.color import Color
-from ..core.drawingboard import DrawingBoard, Pango
 from ..core.vector import Matrix, Vector2D
+
+DrawingBoard = inventory['drawingboard'].type
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -77,7 +79,7 @@ class _Background(DrawingBoard):
     def draw_labels(self,
         r: float,
         labels: List[str],
-        font: Pango.FontDescription,
+        font: DrawingBoard.Pango.FontDescription,
         font_color: Color,
         zero: float = 0.0,
         length: Union[float, None] = None

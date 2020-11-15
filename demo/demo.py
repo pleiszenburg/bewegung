@@ -34,10 +34,13 @@ import os
 import psutil
 
 from bewegung import (
-    Camera, Color, DrawingBoard, Video,
+    Camera, Color, Video,
     Vector2D, Vector3D, VectorArray3D,
     FadeInEffect, FadeOutEffect,
+    inventory,
     )
+
+DrawingBoard = inventory['drawingboard'].type
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ROUTINES
