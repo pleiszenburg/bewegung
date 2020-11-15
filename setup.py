@@ -72,6 +72,25 @@ extras_require = {
         "twine",
         "wheel",
     ],
+    "drawingboard": [
+        "pycairo",
+        "PyGObject",
+    ],
+    "cairo": [
+        "pycairo",
+    ],
+    "datashader": [
+        "datashader", # datashader backend (optional)
+    ],
+    "ipython": [
+        "ipython", # for drawingboard backend (optional)
+    ],
+    "numba": [
+        "numba", # for camera (optional)
+    ],
+    "numpy": [
+        "numpy", # for camera (optional) and vector arrays (required)
+    ],
 }
 extras_require["all"] = list(
     {rq for target in extras_require.keys() for rq in extras_require[target]}
@@ -106,13 +125,7 @@ setup(
     python_requires=">=3.{MINOR:d}".format(MINOR=python_minor_min),
     setup_requires=[],
     install_requires=[
-        "datashader",
-        "ipython",
-        "numba",
-        "numpy",
-        "pycairo",
         "Pillow",
-        "PyGObject",
         "tqdm",
         "typeguard",
         ],
