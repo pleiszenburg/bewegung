@@ -11,7 +11,7 @@ User's guide
 
    installation
    getting_started
-   time
+   canvas
    video
    algebra
 
