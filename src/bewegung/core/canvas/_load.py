@@ -29,6 +29,7 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from typing import Any
+import traceback
 
 import importlib
 import os
@@ -55,10 +56,12 @@ class _Inventory(dict):
             for item in os.listdir(path)
             if not item.startswith('_') and not item.startswith('.')
             ]
-        self.update({
-            name: importlib.import_module(f'bewegung.core.canvas.{name:s}').Canvas()
-            for name in backends
-            })
+
+        for name in backends:
+            try:
+                self[name] = importlib.import_module(f'bewegung.core.canvas.{name:s}').Canvas()
+            except Exception as e:
+                traceback.print_exception(e, None, e.__traceback__)
 
     def isinstance(self, obj: Any) -> bool:
 
