@@ -43,7 +43,10 @@ gi.require_version('PangoCairo', '1.0')
 gi.require_version('Rsvg', '2.0')
 from gi.repository import Pango, PangoCairo, Rsvg
 
-import IPython.display
+try:
+    import IPython.display
+except ModuleNotFoundError:
+    IPython = None
 
 from ...abc import DrawingBoardABC, Vector2DABC
 from ...color import Color
@@ -129,6 +132,9 @@ class DrawingBoard(DrawingBoardABC):
         return Image.merge('RGBA', (r, g, b, a))
 
     def display(self):
+
+        if IPython is None:
+            raise NotImplementedError('IPython is not available')
 
         with io.BytesIO() as buffer:
             self.as_pil().save(buffer, format = 'PNG')
