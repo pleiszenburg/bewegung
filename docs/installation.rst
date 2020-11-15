@@ -20,7 +20,7 @@ All further Python dependencies are optional and allow to use certain optional c
 
     pip install -vU bewegung[all]
 
-Certain **non-Python components must installed separately and before invoking the above command**. Fur further instructions, see below. E.g. ``ffmpeg`` should be installed for producing actual video files instead of video frames as individual files.
+Certain **non-Python components must installed separately and before invoking the above command**. Fur further instructions, see below. Most notably, ``ffmpeg`` should be installed for producing actual video files instead of video frames as individual files.
 
 Detailed Installation Options
 -----------------------------
@@ -60,9 +60,17 @@ For the **datashader rendering backend** (optional component, ``pip install -vU 
 
 - ``datashader``
 
+For further instructions, see `datashader's documentation`_.
+
+.. _datashader's documentation: https://datashader.org/getting_started/index.html
+
 For a **faster camera** based Just-in-Time (JIT) compilation (``pip install -vU bewegung[numba]``):
 
 - ``numba``
+
+For further instructions, see `numba's documentation`_.
+
+.. _numba's documentation: https://numba.readthedocs.io/en/stable/user/installing.html
 
 For **vector arrays** and a **faster camera** based on ``numpy``'s array types (``pip install -vU bewegung[numpy]``):
 
