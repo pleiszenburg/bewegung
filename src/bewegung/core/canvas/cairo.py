@@ -31,12 +31,11 @@ specific language governing rights and limitations under the License.
 from typing import Any, Callable
 
 from cairo import FORMAT_ARGB32, ImageSurface, Format
-from PIL.Image import Image, frombuffer
+from PIL.Image import Image, frombuffer, merge
 from typeguard import typechecked
 
 from ._base import CanvasBase
 from ..abc import VideoABC
-from ..drawingboard import DrawingBoard
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -66,8 +65,10 @@ class Canvas(CanvasBase):
 
         assert obj.get_format() == Format.ARGB32
 
-        return DrawingBoard.swap_channels(frombuffer(
+        image = frombuffer(
             mode = 'RGBA',
             size = (obj.get_width(), obj.get_height()),
             data = obj.get_data(),
-            ))
+            )
+        b, g, r, a = image.split()
+        return merge('RGBA', (r, g, b, a))
