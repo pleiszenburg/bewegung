@@ -101,6 +101,7 @@ extras_require = {
 extras_require["all"] = list(
     {rq for target in extras_require.keys() for rq in extras_require[target]}
 )
+extras_require["docs"] = list(set(extras_require["all"]) - {'PyGObject'})
 
 # Install package
 setup(
