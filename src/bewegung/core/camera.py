@@ -34,8 +34,19 @@ from typing import Union
 
 from typeguard import typechecked
 
-import numpy as np
-import numba as nb
+try:
+    import numpy as np
+except ModuleNotFoundError:
+    np = None
+
+try:
+    from numba import jit, float32, float64, boolean
+except ModuleNotFoundError:
+    def jit(*jit_args, **jit_kwargs):
+        def wrapper(func):
+            return func
+        return wrapper
+    boolean, float32, float64 = None, tuple(), tuple()
 
 from .abc import CameraABC
 from .vector import (
@@ -229,6 +240,9 @@ class Camera(CameraABC):
 
     def get_points(self, points_3d: VectorArray3D) -> VectorArray2Ddist:
 
+        if np is None:
+            raise NotImplementedError('numpy is not available')
+
         position = self._position.as_ndarray() # type
         planeOffset = self._planeOffset.as_ndarray() # type
         points_3d = points_3d.as_ndarray() # type
@@ -259,16 +273,16 @@ class Camera(CameraABC):
             )
 
     @staticmethod
-    @nb.jit(
+    @jit(
         [
             (
-                nb.float32[:, :], nb.float32[:, :],
-                nb.float32[:, :], nb.float32[:], nb.float32[:], nb.float32[:],
-                nb.float32, nb.boolean,
+                float32[:, :], float32[:, :],
+                float32[:, :], float32[:], float32[:], float32[:],
+                float32, boolean,
             ), (
-                nb.float64[:, :], nb.float64[:, :],
-                nb.float64[:, :], nb.float64[:], nb.float64[:], nb.float64[:],
-                nb.float64, nb.boolean,
+                float64[:, :], float64[:, :],
+                float64[:, :], float64[:], float64[:], float64[:],
+                float64, boolean,
             )
         ],
         nopython = True,
