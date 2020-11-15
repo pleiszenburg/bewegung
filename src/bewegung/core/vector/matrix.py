@@ -29,12 +29,12 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from math import cos, sin
-from typing import List, Union
+from typing import List, Type, Union
 
 import numpy as np
 from typeguard import typechecked
 
-from ..abc import Dtype, MatrixABC, Vector2DABC, Vector3DABC
+from ..abc import Dtype, MatrixABC, PyNumber, Vector2DABC, Vector3DABC
 from ..const import FLOAT_DEFAULT
 from .single2d import Vector2D
 from .single3d import Vector3D
@@ -46,13 +46,23 @@ from .single3d import Vector3D
 @typechecked
 class Matrix(MatrixABC):
 
-    def __init__(self, matrix = List[List[float]]):
+    def __init__(self, matrix = List[List[PyNumber]], dtype: Union[Type, None] = None):
 
         lines = len(matrix)
         assert lines in (2, 3) # allow 2D and 3D
         assert all((len(line) == lines for line in matrix))
 
+        if dtype is None:
+            dtype = type(matrix[0][0])
+        else:
+            assert isinstance(matrix[0][0], dtype)
+        assert all((all((isinstance(number, dtype) for number in line)) for line in matrix))
+
+        self._dtype = dtype
         self._matrix = matrix
+
+    def __repr__(self) -> str:
+        return f'<Matrix shape={len(self._matrix):d}x{len(self._matrix):d} dtype={self._dtype.__name__:s}>'
 
     def __matmul__(self, vector: Union[Vector2DABC, Vector3DABC]) -> Union[Vector2DABC, Vector3DABC]:
 
@@ -70,20 +80,24 @@ class Matrix(MatrixABC):
 
         return np.array(self._matrix, dtype = dtype)
 
+    @property
+    def dtype(self) -> Type:
+        return self._dtype
+
     @classmethod
-    def from_ndarray(cls, matrix: np.ndarray) -> MatrixABC:
+    def from_ndarray(cls, matrix: np.ndarray, dtype: Type = float) -> MatrixABC:
 
         assert matrix.ndim == 2
         assert matrix.shape in ((2, 2), (3, 3))
 
         matrix = matrix.tolist()
         if isinstance(matrix[0][0], int):
-            matrix = [[float(item) for item in line] for line in matrix]
+            matrix = [[dtype(item) for item in line] for line in matrix]
 
-        return cls(matrix)
+        return cls(matrix, dtype = dtype)
 
     @classmethod
-    def from_2d_rotation(cls, a: float) -> MatrixABC:
+    def from_2d_rotation(cls, a: PyNumber) -> MatrixABC:
 
         return cls([
             [cos(a), -sin(a)],
@@ -91,7 +105,7 @@ class Matrix(MatrixABC):
         ])
 
     @classmethod
-    def from_3d_rotation(cls, v: Vector3DABC, a: float) -> MatrixABC:
+    def from_3d_rotation(cls, v: Vector3DABC, a: PyNumber) -> MatrixABC:
 
         ca = cos(a)
         oca = 1 - ca
