@@ -4,7 +4,6 @@ Installation
 Minimum requirements:
 
 - ``Pillow``
-- ``typeguard``
 
 For a nice progress bar during video rendering:
 
