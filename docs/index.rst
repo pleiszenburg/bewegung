@@ -7,11 +7,12 @@ User's guide
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents
+   :caption: Table of Contents
 
    installation
    getting_started
    video
+   algebra
 
 Indices and tables
 ==================
