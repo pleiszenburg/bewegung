@@ -34,8 +34,13 @@ from subprocess import Popen, PIPE, DEVNULL
 from typing import Callable, Dict, Union
 
 from PIL import Image as PIL_Image
-from tqdm import tqdm
 from typeguard import typechecked
+try:
+    from tqdm import tqdm
+except ModuleNotFoundError:
+    def tqdm(data):
+        for item in data:
+            yield item
 
 from .abc import LayerABC, SequenceABC, VideoABC, Vector2DABC
 from .canvas import inventory

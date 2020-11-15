@@ -91,6 +91,9 @@ extras_require = {
     "numpy": [
         "numpy", # for camera (optional) and vector arrays (required)
     ],
+    "tqdm": [
+        "tqdm", # for progress bar during video rendering (optional)
+    ]
 }
 extras_require["all"] = list(
     {rq for target in extras_require.keys() for rq in extras_require[target]}
@@ -126,7 +129,6 @@ setup(
     setup_requires=[],
     install_requires=[
         "Pillow",
-        "tqdm",
         "typeguard",
         ],
     extras_require=extras_require,
