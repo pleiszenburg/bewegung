@@ -43,13 +43,7 @@ from ...abc import VideoABC
 @typechecked
 class Canvas(CanvasBase):
 
-    def __init__(self):
-
-        super().__init__()
-
-        self._DrawingBoard = None
-
-    def prototype(self, video: VideoABC, **kwargs) -> Callable:
+    def _prototype(self, video: VideoABC, **kwargs) -> Callable:
 
         if not self._loaded:
             self.load()
@@ -59,41 +53,16 @@ class Canvas(CanvasBase):
         if 'height' not in kwargs.keys():
             kwargs['height'] = video.height
 
-        return lambda: self._DrawingBoard(**kwargs)
+        return lambda: self._type(**kwargs)
 
-    def isinstance(self, obj: Any, hard: bool = True) -> bool:
-
-        if not self._loaded and not hard:
-            return False
-        if not self._loaded:
-            self.load()
-
-        return isinstance(obj, self._DrawingBoard)
-
-    def load(self):
-
-        if self._loaded:
-            return
+    def _load(self):
 
         from .core import DrawingBoard
 
-        self._DrawingBoard = DrawingBoard
+        self._type = DrawingBoard
 
-        self._loaded = True
+    def _to_pil(self, obj: Any) -> Image:
 
-    def to_pil(self, obj: Any) -> Image:
-
-        if not self._loaded:
-            self.load()
-
-        assert isinstance(obj, self._DrawingBoard)
+        assert isinstance(obj, self._type)
 
         return obj.as_pil()
-
-    @property
-    def type(self) -> Type:
-
-        if not self._loaded:
-            self.load()
-
-        return self._DrawingBoard
