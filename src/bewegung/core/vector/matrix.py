@@ -45,6 +45,9 @@ from .single3d import Vector3D
 
 @typechecked
 class Matrix(MatrixABC):
+    """
+    Mutable
+    """
 
     def __init__(self, matrix = List[List[PyNumber]], dtype: Union[Type, None] = None):
 
