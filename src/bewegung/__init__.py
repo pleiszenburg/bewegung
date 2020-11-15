@@ -34,7 +34,6 @@ from .core.camera import Camera
 from .core.canvas import *
 from .core.color import Color
 from .core.const import FPS_DEFAULT, FLOAT_DEFAULT
-from .core.drawingboard import DrawingBoard
 from .core.effects import BaseEffect, FadeInEffect, FadeOutEffect
 from .core.indexpool import IndexPool
 from .core.layer import Layer
