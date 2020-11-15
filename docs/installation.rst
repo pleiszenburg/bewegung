@@ -20,7 +20,11 @@ All further Python dependencies are optional and allow to use certain optional c
 
     pip install -vU bewegung[all]
 
-Certain **non-Python components must installed separately and before invoking the above command**. Fur further instructions, see below. Most notably, ``ffmpeg`` should be installed for producing actual video files instead of video frames as individual files.
+Certain **non-Python components must installed separately and before invoking the above command**. For further instructions, see below. Most notably, ``ffmpeg`` should be installed for producing actual video files instead of video frames as individual files.
+
+In principle, ``bewegung`` works across all modern operating systems. In terms of memory usage and performance, it behaves best on Unix-like systems due to `Windows's lack of "fork"`_.
+
+.. _Windows's lack of "fork": https://stackoverflow.com/q/985281/1672565
 
 Detailed Installation Options
 -----------------------------

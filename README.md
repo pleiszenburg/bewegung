@@ -2,17 +2,23 @@
 
 ## Synopsis
 
-[`bewegung`](https://dict.leo.org/englisch-deutsch/bewegung) is a versatile video renderer, primarily targeting scientific visualizations of large quantities of data. Its core concepts are *sequences* and *layers*. Sequences describe a certain time span within a video and can overlap. Each sequence can hold multiple layers. Layers can be generated with [`cairo`](https://cairographics.org/), [`Pillow`](https://pillow.readthedocs.io), [`datashader`](https://datashader.org/) and `bewegung`'s internal drawing system [`DrawingBoard`](https://github.com/pleiszenburg/bewegung/blob/master/src/bewegung/core/drawingboard.py). Final compositing of every video frame and video effects are implemented via `Pillow`. Video encoding is handled by `ffmpeg`. `bewegung` also includes a simple [vector algebra system](https://github.com/pleiszenburg/bewegung/tree/master/src/bewegung/core/vector) and a ["camera" for 3D to 2D projections](https://github.com/pleiszenburg/bewegung/blob/master/src/bewegung/core/camera.py). `bewegung` is developed with ease of use, compute time and memory efficiency in mind.
+[`bewegung`](https://dict.leo.org/englisch-deutsch/bewegung) is a versatile video renderer, primarily targeting scientific visualizations of large quantities of data. Its core concepts are *sequences* and *layers*. Sequences describe a certain time span within a video and can overlap. Each sequence can hold multiple layers. Layers can be generated with [`cairo`](https://cairographics.org/), [`Pillow`](https://pillow.readthedocs.io), [`datashader`](https://datashader.org/) and `bewegung`'s internal drawing system [`DrawingBoard`](https://bewegung.readthedocs.io/en/latest/canvas.html). Final compositing of every video frame and video effects are implemented via `Pillow`. Video encoding is handled by `ffmpeg`. `bewegung` also includes a simple [vector algebra system](https://bewegung.readthedocs.io/en/latest/vectors.html) and a ["camera" for 3D to 2D projections](https://bewegung.readthedocs.io/en/latest/camera.html). `bewegung` is developed with ease of use, compute time and memory efficiency in mind.
 
 ## Installation
 
-The prerequisites of [PyQObject](https://pygobject.readthedocs.io/en/latest/getting_started.html) have to be fulfilled. In addition, [Pango](https://pango.gnome.org/), its headers (development package), [librsvg](https://wiki.gnome.org/Projects/LibRsvg), its headers (development package) and [ffmpeg](https://ffmpeg.org/download.html) must be installed. Once all prerequisites are met, `bewegung` can be installed with Python's package manager `pip`:
+A bare minimum of `bewegung` can be installed with Python's package manager `pip`:
 
 ```bash
-pip install -vU git+https://github.com/pleiszenburg/bewegung.git@master
+pip install -vU bewegung
 ```
 
-In principle, `bewegung` works across all modern operating systems. In terms of memory usage and performance, it behaves best on Unix-like systems due to [Windows's lack of "fork"](https://stackoverflow.com/q/985281/1672565).
+A complete installation of all optional components and development tools can be triggered by running:
+
+```bash
+pip install -vU bewegung[all]
+```
+
+Certain non-Python components must installed separately and before invoking the above command. [For detailed instructions, see documentation](https://bewegung.readthedocs.io/en/latest/installation.html). Most notably, `ffmpeg` should be installed for producing actual video files instead of video frames as individual files. See [download section](https://ffmpeg.org/download.html) of the `ffmpeg` project website for further instructions.
 
 ## Example
 
@@ -22,4 +28,4 @@ See [`demo.py`](https://github.com/pleiszenburg/bewegung/blob/master/demo/demo.p
 
 The API is not stable yet. It will remain subject to changes until the project is labeled "beta" or better.
 
-By default, `bewegung` enforces [type hints](https://www.python.org/dev/peps/pep-0484/) with [`typeguard`](https://typeguard.readthedocs.io), which is very slow but useful for debugging. For significantly more speed, please deactivate `typeguard` by running Python in "optimized mode 1" (`opt-1`), see [here](https://docs.python.org/3/using/cmdline.html#cmdoption-o) and [here](https://docs.python.org/3/using/cmdline.html#envvar-PYTHONOPTIMIZE). Do not use "optimized mode 2" (`opt-2`) because it will cause incompatibilities and crashes.
+`bewegung` can be drastically accelerated by deactivating debugging features. See [relevant section in the documentation](https://bewegung.readthedocs.io/en/latest/debug.html).
