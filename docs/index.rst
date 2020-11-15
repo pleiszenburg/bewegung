@@ -14,6 +14,7 @@ User's guide
    canvas
    video
    algebra
+   debug
 
 Indices and tables
 ==================
