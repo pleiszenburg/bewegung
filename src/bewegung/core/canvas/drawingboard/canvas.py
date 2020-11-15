@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/canvas/drawingboard.py: DrawingBoard canvas
+    src/bewegung/core/canvas/drawingboard/canvas.py: Backend Canvas
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -28,14 +28,14 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Any, Callable
+from typing import Any, Callable, Type
 
 from PIL.Image import Image
 from typeguard import typechecked
 
-from ._base import CanvasBase
-from ..abc import VideoABC
-from ..drawingboard import DrawingBoard
+from .core import DrawingBoard
+from .._base import CanvasBase
+from ...abc import VideoABC
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -60,3 +60,8 @@ class Canvas(CanvasBase):
     def to_pil(self, obj: DrawingBoard) -> Image:
 
         return obj.as_pil()
+
+    @property
+    def type(self) -> Type:
+
+        return DrawingBoard
