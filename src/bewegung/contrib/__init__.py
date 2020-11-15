@@ -28,4 +28,4 @@ specific language governing rights and limitations under the License.
 # EXPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from .circular_century_calendar import CircularCenturyCalendar
+# No direct exports!
