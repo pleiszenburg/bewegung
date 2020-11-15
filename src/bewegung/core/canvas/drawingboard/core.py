@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/drawingboard.py: Simple 2D cairo renderer
+    src/bewegung/core/canvas/drawingboard/core.py: Simple 2D cairo renderer
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -45,9 +45,9 @@ from gi.repository import Pango, PangoCairo, Rsvg
 
 import IPython.display
 
-from .abc import DrawingBoardABC, Vector2DABC
-from .color import Color
-from .vector import Vector2D, Matrix
+from ...abc import DrawingBoardABC, Vector2DABC
+from ...color import Color
+from ...vector import Vector2D, Matrix
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -66,6 +66,11 @@ def _geometry(func: Callable) -> Callable:
 
 @typechecked
 class DrawingBoard(DrawingBoardABC):
+
+    cairo = cairo
+    Pango = Pango
+    PangoCairo = PangoCairo
+    Rsvg = Rsvg
 
     def __init__(self,
         width: int,
