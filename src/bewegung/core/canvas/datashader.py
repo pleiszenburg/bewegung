@@ -48,13 +48,9 @@ class Canvas(CanvasBase):
 
         super().__init__()
 
-        self._DS_Canvas = None
         self._DS_Image = None
 
-    def prototype(self, video: VideoABC, **kwargs) -> Callable:
-
-        if not self._loaded:
-            self.load()
+    def _prototype(self, video: VideoABC, **kwargs) -> Callable:
 
         if 'plot_width' not in kwargs.keys():
             kwargs['plot_width'] = video.width
@@ -66,45 +62,24 @@ class Canvas(CanvasBase):
         if 'y_range' not in kwargs.keys():
             kwargs['y_range'] = (0, video.height)
 
-        return lambda: self._DS_Canvas(**kwargs)
+        return lambda: self._type(**kwargs)
 
-    def isinstance(self, obj: Any, hard: bool = True) -> bool:
+    def _isinstance(self, obj: Any) -> bool:
 
-        if not self._loaded and not hard:
-            return False
-        if not self._loaded:
-            self.load()
+        return isinstance(obj, self._DS_Image) # Return type is not a canvas!
 
-        return isinstance(obj, self._DS_Image)
-
-    def load(self):
-
-        if self._loaded:
-            return
+    def _load(self):
 
         from datashader import Canvas as DS_Canvas
         from datashader.transfer_functions import Image as DS_Image
 
-        self._DS_Canvas = DS_Canvas
+        self._type = DS_Canvas
         self._DS_Image = DS_Image
 
-        self._loaded = True
-
-    def to_pil(self, obj: Any) -> Image:
-
-        if not self._loaded:
-            self.load()
+    def _to_pil(self, obj: Any) -> Image:
 
         assert isinstance(obj, self._DS_Image)
 
         cvs = obj.to_pil()
         assert cvs.mode == 'RGBA'
         return ImageOps.flip(cvs) # datashader's y axis must be flipped
-
-    @property
-    def type(self) -> Type:
-
-        if not self._loaded:
-            self.load()
-
-        return self._DS_Canvas
