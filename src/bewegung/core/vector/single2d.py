@@ -31,7 +31,11 @@ specific language governing rights and limitations under the License.
 import math
 from typing import Tuple, Type, Union
 
-import numpy as np
+try:
+    import numpy as np
+    from numpy import ndarray
+except ModuleNotFoundError:
+    np, ndarray = None, None
 from typeguard import typechecked
 
 from ..abc import Dtype, PyNumber, PyNumber2D, Vector2DABC
@@ -89,7 +93,9 @@ class Vector2D(Vector2DABC):
             return self.copy()
         return type(self)(dtype(self._x), dtype(self._y), dtype)
 
-    def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> np.ndarray:
+    def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> ndarray:
+        if np is None:
+            raise NotImplementedError('numpy is not available')
         return np.array(self.as_tuple(), dtype = dtype)
 
     def as_polar_tuple(self) -> Tuple[float, float]:

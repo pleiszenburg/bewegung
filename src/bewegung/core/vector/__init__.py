@@ -31,7 +31,16 @@ specific language governing rights and limitations under the License.
 from .single2d import Vector2D
 from .single2ddist import Vector2Ddist
 from .single3d import Vector3D
-from .array2d import VectorArray2D
-from .array2ddist import VectorArray2Ddist
-from .array3d import VectorArray3D
 from .matrix import Matrix
+
+try:
+    import numpy as _np
+except ModuleNotFoundError:
+    _np = None
+
+if _np is not None:
+    from .array2d import VectorArray2D
+    from .array2ddist import VectorArray2Ddist
+    from .array3d import VectorArray3D
+
+del _np

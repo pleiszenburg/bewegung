@@ -31,7 +31,11 @@ specific language governing rights and limitations under the License.
 from math import cos, sin
 from typing import List, Tuple, Type, Union
 
-import numpy as np
+try:
+    import numpy as np
+    from numpy import ndarray
+except ModuleNotFoundError:
+    np, ndarray = None, None
 from typeguard import typechecked
 
 from ..abc import Dtype, MatrixABC, PyNumber, Vector2DABC, Vector3DABC
@@ -85,7 +89,9 @@ class Matrix(MatrixABC):
     def __setitem__(self, index: Tuple[int, int], value: PyNumber):
         self._matrix[index[0]][index[1]] = self._dtype(value)
 
-    def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> np.ndarray:
+    def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> ndarray:
+        if np is None:
+            raise NotImplementedError('numpy is not available')
         return np.array(self._matrix, dtype = dtype)
 
     @property
