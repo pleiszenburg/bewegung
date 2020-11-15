@@ -26,6 +26,8 @@ See [`demo.py`](https://github.com/pleiszenburg/bewegung/blob/master/demo/demo.p
 
 ## Usage
 
+See [documentation](https://bewegung.readthedocs.io) (work in progress).
+
 The API is not stable yet. It will remain subject to changes until the project is labeled "beta" or better.
 
 `bewegung` can be drastically accelerated by deactivating debugging features. See [relevant section in the documentation](https://bewegung.readthedocs.io/en/latest/debug.html).
