@@ -33,6 +33,7 @@ from typing import List, Tuple, Union
 import numpy as np
 from typeguard import typechecked
 
+from .lib import dtype_np2py
 from .single2d import Vector2D
 from ..abc import Dtype, Number, VectorArray2DABC, VectorIterable2D
 from ..const import FLOAT_DEFAULT
@@ -59,7 +60,8 @@ class VectorArray2D(VectorArray2DABC):
 
     def __getitem__(self, idx: Union[int, slice]) -> Union[Vector2D, VectorArray2DABC]:
         if isinstance(idx, int):
-            return Vector2D(float(self._x[idx]), float(self._y[idx]))
+            dtype = dtype_np2py(self.dtype)
+            return Vector2D(dtype(self._x[idx]), dtype(self._y[idx]), dtype = dtype)
         return VectorArray2D(self._x[idx].copy(), self._y[idx].copy())
 
     def __eq__(self, other: VectorArray2DABC) -> bool:
@@ -91,8 +93,9 @@ class VectorArray2D(VectorArray2DABC):
         return self.x * other.x + self.y * other.y
 
     def as_list(self) -> List[Vector2D]:
+        dtype = dtype_np2py(self.dtype)
         return [
-            Vector2D(float(self._x[idx]), float(self._y[idx]))
+            Vector2D(dtype(self._x[idx]), dtype(self._y[idx]), dtype = dtype)
             for idx in range(len(self))
         ]
 
