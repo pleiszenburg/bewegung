@@ -30,10 +30,9 @@ specific language governing rights and limitations under the License.
 
 from datetime import datetime
 
-from typeguard import typechecked
-
 from .abc import TimeScaleABC
 from .time import Time
+from .typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS: TimeScale

@@ -30,9 +30,8 @@ specific language governing rights and limitations under the License.
 
 from typing import List
 
-from typeguard import typechecked
-
 from .abc import IndexPoolABC
+from .typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

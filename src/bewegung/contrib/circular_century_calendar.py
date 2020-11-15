@@ -34,11 +34,11 @@ import math
 from typing import List, Union
 
 from PIL.Image import Image, new, LANCZOS
-from typeguard import typechecked
 
 from ..core.canvas import inventory
 from ..core.color import Color
 from ..core.vector import Matrix, Vector2D
+from ..core.typeguard import typechecked
 
 DrawingBoard = inventory['drawingboard'].type
 

@@ -35,7 +35,6 @@ from typing import Callable, Union
 
 import cairo
 from PIL import Image
-from typeguard import typechecked
 
 import gi
 gi.require_version('Pango', '1.0')
@@ -50,6 +49,7 @@ except ModuleNotFoundError:
 
 from ...abc import DrawingBoardABC, Vector2DABC
 from ...color import Color
+from ...typeguard import typechecked
 from ...vector import Vector2D, Matrix
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

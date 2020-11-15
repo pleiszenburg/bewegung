@@ -34,7 +34,6 @@ from subprocess import Popen, PIPE, DEVNULL
 from typing import Callable, Dict, Union
 
 from PIL import Image as PIL_Image
-from typeguard import typechecked
 try:
     from tqdm import tqdm
 except ModuleNotFoundError:
@@ -48,6 +47,7 @@ from .layer import Layer
 from .sequence import Sequence
 from .task import Task
 from .time import Time
+from .typeguard import typechecked
 from .vector import Vector2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

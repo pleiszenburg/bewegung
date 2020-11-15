@@ -31,9 +31,9 @@ specific language governing rights and limitations under the License.
 from typing import Any, Callable, Type
 
 from PIL.Image import Image
-from typeguard import typechecked
 
 from ..abc import CanvasABC, VideoABC
+from ..typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

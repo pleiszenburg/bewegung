@@ -34,7 +34,7 @@ import traceback
 import importlib
 import os
 
-from typeguard import typechecked
+from ..typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

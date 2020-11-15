@@ -32,8 +32,6 @@ import math
 import sys
 from typing import Union
 
-from typeguard import typechecked
-
 try:
     import numpy as np
 except ModuleNotFoundError:
@@ -49,6 +47,7 @@ except ModuleNotFoundError:
     boolean, float32, float64 = None, tuple(), tuple()
 
 from .abc import CameraABC
+from .typeguard import typechecked
 from .vector import (
     Matrix,
     Vector2D,

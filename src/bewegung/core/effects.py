@@ -31,9 +31,9 @@ specific language governing rights and limitations under the License.
 import math
 
 from PIL import Image as PIL_Image
-from typeguard import typechecked
 
 from .abc import EffectABC, LayerABC, SequenceABC, TimeABC, VideoABC
+from .typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS: BASE

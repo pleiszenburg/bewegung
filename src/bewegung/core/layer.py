@@ -32,10 +32,10 @@ from types import MethodType
 from typing import Any, Callable, Union
 
 from PIL import Image as PIL_Image
-from typeguard import typechecked
 
 from .abc import EffectABC, LayerABC, SequenceABC, TimeABC, VideoABC, Vector2DABC
 from .canvas import inventory
+from .typeguard import typechecked
 from .vector import Vector2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

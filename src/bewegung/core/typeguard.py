@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/canvas/pil.py: PIL canvas
+    src/bewegung/core/typeguard.py: Wrapper around typeguard (optional)
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -28,36 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Callable
-
-from PIL.Image import Image, new
-
-from ._base import CanvasBase
-from ..abc import VideoABC
-from ..typeguard import typechecked
-
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# CLASS
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-@typechecked
-class Canvas(CanvasBase):
-
-    def _prototype(self, video: VideoABC, **kwargs) -> Callable:
-
-        if 'mode' not in kwargs.keys():
-            kwargs['mode'] = 'RGBA'
-        if 'size' not in kwargs.keys():
-            kwargs['size'] = (video.width, video.height)
-
-        return lambda: new(**kwargs)
-
-    def _load(self):
-
-        self._type = Image
-
-    def _to_pil(self, obj: Image) -> Image:
-
-        assert obj.mode == 'RGBA'
-
-        return obj
+try:
+    from typeguard import typechecked
+except ModuleNotFoundError:
+    typechecked = lambda x: x
