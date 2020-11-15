@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Any, Callable
+from typing import Any, Callable, Type
 
 from cairo import FORMAT_ARGB32, ImageSurface, Format
 from PIL.Image import Image, frombuffer, merge
@@ -72,3 +72,8 @@ class Canvas(CanvasBase):
             )
         b, g, r, a = image.split()
         return merge('RGBA', (r, g, b, a))
+
+    @property
+    def type(self) -> Type:
+
+        return ImageSurface

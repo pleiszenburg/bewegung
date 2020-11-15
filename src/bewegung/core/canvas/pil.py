@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Any, Callable
+from typing import Any, Callable, Type
 
 from PIL.Image import Image, new
 from typeguard import typechecked
@@ -61,3 +61,8 @@ class Canvas(CanvasBase):
         assert obj.mode == 'RGBA'
 
         return obj
+
+    @property
+    def type(self) -> Type:
+
+        return Image

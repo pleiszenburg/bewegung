@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Any, Callable
+from typing import Any, Callable, Type
 
 from datashader import Canvas as DS_Canvas
 from datashader.transfer_functions import Image as DS_Image
@@ -69,3 +69,8 @@ class Canvas(CanvasBase):
         cvs = obj.to_pil()
         assert cvs.mode == 'RGBA'
         return ImageOps.flip(cvs) # datashader's y axis must be flipped
+
+    @property
+    def type(self) -> Type:
+
+        return DS_Canvas
