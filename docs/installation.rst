@@ -1,7 +1,7 @@
 Installation
 ============
 
-Minimum requirements:
+Hard dependencies:
 
 - ``Pillow``
 
@@ -31,6 +31,6 @@ For vector arrays and faster camera:
 
 - ``numpy``
 
-For run-time type-checking across the library (i.e. debugging):
+For run-time type-checking across the library (see :ref:`debugging <debug>`):
 
 - ``typeguard``
