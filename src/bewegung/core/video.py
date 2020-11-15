@@ -38,9 +38,7 @@ from typeguard import typechecked
 try:
     from tqdm import tqdm
 except ModuleNotFoundError:
-    def tqdm(data):
-        for item in data:
-            yield item
+    tqdm = lambda x: x
 
 from .abc import LayerABC, SequenceABC, VideoABC, Vector2DABC
 from .canvas import inventory
