@@ -29,7 +29,7 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from math import cos, sin
-from typing import List, Type, Union
+from typing import List, Tuple, Type, Union
 
 import numpy as np
 from typeguard import typechecked
@@ -76,8 +76,13 @@ class Matrix(MatrixABC):
 
         return Vector2D(*values) if len(vector) == 2 else Vector3D(*values)
 
-    def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> np.ndarray:
+    def __getitem__(self, index: Tuple[int, int]) -> PyNumber:
+        return self._matrix[index[0]][index[1]]
 
+    def __setitem__(self, index: Tuple[int, int], value: PyNumber):
+        self._matrix[index[0]][index[1]] = self._dtype(value)
+
+    def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> np.ndarray:
         return np.array(self._matrix, dtype = dtype)
 
     @property
