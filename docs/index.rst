@@ -11,6 +11,7 @@ User's guide
 
    installation
    getting_started
+   time
    video
    algebra
 
