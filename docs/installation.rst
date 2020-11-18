@@ -29,15 +29,28 @@ In principle, ``bewegung`` works across all modern operating systems. In terms o
 Detailed Installation Options
 -----------------------------
 
-**For rendering an actual video** file, ``ffmpeg`` is required. See `download section`_ on ``ffmpeg``'s project website for installation instructions. If ``ffmpeg`` is not present, individual video frames can still be exported as image files.
+Video File Encoding
+~~~~~~~~~~~~~~~~~~~
+
+For rendering an actual video file, ``ffmpeg`` is required. See `download section`_ on ``ffmpeg``'s project website for installation instructions. If ``ffmpeg`` is not present, individual video frames can still be exported as image files.
 
 .. _download section: https://ffmpeg.org/download.html
 
-For a nice **progress bar** during video rendering (``pip install -vU bewegung[tqdm]``):
+Progress Bars
+~~~~~~~~~~~~~
 
-- ``tqdm`` (optional dependency)
+Installation: ``pip install -vU bewegung[tqdm]``
 
-For the **drawingboard rendering backend** (optional component, ``pip install -vU bewegung[drawingboard]``):
+Dependencies:
+
+- ``tqdm``
+
+Drawingboard Rendering Backend
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Installation: ``pip install -vU bewegung[drawingboard]``
+
+Dependencies:
 
 - ``pycairo``
 - ``PyGObject``
@@ -51,7 +64,12 @@ The `cairo library`_ and its headers must be installed, see `pycairo's documenta
 .. _ipython: https://ipython.org/
 .. _Jupyter: https://jupyter.org/
 
-For the **cairo rendering backend** (optional component, ``pip install -vU bewegung[cairo]``):
+Cairo Rendering Backend
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Installation: ``pip install -vU bewegung[cairo]``
+
+Dependencies:
 
 - ``pycairo``
 
@@ -60,7 +78,12 @@ The `cairo library`_ and its headers must be installed, see `pycairo's documenta
 .. _cairo library: https://www.cairographics.org/
 .. _pycairo's documentation: https://pycairo.readthedocs.io/en/latest/getting_started.html
 
-For the **datashader rendering backend** (optional component, ``pip install -vU bewegung[datashader]``):
+Datashader Rendering Backend
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Installation: ``pip install -vU bewegung[datashader]``
+
+Dependencies:
 
 - ``datashader``
 
@@ -68,7 +91,12 @@ For further instructions, see `datashader's documentation`_.
 
 .. _datashader's documentation: https://datashader.org/getting_started/index.html
 
-For the **matplotlib rendering backend** (optional component, ``pip install -vU bewegung[matplotlib]``):
+Matplotlib Rendering Backend
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Installation: ``pip install -vU bewegung[matplotlib]``
+
+Dependencies:
 
 - ``numpy``
 - ``matploblib``
@@ -77,18 +105,33 @@ For the **matplotlib rendering backend** (optional component, ``pip install -vU 
 
 The `cairo library`_ and its headers must be installed, see `pycairo's documentation`_.
 
-For a **faster camera** based Just-in-Time (JIT) compilation (``pip install -vU bewegung[numba]``):
+Faster Camera
+~~~~~~~~~~~~~
 
-- ``numba``
+Installation: ``pip install -vU bewegung[numba]``
+
+Dependencies:
+
+- ``numba`` for Just-in-Time (JIT) compilation
 
 For further instructions, see `numba's documentation`_.
 
 .. _numba's documentation: https://numba.readthedocs.io/en/stable/user/installing.html
 
-For **vector arrays** and a **faster camera** based on ``numpy``'s array types (``pip install -vU bewegung[numpy]``):
+Vector Arrays and Faster Camera
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Installation: ``pip install -vU bewegung[numpy]``
+
+Dependencies:
 
 - ``numpy``
 
-For **run-time type-checking** across the library (see :ref:`debugging <debug>`):
+Run-Time Type-Checking
+~~~~~~~~~~~~~~~~~~~~~~
+
+Installation: ``pip install -vU bewegung[typeguard]``
 
 - ``typeguard``
+
+If installed, type-checking will be enabled across the library (see :ref:`debugging <debug>`).
