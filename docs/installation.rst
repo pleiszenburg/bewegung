@@ -68,6 +68,15 @@ For further instructions, see `datashader's documentation`_.
 
 .. _datashader's documentation: https://datashader.org/getting_started/index.html
 
+For the **matplotlib rendering backend** (optional component, ``pip install -vU bewegung[matplotlib]``):
+
+- ``numpy``
+- ``matploblib``
+- ``pycairo``
+- ``mplcairo``
+
+The `cairo library`_ and its headers must be installed, see `pycairo's documentation`_.
+
 For a **faster camera** based Just-in-Time (JIT) compilation (``pip install -vU bewegung[numba]``):
 
 - ``numba``
