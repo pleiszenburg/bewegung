@@ -82,6 +82,12 @@ extras_require = {
     "datashader": [
         "datashader", # datashader backend (optional)
     ],
+    "matplotlib": [
+        "numpy",
+        "matplotlib", # matplotlib backend (optional)
+        "pycairo",
+        "mplcairo",
+    ],
     "ipython": [
         "ipython", # for drawingboard backend (optional)
     ],
