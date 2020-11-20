@@ -111,16 +111,16 @@ class DrawingBoard(DrawingBoardABC):
 
         if self._subpixels == 1:
             return self.swap_channels(Image.frombuffer(
-                mode = 'RGBA',
+                mode = 'RGBa',
                 size = (self._width, self._height),
-                data = self._surface.get_data(),
-                ))
+                data = self._surface.get_data().tobytes(), # call to "tobytes" required because of RGBa mode
+                )).convert("RGBA")
 
         return self.swap_channels(Image.frombuffer(
-            mode = 'RGBA',
+            mode = 'RGBa',
             size = (self._width * self._subpixels, self._height * self._subpixels),
-            data = self._surface.get_data(),
-            ).resize(
+            data = self._surface.get_data().tobytes(), # call to "tobytes" required because of RGBa mode
+            ).convert("RGBA").resize(
                 (self._width, self._height),
                 resample = Image.LANCZOS,
             ))
@@ -129,7 +129,7 @@ class DrawingBoard(DrawingBoardABC):
     def swap_channels(image: Image.Image) -> Image.Image:
 
         b, g, r, a = image.split()
-        return Image.merge('RGBA', (r, g, b, a))
+        return Image.merge(image.mode, (r, g, b, a))
 
     def display(self):
 
