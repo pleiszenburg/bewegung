@@ -73,7 +73,12 @@ class Canvas(CanvasBase):
         if 'tight_layout' not in kwargs.keys():
             kwargs['tight_layout'] = True
 
-        return lambda: self._type(**kwargs)
+        def new_figure():
+            fig = self._type(**kwargs)
+            setattr(fig, '__bewegung_managed__', None) # flag: close figure after extracting image
+            return fig
+
+        return new_figure
 
     def _isinstance(self, obj: Any) -> bool:
 
@@ -100,7 +105,9 @@ class Canvas(CanvasBase):
         image = fromarray(
             obj.canvas.renderer.buffer_rgba()
             ) # depends on matplotlib backend - https://stackoverflow.com/q/57316491/1672565
-        self._plt.close(obj)
+
+        if hasattr(obj, '__bewegung_managed__'): # close flagged image
+            self._plt.close(obj)
 
         assert image.mode == 'RGBA'
 
