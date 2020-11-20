@@ -102,4 +102,6 @@ class Canvas(CanvasBase):
             ) # depends on matplotlib backend - https://stackoverflow.com/q/57316491/1672565
         self._plt.close(obj)
 
+        assert image.mode == 'RGBA'
+
         return image

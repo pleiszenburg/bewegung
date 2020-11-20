@@ -65,4 +65,8 @@ class Canvas(CanvasBase):
 
         assert isinstance(obj, self._type)
 
-        return obj.as_pil()
+        image = obj.as_pil()
+
+        assert image.mode == 'RGBA'
+
+        return image
