@@ -102,9 +102,11 @@ class Canvas(CanvasBase):
         assert isinstance(obj, self._Figure)
 
         obj.canvas.draw()
-        image = fromarray(
-            obj.canvas.renderer.buffer_rgba()
-            ) # depends on matplotlib backend - https://stackoverflow.com/q/57316491/1672565
+
+        buffer = obj.canvas.renderer.buffer_rgba()
+        assert buffer.dtype.name == 'uint8' # TODO cairo & mplcairo also support RGBA128F
+
+        image = fromarray(buffer) # depends on matplotlib backend - https://stackoverflow.com/q/57316491/1672565
 
         if hasattr(obj, '__bewegung_managed__'): # close flagged image
             self._plt.close(obj)
