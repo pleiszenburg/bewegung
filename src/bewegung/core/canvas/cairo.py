@@ -78,9 +78,9 @@ class Canvas(CanvasBase):
         assert obj.get_format() == self._Format.ARGB32
 
         image = frombuffer(
-            mode = 'RGBA',
+            mode = 'RGBa',
             size = (obj.get_width(), obj.get_height()),
-            data = obj.get_data(),
+            data = obj.get_data().tobytes(), # call to "tobytes" required because of RGBa mode
             )
         b, g, r, a = image.split()
-        return merge('RGBA', (r, g, b, a))
+        return merge('RGBa', (r, g, b, a)).convert("RGBA")
