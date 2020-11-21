@@ -472,22 +472,23 @@ class Video(VideoABC):
         ]
 
         if video_fn is not None:
-            codec = Popen([
-                'ffmpeg',
-                '-y', # force overwrite of output file
-                '-framerate', f'{self.fps:d}',
-                '-f', 'image2pipe', # force input format
-                '-i', '-', # data from stdin
-                '-vcodec', 'bmp', # input codec
-                '-s:v', f'{self._width:d}x{self._height:d}',
-                '-c:v', 'libx264',
-                '-preset', ffmpeg_preset,
-                '-crf', f'{ffmpeg_crf:d}',
-                '-tune', ffmpeg_tune,
-                video_fn,
-            ],
-            stdin = PIPE, stdout = DEVNULL, stderr = DEVNULL,
-            bufsize = buffersize,
+            codec = Popen(
+                [
+                    'ffmpeg',
+                    '-y', # force overwrite of output file
+                    '-framerate', f'{self.fps:d}',
+                    '-f', 'image2pipe', # force input format
+                    '-i', '-', # data from stdin
+                    '-vcodec', 'bmp', # input codec
+                    '-s:v', f'{self._width:d}x{self._height:d}',
+                    '-c:v', 'libx264',
+                    '-preset', ffmpeg_preset,
+                    '-crf', f'{ffmpeg_crf:d}',
+                    '-tune', ffmpeg_tune,
+                    video_fn,
+                ],
+                stdin = PIPE, stdout = DEVNULL, stderr = DEVNULL,
+                bufsize = buffersize,
             )
 
         for promise in tqdm(workers_promises):
