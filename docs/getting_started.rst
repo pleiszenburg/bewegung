@@ -257,7 +257,44 @@ Please note that layer methods do not need to return a/the canvas object. If the
 Working with Time
 -----------------
 
-Time, TimeScale ...
+Describing time within a videos is handled by special ``Time`` objects. They encapsulate two representations of time: An *index* representing a frame number and an actual *time in seconds*. The conversion between the two depends on the *frames per second* (*fps*). A lot of basic arithmetic is implemented for ``Time`` objects.
+
+.. code:: ipython
+
+    >>> from bewegung import Time
+    >>> a = Time(index = 50, fps = 30)
+    >>> print(a)
+    <Time index=50 seconds=1.667s fps=30>
+    >>> b = Time(index = 75, fps = 30)
+    >>> c = b - a
+    >>> print(c)
+    <Time index=25 seconds=0.833s fps=30>
+    >>> print(c.seconds, c.index, c.fps)
+    0.8333333333333334 25 30
+
+Because the need of taking care of the frames per second all the time can be annoying, every ``Time`` and ``Video`` object allows to generate new time objects based on its frames per second state.
+
+.. code:: ipython
+
+    >>> from bewegung import Time, Video
+    >>> a = Time(index = 50, fps = 30)
+    >>> b = a.time(75) # new time object, index == 75, fps from a
+    >>> c = a.time_from_seconds(1.0) # new time object, seconds == 1.0, fps from a
+    >>> print(a)
+    <Time index=50 seconds=1.667s fps=30>
+    >>> print(b)
+    <Time index=75 seconds=2.500s fps=30>
+    >>> print(c)
+    <Time index=30 seconds=1.000s fps=30>
+    >>> v = Video(width = 1920, height = 1080, seconds = 10.0, fps = 25)
+    >>> d = v.time(40) # new time object, index == 40, fps from v
+    >>> e = v.time_from_seconds(7.0) # new time object, index == 40, fps from v
+    >>> print(d)
+    <Time index=40 seconds=1.600s fps=25>
+    >>> print(e)
+    <Time index=175 seconds=7.000s fps=25>
+
+For easily working with "accelerated" or "slowed down" time, i.e. time-lapse or slow-motion videos, ``bewegung`` also offers a ``TimeScale`` class.
 
 Convenience Functionality
 -------------------------
