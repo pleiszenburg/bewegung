@@ -39,7 +39,7 @@ try:
 except ModuleNotFoundError:
     tqdm = lambda x: x
 
-from .abc import LayerABC, SequenceABC, VideoABC, Vector2DABC
+from .abc import LayerABC, SequenceABC, VideoABC, Vector2DABC, TimeABC
 from .canvas import inventory
 from .const import FPS_DEFAULT
 from .indexpool import IndexPool
@@ -132,7 +132,7 @@ class Video(VideoABC):
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     @property
-    def length(self) -> Time:
+    def length(self) -> TimeABC:
         """
         Duration of video
         """
@@ -191,14 +191,14 @@ class Video(VideoABC):
 # RESET TASKS
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    def time(self, index: int) -> Time:
+    def time(self, index: int) -> TimeABC:
         """
         Generates a new ``Time`` object from a given number of frames based on the video's frames per second.
         """
 
         return self._length.time(index = index)
 
-    def time_from_seconds(self, seconds: Union[float, int]) -> Time:
+    def time_from_seconds(self, seconds: Union[float, int]) -> TimeABC:
         """
         Generates a new ``Time`` object from a given time in seconds based on the video's frames per second.
         """
