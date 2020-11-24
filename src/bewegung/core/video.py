@@ -87,19 +87,25 @@ class Video(VideoABC):
         frames: Union[int, None] = None,
     ):
 
-        assert width > 0
-        assert height > 0
+        if width <= 0:
+            raise ValueError('width must be greater than 0')
+        if height <= 0:
+            raise ValueError('height must be greater than 0')
 
         self._width = width
         self._height = height
         self._ctx = ctx if ctx is not None else {}
 
-        assert fps > 0
-        assert (seconds is not None) ^ (frames is not None)
+        if fps <= 0:
+            raise ValueError('fps must be greater than 0')
+        if not ((seconds is not None) ^ (frames is not None)):
+            raise ValueError('frames and seconds are mutually exclusive')
         if seconds is not None:
-            assert seconds > 0
+            if seconds <= 0:
+                raise ValueError('seconds must be greater than 0')
         if frames is not None:
-            assert frames > 0
+            if frames <= 0:
+                raise ValueError('frames must be greater than 0')
         self._length = Time(
             fps = fps, index = frames,
             ) if seconds is None else Time.from_seconds(
