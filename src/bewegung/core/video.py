@@ -343,7 +343,7 @@ class Video(VideoABC):
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     def layer(self,
-        zindex: int,
+        zindex: Union[int, None] = None,
         canvas: Union[Callable, None] = None,
         offset: Union[Vector2DABC, None] = None,
     ) -> Callable:
@@ -351,13 +351,15 @@ class Video(VideoABC):
         A **decorator** for decorating ``layer`` methods (tasks) within ``sequence`` classes.
 
         Args:
-            zindex : A number, managed by an index pool, representing the relative position within a stack of ``layer`` tasks.
+            zindex : A number, managed by an index pool, representing the relative position within a stack of ``layer`` tasks. If not provided, the new layer will be created on top.
             canvas : A function pointer, generating a new canvas once per frame for the ``layer`` task.
             offset : The layer's offset relative to the top-left corner of the video. The y-axis is downwards positive.
         """
 
         if offset is None:
             offset = Vector2D(0, 0)
+        if zindex is None:
+            zindex = self._zindex.on_top()
 
         self._zindex.register(zindex) # ensure unique z-index
 
