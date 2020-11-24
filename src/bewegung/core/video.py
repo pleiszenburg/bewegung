@@ -250,6 +250,7 @@ class Video(VideoABC):
     def sequence(self,
         start: Union[Time, None] = None,
         stop: Union[Time, None] = None,
+        length: Union[Time, None] = None,
     ) -> Callable:
         """
         A **decorator** for decorating ``sequence`` classes.
@@ -261,17 +262,27 @@ class Video(VideoABC):
             stop : Time of stop of sequence within the video.
                 A negative time can be used to specify a time relative to the end of the video.
                 Defaults to the end of the video.
+                ``stop`` and ``length`` are mutually exclusive. Specify one at most.
+            length : Length of the sequence.
+                ``stop`` and ``length`` are mutually exclusive. Specify one at most.
         """
 
         if start is None:
             start = self.time(0)
-        if stop is None:
-            stop = self._length
-
         if start.fps != self.fps:
             start = self.time_from_seconds(seconds = start.seconds)
-        if stop.fps != self.fps:
-            stop = self.time_from_seconds(seconds = stop.seconds)
+
+        if stop is not None and length is not None:
+            raise ValueError()
+        if length is not None:
+            if length.fps != length.fps:
+                length = self.time_from_seconds(seconds = length.seconds)
+            stop = length - start
+        if stop is not None:
+            if stop.fps != self.fps:
+                stop = self.time_from_seconds(seconds = stop.seconds)
+        else:
+            stop = self._length
 
         if start < self.time(0):
             start = self._length + start
