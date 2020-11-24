@@ -560,7 +560,6 @@ class Video(VideoABC):
             for layertask in self._layertasks
             if time in layertask.sequence # only render layer if time within sequence
         ] # call layer render functions, get list of uni-size PIL images
-        assert len(layers) != 0
 
         base_layer = PIL_Image.new('RGBA', (self._width, self._height), (0, 0, 0, 0)) # transparent black
         for layer in layers:
