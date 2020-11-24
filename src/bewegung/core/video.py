@@ -303,14 +303,17 @@ class Video(VideoABC):
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     def prepare(self,
-        preporder: int,
+        preporder: Union[int, None] = None,
     ) -> Callable:
         """
         A **decorator** for decorating ``prepare`` methods (tasks) within ``sequence`` classes.
 
         Args:
-            preporder : A number, managed by an index pool, representing the relative position within a set of ``prepare`` tasks.
+            preporder : A number, managed by an index pool, representing the relative position within a set of ``prepare`` tasks. If not provided, the new task will be created at the end of the set.
         """
+
+        if preporder is None:
+            preporder = self._preporder.on_top()
 
         self._preporder.register(preporder) # ensure unique preporder
 
