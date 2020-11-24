@@ -164,3 +164,23 @@ For debugging and development, it can be very useful to be able to selectively r
 Instead of calling ``Video.render``, the video object can be manually *reset* by calling ``Video.reset``. A reset is usually taken care of by the video render method, but if individual frames are desired instead, it has to be called at least once before the first video frame is generated. Once this is done, frames can be selected based on their time and rendered with ``Video.render_frame``. This method can both directly store the frame into a file and return it as a ``Pillow.Image`` object, see `Pillow documentation`_.
 
 .. _Pillow documentation: https://pillow.readthedocs.io/en/stable/reference/Image.html#the-image-class
+
+Using & Mixing Backends
+-----------------------
+
+Foo bar.
+
+Requesting Parameters in Layers and Prepare Tasks
+-------------------------------------------------
+
+Foo bar.
+
+Working with Time
+-----------------
+
+Time, TimeScale ...
+
+Convenience Functionality
+-------------------------
+
+Vectors, Camera, Color
