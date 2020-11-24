@@ -80,6 +80,10 @@ class Time(TimeABC):
         self._assert_fps(other)
         return type(self)(self.fps, self.index - other.index)
 
+    def __truediv__(self, other: TimeABC) -> float:
+        self._assert_fps(other)
+        return self.index / other.index
+
     def _assert_fps(self, other):
         if self.fps != other.fps:
             raise ValueError()
