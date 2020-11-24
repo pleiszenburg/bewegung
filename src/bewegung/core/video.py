@@ -540,7 +540,7 @@ class Video(VideoABC):
 
     def render_frame(self,
         time: Time,
-        return_frame: bool,
+        return_frame: bool = True,
         frame_fn: Union[str, None] = None,
         ) -> Union[PIL_Image.Image, None]:
         """
