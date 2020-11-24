@@ -299,4 +299,42 @@ For easily working with "accelerated" or "slowed down" time, i.e. time-lapse or 
 Convenience Functionality
 -------------------------
 
-Vectors, Camera, Color
+Not for speed: Vectors, Camera ...
+
+.. code:: ipython
+
+    >>> from math import pi
+    >>> from bewegung import Vector2D, Vector3D, Matrix, Camera
+    >>> Vector2D(2, 3) + Vector2D(7, 11)
+    <Vector2D x=9 y=14 dtype=int>
+    >>> c = Camera(position = Vector3D(20.0, 0.0, 0.0), direction = Vector3D(-1.0, 0.0, 0.0))
+    >>> g3D = Vector3D(0.0, 5.0, 5.0)
+    >>> print(g3D)
+    <Vector3D x=0.000000e+00 y=5.000000e+00 z=5.000000e+00 dtype=float>
+    >>> g2D = c.get_point(g3D).as_vector()
+    >>> print(g2D)
+    <Vector2D x=2.500000e-01 y=-2.500000e-01 dtype=float>
+    >>> m = Matrix.from_2d_rotation(0.25 * pi)
+    >>> print(m)
+    <Matrix shape=2x2 dtype=float>
+    >>> m @ g2D
+    <Vector2D x=3.535534e-01 y=-2.775558e-17 dtype=float>
+
+Color ...
+
+.. code:: ipython
+
+    >>> from bewegung import Color
+    >>> a = Color(5, 6, 7)
+    >>> print(a)
+    <Color r=5 g=6 b=7 a=255>
+    >>> a.as_hex()
+    '050607ff'
+    >>> a.as_hex(alpha = False)
+    '050607'
+    >>> a.as_rgba_float()
+    (0.0196078431372549, 0.023529411764705882, 0.027450980392156862, 1.0)
+    >>> a.as_rgba_int()
+    (5, 6, 7, 255)
+    >>> Color.from_hex('FF0000')
+    <Color r=255 g=0 b=0 a=255>
