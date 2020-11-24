@@ -3,6 +3,8 @@ Getting Started
 
 ``bewegung`` provides classes and functions for defining and rendering videos. Various drawing and plotting libraries can virtually transparently be integrated into this process. ``bewegung`` manages the composition of the video frames, in parallel if desired, and streams them to ``ffmpeg`` for video encoding.
 
+.. _minimalexample:
+
 Minimal Example
 ---------------
 
@@ -36,6 +38,8 @@ The following code snipped will create an empty, black video, 10 seconds long at
 .. _1080p: https://en.wikipedia.org/wiki/1080p
 
 *Video objects* manage the subsequently defined components of a video. They can be understood as a thin data management structure combined with a simple scheduler. Every video can contain multiple (overlapping) *sequences*. Sequences are special, decorated classes. By default, a sequence is as long as its parent video - however, it can also be limited in length and begin at any desired time. A sequence can hold multiple *layers*. A layer is a special, decorated method within a sequence class that draws content onto a canvas and returns the "filled" canvas (i.e. the drawn image).
+
+.. _complexexample:
 
 Complex Example
 ---------------
@@ -168,12 +172,87 @@ Instead of calling ``Video.render``, the video object can be manually *reset* by
 Using & Mixing Backends
 -----------------------
 
-Foo bar.
+One of ``bewegung``'s key features is its ability to work with multiple drawing and plotting systems simultaneously. ``bewegung`` offers its own drawing system, ``DrawingBoard``, which is used both in the :ref:`minimal <minimalexample>` and in the :ref:`complex example <complexexample>` at the beginning of this chapter. It is based on ``pycairo``. ``pycairo`` can of cause also be used directly. In addition, ``bewegung`` directly integrates ``matplotlib``, ``datashader`` and ``Pillow``. The mentioned libraries are referred to as *backends*. A new, custom backend can easily be added. A backend is typically chosen once per layer, although it is feasible make this process even more flexible. Backends are loaded (in Python-terms *imported*) on demand. If a backend is not required, the underlying library does not have to be present / installed.
+
+.. code:: python
+
+    from multiprocessing import cpu_count
+    from bewegung import Video, Color
+
+    v = Video(width = 1920, height = 1080, seconds = 10.0)
+
+    @v.sequence()
+    class SomeSequence:
+
+        def __init__(self):
+            self._x, self._y = [], []
+
+        @v.layer(
+            canvas = v.canvas(background_color = Color(200, 200, 200)),
+        ) # this layer uses DrawingBoard, the default backend
+        def background(self, canvas):
+            return canvas
+
+        @v.layer(
+            canvas = v.canvas(
+                canvas = 'matplotlib', # configure layer to use matplotlib
+                tight_layout = True, # pass parameters to new matplotlib figures
+            ),
+        )
+        def growing_parabola(self,
+            time,
+            canvas, # this is now actually a matplotlib figure
+        ):
+            self._x.append(time.index)
+            self._y.append(time.index ** 2)
+            ax = canvas.subplots()
+            ax.plot(self._x, self._y)
+            return canvas
+
+    v.render(video_fn = 'video.mp4', processes = cpu_count())
+
+The ``Video.canvas`` method allows to specify and configure backends once per layer. Most of its parameters are passed on to the backend library unmodified. If required, ``bewegung`` fills certain parameters with reasonable defaults or fixes inconsistencies that may be problematic in the context of generating videos. For details, see :ref:`chapter on drawing <drawing>`.
 
 Requesting Parameters in Layers and Prepare Tasks
 -------------------------------------------------
 
-Foo bar.
+Both prepare task methods and layer methods can request information and canvases based on their actual demand. ``bewegung`` first analyzes what a method requests. It then generates the requested objects and passes them on to the prepare task or layer method.
+
+.. code:: python
+
+    from bewegung import Video
+
+    v = Video(width = 1920, height = 1080, seconds = 10.0)
+
+    @v.sequence()
+    class SomeSequence:
+
+        @v.prepare()
+        def prepare_task_without_request(self):
+            pass
+
+        @v.prepare()
+        def prepare_task_requesting_all_possible_fields(self,
+            time, # time within video
+            reltime, # relative time within sequence
+        ):
+            pass
+
+        @v.layer()
+        def layer_without_request(self):
+            pass
+
+        @v.layer()
+        def layer_requesting_all_possible_fields(self,
+            time, # time within video
+            reltime, # relative time within sequence
+            canvas, # empty canvas
+        ):
+            pass
+
+Information does not have to be requested in any specific order.
+
+Please note that layer methods do not need to return a/the canvas object. If the canvas object is not returned, ``bewegung`` will assume that the user has drawn onto the canvas object that was passed into the layer method. ``bewegung`` retains a reference to this canvas object internally. Only if no canvas was passed into the method and no canvas was returned by the method, an exception will be raised.
 
 Working with Time
 -----------------
