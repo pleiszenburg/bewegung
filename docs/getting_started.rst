@@ -37,8 +37,8 @@ The following code snipped will create an empty, black video, 10 seconds long at
 
 *Video objects* manage the subsequently defined components of a video. They can be understood as a thin data management structure combined with a simple scheduler. Every video can contain multiple (overlapping) *sequences*. Sequences are special, decorated classes. By default, a sequence is as long as its parent video - however, it can also be limited in length and begin at any desired time. A sequence can hold multiple *layers*. A layer is a special, decorated method within a sequence class that draws content onto a canvas and returns the "filled" canvas (i.e. the drawn image).
 
-More Complex Example
---------------------
+Complex Example
+---------------
 
 The following code snipped will create a 10 second long video at 30 fps in 1080p with a gray background and a red "ball" (filled circle) moving from the top left corner to the bottom right corner of the image:
 
@@ -133,3 +133,34 @@ In may be necessary to prepare or compute data prior to drawing onto a canvas. I
     v.render(video_fn = 'video.mp4', processes = cpu_count())
 
 In the above example, a single prepare task is defined. It computes a "factor" which is eventually picked up by the "moving_red_ball" layer. The "SomeForeground" sequence class' constructor is used to initialize the "factor" variable.
+
+Rendering Frames as Images instead of Videos
+--------------------------------------------
+
+For debugging and development, it can be very useful to be able to selectively render individual frames into image files or interactively work with the resulting image objects.
+
+.. code:: python
+
+    from bewegung import Video
+
+    v = Video(width = 1920, height = 1080, seconds = 10.0)
+
+    @v.sequence()
+    class Background:
+
+        @v.layer()
+        def empty(self, canvas):
+            return canvas
+
+    v.reset() # reset video object before frames can be saved!
+    v.render_frame(
+        time = v.time(45), # frame number 45
+        frame_fn = 'some_frame.png', # save to location as PNG
+        )
+    pillow_image_object = v.render_frame(
+        time = v.time_from_seconds(1.0), # frame at 1 second
+        ) # returns a Pillow.Image object
+
+Instead of calling ``Video.render``, the video object can be manually *reset* by calling ``Video.reset``. A reset is usually taken care of by the video render method, but if individual frames are desired instead, it has to be called at least once before the first video frame is generated. Once this is done, frames can be selected based on their time and rendered with ``Video.render_frame``. This method can both directly store the frame into a file and return it as a ``Pillow.Image`` object, see `Pillow documentation`_.
+
+.. _Pillow documentation: https://pillow.readthedocs.io/en/stable/reference/Image.html#the-image-class
