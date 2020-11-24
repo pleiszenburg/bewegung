@@ -48,9 +48,18 @@ class Sequence(SequenceABC):
         self._start, self._stop = start, stop
         self._video, self._ctx = video, video.ctx
 
+        self._length = stop - start
+
     def __repr__(self) -> str:
 
         return f'<Sequence name={type(self).__name__:s}>'
+
+    def __len__(self) -> int:
+        """
+        Duration of sequence as number of frames
+        """
+
+        return self._length.index
 
     def __contains__(self, time: TimeABC) -> bool:
 
@@ -59,6 +68,14 @@ class Sequence(SequenceABC):
     def reset(self):
 
         super().__init__()
+
+    @property
+    def length(self) -> TimeABC:
+        """
+        Duration of sequence
+        """
+
+        return self._length
 
     @property
     def start(self) -> TimeABC:
