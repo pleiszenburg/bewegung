@@ -453,10 +453,14 @@ class Video(VideoABC):
         .. _`ffmpeg's H.264 tune documentation`: https://trac.ffmpeg.org/wiki/Encode/H.264#Tune
         """
 
-        assert 0 < processes
-        assert 0 < batchsize
-        assert 0 < buffersize
-        assert ffmpeg_preset in (
+        if processes <= 0:
+            raise ValueError('processes must be greater than 0')
+        if batchsize <= 0:
+            raise ValueError('batchsize must be greater than 0')
+        if buffersize <= 0:
+            raise ValueError('buffersize must be greater than 0')
+
+        if ffmpeg_preset not in (
             "ultrafast",
             "superfast",
             "veryfast",
@@ -466,16 +470,19 @@ class Video(VideoABC):
             "slow",
             "slower",
             "veryslow",
-            )
-        assert 0 <= ffmpeg_crf <= 51
-        assert ffmpeg_tune in (
+            ):
+            raise ValueError('unknown ffmpeg preset')
+        if not (0 <= ffmpeg_crf <= 51):
+            raise ValueError('ffmpeg crf out of bounds')
+        if ffmpeg_tune not in (
             "film",
             "animation",
             "grain",
             "stillimage",
             "fastdecode",
             "zerolatency",
-            )
+            ):
+            raise ValueError('unknown ffmpeg tune')
 
         self.reset()
 
