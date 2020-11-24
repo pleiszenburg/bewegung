@@ -62,6 +62,8 @@ class Vector2D(Vector2DABC):
         self._x, self._y, self._dtype = x, y, dtype
 
     def __repr__(self) -> str:
+        if self._dtype == int:
+            return f'<Vector2D x={self._x:d} y={self._y:d} dtype={self._dtype.__name__:s}>'
         return f'<Vector2D x={self._x:e} y={self._y:e} dtype={self._dtype.__name__:s}>'
 
     def __eq__(self, other: Vector2DABC) -> bool:

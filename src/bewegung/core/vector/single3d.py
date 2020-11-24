@@ -62,6 +62,8 @@ class Vector3D(Vector3DABC):
         self._x, self._y, self._z, self._dtype = x, y, z, dtype
 
     def __repr__(self) -> str:
+        if self._dtype == int:
+            return f'<Vector3D x={self._x:d} y={self._y:d} z={self._z:d} dtype={self._dtype.__name__:s}>'
         return f'<Vector3D x={self._x:e} y={self._y:e} z={self._z:e} dtype={self._dtype.__name__:s}>'
 
     def __eq__(self, other: Vector3DABC) -> bool:
