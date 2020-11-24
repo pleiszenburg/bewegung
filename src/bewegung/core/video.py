@@ -279,7 +279,7 @@ class Video(VideoABC):
             start = self.time_from_seconds(seconds = start.seconds)
 
         if stop is not None and length is not None:
-            raise ValueError()
+            raise ValueError('stop and length are mutually exclusive')
         if length is not None:
             if length.fps != length.fps:
                 length = self.time_from_seconds(seconds = length.seconds)
@@ -293,14 +293,14 @@ class Video(VideoABC):
         if start < self.time(0):
             start = self._length + start
         if not (self.time(0) <= start <= self._length):
-            raise ValueError()
+            raise ValueError('start out of bounds')
         if stop < self.time(0):
             stop = self._length + stop
         if not (self.time(0) <= stop <= self._length):
-            raise ValueError()
+            raise ValueError('stop out of bounds')
 
         if start >= stop:
-            raise ValueError()
+            raise ValueError('stop smaller or equal to stop')
 
         @typechecked
         def decorator(cls: type):
