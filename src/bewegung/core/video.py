@@ -30,7 +30,6 @@ specific language governing rights and limitations under the License.
 
 import inspect
 import multiprocessing as mp
-from subprocess import Popen, PIPE, DEVNULL
 from typing import Callable, Dict, Union
 
 from PIL import Image as PIL_Image
@@ -39,9 +38,10 @@ try:
 except ModuleNotFoundError:
     tqdm = lambda x: x
 
-from .abc import LayerABC, SequenceABC, VideoABC, Vector2DABC, TimeABC
+from .abc import EncoderABC, LayerABC, SequenceABC, VideoABC, Vector2DABC, TimeABC
 from .canvas import inventory
 from .const import FPS_DEFAULT
+from .encoders import FFmpegEncoder
 from .indexpool import IndexPool
 from .layer import Layer
 from .sequence import Sequence
@@ -419,10 +419,7 @@ class Video(VideoABC):
     def render(self,
         processes: int = 1,
         batchsize: int = 256,
-        buffersize: int = 134217728,
-        ffmpeg_preset: str = "slow",
-        ffmpeg_crf: int = 17,
-        ffmpeg_tune: str = "animation",
+        encoder: Union[EncoderABC, None] = None,
         frame_fn: Union[str, None] = None,
         video_fn: Union[str, None] = None,
         ):
@@ -436,11 +433,8 @@ class Video(VideoABC):
             processes : Number of parallel frame rendering (worker) processes
             batchsize : Maximum number of frames rendered by a worker process before the (old) worker is replaced by a new worker.
                 This option helps to prevent long rendering jobs from running out of memory.
-            buffersize : Maximum size of buffer in bytes between ``bewegung`` and ``ffmpeg``.
-                A larger buffer may have a mildly positive impact on performance.
-            ffmpeg_preset : ``ffmpeg`` encoding and compression preset. See `ffmpeg's H.264 preset documentation`_ for details.
-            ffmpeg_crf : ``ffmpeg`` Constant Rate Factor (CRF) value. See `ffmpeg's H.264 CRF documentation`_ for details.
-            ffmpeg_tune : ``ffmpeg`` tune option. See `ffmpeg's H.264 tune documentation`_ for details.
+            encoder : A video encoder object.
+                If omitted, the ffmpeg encoder will be selected.
             frame_fn : A Python string template (representing a path) including an ``index`` integer placeholder.
                 If specified, individual frames will be stored here.
                 If omitted, no frames will be stored.
@@ -457,32 +451,11 @@ class Video(VideoABC):
             raise ValueError('processes must be greater than 0')
         if batchsize <= 0:
             raise ValueError('batchsize must be greater than 0')
-        if buffersize <= 0:
-            raise ValueError('buffersize must be greater than 0')
 
-        if ffmpeg_preset not in (
-            "ultrafast",
-            "superfast",
-            "veryfast",
-            "faster",
-            "fast",
-            "medium",
-            "slow",
-            "slower",
-            "veryslow",
-            ):
-            raise ValueError('unknown ffmpeg preset')
-        if not (0 <= ffmpeg_crf <= 51):
-            raise ValueError('ffmpeg crf out of bounds')
-        if ffmpeg_tune not in (
-            "film",
-            "animation",
-            "grain",
-            "stillimage",
-            "fastdecode",
-            "zerolatency",
-            ):
-            raise ValueError('unknown ffmpeg tune')
+        if video_fn is not None and len(video_fn) == 0:
+            raise ValueError('if a string, video_fn must not be empty')
+        if video_fn is not None and encoder is None:
+            encoder = FFmpegEncoder.from_video(video = self, video_fn = video_fn)
 
         self.reset()
 
@@ -500,43 +473,23 @@ class Video(VideoABC):
             ) for time in Time.range(self.time(0), self._length)
         ]
 
-        if video_fn is not None:
-            codec = Popen(
-                [
-                    'ffmpeg',
-                    '-y', # force overwrite of output file
-                    '-framerate', f'{self.fps:d}',
-                    '-f', 'image2pipe', # force input format
-                    '-i', '-', # data from stdin
-                    '-vcodec', 'bmp', # input codec
-                    '-s:v', f'{self._width:d}x{self._height:d}',
-                    '-c:v', 'libx264',
-                    '-preset', ffmpeg_preset,
-                    '-crf', f'{ffmpeg_crf:d}',
-                    '-tune', ffmpeg_tune,
-                    video_fn,
-                ],
-                stdin = PIPE, stdout = DEVNULL, stderr = DEVNULL,
-                bufsize = buffersize,
-            )
+        if video_fn is None:
 
-        for promise in tqdm(workers_promises):
-            frame = promise.get()
-            if video_fn is None:
-                continue
-            frame.save(codec.stdin, 'bmp')
-            codec.stdin.flush()
-            frame.close()
+            for promise in tqdm(workers_promises):
+                _ = promise.get()
+
+        else:
+
+            with encoder as stream:
+                for promise in tqdm(workers_promises):
+                    frame = promise.get()
+                    frame.save(stream, 'bmp')
+                    stream.flush()
+                    frame.close()
 
         workers.close()
         workers.terminate()
         workers.join()
-
-        if video_fn is None:
-            return
-
-        codec.stdin.close()
-        codec.wait()
 
     def render_frame(self,
         time: Time,
