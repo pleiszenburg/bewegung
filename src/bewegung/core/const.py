@@ -30,3 +30,9 @@ specific language governing rights and limitations under the License.
 
 FPS_DEFAULT = 60
 FLOAT_DEFAULT = 'f4'
+
+FFMPEG_CRF_DEFAULT = 17
+FFMPEG_PRESET_DEFAULT = "slow"
+FFPMEG_TUNE_DEFAULT = "animation"
+
+PIPE_BUFFER_DEFAULT = 134217728 # 128 MByte
