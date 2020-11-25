@@ -220,6 +220,7 @@ Both prepare task methods and layer methods can request information and canvases
 
 .. code:: python
 
+    from PIL.Image import new
     from bewegung import Video
 
     v = Video(width = 1920, height = 1080, seconds = 10.0)
@@ -240,7 +241,7 @@ Both prepare task methods and layer methods can request information and canvases
 
         @v.layer()
         def layer_without_request(self):
-            pass
+            return new(mode = 'RGBA', size = (v.width, v.height))
 
         @v.layer()
         def layer_requesting_all_possible_fields(self,
