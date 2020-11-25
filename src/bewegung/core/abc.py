@@ -55,6 +55,9 @@ class DrawingBoardABC(ABC):
 class EffectABC(ABC):
     pass
 
+class EncoderABC(ABC):
+    pass
+
 class IndexPoolABC(ABC):
     pass
 
