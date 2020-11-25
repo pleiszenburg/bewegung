@@ -33,8 +33,9 @@ __version__ = '0.0.1'
 from .core.camera import Camera
 from .core.canvas import *
 from .core.color import Color
-from .core.const import FPS_DEFAULT, FLOAT_DEFAULT
+from .core.const import *
 from .core.effects import BaseEffect, FadeInEffect, FadeOutEffect
+from .core.encoders import BaseEncoder, FFmpegEncoder
 from .core.indexpool import IndexPool
 from .core.layer import Layer
 from .core.sequence import Sequence
