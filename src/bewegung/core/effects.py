@@ -53,6 +53,10 @@ class BaseEffect(EffectABC):
             ] # parameters requested by user
         assert self._args[0] == 'cvs' # canvas
 
+    def __repr__(self) -> str:
+
+        return f'<{type(self).__name__}>'
+
     def __call__(self, layer: LayerABC) -> LayerABC:
         """
         Decorator function.
