@@ -79,7 +79,8 @@ class Canvas(CanvasBase):
         managed = kwargs.pop('managed') if 'managed' in kwargs.keys() else True
         assert isinstance(managed, bool)
 
-        def new_figure():
+        @typechecked
+        def new_figure() -> self._Figure:
             fig = self._type(**kwargs)
             if managed:
                 setattr(fig, '__bewegung_managed__', None) # flag: close figure after extracting image
