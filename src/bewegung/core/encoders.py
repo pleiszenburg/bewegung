@@ -79,17 +79,16 @@ class BaseEncoder(EncoderABC):
         self._width, self._height, self._fps = width, height, fps
         self._video_fn = video_fn
 
-        self._running = False
         self._stream = None
 
     def __repr__(self) -> str:
 
-        return f'<{type(self).__name__} width={self._width:d} height={self._height:d} fps={self._fps:d} video_fn="{self._video_fn:s}" running={"yes" if self._running else "no"}>'
+        return f'<{type(self).__name__} width={self._width:d} height={self._height:d} fps={self._fps:d} video_fn="{self._video_fn:s}" running={"yes" if self._stream is not None else "no"}>'
 
     @property
     def stream(self) -> BinaryIO:
 
-        if not self._running:
+        if self._stream is None:
             raise RuntimeError('encoder is not running')
 
         return self._stream
@@ -102,7 +101,7 @@ class BaseEncoder(EncoderABC):
     @video_fn.setter
     def video_fn(self, value: str):
 
-        if self._running:
+        if self._stream is None:
             raise RuntimeError('encoder is currently running')
         if len(value) == 0:
             raise ValueError('video_fn must not be empty')
@@ -223,7 +222,6 @@ class FFmpegEncoder(BaseEncoder):
             bufsize = self._buffersize,
         )
         self._stream = self._proc.stdin
-        self._running = True
 
         return self.stream
 
@@ -234,14 +232,13 @@ class FFmpegEncoder(BaseEncoder):
         traceback: Union[TracebackType, None],
     ):
 
-        self._running = False
+        self._stream = None
 
         self._proc.stdin.flush()
         self._proc.stdin.close()
         self._proc.wait()
 
         self._proc = None
-        self._stream = None
 
     @classmethod
     def from_video(cls,
