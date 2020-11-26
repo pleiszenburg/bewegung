@@ -69,6 +69,7 @@ extras_require = {
         "Sphinx",
         "sphinx-autodoc-typehints",
         "sphinx-rtd-theme",
+        "sphinxembeddedvideos", # https://github.com/sphinx-contrib/youtube/issues/9#issuecomment-734295832
         "twine",
         "wheel",
     ],

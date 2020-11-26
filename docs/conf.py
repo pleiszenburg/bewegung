@@ -65,6 +65,7 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx_autodoc_typehints',
     'sphinx_rtd_theme',
+    'sphinxembeddedvideos.youtube', # https://github.com/sphinx-contrib/youtube/issues/9#issuecomment-734295832
 ]
 
 # Add any paths that contain templates here, relative to this directory.
