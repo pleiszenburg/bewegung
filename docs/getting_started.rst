@@ -307,28 +307,9 @@ For easily working with "accelerated" or "slowed down" time, i.e. time-lapse or 
 Convenience Functionality
 -------------------------
 
-Not for speed: Vectors, Camera ...
+``bewegung`` includes a lot of "convenience functionality" for common tasks around video production in the context of scientific visualizations. Most of this functionality is only little optimized for speed. It is therefore not meant as a substitute for professional libraries doing those exact things.
 
-.. code:: ipython
-
-    >>> from math import pi
-    >>> from bewegung import Vector2D, Vector3D, Matrix, Camera
-    >>> Vector2D(2, 3) + Vector2D(7, 11)
-    <Vector2D x=9 y=14 dtype=int>
-    >>> c = Camera(position = Vector3D(20.0, 0.0, 0.0), direction = Vector3D(-1.0, 0.0, 0.0))
-    >>> g3D = Vector3D(0.0, 5.0, 5.0)
-    >>> print(g3D)
-    <Vector3D x=0.000000e+00 y=5.000000e+00 z=5.000000e+00 dtype=float>
-    >>> g2D = c.get_point(g3D).as_vector()
-    >>> print(g2D)
-    <Vector2D x=2.500000e-01 y=-2.500000e-01 dtype=float>
-    >>> m = Matrix.from_2d_rotation(0.25 * pi)
-    >>> print(m)
-    <Matrix shape=2x2 dtype=float>
-    >>> m @ g2D
-    <Vector2D x=3.535534e-01 y=-2.775558e-17 dtype=float>
-
-Color ...
+Because many of ``bewegung``'s backends have their own interpretations of colors and color models, ``bewegung`` offers a unified ``Color`` class. Internally, it is based on RGBA (red, green, blue, alpha) integer values with 8 bits per channel, representing values from 0 to 255.
 
 .. code:: ipython
 
@@ -346,3 +327,29 @@ Color ...
     (5, 6, 7, 255)
     >>> Color.from_hex('FF0000')
     <Color r=255 g=0 b=0 a=255>
+
+Simple vector algebra is also a rather common task, which is why ``bewegung`` offers vector classes (``Vector2D``, ``Vector2Ddist``, ``Vector3D``) and vector array classes (``VectorArray2D``, ``VectorArray2Ddist``, ``VectorArray3D``) as well as a ``Matrix`` class. While the vector classes simply hold two or three Python numbers, the vector array classes are wrappers around ``numpy`` arrays. The ``Matrix`` class is meant for simple tasks like rotations. A ``Camera`` class allows to define a "pinhole camera" in 3D space which can project 3D vectors onto a 2D plane. The "dist" variants of the 2D vector and vector array classes not only contain an "x" and a "y" value but also the absolute distance to a Camera in 3D space as a third parameter, which can be important for depth perception.
+
+.. code:: ipython
+
+    >>> from math import pi
+    >>> from bewegung import Vector2D, Vector3D, Matrix, Camera
+    >>> Vector2D(2, 3) + Vector2D(7, 11)
+    <Vector2D x=9 y=14 dtype=int>
+    >>> c = Camera(position = Vector3D(20.0, 0.0, 0.0), direction = Vector3D(-1.0, 0.0, 0.0))
+    >>> g3D = Vector3D(0.0, 5.0, 5.0)
+    >>> print(g3D)
+    <Vector3D x=0.000000e+00 y=5.000000e+00 z=5.000000e+00 dtype=float>
+    >>> g2D_dist = c.get_point(g3D)
+    >>> print(g2D_dist)
+    <Vector2Ddist x=2.500000e-01 y=-2.500000e-01 dist=2.121320e+01 dtype=float>
+    >>> g2D = g2D_dist.as_vector()
+    >>> print(g2D)
+    <Vector2D x=2.500000e-01 y=-2.500000e-01 dtype=float>
+    >>> m = Matrix.from_2d_rotation(0.25 * pi)
+    >>> print(m)
+    <Matrix shape=2x2 dtype=float>
+    >>> m @ g2D
+    <Vector2D x=3.535534e-01 y=-2.775558e-17 dtype=float>
+
+Besides simple vector algebra, a lot of ``bewegung``'s functions and methods expect geometric input using vector classes.
