@@ -33,7 +33,7 @@ from typing import Any, Callable
 from PIL.Image import Image, fromarray
 
 from ._base import CanvasBase
-from ..abc import VideoABC
+from ..abc import ColorABC, NumberTypes, VideoABC
 from ..typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -58,6 +58,8 @@ class Canvas(CanvasBase):
                 kwargs['width'] = video.width
             if 'height' not in kwargs.keys():
                 kwargs['height'] = video.height
+            assert isinstance(kwargs['width'], NumberTypes)
+            assert isinstance(kwargs['height'], NumberTypes)
             kwargs['figsize'] = (
                 kwargs.pop('width') / kwargs['dpi'],
                 kwargs.pop('height') / kwargs['dpi'],
@@ -66,6 +68,7 @@ class Canvas(CanvasBase):
         if 'background_color' in kwargs.keys() and 'facecolor' in kwargs.keys():
             kwargs.pop('background_color')
         if 'background_color' in kwargs.keys():
+            assert isinstance(kwargs['background_color'], ColorABC)
             kwargs['facecolor'] = f'#{kwargs.pop("background_color").as_hex():s}'
         if 'facecolor' not in kwargs.keys():
             kwargs['facecolor'] = '#FFFFFF00'
@@ -73,9 +76,13 @@ class Canvas(CanvasBase):
         if 'tight_layout' not in kwargs.keys():
             kwargs['tight_layout'] = True
 
+        managed = kwargs.pop('managed') if 'managed' in kwargs.keys() else True
+        assert isinstance(managed, bool)
+
         def new_figure():
             fig = self._type(**kwargs)
-            setattr(fig, '__bewegung_managed__', None) # flag: close figure after extracting image
+            if managed:
+                setattr(fig, '__bewegung_managed__', None) # flag: close figure after extracting image
             return fig
 
         return new_figure
