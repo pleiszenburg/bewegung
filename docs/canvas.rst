@@ -34,7 +34,17 @@ In the context of a layer's configuration, the use of ``Video.canvas`` looks as 
 
 Parameters of the ``Video.canvas`` method other than ``backend``, i.e. the name of the selected backend, are usually forwarded to the underlying library. However, the various backends of ``bewegung`` may fill certain parameters with reasonable defaults or fix inconsistencies that can be problematic in the context of generating videos. See chapters on individual backends below.
 
-TODO ``backends`` dict
+All backends can be accessed via the ``backends`` dictionary, which represents an inventory of backends.
+
+.. code:: ipython
+
+    >>> from bewegung import backends
+    >>> backends.keys()
+    dict_keys(['drawingboard', 'pil', 'datashader', 'cairo', 'matplotlib'])
+    >>> [backend for backend in backends.values()]
+    [<DrawingBoardCanvas>, <PillowCanvas>, <DatashaderCanvas>, <CairoCanvas>, <MatplotlibCanvas>]
+
+Backends are "lazy" objects. They only import the underlying library if actually used. Further details about the common structure of backends are provided in the :ref:`sections on custom backends <custombackends>`
 
 Backend: ``DrawingBoard``
 -------------------------
@@ -67,6 +77,8 @@ Accelerating ``matplotlib``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Foo bar.
+
+.. _custombackends:
 
 Defining & Registering Custom Backends
 --------------------------------------
