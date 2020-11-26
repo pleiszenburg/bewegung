@@ -29,7 +29,7 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from types import TracebackType
-from typing import BinaryIO, Dict, Union, Type
+from typing import BinaryIO, Union, Type
 from subprocess import Popen, PIPE, DEVNULL
 
 from .abc import EncoderABC, VideoABC
