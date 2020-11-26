@@ -18,7 +18,7 @@ The ``Video.canvas`` method is typically used to configure a layer. It returns a
 
     canvas_factory = v.canvas(backend = 'drawingboard')
     canvas_a = canvas_factory() # produce a new canvas
-    canvas_b = canvas_factory() # produce a yet another new canvas
+    canvas_b = canvas_factory() # produce yet another new canvas
 
 In the context of a layer's configuration, the use of ``Video.canvas`` looks as follows. Note that ``DrawingBoard`` is in fact the default canvas, so it usually does not have to be explicitly selected. A new, pre-configured canvas of the requested type is fed into the layer method for every individual video frame.
 
