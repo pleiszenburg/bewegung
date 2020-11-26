@@ -49,46 +49,55 @@ from .typeguard import typechecked
 class BaseEncoder(EncoderABC):
     """
     Mutable. Context manager. Wraps video envoders.
-
-    Args:
-        width : Video width in pixels
-        height : Video width in pixels
-        fps : Frames per second
-        video_fn : Location and name (path) of where to store the video file.
-            If omitted, no video will be rendered.
-            However, indivual frames may in fact still be rendered if ``frame_fn`` has been specified.
     """
 
-    def __init__(self,
-        width: int,
-        height: int,
-        fps: int,
-        video_fn: str,
-    ):
+    def __init__(self):
 
-        if width <= 0:
-            raise ValueError('width must be greater than 0')
-        if height <= 0:
-            raise ValueError('height must be greater than 0')
-        if fps <= 0:
-            raise ValueError('fps must be greater than 0')
+        self._width = None
+        self._height = None
+        self._fps = None
+        self._video_fn = None
+        self._stream = None
+
+    def __call__(self, video: VideoABC, video_fn: str) -> EncoderABC:
+        """
+        Configures the encoder. Returns encoder object itself.
+
+        Args:
+            video : Video object
+            video_fn : Location and name (path) of where to store the video file.
+                If omitted, no video will be rendered.
+                However, indivual frames may in fact still be rendered if ``frame_fn`` has been specified.
+        """
 
         if len(video_fn) == 0:
             raise ValueError('video_fn must not be empty')
 
-        self._width, self._height, self._fps = width, height, fps
+        self._width = video.width
+        self._height = video.height
+        self._fps = video.fps
         self._video_fn = video_fn
 
-        self._stream = None
+        return self
 
     def __repr__(self) -> str:
 
-        return f'<{type(self).__name__} width={self._width:d} height={self._height:d} fps={self._fps:d} video_fn="{self._video_fn:s}" running={"yes" if self._stream is not None else "no"}>'
+        return f'<{type(self).__name__} configured={"yes" if self.configured else "no"} running={"yes" if self.running else "no"}>'
+
+    @property
+    def configured(self) -> bool:
+
+        return self._video_fn is not None
+
+    @property
+    def running(self) -> bool:
+
+        return self._stream is not None
 
     @property
     def stream(self) -> BinaryIO:
 
-        if self._stream is None:
+        if not self.running:
             raise RuntimeError('encoder is not running')
 
         return self._stream
@@ -101,7 +110,7 @@ class BaseEncoder(EncoderABC):
     @video_fn.setter
     def video_fn(self, value: str):
 
-        if self._stream is None:
+        if self.running:
             raise RuntimeError('encoder is currently running')
         if len(value) == 0:
             raise ValueError('video_fn must not be empty')
@@ -120,21 +129,6 @@ class BaseEncoder(EncoderABC):
     ):
 
         raise NotImplementedError()
-
-    @classmethod
-    def from_video(cls, *args, **kwargs) -> EncoderABC:
-
-        return cls(**cls._from_video(*args, **kwargs))
-
-    @classmethod
-    def _from_video(cls, video: VideoABC, video_fn: str) -> Dict:
-
-        return dict(
-            width = video.width,
-            height = video.height,
-            fps = video.fps,
-            video_fn = video_fn,
-        )
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASSES: ENCODERS
@@ -158,15 +152,13 @@ class FFmpegEncoder(BaseEncoder):
     """
 
     def __init__(self,
-        *args,
         buffersize: int = PIPE_BUFFER_DEFAULT,
         preset: str = FFMPEG_PRESET_DEFAULT,
         crf: int = FFMPEG_CRF_DEFAULT,
         tune: str = FFPMEG_TUNE_DEFAULT,
-        **kwargs,
     ):
 
-        super().__init__(*args, **kwargs)
+        super().__init__()
 
         if buffersize <= 0:
             raise ValueError('buffersize must be greater than 0')
@@ -203,6 +195,11 @@ class FFmpegEncoder(BaseEncoder):
 
     def __enter__(self) -> BinaryIO:
 
+        if not self.configured:
+            raise RuntimeError('encoder has not been configured')
+        if self.running:
+            raise RuntimeError('encoder is already running')
+
         self._proc = Popen(
             [
                 'ffmpeg',
@@ -232,6 +229,9 @@ class FFmpegEncoder(BaseEncoder):
         traceback: Union[TracebackType, None],
     ):
 
+        if not self.running:
+            raise RuntimeError('encoder is not running')
+
         self._stream = None
 
         self._proc.stdin.flush()
@@ -239,21 +239,3 @@ class FFmpegEncoder(BaseEncoder):
         self._proc.wait()
 
         self._proc = None
-
-    @classmethod
-    def from_video(cls,
-        *args,
-        buffersize: int = PIPE_BUFFER_DEFAULT,
-        preset: str = FFMPEG_PRESET_DEFAULT,
-        crf: int = FFMPEG_CRF_DEFAULT,
-        tune: str = FFPMEG_TUNE_DEFAULT,
-        **kwargs,
-    ) -> EncoderABC:
-
-        return cls(
-            **cls._from_video(*args, **kwargs),
-            buffersize = buffersize,
-            preset = preset,
-            crf = crf,
-            tune = tune,
-        )
