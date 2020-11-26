@@ -426,8 +426,9 @@ class Video(VideoABC):
         """
         A method for rendering the actual video file.
 
-        This function invokes ``ffmpeg``. It also starts at least one Python sub-process (worker process) for rendering frames.
+        This function starts at least one Python sub-process (worker process) for rendering frames.
         Based on multiple worker processes, multiple frames can be rendered in parallel.
+        If a filename for a video is specified, the rendered frames are streamed to a video encoder.
 
         Args:
             processes : Number of parallel frame rendering (worker) processes
@@ -441,10 +442,6 @@ class Video(VideoABC):
             video_fn: Location and name (path) of where to store the video file.
                 If omitted, no video will be rendered.
                 However, indivual frames may in fact still be rendered if ``frame_fn`` has been specified.
-
-        .. _`ffmpeg's H.264 preset documentation`: https://trac.ffmpeg.org/wiki/Encode/H.264#Preset
-        .. _`ffmpeg's H.264 CRF documentation`: https://trac.ffmpeg.org/wiki/Encode/H.264#crf
-        .. _`ffmpeg's H.264 tune documentation`: https://trac.ffmpeg.org/wiki/Encode/H.264#Tune
         """
 
         if processes <= 0:
