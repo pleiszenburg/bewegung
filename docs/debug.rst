@@ -36,3 +36,8 @@ resolution   Pillow 8 Pillow-SIMD 7.0.0.post3 AVX2
 ============ ======== ============================
 
 A 6 to 7 percent improvement could be observed. However, it should be noted that Pillow can still be faster if the CPU's turbo functionality is activated. The use of SIMD instructions typically causes the CPU to produce much more heat. If the CPU's cooling system can not remove this heat in time, the CPU makes less or even no use of its turbo functionality. Real-world performance improvements when using Pillow-SIMD instead of Pillow can therefore only be observed if the CPU is sufficiently cooled. If it is not, Pillow should be faster than Pillow-SIMD in longer running rendering sessions.
+
+Accelerating Backends
+---------------------
+
+Certain backend libraries have slow and fast ways of using them. A really good example is ``matplotlib``, which can be :ref:`drastically accelerated <acceleratingmatplotlib>` if used right. Please consult the :ref:`chapter on drawing <drawing>` as well as the documentations of the backend libraries for further details.
