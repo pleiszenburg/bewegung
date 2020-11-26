@@ -254,7 +254,7 @@ Both prepare task methods and layer methods can request information and canvases
         ):
             pass
 
-Information does not have to be requested in any specific order.
+Parameters do not have to be requested in any specific order.
 
 Please note that layer methods do not need to return a/the canvas object. If the canvas object is not returned, ``bewegung`` will assume that the user has drawn onto the canvas object that was passed into the layer method. ``bewegung`` retains a reference to this canvas object internally. Only if no canvas was passed into the method and no canvas was returned by the method, an exception will be raised.
 
