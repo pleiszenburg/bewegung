@@ -37,8 +37,8 @@ In the context of a layer's configuration, the use of ``Video.canvas`` looks as 
 
 Parameters of the ``Video.canvas`` method other than ``backend``, i.e. the name of the selected backend, are usually forwarded to the underlying library. However, the various backends of ``bewegung`` may fill certain parameters with reasonable defaults or fix inconsistencies that can be problematic in the context of generating videos. See chapters on individual backends below.
 
-``backends`` Inventory
-----------------------
+Inventory of ``backends``
+-------------------------
 
 All backends can be accessed via the ``backends`` dictionary, which represents the inventory of backends.
 
