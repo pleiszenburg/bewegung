@@ -32,7 +32,7 @@ In the context of a layer's configuration, the use of ``Video.canvas`` looks as 
         def bar(self, canvas): # a new canvas is generated and passed once per frame
             return canvas
 
-Parameters of the ``Video.canvas`` method other than ``canvas``, i.e. the name of the selected backend, are usually forwarded to the underlying library. The various backends of ``bewegung`` fill certain parameters with reasonable defaults or fix inconsistencies that may be problematic in the context of generating videos. See chapters on individual backends below.
+Parameters of the ``Video.canvas`` method other than ``backend``, i.e. the name of the selected backend, are usually forwarded to the underlying library. However, the various backends of ``bewegung`` may fill certain parameters with reasonable defaults or fix inconsistencies that can be problematic in the context of generating videos. See chapters on individual backends below.
 
 TODO ``backends`` dict
 
