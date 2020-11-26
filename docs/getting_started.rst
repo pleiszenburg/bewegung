@@ -90,7 +90,7 @@ Compared to the initial minimal example, the above complex example contains two 
 
 The "empty" layer in the "Background" sequence receives a background color, a dark gray tone. It is provided with an explicit z-index at the bottom of the stack of layers. The "SomeForeground" sequence begins 1 second into the video and ends one second before the end of the video. The "moving_red_ball" layer has a transparent background color so the "empty" layer from the "Background" sequence becomes visible. It is also provided with an explicit z-index - this time at the top of the stack of layers. In addition, the "moving_red_ball" layer is decorated with *video effects*, making it to fade in and out.
 
-The video frames are *rendered in parallel*. The ``processes`` parameter of the ``Video.render`` method defines the number of parallel rendering processes. It is set to the `number of logical cores`_ of the computer's CPU(s). ``bewegung`` evaluates every layer once per video frame and composes all layers to an image - the actual video frame. Because of the parallel nature of ``bewegung``, the *generation of frames may occur out-of-order*. However, the video frames are always forwarded to the video encoder in order.
+The video frames are *rendered in parallel*. The ``processes`` parameter of the ``Video.render`` method defines the number of parallel rendering processes. It is set to the `number of logical cores`_ of the computer's CPU(s). ``bewegung`` evaluates every layer once per video frame and composes all layers to an image - the actual video frame. Because of the parallel nature of ``bewegung``, the *generation of frames may occur out-of-order*. However, the video frames are always forwarded to the video encoder in the right order.
 
 .. _number of logical cores: https://docs.python.org/3/library/multiprocessing.html#multiprocessing.cpu_count
 
@@ -117,18 +117,21 @@ In may be necessary to prepare or compute data prior to drawing onto a canvas. I
     class SomeForeground:
 
         def __init__(self):
-            self._factor = None # initialize variable which will eventually hold the data
+            self._factor = None # initialize variable which will eventually hold data
 
         @v.prepare(
-            preporder = v.preporder.on_bottom(), # this prepare task comes firth in line ("bottom of stack")
+            preporder = v.preporder.on_bottom(), # task comes first ("bottom of stack")
         ) # prepare task decorator
         def compute_data(self, reltime): # prepare task method, requesting relative time within sequence
             self._factor = reltime / self.length # prepare data
 
         @v.layer(canvas = v.canvas(background_color = Color(26, 26, 26, 0)))
-        def moving_red_ball(self, canvas): # only request canvas
+        def moving_red_ball(self, canvas): # requesting a canvas
             canvas.draw_filledcircle(
-                point = Vector2D(self._factor * v.width, self._factor * v.height),
+                point = Vector2D(
+                    self._factor * v.width, # use data
+                    self._factor * v.height, # use data
+                ),
                 r = 10,
                 fill_color = Color(255, 0, 0),
                 )
