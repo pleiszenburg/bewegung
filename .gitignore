@@ -10,9 +10,9 @@ config.yaml
 dist/
 build/
 test/
-*.png
 *.bmp
 *.mp4
 *.gif
 *pleiszenburg*
 _build/
+MATERIAL/
