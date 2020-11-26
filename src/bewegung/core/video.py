@@ -455,7 +455,7 @@ class Video(VideoABC):
         if video_fn is not None and len(video_fn) == 0:
             raise ValueError('if a string, video_fn must not be empty')
         if video_fn is not None and encoder is None:
-            encoder = FFmpegEncoder.from_video(video = self, video_fn = video_fn)
+            encoder = FFmpegEncoder()
 
         self.reset()
 
@@ -480,7 +480,7 @@ class Video(VideoABC):
 
         else:
 
-            with encoder as stream:
+            with encoder(video = self, video_fn = video_fn) as stream:
                 for promise in tqdm(workers_promises):
                     frame = promise.get()
                     frame.save(stream, 'bmp')
