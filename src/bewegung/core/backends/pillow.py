@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/backends/pil.py: Pillow backend
+    src/bewegung/core/backends/pillow.py: Pillow backend
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -49,8 +49,16 @@ class Backend(BackendBase):
 
         if 'mode' not in kwargs.keys():
             kwargs['mode'] = 'RGBA'
+        if 'size' in kwargs.keys() and 'width' in kwargs.keys():
+            kwargs.pop('width')
+        if 'size' in kwargs.keys() and 'height' in kwargs.keys():
+            kwargs.pop('height')
         if 'size' not in kwargs.keys():
             kwargs['size'] = (video.width, video.height)
+        else:
+            if 'width' not in kwargs.keys() and 'height' not in kwargs.keys():
+                raise ValueError('width or height missing')
+            kwargs['size'] = (kwargs.pop('width'), kwargs.pop('height'))
 
         return lambda: new(**kwargs)
 
@@ -60,6 +68,7 @@ class Backend(BackendBase):
 
     def _to_pil(self, obj: Image) -> Image:
 
-        assert obj.mode == 'RGBA'
+        if obj.mode != 'RGBA':
+            raise TypeError('unhandled image mode')
 
         return obj
