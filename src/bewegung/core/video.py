@@ -400,17 +400,17 @@ class Video(VideoABC):
 # CANVAS PROTOTYPES FOR LAYER
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    def canvas(self, canvas: str = 'drawingboard', **kwargs) -> Callable:
+    def canvas(self, backend: str = 'drawingboard', **kwargs) -> Callable:
         """
         A method to create function pointers for functions generating new canvases.
         The pointers can be passed to the ``canvas`` parameter in the ``layer`` decorator method.
 
         Args:
-            canvas : Selected type of canvas, i.e. name of desired backend.
+            backend : Selected type of canvas, i.e. name of desired backend.
             kwargs : Keyword arguments of the selected backend's canvas creation function.
         """
 
-        return backends[canvas].prototype(video = self, **kwargs)
+        return backends[backend].prototype(video = self, **kwargs)
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # RENDER VIDEO

@@ -85,7 +85,7 @@ def main():
         @v.layer(
             zindex = v.zindex.on_top(),
             canvas = v.canvas(
-                canvas = 'matplotlib',
+                backend = 'matplotlib',
                 background_color = v.ctx['bg_color_transparent'],
             ),
         )

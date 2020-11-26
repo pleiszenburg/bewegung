@@ -198,7 +198,7 @@ One of ``bewegung``'s key features is its ability to work with multiple drawing 
 
         @v.layer(
             canvas = v.canvas(
-                canvas = 'matplotlib', # configure layer to use matplotlib
+                backend = 'matplotlib', # configure layer to use matplotlib
                 tight_layout = True, # pass parameters to new matplotlib figures
             ),
         )

@@ -13,7 +13,7 @@ The ``Video.canvas`` method is typically used to configure a layer. It returns a
 
     v = Video(width = 1920, height = 1080, seconds = 10.0)
 
-    canvas_factory = v.canvas(canvas = 'drawingboard')
+    canvas_factory = v.canvas(backend = 'drawingboard')
     canvas_a = canvas_factory() # produce a new canvas
     canvas_b = canvas_factory() # produce a yet another new canvas
 
@@ -28,7 +28,7 @@ In the context of a layer's configuration, the use of ``Video.canvas`` looks as 
     @v.sequence()
     class Foo:
 
-        @v.layer(canvas = v.canvas(canvas = 'drawingboard'))
+        @v.layer(canvas = v.canvas(backend = 'drawingboard'))
         def bar(self, canvas): # a new canvas is generated and passed once per frame
             return canvas
 
