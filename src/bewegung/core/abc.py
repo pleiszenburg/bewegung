@@ -104,9 +104,11 @@ PyNumber3D = Union[Tuple[int, int, int], Tuple[float, float, float]]
 
 if np is not None:
     Number = Union[int, float, np.number]
+    NumberTypes = (int, float, np.number)
     Dtype = Union[str, np.dtype]
 else:
     Number = Union[int, float]
+    NumberTypes = (int, float)
     Dtype = None # HACK
 
 VectorIterable2D = Union[
