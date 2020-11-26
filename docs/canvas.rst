@@ -5,6 +5,9 @@ Drawing: Canvas Types & Backends
 
 ``bewegung`` offers a set of "backends" for drawing on canvases. A specific canvas can be selected with the ``Video.canvas`` method. Full access to the inventory of backends and all of their functionality is provided through a ``backends`` dictionary.
 
+Canvas Factories: ``Video.canvas``
+----------------------------------
+
 The ``Video.canvas`` method is typically used to configure a layer. It returns a "factory", i.e. a special function, which can be called to generate new pre-configured canvases of a certain type.
 
 .. code:: python
@@ -34,7 +37,10 @@ In the context of a layer's configuration, the use of ``Video.canvas`` looks as 
 
 Parameters of the ``Video.canvas`` method other than ``backend``, i.e. the name of the selected backend, are usually forwarded to the underlying library. However, the various backends of ``bewegung`` may fill certain parameters with reasonable defaults or fix inconsistencies that can be problematic in the context of generating videos. See chapters on individual backends below.
 
-All backends can be accessed via the ``backends`` dictionary, which represents an inventory of backends.
+``backends`` Inventory
+----------------------
+
+All backends can be accessed via the ``backends`` dictionary, which represents the inventory of backends.
 
 .. code:: ipython
 
@@ -44,7 +50,7 @@ All backends can be accessed via the ``backends`` dictionary, which represents a
     >>> [backend for backend in backends.values()]
     [<DrawingBoardCanvas>, <PillowCanvas>, <DatashaderCanvas>, <CairoCanvas>, <MatplotlibCanvas>]
 
-Backends are "lazy" objects. They only import the underlying library if actually used. Further details about the common structure of backends are provided in the :ref:`sections on custom backends <custombackends>`
+Backends are "lazy" objects. They only import the underlying library if actually used. For most intends and purposes, working with ``Video.canvas`` is sufficient. Further details about the common structure of backends are provided in the :ref:`sections on custom backends <custombackends>`
 
 Backend: ``DrawingBoard``
 -------------------------
