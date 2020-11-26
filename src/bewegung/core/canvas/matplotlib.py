@@ -43,6 +43,8 @@ from ..typeguard import typechecked
 @typechecked
 class Canvas(CanvasBase):
 
+    _name = 'Matplotlib'
+
     def __init__(self):
 
         super().__init__()

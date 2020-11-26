@@ -42,10 +42,16 @@ from ..typeguard import typechecked
 @typechecked
 class CanvasBase(CanvasABC):
 
+    _name = None
+
     def __init__(self):
 
         self._loaded = False
         self._type = None
+
+    def __repr__(self) -> str:
+
+        return f'<{self._name:s}Canvas>'
 
     def prototype(self, video: VideoABC, **kwargs) -> Callable:
 

@@ -43,6 +43,8 @@ from ..typeguard import typechecked
 @typechecked
 class Canvas(CanvasBase):
 
+    _name = 'Pillow'
+
     def _prototype(self, video: VideoABC, **kwargs) -> Callable:
 
         if 'mode' not in kwargs.keys():

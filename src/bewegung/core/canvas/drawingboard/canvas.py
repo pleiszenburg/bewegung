@@ -43,6 +43,8 @@ from ...typeguard import typechecked
 @typechecked
 class Canvas(CanvasBase):
 
+    _name = 'DrawingBoard'
+
     def _prototype(self, video: VideoABC, **kwargs) -> Callable:
 
         if not self._loaded:

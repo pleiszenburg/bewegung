@@ -44,6 +44,8 @@ from ..typeguard import typechecked
 @typechecked
 class Canvas(CanvasBase):
 
+    _name = 'Datashader'
+
     def __init__(self):
 
         super().__init__()
