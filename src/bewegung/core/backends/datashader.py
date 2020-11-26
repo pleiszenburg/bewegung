@@ -54,6 +54,16 @@ class Backend(BackendBase):
 
     def _prototype(self, video: VideoABC, **kwargs) -> Callable:
 
+        if 'plot_width' in kwargs.keys() and 'width' in kwargs.keys():
+            kwargs.pop('width')
+        if 'plot_height' in kwargs.keys() and 'height' in kwargs.keys():
+            kwargs.pop('height')
+
+        if 'plot_width' not in kwargs.keys() and 'width' in kwargs.keys():
+            kwargs['plot_width'] = kwargs.pop('width')
+        if 'plot_height' not in kwargs.keys() and 'height' in kwargs.keys():
+            kwargs['plot_height'] = kwargs.pop('height')
+
         if 'plot_width' not in kwargs.keys():
             kwargs['plot_width'] = video.width
         if 'plot_height' not in kwargs.keys():
@@ -83,5 +93,6 @@ class Backend(BackendBase):
         assert isinstance(obj, self._DS_Image)
 
         cvs = obj.to_pil()
-        assert cvs.mode == 'RGBA'
+        if cvs.mode != 'RGBA':
+            raise TypeError('unhandled image mode')
         return ImageOps.flip(cvs) # datashader's y axis must be flipped
