@@ -52,6 +52,12 @@ class Time(TimeABC):
     def __repr__(self) -> str:
         return f'<Time index={self._index:d} seconds={self.seconds:.03f}s fps={self._fps:d}>'
 
+    def __int__(self) -> int:
+        return self._index
+
+    def __float__(self) -> float:
+        return self.seconds
+
     def __eq__(self, other: TimeABC) -> bool:
         self._assert_fps(other)
         return self.index == other.index

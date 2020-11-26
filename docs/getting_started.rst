@@ -275,6 +275,10 @@ Describing time within a videos is handled by special ``Time`` objects. They enc
     <Time index=25 seconds=0.833s fps=30>
     >>> print(c.seconds, c.index, c.fps)
     0.8333333333333334 25 30
+    >>> int(c)
+    25
+    >>> float(c)
+    0.8333333333333334
 
 Because the need of taking care of the frames per second all the time can be annoying, every ``Time`` and ``Video`` object allows to generate new time objects based on its frames per second state.
 
