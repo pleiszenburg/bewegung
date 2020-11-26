@@ -37,10 +37,10 @@ from bewegung import (
     Color, Video,
     Vector2D,
     FadeInEffect, FadeOutEffect,
-    inventory,
+    backends,
     )
 
-DrawingBoard = inventory['drawingboard'].type
+DrawingBoard = backends['drawingboard'].type
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ROUTINES

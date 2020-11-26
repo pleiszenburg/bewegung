@@ -39,7 +39,7 @@ except ModuleNotFoundError:
     tqdm = lambda x: x
 
 from .abc import EncoderABC, LayerABC, SequenceABC, VideoABC, Vector2DABC, TimeABC
-from .canvas import inventory
+from .canvas import backends
 from .const import FPS_DEFAULT
 from .encoders import FFmpegEncoder
 from .indexpool import IndexPool
@@ -410,7 +410,7 @@ class Video(VideoABC):
             kwargs : Keyword arguments of the selected backend's canvas creation function.
         """
 
-        return inventory[canvas].prototype(video = self, **kwargs)
+        return backends[canvas].prototype(video = self, **kwargs)
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # RENDER VIDEO

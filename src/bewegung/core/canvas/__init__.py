@@ -28,5 +28,5 @@ specific language governing rights and limitations under the License.
 # EXPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from ._load import inventory
+from ._load import backends
 from ._base import CanvasBase

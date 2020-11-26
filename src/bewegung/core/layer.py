@@ -34,7 +34,7 @@ from typing import Any, Callable, Union
 from PIL import Image as PIL_Image
 
 from .abc import EffectABC, LayerABC, SequenceABC, TimeABC, VideoABC, Vector2DABC
-from .canvas import inventory
+from .canvas import backends
 from .typeguard import typechecked
 from .vector import Vector2D
 
@@ -132,8 +132,8 @@ class Layer(LayerABC):
 
     def _to_pil(self, obj: Any) -> PIL_Image.Image:
 
-        for canvas in inventory.values():
-            if canvas.isinstance(obj, hard = False):
-                return canvas.to_pil(obj)
+        for backend in backends.values():
+            if backend.isinstance(obj, hard = False):
+                return backend.to_pil(obj)
 
-        raise TypeError('unknown or unloaded canvas type coming from layer')
+        raise TypeError('unknown or unloaded backend canvas type coming from layer')

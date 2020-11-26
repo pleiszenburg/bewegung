@@ -51,13 +51,13 @@ class _Inventory(dict):
 
         super().__init__()
         path = os.path.dirname(__file__)
-        backends = [
+        backend_modules = [
             item[:-3] if item.lower().endswith('.py') else item
             for item in os.listdir(path)
             if not item.startswith('_') and not item.startswith('.')
             ]
 
-        for name in backends:
+        for name in backend_modules:
             try:
                 self[name] = importlib.import_module(f'bewegung.core.canvas.{name:s}').Canvas()
             except Exception as e:
@@ -71,4 +71,4 @@ class _Inventory(dict):
 # EXPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-inventory = _Inventory()
+backends = _Inventory()
