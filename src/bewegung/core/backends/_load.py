@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/canvas/_load.py: Canvas inventory and loader
+    src/bewegung/core/backends/_load.py: Backend inventory and loader
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -29,7 +29,6 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from typing import Any
-import traceback
 
 import importlib
 import os
@@ -58,14 +57,11 @@ class _Inventory(dict):
             ]
 
         for name in backend_modules:
-            try:
-                self[name] = importlib.import_module(f'bewegung.core.canvas.{name:s}').Canvas()
-            except Exception as e:
-                traceback.print_exception(e, None, e.__traceback__)
+            self[name] = importlib.import_module(f'bewegung.core.backends.{name:s}').Backend()
 
     def isinstance(self, obj: Any) -> bool:
 
-        return any((canvas.isinstance(obj) for canvas in self.values()))
+        return any((backend.isinstance(obj) for backend in self.values()))
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # EXPORT

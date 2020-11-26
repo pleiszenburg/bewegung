@@ -40,10 +40,10 @@ except ModuleNotFoundError:
 # CLASSES
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class CameraABC(ABC):
+class BackendABC(ABC):
     pass
 
-class CanvasABC(ABC):
+class CameraABC(ABC):
     pass
 
 class ColorABC(ABC):

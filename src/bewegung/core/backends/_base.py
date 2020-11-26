@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/canvas/datashader.py: Datashader canvas
+    src/bewegung/core/backends/_base.py: Backend base class
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -28,13 +28,11 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Any, Callable
+from typing import Any, Callable, Type
 
 from PIL.Image import Image
-from PIL import ImageOps
 
-from ._base import CanvasBase
-from ..abc import VideoABC
+from ..abc import BackendABC, VideoABC
 from ..typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -42,46 +40,77 @@ from ..typeguard import typechecked
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-class Canvas(CanvasBase):
+class BackendBase(BackendABC):
 
-    _name = 'Datashader'
+    _name = None
 
     def __init__(self):
 
-        super().__init__()
+        self._loaded = False
+        self._type = None
 
-        self._DS_Image = None
+    def __repr__(self) -> str:
+
+        return f'<{self._name:s}Backend>'
+
+    def prototype(self, video: VideoABC, **kwargs) -> Callable:
+
+        if not self._loaded:
+            self.load()
+
+        return self._prototype(video, **kwargs)
 
     def _prototype(self, video: VideoABC, **kwargs) -> Callable:
 
-        if 'plot_width' not in kwargs.keys():
-            kwargs['plot_width'] = video.width
-        if 'plot_height' not in kwargs.keys():
-            kwargs['plot_height'] = video.height
+        raise NotImplementedError()
 
-        if 'x_range' not in kwargs.keys():
-            kwargs['x_range'] = (0, video.width)
-        if 'y_range' not in kwargs.keys():
-            kwargs['y_range'] = (0, video.height)
+    def isinstance(self, obj: Any, hard: bool = True) -> bool:
 
-        return lambda: self._type(**kwargs)
+        if (not self._loaded) and hard:
+            return False
+        if not self._loaded:
+            self.load()
+
+        return self._isinstance(obj)
 
     def _isinstance(self, obj: Any) -> bool:
 
-        return isinstance(obj, self._DS_Image) # Return type is not a canvas!
+        return isinstance(obj, self._type)
+
+    def load(self):
+
+        if self._loaded:
+            return
+
+        self._load()
+        assert self._type is not None
+
+        self._loaded = True
 
     def _load(self):
 
-        from datashader import Canvas as DS_Canvas
-        from datashader.transfer_functions import Image as DS_Image
+        raise NotImplementedError()
 
-        self._type = DS_Canvas
-        self._DS_Image = DS_Image
+    def to_pil(self, obj: Any) -> Image:
+
+        if not self._loaded:
+            self.load()
+
+        return self._to_pil(obj)
 
     def _to_pil(self, obj: Any) -> Image:
 
-        assert isinstance(obj, self._DS_Image)
+        raise NotImplementedError()
 
-        cvs = obj.to_pil()
-        assert cvs.mode == 'RGBA'
-        return ImageOps.flip(cvs) # datashader's y axis must be flipped
+    @property
+    def loaded(self) -> bool:
+
+        return self._loaded
+
+    @property
+    def type(self) -> Type:
+
+        if not self._loaded:
+            self.load()
+
+        return self._type

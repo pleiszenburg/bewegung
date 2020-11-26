@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/canvas/matplotlib.py: Matplotlib canvas
+    src/bewegung/core/backends/matplotlib.py: Matplotlib backend
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -32,7 +32,7 @@ from typing import Any, Callable
 
 from PIL.Image import Image, fromarray
 
-from ._base import CanvasBase
+from ._base import BackendBase
 from ..abc import ColorABC, NumberTypes, VideoABC
 from ..typeguard import typechecked
 
@@ -41,7 +41,7 @@ from ..typeguard import typechecked
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-class Canvas(CanvasBase):
+class Backend(BackendBase):
 
     _name = 'Matplotlib'
 

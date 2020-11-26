@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/canvas/__init__.py: Collects canvas types for layers
+    src/bewegung/core/backends/drawingboard/__init__.py: Simple 2D cairo renderer
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -28,5 +28,4 @@ specific language governing rights and limitations under the License.
 # EXPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from ._load import backends
-from ._base import CanvasBase
+from .backend import Backend

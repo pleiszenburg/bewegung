@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/__init__.py: Package root
+    src/bewegung/core/backends/__init__.py: Collects backend types for layers
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -28,19 +28,5 @@ specific language governing rights and limitations under the License.
 # EXPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-__version__ = '0.0.1'
-
-from .core.camera import Camera
-from .core.backends import *
-from .core.color import Color
-from .core.const import *
-from .core.effects import BaseEffect, FadeInEffect, FadeOutEffect
-from .core.encoders import BaseEncoder, FFmpegEncoder
-from .core.indexpool import IndexPool
-from .core.layer import Layer
-from .core.sequence import Sequence
-from .core.task import Task
-from .core.time import Time
-from .core.timescale import TimeScale
-from .core.vector import *
-from .core.video import Video
+from ._load import backends
+from ._base import BackendBase

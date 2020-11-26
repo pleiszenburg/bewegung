@@ -39,7 +39,7 @@ except ModuleNotFoundError:
     tqdm = lambda x: x
 
 from .abc import EncoderABC, LayerABC, SequenceABC, VideoABC, Vector2DABC, TimeABC
-from .canvas import backends
+from .backends import backends
 from .const import FPS_DEFAULT
 from .encoders import FFmpegEncoder
 from .indexpool import IndexPool

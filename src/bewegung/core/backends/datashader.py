@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/canvas/pil.py: PIL canvas
+    src/bewegung/core/backends/datashader.py: Datashader backend
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -28,11 +28,12 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Callable
+from typing import Any, Callable
 
-from PIL.Image import Image, new
+from PIL.Image import Image
+from PIL import ImageOps
 
-from ._base import CanvasBase
+from ._base import BackendBase
 from ..abc import VideoABC
 from ..typeguard import typechecked
 
@@ -41,25 +42,46 @@ from ..typeguard import typechecked
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-class Canvas(CanvasBase):
+class Backend(BackendBase):
 
-    _name = 'Pillow'
+    _name = 'Datashader'
+
+    def __init__(self):
+
+        super().__init__()
+
+        self._DS_Image = None
 
     def _prototype(self, video: VideoABC, **kwargs) -> Callable:
 
-        if 'mode' not in kwargs.keys():
-            kwargs['mode'] = 'RGBA'
-        if 'size' not in kwargs.keys():
-            kwargs['size'] = (video.width, video.height)
+        if 'plot_width' not in kwargs.keys():
+            kwargs['plot_width'] = video.width
+        if 'plot_height' not in kwargs.keys():
+            kwargs['plot_height'] = video.height
 
-        return lambda: new(**kwargs)
+        if 'x_range' not in kwargs.keys():
+            kwargs['x_range'] = (0, video.width)
+        if 'y_range' not in kwargs.keys():
+            kwargs['y_range'] = (0, video.height)
+
+        return lambda: self._type(**kwargs)
+
+    def _isinstance(self, obj: Any) -> bool:
+
+        return isinstance(obj, self._DS_Image) # Return type is not a canvas!
 
     def _load(self):
 
-        self._type = Image
+        from datashader import Canvas as DS_Canvas
+        from datashader.transfer_functions import Image as DS_Image
 
-    def _to_pil(self, obj: Image) -> Image:
+        self._type = DS_Canvas
+        self._DS_Image = DS_Image
 
-        assert obj.mode == 'RGBA'
+    def _to_pil(self, obj: Any) -> Image:
 
-        return obj
+        assert isinstance(obj, self._DS_Image)
+
+        cvs = obj.to_pil()
+        assert cvs.mode == 'RGBA'
+        return ImageOps.flip(cvs) # datashader's y axis must be flipped

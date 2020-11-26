@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/canvas/drawingboard/core.py: Simple 2D cairo renderer
+    src/bewegung/core/backends/drawingboard/core.py: Simple 2D cairo renderer
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 

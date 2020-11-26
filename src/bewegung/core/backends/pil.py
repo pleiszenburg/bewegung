@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/canvas/drawingboard/__init__.py: Simple 2D cairo renderer
+    src/bewegung/core/backends/pil.py: Pillow backend
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -25,7 +25,41 @@ specific language governing rights and limitations under the License.
 """
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# EXPORT
+# IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from .canvas import Canvas
+from typing import Callable
+
+from PIL.Image import Image, new
+
+from ._base import BackendBase
+from ..abc import VideoABC
+from ..typeguard import typechecked
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# CLASS
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+@typechecked
+class Backend(BackendBase):
+
+    _name = 'Pillow'
+
+    def _prototype(self, video: VideoABC, **kwargs) -> Callable:
+
+        if 'mode' not in kwargs.keys():
+            kwargs['mode'] = 'RGBA'
+        if 'size' not in kwargs.keys():
+            kwargs['size'] = (video.width, video.height)
+
+        return lambda: new(**kwargs)
+
+    def _load(self):
+
+        self._type = Image
+
+    def _to_pil(self, obj: Image) -> Image:
+
+        assert obj.mode == 'RGBA'
+
+        return obj
