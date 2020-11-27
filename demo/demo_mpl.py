@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    demo_mpl.py: Package demo - matplotlib
+    demo/demo_mpl.py: Package demo - matplotlib
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 

@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    demo.py: Package demo
+    demo/demo.py: Package demo
 
     Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
