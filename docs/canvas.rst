@@ -205,7 +205,45 @@ Layer methods are expected to return ``datashader.transfer_functions.Image`` obj
 Backend: ``matplotlib``
 -----------------------
 
-Foo bar.
+The ``matplotlib`` library is a - if not the - classic plotting package in the Python ecosystem. For further details, please consult the `documentation of matplotlib`_. A good basic introduction can also be found in the `Python Data Science Handbook`_ (2016), chapter 4, by `Jake VanderPlas`_. The author has made the `manuscript freely available in the form of Jupyter notebooks on Github`_.
+
+.. _documentation of matplotlib: https://matplotlib.org/contents.html
+.. _Python Data Science Handbook: https://www.worldcat.org/search?q=isbn:9781491912058
+.. _Jake VanderPlas: https://twitter.com/jakevdp
+.. _manuscript freely available in the form of Jupyter notebooks on Github: https://github.com/jakevdp/PythonDataScienceHandbook
+
+.. code:: python
+
+    from bewegung import Video
+
+    v = Video(width = 480, height = 270, seconds = 1.0)
+
+    @v.sequence()
+    class Foo:
+
+        @v.layer(
+            canvas = v.canvas(
+                backend = 'matplotlib',
+                facecolor = '#FFFFFFFF',
+                dpi = 150,
+            )
+        )
+        def bar(self, canvas): # a matplotlib figure object
+
+            ax = canvas.subplots()
+            ax.plot([1, 2, 3], [5, 4, 7])
+
+            return canvas
+
+    v.reset()
+    v.render_frame(v.time(0))
+
+.. image:: _static/backend_matplotlib.png
+  :width: 480
+  :alt: Matplotlib output
+
+
+
 
 .. _acceleratingmatplotlib:
 
