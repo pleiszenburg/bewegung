@@ -46,7 +46,7 @@ All backends can be accessed via the ``backends`` dictionary, which represents t
 
     >>> from bewegung import backends
     >>> backends.keys()
-    dict_keys(['drawingboard', 'pil', 'datashader', 'cairo', 'matplotlib'])
+    dict_keys(['drawingboard', 'pillow', 'datashader', 'cairo', 'matplotlib'])
     >>> [backend for backend in backends.values()]
     [<DrawingBoardBackend>, <PillowBackend>, <DatashaderBackend>, <CairoBackend>, <MatplotlibBackend>]
 
