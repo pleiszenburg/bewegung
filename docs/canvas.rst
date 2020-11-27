@@ -242,8 +242,21 @@ The ``matplotlib`` library is a - if not the - classic plotting package in the P
   :width: 480
   :alt: Matplotlib output
 
+Similar to ``matplotlib.pyplot.figure``, the function call ``v.canvas(backend = 'matplotlib')`` accepts the following additional keyword arguments, among others (see documentation of `matplotlib.pyplot.figure`_ and `matplotlib.figure.Figure`_):
 
+.. _matplotlib.pyplot.figure: https://matplotlib.org/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure
+.. _matplotlib.figure.Figure: https://matplotlib.org/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure
 
+- ``dpi``, resolution or *dots per inch*. 300 by default.
+- ``figsize``, a tuple of width and height *in inches*. Width and height of the video by default, converted to inches based on the value of ``dpi``.
+- ``width``, width *in pixels*. Mapped to ``figsize`` if provided together with ``height``. Converted to inches based on the value of ``dpi``.
+- ``height``, height *in pixels*. Mapped to ``figsize`` if provided together with ``width``. Converted to inches based on the value of ``dpi``.
+- ``tight_layout``, by default ``True``.
+- ``facecolor``, a background color.
+- ``background_color``, mapped to ``facecolor``. Accepts ``bewegung.Color`` objects.
+- ``managed``, a boolean, by default ``True``. This value indicates whether the the ``matplotlib.figure.Figure`` object is "managed" by ``bewegung``. If ``True``, ``bewegung`` will close, i.e. destroy, a figure that is returned by a layer method.
+
+Layer methods are expected to return ``matplotlib.figure.Figure`` objects. By default, ``bewegung`` will "manage" them for saving resources, i.e. the returned ``matplotlib.figure.Figure`` objects are automatically closed once returned.
 
 .. _acceleratingmatplotlib:
 
