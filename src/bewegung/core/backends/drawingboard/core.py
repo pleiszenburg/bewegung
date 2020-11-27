@@ -31,16 +31,31 @@ specific language governing rights and limitations under the License.
 from functools import wraps
 import io
 import math
+import os
 from typing import Callable, Union
 
 import cairo
 from PIL import Image
 
-import gi
-gi.require_version('Pango', '1.0')
-gi.require_version('PangoCairo', '1.0')
-gi.require_version('Rsvg', '2.0')
-from gi.repository import Pango, PangoCairo, Rsvg
+try:
+    import gi
+    gi.require_version('Pango', '1.0')
+    gi.require_version('PangoCairo', '1.0')
+    gi.require_version('Rsvg', '2.0')
+    from gi.repository import Pango, PangoCairo, Rsvg
+except Exception as e:
+    if os.environ.get('RTD_NO_GI', 'False') == 'True': # catch ReadTheDocs builds
+        class Pango:
+            class Alignment:
+                LEFT, CENTER, RIGHT = None, None, None
+            class FontDescription:
+                pass
+        PangoCairo = None
+        class Rsvg:
+            class Handle:
+                pass
+    else:
+        raise e
 
 try:
     import IPython.display
