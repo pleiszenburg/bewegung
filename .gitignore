@@ -12,7 +12,6 @@ build/
 test/
 *.bmp
 *.mp4
-*.gif
 *pleiszenburg*
 _build/
 MATERIAL/

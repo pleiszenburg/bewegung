@@ -49,9 +49,18 @@ The following code snipped will create a 10 second long video at 30 fps in 1080p
 .. code:: python
 
     from multiprocessing import cpu_count
-    from bewegung import Video, Color, Vector2D, FadeInEffect, FadeOutEffect
+    from bewegung import (
+        Video,
+        Color, Vector2D,
+        FadeInEffect, FadeOutEffect,
+        FFmpegGifEncoder,
+    )
 
-    v = Video(width = 1920, height = 1080, frames = 300, fps = 30) # set output to 30 fps
+    v = Video(
+        width = 480, height = 270,
+        frames = 300, # video length in frames
+        fps = 30, # set output to 30 fps
+    )
 
     @v.sequence() # from start to finish of the video
     class Background:
@@ -84,7 +93,17 @@ The following code snipped will create a 10 second long video at 30 fps in 1080p
                 )
             return canvas
 
-    v.render(video_fn = 'video.mp4', processes = cpu_count()) # render video frames in parallel
+    v.render(
+        video_fn = 'video.gif',
+        processes = cpu_count(), # render video frames in parallel
+        encoder = FFmpegGifEncoder(), # export as gif file
+    )
+
+The output looks as follows:
+
+.. image:: _static/complex_example.gif
+  :width: 480
+  :alt: Complex example output
 
 Compared to the initial minimal example, the above complex example contains two sequences with one layer each. The video, the layers and the sequences are a lot more configured. The video for instance is not defined based on its length in seconds. Instead, the number of frames is provided. Besides, the video is not using ``bewegung``'s default frame rate of 60 fps but 30 fps instead.
 
