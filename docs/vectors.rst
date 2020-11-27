@@ -1,3 +1,5 @@
+.. _vectors:
+
 Vectors and Vector Arrays
 =========================
 

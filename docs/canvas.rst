@@ -55,12 +55,21 @@ Backends are "lazy" objects. They only import the underlying library if actually
 Backend: ``DrawingBoard``
 -------------------------
 
-Foo bar.
+The ``DrawingBoard`` backend provides relatively easy facilities for drawing lines, circles, other geometric primitives, text and SVGs. It is not meant for complex drawings or performance. A detailed :ref:`description of its API <drawingboardapi>` is provided below. ``DrawingBoard`` is essentially a wrapper around ``pycairo``. Besides, ``bewegung`` also offers an explicit :ref:`cairo backend <backendcairo>`. If no backend is specified, layers will typically fall back to ``DrawingBoard``. A simple example using ``DrawingBoard`` looks as follows:
+
+...
+
+.. _drawingboardapi:
+
+The ``DrawingBoard`` API
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ``DrawingBoard`` class makes use of :ref:`vectors <vectors>` and :ref:`colors <colors>`.
 
 .. autoclass:: bewegung.core.backends.drawingboard.core.DrawingBoard
     :members:
 
-Foo bar.
+.. _backendcairo:
 
 Backend: ``pycairo``
 --------------------
@@ -318,6 +327,8 @@ Defining & Registering Custom Backends
 Foo bar.
 
 Demo backend with numpy ...
+
+.. _colors:
 
 Cross-Backend Abstraction: Colors
 ---------------------------------
