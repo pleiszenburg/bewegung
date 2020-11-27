@@ -84,6 +84,18 @@ def _geometry(func: Callable) -> Callable:
 
 @typechecked
 class DrawingBoard(DrawingBoardABC):
+    """
+    A wrapper around Cairo, Pango (PangoCairo) and Rsvg, providing a canvas with a simple API for day-to-day drawing tasks.
+
+    DrawingBoard objects are mutable. The color mode is 32 bit RGBA (actually cairo's ARGB32).
+
+    Args:
+        width : Canvas width in pixels
+        height : Canvas width in pixels
+        offset : Center of coordinate system (device offset)
+        subpixels : Number of subpixels per pixel (devise scale)
+        background_color : Canvas background color - transparent white by default
+    """
 
     cairo = cairo
     Pango = Pango
@@ -97,6 +109,13 @@ class DrawingBoard(DrawingBoardABC):
         subpixels: int = 1,
         background_color: Union[Color, None] = None,
         ):
+
+        if width < 1:
+            raise ValueError('width must be at least 1 pixel')
+        if height < 1:
+            raise ValueError('height must be at least 1 pixel')
+        if subpixels < 1:
+            raise ValueError('there must be a positive number subpixels')
 
         if offset is None:
             offset = Vector2D(0.0, 0.0)
@@ -120,9 +139,13 @@ class DrawingBoard(DrawingBoardABC):
             self._surface.set_device_offset(*self._offset.as_tuple())
 
     def __repr__(self) -> str:
+
         return f'<DrawingBoard width={self._width:d} height={self._height:d} subpixels={self._subpixels:d}>'
 
     def as_pil(self) -> Image.Image:
+        """
+        Exports drawing as a Pillow Image object
+        """
 
         if self._subpixels == 1:
             return self.swap_channels(Image.frombuffer(
@@ -147,6 +170,9 @@ class DrawingBoard(DrawingBoardABC):
         return Image.merge(image.mode, (r, g, b, a))
 
     def display(self):
+        """
+        Displays drawing in an IPython console or Jupyter notebook
+        """
 
         if IPython is None:
             raise NotImplementedError('IPython is not available')
@@ -160,6 +186,15 @@ class DrawingBoard(DrawingBoardABC):
             )
 
     def save(self, fn: str):
+        """
+        Saves drawing to a file
+
+        Args:
+            fn : Path to image file. The image format is derived from the file extension.
+        """
+
+        if len(fn) == 0:
+            raise ValueError('filename must not be empty')
 
         self.as_pil().save(fn)
 
@@ -173,11 +208,35 @@ class DrawingBoard(DrawingBoardABC):
         angle: float = 0.0,
         anchor: Union[Vector2D, str] = 'cc',
     ):
+        """
+        Adds an SVG to the drawing.
 
-        assert (fn is not None) ^ (raw is not None) ^ (svg is not None)
+        The SVG can be provided with one of the three following options:
+
+        (1) a path/filename, from where the SVG can be loaded
+        (2) a raw sequence of bytes containing the SVG markup
+        (3) a handle on an rsvg object
+
+        Args:
+            fn : Path to SVG file (1)
+            raw : SVG markup (2)
+            svg : rsvg handle object (3)
+            point : Location of the SVG within the drawing relative to the SVG's anchor
+            scale : Allows to resize the SVG by the provided factor
+            angle : Rotates the SVG by a given angle in radians
+            anchor : Describes the achor point of the SVG.
+                The location an either be provided as a 2D vector or as a two-letter code.
+                First letters can be "t" (top), "c" (center) and "b" (bottom).
+                Second letters can be "l" (left), "c" (center) and "r" (right).
+        """
+
+        if not ((fn is not None) ^ (raw is not None) ^ (svg is not None)):
+            raise RuntimeError('SVG must be provided exactly once')
 
         if svg is None:
             if raw is None:
+                if len(fn) == 0:
+                    raise ValueError('filename must not be empty')
                 with open(fn, 'rb') as f:
                     raw = f.read()
                 svg = Rsvg.Handle.new_from_data(raw)
@@ -192,7 +251,11 @@ class DrawingBoard(DrawingBoardABC):
         svg_dim = Vector2D(svg_dim.width, svg_dim.height)
 
         if isinstance(anchor, str):
-            anchor = self._anchor[anchor](*svg_dim.as_tuple())
+            try:
+                anchor = self._anchor[anchor]
+            except KeyError:
+                raise ValueError('unknown anchor point')
+            anchor = anchor(*svg_dim.as_tuple())
         else:
             anchor = anchor * -1.0
 
@@ -211,6 +274,15 @@ class DrawingBoard(DrawingBoardABC):
 
     @staticmethod
     def make_svg(fn: str) -> Rsvg.Handle:
+        """
+        Generates an rsvg handle for re-use.
+
+        Args:
+            fn : Path to SVG file
+        """
+
+        if len(fn) == 0:
+            raise ValueError('filename must not be empty')
 
         return Rsvg.Handle.new_from_file(fn)
 
@@ -224,6 +296,21 @@ class DrawingBoard(DrawingBoardABC):
         alignment: str = 'l',
         anchor: Union[Vector2D, str] = 'cc',
         ):
+        """
+        Adds text to the drawing.
+
+        Args:
+            text : The actual text. Can handle explicit line breaks (``\\n``) but does not offer automatic line breaks.
+            point : Location of the text within the drawing relative to the text's anchor
+            angle : Rotates the text by a given angle in radians
+            font : A Pango font description object
+            font_color : The font color. Opaque black by default.
+            alignment : Single letter describing the text allignment. Can be "l" (left), "c" (center) and "r" (right).
+            anchor : Describes the achor point of the text.
+                The location an either be provided as a 2D vector or as a two-letter code.
+                First letters can be "t" (top), "c" (center) and "b" (bottom).
+                Second letters can be "l" (left), "c" (center) and "r" (right).
+        """
 
         if point is None:
             point = Vector2D(0.0, 0.0)
@@ -234,14 +321,22 @@ class DrawingBoard(DrawingBoardABC):
 
         layout = PangoCairo.create_layout(self._ctx)
         layout.set_font_description(font)
-        layout.set_alignment(self._alignment[alignment])
+        try:
+            alignment = self._alignment[alignment]
+        except KeyError:
+            raise ValueError('unknown alignment')
+        layout.set_alignment(alignment)
         layout.set_markup(text, -1)
 
         self._ctx.set_source_rgba(*font_color.as_rgba_float())
 
         if isinstance(anchor, str):
             _, text_extents = layout.get_pixel_extents()
-            anchor = self._anchor[anchor](text_extents.width, text_extents.height)
+            try:
+                anchor = self._anchor[anchor]
+            except KeyError:
+                raise ValueError('unknown anchor point')
+            anchor = anchor(text_extents.width, text_extents.height)
         else:
             anchor = anchor * -1
 
@@ -272,6 +367,13 @@ class DrawingBoard(DrawingBoardABC):
 
     @staticmethod
     def make_font(family: str, size: float) -> Pango.FontDescription:
+        """
+        Generates an Pango font description for re-use.
+
+        Args:
+            familiy : Font family (name)
+            size : Font size
+        """
 
         # TODO https://developer.gnome.org/pango/stable/pango-Fonts.html#pango-font-description-from-string
         return Pango.font_description_from_string(f'{family:s} {size:.2f}')
@@ -279,13 +381,26 @@ class DrawingBoard(DrawingBoardABC):
     @_geometry
     def draw_polygon(self,
         *points: Vector2DABC,
+        close: bool = False,
         **kwargs,
         ):
+        """
+        Adds an unfilled polygon to the drawing.
 
-        assert len(points) > 1
+        Args:
+            points : An arbitrary number of 2D vectors
+            close : Whether or not the polygon should be closed
+            kwargs : Arguments for line stroke (see ``_stroke``)
+        """
+
+        if len(points) < 2:
+            raise ValueError('at least two points most be provided')
+
         self._ctx.move_to(points[0].x, points[0].y)
         for point in points[1:]:
             self._ctx.line_to(point.x, point.y)
+        if close:
+            self._ctx.line_to(points[0].x, points[0].y)
         self._stroke(**kwargs)
 
     @_geometry
@@ -293,8 +408,19 @@ class DrawingBoard(DrawingBoardABC):
         *points: Vector2DABC,
         fill_color: Union[Color, None] = None,
         ):
+        """
+        Adds a filled, frame-less polygon to the drawing.
 
-        assert len(points) > 1
+        Args:
+            points : An arbitrary number of 2D vectors
+            fill_color : Fill color. Opaque black by default.
+        """
+
+        if len(points) < 3:
+            raise ValueError('at least three points most be provided')
+        if fill_color is None:
+            fill_color = Color(0, 0, 0, 255) # opaque black
+
         self._ctx.move_to(points[0].x, points[0].y)
         for point in points[1:]:
             self._ctx.line_to(point.x, point.y)
@@ -307,6 +433,17 @@ class DrawingBoard(DrawingBoardABC):
         r: float = 1.0,
         **kwargs,
         ):
+        """
+        Adds an unfilled circle to the drawing.
+
+        Args:
+            point : Center of circle
+            r : Radius of circle
+            kwargs : Arguments for line stroke (see ``_stroke``)
+        """
+
+        if r < 0:
+            raise ValueError('radius must be greater or equal to zero')
 
         self._ctx.arc(
             point.x, point.y, r,
@@ -320,6 +457,17 @@ class DrawingBoard(DrawingBoardABC):
         r: float = 1.0,
         fill_color: Union[Color, None] = None,
         ):
+        """
+        Adds a filled, frame-less circle to the drawing.
+
+        Args:
+            point : Center of circle
+            r : Radius of circle
+            fill_color : Fill color. Opaque black by default.
+        """
+
+        if r < 0:
+            raise ValueError('radius must be greater or equal to zero')
 
         if fill_color is None:
             fill_color = Color(0, 0, 0, 255) # opaque black
@@ -336,6 +484,13 @@ class DrawingBoard(DrawingBoardABC):
         line_width: float = 1.0,
         **kwargs,
         ):
+        """
+        Strokes lines. Never called directly.
+
+        Args:
+            line_color : Color of line. Opaque black by default.
+            line_width : Width of line
+        """
 
         if line_color is None:
             line_color = Color(0, 0, 0, 255) # opaque black
@@ -357,8 +512,16 @@ class DrawingBoard(DrawingBoardABC):
 
     @property
     def ctx(self) -> cairo.Context:
+        """
+        Exposes drawing's cairo.Context object
+        """
+
         return self._ctx
 
     @property
     def surface(self) -> cairo.ImageSurface:
+        """
+        Exposes drawing's cairo.ImageSurface object
+        """
+
         return self._surface
