@@ -135,9 +135,9 @@ class BaseEncoder(EncoderABC):
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-class FFmpegEncoder(BaseEncoder):
+class FFmpegH264Encoder(BaseEncoder):
     """
-    Mutable. Context manager. Wraps FFmpeg.
+    Mutable. Context manager. Wraps FFmpeg with H.264.
 
     Args:
         buffersize : Maximum size of buffer in bytes between ``bewegung`` and ``ffmpeg``.

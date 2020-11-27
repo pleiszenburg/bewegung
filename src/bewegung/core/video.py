@@ -41,7 +41,7 @@ except ModuleNotFoundError:
 from .abc import EncoderABC, LayerABC, SequenceABC, VideoABC, Vector2DABC, TimeABC
 from .backends import backends
 from .const import FPS_DEFAULT
-from .encoders import FFmpegEncoder
+from .encoders import FFmpegH264Encoder
 from .indexpool import IndexPool
 from .layer import Layer
 from .sequence import Sequence
@@ -435,7 +435,7 @@ class Video(VideoABC):
             batchsize : Maximum number of frames rendered by a worker process before the (old) worker is replaced by a new worker.
                 This option helps to prevent long rendering jobs from running out of memory.
             encoder : A video encoder object.
-                If omitted, the ffmpeg encoder will be selected.
+                If omitted, the ffmpeg H.264 encoder will be selected.
             frame_fn : A Python string template (representing a path) including an ``index`` integer placeholder.
                 If specified, individual frames will be stored here.
                 If omitted, no frames will be stored.
@@ -452,7 +452,7 @@ class Video(VideoABC):
         if video_fn is not None and len(video_fn) == 0:
             raise ValueError('if a string, video_fn must not be empty')
         if video_fn is not None and encoder is None:
-            encoder = FFmpegEncoder()
+            encoder = FFmpegH264Encoder()
 
         self.reset()
 
