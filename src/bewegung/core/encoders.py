@@ -119,6 +119,16 @@ class BaseEncoder(EncoderABC):
 
     def __enter__(self) -> BinaryIO:
 
+        if not self.configured:
+            raise RuntimeError('encoder has not been configured')
+        if self.running:
+            raise RuntimeError('encoder is already running')
+
+        self._stream = self._enter()
+        return self._stream
+
+    def _enter(self) -> BinaryIO:
+
         raise NotImplementedError()
 
     def __exit__(
@@ -127,6 +137,14 @@ class BaseEncoder(EncoderABC):
         exc_value: Union[Exception, None],
         traceback: Union[TracebackType, None],
     ):
+
+        if not self.running:
+            raise RuntimeError('encoder is not running')
+
+        self._stream = None
+        self._exit()
+
+    def _exit(self):
 
         raise NotImplementedError()
 
@@ -193,12 +211,7 @@ class FFmpegH264Encoder(BaseEncoder):
 
         self._proc = None
 
-    def __enter__(self) -> BinaryIO:
-
-        if not self.configured:
-            raise RuntimeError('encoder has not been configured')
-        if self.running:
-            raise RuntimeError('encoder is already running')
+    def _enter(self) -> BinaryIO:
 
         self._proc = Popen(
             [
@@ -218,21 +231,62 @@ class FFmpegH264Encoder(BaseEncoder):
             stdin = PIPE, stdout = DEVNULL, stderr = DEVNULL,
             bufsize = self._buffersize,
         )
-        self._stream = self._proc.stdin
 
-        return self.stream
+        return self._proc.stdin
 
-    def __exit__(
-        self,
-        exc_type: Union[Type, None],
-        exc_value: Union[Exception, None],
-        traceback: Union[TracebackType, None],
+    def _exit(self):
+
+        self._proc.stdin.flush()
+        self._proc.stdin.close()
+        self._proc.wait()
+
+        self._proc = None
+
+@typechecked
+class FFmpegGifEncoder(BaseEncoder):
+    """
+    Mutable. Context manager. Wraps FFmpeg with gif.
+
+    Args:
+        buffersize : Maximum size of buffer in bytes between ``bewegung`` and ``ffmpeg``.
+            A larger buffer may have a mildly positive impact on performance.
+    """
+
+    def __init__(self,
+        buffersize: int = PIPE_BUFFER_DEFAULT,
     ):
 
-        if not self.running:
-            raise RuntimeError('encoder is not running')
+        super().__init__()
 
-        self._stream = None
+        if buffersize <= 0:
+            raise ValueError('buffersize must be greater than 0')
+
+        self._buffersize = buffersize
+
+        self._proc = None
+
+    def _enter(self) -> BinaryIO:
+
+        self._proc = Popen(
+            [
+                'ffmpeg',
+                '-y', # force overwrite of output file
+                '-framerate', f'{self._fps:d}',
+                '-f', 'image2pipe', # force input format
+                '-i', '-', # data from stdin
+                '-vcodec', 'bmp', # input codec
+                '-s:v', f'{self._width:d}x{self._height:d}',
+                '-vf', 'split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse',
+                '-c:v', 'gif',
+                self._video_fn,
+            ],
+            stdin = PIPE, stdout = DEVNULL, stderr = DEVNULL,
+            bufsize = self._buffersize,
+        )
+
+        return self._proc.stdin
+
+    def _exit(self):
 
         self._proc.stdin.flush()
         self._proc.stdin.close()
