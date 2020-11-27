@@ -35,7 +35,7 @@ from .core.backends import *
 from .core.color import Color
 from .core.const import *
 from .core.effects import BaseEffect, FadeInEffect, FadeOutEffect
-from .core.encoders import BaseEncoder, FFmpegH264Encoder
+from .core.encoders import BaseEncoder, FFmpegH264Encoder, FFmpegGifEncoder
 from .core.indexpool import IndexPool
 from .core.layer import Layer
 from .core.sequence import Sequence
