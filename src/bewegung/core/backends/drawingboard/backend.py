@@ -47,9 +47,6 @@ class Backend(BackendBase):
 
     def _prototype(self, video: VideoABC, **kwargs) -> Callable:
 
-        if not self._loaded:
-            self.load()
-
         if 'width' not in kwargs.keys():
             kwargs['width'] = video.width
         if 'height' not in kwargs.keys():
