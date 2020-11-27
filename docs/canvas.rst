@@ -57,6 +57,11 @@ Backend: ``DrawingBoard``
 
 Foo bar.
 
+.. autoclass:: bewegung.core.backends.drawingboard.core.DrawingBoard
+    :members:
+
+Foo bar.
+
 Backend: ``pycairo``
 --------------------
 
