@@ -360,4 +360,6 @@ Demo backend with numpy ...
 Cross-Backend Abstraction: Colors
 ---------------------------------
 
-Foo bar.
+All backends work with variations of RGB, RGBA or RGBa color spaces. Some use pre-multiplied alpha values, so do not. Some accept RGB values as floats from 0.0 to 1.0, some accept RGB values as integers from 0 to 255, some expect hexadecimal notations as strings.
+
+TODO class
