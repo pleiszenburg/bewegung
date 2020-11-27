@@ -263,7 +263,47 @@ Layer methods are expected to return ``matplotlib.figure.Figure`` objects. By de
 Accelerating ``matplotlib``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Foo bar.
+Aside from its reach set of features, ``matplotlib`` is known for its mediocre performance. Not to be confused with ``bewegung``'s backends, ``matplotlib`` also has `different backends for rendering`_. Within ``bewegung``, ``matplotlib`` is automatically configured to use `mplcairo`_, "A (new) cairo backend for Matplotlib". Compared to ``matplotlib``'s own built-in backends, its output quality is significantly better while the rendering speed is also higher. Unfortunately, ``mplcairo`` is just one half of the story of ``matplotlib`` performance.
+
+.. _mplcairo: https://github.com/matplotlib/mplcairo
+.. _different backends for rendering: https://matplotlib.org/faq/usage_faq.html#what-is-a-backend
+
+In animation frameworks for ``matplotlib``, such as the "offical" `matplotlib.animation`_ sub-package, it is common practice to re-use and update existing figure and subplot / axes objects. This speeds up the rendering process considerably. This strategy is also supported by ``bewegung``. It should be noted that this approach requires some deeper understanding of ``matplotlib``'s facilities. The following code illustrates the approach.
+
+.. _matplotlib.animation: https://matplotlib.org/api/animation_api.html
+
+.. code:: python
+
+    from bewegung import Video
+
+    v = Video(width = 480, height = 270, seconds = 1.0)
+
+    @v.sequence()
+    class Foo:
+
+        def __init__(self):
+
+            self._fig = v.canvas(
+                backend = 'matplotlib',
+                facecolor = '#FFFFFFFF',
+                dpi = 150,
+                managed = False, # ensure that bewegung does not close figure
+            )() # calls the factory once, generates a single figure
+            self._ax = self._fig.subplots() # generates a single subplot
+
+        @v.layer() # no backend configuration required
+        def bar(self): # no canvas requested
+
+            self._ax.clear() # optional: update content directly instead
+            self._ax.plot([1, 2, 3], [5, 4, 7]) # draw new content or change old content
+
+            return self._fig
+
+    v.reset()
+    image0 = v.render_frame(v.time(0))
+    image1 = v.render_frame(v.time(1))
+
+The less a figure changes, the faster the above code becomes. Depending on the degree of optimization, anything from a few percent to an order of magnitude of performance gain can be achieved.
 
 .. _custombackends:
 
