@@ -40,7 +40,15 @@ from .typeguard import typechecked
 @typechecked
 class Color(ColorABC):
     """
-    Immutable.
+    Common infrastructure for working with RGBA colors in different formats.
+
+    Color objects are immutable.
+
+    Args:
+        r : red channel 0...255 (uint8)
+        g : green channel 0...255 (uint8)
+        b : blue channel 0...255 (uint8)
+        a : alpha channel 0...255 (uint8), opaque by default
     """
 
     def __init__(self,
@@ -50,10 +58,14 @@ class Color(ColorABC):
         a: int = 255,
     ):
 
-        assert 0 <= r <= 255
-        assert 0 <= g <= 255
-        assert 0 <= b <= 255
-        assert 0 <= a <= 255
+        if not (0 <= r <= 255):
+            raise ValueError('red color channel out of bounds (0...255)')
+        if not (0 <= g <= 255):
+            raise ValueError('green color channel out of bounds (0...255)')
+        if not (0 <= b <= 255):
+            raise ValueError('blue color channel out of bounds (0...255)')
+        if not (0 <= a <= 255):
+            raise ValueError('alpha color channel out of bounds (0...255)')
 
         self._r, self._g, self._b, self._a = r, g, b, a
 
@@ -63,21 +75,43 @@ class Color(ColorABC):
 
     @property
     def r(self) -> int:
+        """
+        red channel
+        """
+
         return self._r
 
     @property
     def g(self) -> int:
+        """
+        green channel
+        """
+
         return self._g
 
     @property
     def b(self) -> int:
+        """
+        blue channel
+        """
+
         return self._b
 
     @property
     def a(self) -> int:
+        """
+        alpha channel
+        """
+
         return self._a
 
     def as_hex(self, alpha: bool = True) -> str:
+        """
+        Exports color as hexadecimal string
+
+        Args:
+            alpha : Allows to disable alpha channel on export
+        """
 
         if not alpha:
             return f'{self._r:02x}{self._g:02x}{self._b:02x}'
@@ -85,14 +119,30 @@ class Color(ColorABC):
         return f'{self._r:02x}{self._g:02x}{self._b:02x}{self._a:02x}'
 
     def as_rgba_float(self) -> Tuple[float, float, float, float]:
+        """
+        Exports color a tuple of floats 0.0...1.0
+        """
 
         return self._r / 255, self._g / 255, self._b / 255, self._a / 255
 
     def as_rgba_int(self) -> Tuple[int, int, int, int]:
+        """
+        Exports color a tuple of ints 0...255 (uint8)
+        """
 
         return self._r, self._g, self._b, self._a
 
+    def as_opaque(self) -> ColorABC:
+        """
+        Exports color as a new, fully opaque version of itself
+        """
+
+        return type(self)(self._r, self._g, self._b, 255)
+
     def as_transparent(self) -> ColorABC:
+        """
+        Exports color as a new, fully transparent version of itself
+        """
 
         return type(self)(self._r, self._g, self._b, 0)
 
@@ -103,11 +153,24 @@ class Color(ColorABC):
         b: float,
         a: float = 1.0,
     ) -> ColorABC:
+        """
+        Imports color from floats
 
-        assert 0.0 <= r <= 1.0
-        assert 0.0 <= g <= 1.0
-        assert 0.0 <= b <= 1.0
-        assert 0.0 <= a <= 1.0
+        Args:
+            r : red channel 0.0...1.0
+            g : green channel 0.0...1.0
+            b : blue channel 0.0...1.0
+            a : alpha channel 0.0...1.0, opaque by default
+        """
+
+        if not (0.0 <= r <= 1.0):
+            raise ValueError('red color channel out of bounds (0.0...1.0)')
+        if not (0.0 <= g <= 1.0):
+            raise ValueError('green color channel out of bounds (0.0...1.0)')
+        if not (0.0 <= b <= 1.0):
+            raise ValueError('blue color channel out of bounds (0.0...1.0)')
+        if not (0.0 <= a <= 1.0):
+            raise ValueError('alpha color channel out of bounds (0.0...1.0)')
 
         return cls(
             r = round(r * 255),
@@ -118,6 +181,12 @@ class Color(ColorABC):
 
     @classmethod
     def from_hex(cls, raw: str) -> ColorABC:
+        """
+        Imports color from a hexadecimal string
+
+        Args:
+            raw : Accepts strings both with and without alpha channel. Opaque by default.
+        """
 
         if raw.startswith('#'):
             raw = raw[1:]
