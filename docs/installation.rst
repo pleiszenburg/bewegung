@@ -14,17 +14,25 @@ Quick Install Guide
 
 .. _the Pillow library: https://pillow.readthedocs.io
 
-All further Python dependencies are optional and allow to use certain optional components of ``bewegung``. A complete installation of all Python components and development tools can be triggered by running:
+All further Python dependencies are optional and allow to use certain optional components of ``bewegung``. A **complete installation** of all Python components and development tools can be triggered by running:
 
 .. code:: bash
 
     pip install -vU bewegung[all]
 
-Certain **non-Python components must installed separately and before invoking the above command**. For further instructions, see below. Most notably, ``ffmpeg`` should be installed for producing actual video files instead of video frames as individual files.
+.. warning::
 
-In principle, ``bewegung`` works across all modern operating systems. In terms of memory usage and performance, it behaves best on Unix-like systems due to `Windows's lack of "fork"`_.
+    Certain **non-Python components must installed separately and before invoking the above command**. For further instructions, see :ref:`detailed installation instructions <detailedinstallation>`. Most notably, ``ffmpeg`` should be installed for producing actual video files instead of video frames as individual files.
+
+In principle, ``bewegung`` works across all modern operating systems.
+
+.. note::
+
+    In terms of memory usage and performance, ``bewegung`` behaves best on Unix-like systems due to `Windows's lack of "fork"`_.
 
 .. _Windows's lack of "fork": https://stackoverflow.com/q/985281/1672565
+
+.. _detailedinstallation:
 
 Detailed Installation Options
 -----------------------------
