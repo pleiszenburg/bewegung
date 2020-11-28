@@ -3,7 +3,7 @@
 Drawing: Canvas Types & Backends
 ================================
 
-``bewegung`` offers a set of "backends" for drawing on canvases. A specific canvas can be selected with the ``Video.canvas`` method. Full access to the inventory of backends and all of their functionality is provided through a ``backends`` dictionary.
+``bewegung`` offers a set of "backends" for drawing on canvases. A specific backend can be selected and configured through the ``Video.canvas`` method. Full access to the inventory of backends and all of their functionality is provided through the ``backends`` dictionary.
 
 Canvas Factories: ``Video.canvas``
 ----------------------------------
@@ -20,7 +20,7 @@ The ``Video.canvas`` method is typically used to configure a layer. It returns a
     canvas_a = canvas_factory() # produce a new canvas
     canvas_b = canvas_factory() # produce yet another new canvas
 
-In the context of a layer's configuration, the use of ``Video.canvas`` looks as follows. Note that ``DrawingBoard`` is in fact the default canvas, so it usually does not have to be explicitly selected. A new, pre-configured canvas of the requested type is fed into the layer method for every individual video frame.
+In the context of a layer's configuration, the use of ``Video.canvas`` looks as follows. Note that ``DrawingBoard`` is in fact the default backend, so it usually does not have to be explicitly selected. A new, pre-configured canvas of the requested type is fed into the layer method for every individual video frame.
 
 .. code:: python
 
@@ -137,7 +137,7 @@ The ``pycairo`` backend allows to generate pre-configured ``ImageSurface`` objec
 
 Similar to ``cairo.ImageSurface``, the function call ``v.canvas(backend = 'cairo')`` accepts the following additional keyword arguments:
 
-- ``format``, by default ``cairo.FORMAT_ARGB32``. If a format other than ARGB32 is specified, the layer method is supposed to return a Pillow Image object of mode ```'RGBA'`` instead of an ``ImageSurface`` object, i.e. in this case the conversion to Pillow's image format is left to the user. Alternatively, the user may also convert the non-ARGB32 ``ImageSurface`` object to an ARGB32 ``ImageSurface`` object before returning it from the layer method.
+- ``format``, by default ``cairo.FORMAT_ARGB32``. If a format other than ARGB32 is specified, the layer method is supposed to return a Pillow Image object of mode ``'RGBA'`` instead of an ``ImageSurface`` object, i.e. in this case the conversion to Pillow's image format is left to the user. Alternatively, the user may also convert the non-ARGB32 ``ImageSurface`` object to an ARGB32 ``ImageSurface`` object before returning it from the layer method.
 - ``width``, width of the video by default
 - ``height``, height of the video by default
 
@@ -304,7 +304,7 @@ Layer methods are expected to return ``matplotlib.figure.Figure`` objects. By de
 Accelerating ``matplotlib``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Aside from its reach set of features, ``matplotlib`` is known for its mediocre performance. Not to be confused with ``bewegung``'s backends, ``matplotlib`` also has `different backends for rendering`_. Within ``bewegung``, ``matplotlib`` is automatically configured to use `mplcairo`_, "A (new) cairo backend for Matplotlib". Compared to ``matplotlib``'s own built-in backends, its output quality is significantly better while the rendering speed is also higher. Unfortunately, ``mplcairo`` is just one half of the story of ``matplotlib`` performance.
+Aside from its rich set of features, ``matplotlib`` is known for its mediocre performance. Not to be confused with ``bewegung``'s backends, ``matplotlib`` also has `different backends for rendering`_. Within ``bewegung``, ``matplotlib`` is automatically configured to use `mplcairo`_, "A (new) cairo backend for Matplotlib". Compared to ``matplotlib``'s own built-in backends, its output quality is significantly better while the rendering speed is also higher. Unfortunately, ``mplcairo`` is just "half" of the story of ``matplotlib`` performance.
 
 .. _mplcairo: https://github.com/matplotlib/mplcairo
 .. _different backends for rendering: https://matplotlib.org/faq/usage_faq.html#what-is-a-backend
@@ -344,7 +344,7 @@ In animation frameworks for ``matplotlib``, such as the "offical" `matplotlib.an
     image0 = v.render_frame(v.time(0))
     image1 = v.render_frame(v.time(1))
 
-The less a figure changes, the faster the above code becomes. Depending on the degree of optimization, anything from a few percent to an order of magnitude of performance gain can be achieved.
+The less a figure changes, the faster the above code becomes. Depending on the degree of complexity and optimization, anything from a few percent to an order of magnitude of performance gain can be achieved.
 
 .. _custombackends:
 
@@ -360,6 +360,6 @@ Demo backend with numpy ...
 Cross-Backend Abstraction: Colors
 ---------------------------------
 
-All backends work with variations of RGB, RGBA or RGBa color spaces. Some use pre-multiplied alpha values, so do not. Some accept RGB values as floats from 0.0 to 1.0, some accept RGB values as integers from 0 to 255, some expect hexadecimal notations as strings.
+All backends work with variations of RGB, RGBA or RGBa color spaces. Some use pre-multiplied alpha values, some do not. Some accept RGB values as floats from 0.0 to 1.0, some accept RGB values as integers from 0 to 255, some expect hexadecimal notations as strings.
 
 TODO class
