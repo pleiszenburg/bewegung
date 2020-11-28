@@ -41,19 +41,46 @@ from ..typeguard import typechecked
 
 @typechecked
 class BackendBase(BackendABC):
+    """
+    Base class for backends. Do not instantiate this class - derive and inherit from it instead.
+
+    Backend objects are mutable.
+
+    If the orginal cunstructor method is overridden, it method must be called from child class.
+    """
 
     _name = None
 
     def __init__(self):
+        """
+        Can be overridden.
+        """
 
         self._loaded = False
         self._type = None
 
     def __repr__(self) -> str:
+        """
+        Interactive string representation of backend object
 
-        return f'<{self._name:s}Backend>'
+        Do not override!
+        """
+
+        if self._name is not None:
+            return f'<{self._name:s}Backend>'
+
+        return f'<{type(self).__name__:s}>'
 
     def prototype(self, video: VideoABC, **kwargs) -> Callable:
+        """
+        Returns a factory function which produces a new canvas once per call
+
+        Do not override!
+
+        Args:
+            video : A video object
+            kwargs : Keyword arguments for the backend library
+        """
 
         if not self._loaded:
             self.load()
@@ -61,10 +88,28 @@ class BackendBase(BackendABC):
         return self._prototype(video, **kwargs)
 
     def _prototype(self, video: VideoABC, **kwargs) -> Callable:
+        """
+        Internal method: Returns a factory function which produces a new canvas once per call
+
+        Must be reimplemented!
+
+        Args:
+            video : A video object
+            kwargs : Keyword arguments for the backend library
+        """
 
         raise NotImplementedError()
 
     def isinstance(self, obj: Any, hard: bool = True) -> bool:
+        """
+        Checks whether or not a certain object is an allowed return type within the backend
+
+        Do not override!
+
+        Args:
+            obj : The objects which is supposed to be checked
+            hard : If set to ``True`` when the backend is not loaded, the backend will not be loaded for the check and the test will therefore always fail (return ``False``).
+        """
 
         if (not self._loaded) and hard:
             return False
@@ -74,10 +119,23 @@ class BackendBase(BackendABC):
         return self._isinstance(obj)
 
     def _isinstance(self, obj: Any) -> bool:
+        """
+        Internal method: Checks whether or not a certain object is an allowed return type within the backend
+
+        Must be reimplemented!
+
+        Args:
+            obj : The objects which is supposed to be checked
+        """
 
         return isinstance(obj, self._type)
 
     def load(self):
+        """
+        Orders the backend to import its dependencies (libraries)
+
+        Do not override!
+        """
 
         if self._loaded:
             return
@@ -88,10 +146,23 @@ class BackendBase(BackendABC):
         self._loaded = True
 
     def _load(self):
+        """
+        Internal method: Orders the backend to import its dependencies (libraries)
+
+        Must be reimplemented!
+        """
 
         raise NotImplementedError()
 
     def to_pil(self, obj: Any) -> Image:
+        """
+        Converts canvas to Pillow Image object
+
+        Do not override!
+
+        Args:
+            obj : Backend canvas object
+        """
 
         if not self._loaded:
             self.load()
@@ -99,16 +170,34 @@ class BackendBase(BackendABC):
         return self._to_pil(obj)
 
     def _to_pil(self, obj: Any) -> Image:
+        """
+        Internal method: Converts canvas to Pillow Image object
+
+        Must be reimplemented!
+
+        Args:
+            obj : Backend canvas object
+        """
 
         raise NotImplementedError()
 
     @property
     def loaded(self) -> bool:
+        """
+        Status: Has the backend imported its dependencies?
+
+        Do not override!
+        """
 
         return self._loaded
 
     @property
     def type(self) -> Type:
+        """
+        Exposes backends canvas class
+
+        Do not override!
+        """
 
         if not self._loaded:
             self.load()
