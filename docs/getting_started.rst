@@ -118,7 +118,11 @@ Videos can be encoded with different encoders. By default, ``bewegung`` encodes 
 Prepare Tasks
 -------------
 
-In may be necessary to prepare or compute data prior to drawing onto a canvas. It may even be the case that multiple layers rely on the same data, which has to be prepared once per video frame. This is where *prepare tasks* become useful. They work very much like layers. There is a special decorator for indicating them. Prepare tasks can also be ordered in a system similar to the z-index of layers, the prepare-order (``preporder``). All prepare tasks are evaluated once per video frame and **before** the first layer is drawn.
+In may be necessary to prepare or compute data prior to drawing onto a canvas. It may even be the case that multiple layers rely on the same data, which has to be prepared once per video frame. This is where *prepare tasks* become useful. They work very much like layers. There is a special decorator for indicating them. Prepare tasks can also be ordered in a system similar to the z-index of layers, the prepare-order (``preporder``).
+
+.. note::
+
+    All prepare tasks are evaluated once per video frame and **before** the first layer is drawn.
 
 .. code:: python
 
@@ -191,12 +195,20 @@ For debugging and development, it can be very useful to be able to selectively r
 
 Instead of calling ``Video.render``, the video object can be manually *reset* by calling ``Video.reset``. A reset is usually taken care of by the video render method, but if individual frames are desired instead, it has to be called at least once before the first video frame is generated. Once this is done, frames can be selected based on their time and rendered with ``Video.render_frame``. This method can both directly store the frame into a file and return it as a ``Pillow.Image`` object, see `Pillow documentation`_.
 
+.. note::
+
+    Reset video objects (``Video.reset``) at least once before rendering individual frames (``Video.render_frame``)!
+
 .. _Pillow documentation: https://pillow.readthedocs.io/en/stable/reference/Image.html#the-image-class
 
 Using & Mixing Backends
 -----------------------
 
-One of ``bewegung``'s key features is its ability to work with multiple drawing and plotting systems simultaneously. ``bewegung`` offers its own drawing system, ``DrawingBoard``, which is used both in the :ref:`minimal <minimalexample>` and in the :ref:`complex example <complexexample>` at the beginning of this chapter. It is based on ``pycairo``. ``pycairo`` can of cause also be used directly. In addition, ``bewegung`` directly integrates ``matplotlib``, ``datashader`` and ``Pillow``. The mentioned libraries are referred to as *backends*. A new, custom backend can easily be added. A backend is typically chosen once per layer, although it is feasible make this process even more flexible. Backends are loaded (in Python-terms *imported*) on demand. If a backend is not required, the underlying library does not have to be present / installed.
+One of ``bewegung``'s key features is its ability to work with multiple drawing and plotting systems simultaneously. ``bewegung`` offers its own drawing system, ``DrawingBoard``, which is used both in the :ref:`minimal <minimalexample>` and in the :ref:`complex example <complexexample>` at the beginning of this chapter. It is based on ``pycairo``. ``pycairo`` can of cause also be used directly. In addition, ``bewegung`` directly integrates ``matplotlib``, ``datashader`` and ``Pillow``. The mentioned libraries are referred to as *backends*. A new, custom backend can easily be added. A backend is typically chosen once per layer, although it is feasible make this process even more flexible.
+
+.. note::
+
+    Backends are loaded (in Python-terms *imported*) on demand. If a backend is not required, the underlying library does not have to be present / installed.
 
 .. code:: python
 
@@ -237,6 +249,10 @@ One of ``bewegung``'s key features is its ability to work with multiple drawing 
 
 The ``Video.canvas`` method allows to specify and configure backends once per layer. Most of its parameters are passed on to the backend library unmodified. If required, ``bewegung`` fills certain parameters with reasonable defaults or fixes inconsistencies that may be problematic in the context of generating videos. For details, see :ref:`chapter on drawing <drawing>`.
 
+.. note::
+
+    A backend can, if necessary, alter default values of the backend's underlying library.
+
 Requesting Parameters in Layers and Prepare Tasks
 -------------------------------------------------
 
@@ -275,9 +291,15 @@ Both prepare task methods and layer methods can request information and canvases
         ):
             pass
 
-Parameters do not have to be requested in any specific order.
+.. note::
 
-Please note that layer methods do not need to return a/the canvas object. If the canvas object is not returned, ``bewegung`` will assume that the user has drawn onto the canvas object that was passed into the layer method. ``bewegung`` retains a reference to this canvas object internally. Only if no canvas was passed into the method and no canvas was returned by the method, an exception will be raised.
+    Parameters do not have to be requested in any specific order.
+
+If the canvas object is not returned, ``bewegung`` will assume that the user has drawn onto the canvas object that was passed into the layer method. ``bewegung`` retains a reference to this canvas object internally. Only if no canvas was passed into the method and no canvas was returned by the method, an exception will be raised.
+
+.. note::
+
+    Layer methods do not (always) need to return a/the canvas object.
 
 Working with Time
 -----------------
@@ -328,7 +350,11 @@ For easily working with "accelerated" or "slowed down" time, i.e. time-lapse or 
 Convenience Functionality
 -------------------------
 
-``bewegung`` includes a lot of "convenience functionality" for common tasks around video production in the context of scientific visualizations. Most of this functionality is only little optimized for speed. It is therefore not meant as a substitute for professional libraries doing those exact things.
+``bewegung`` includes a lot of "convenience functionality" for common tasks around video production in the context of scientific visualizations.
+
+.. warning::
+
+    Most of this functionality is only little optimized for speed. It is therefore not meant as a substitute for professional libraries doing those exact things.
 
 Because many of ``bewegung``'s backends have their own interpretations of colors and color models, ``bewegung`` offers a unified ``Color`` class. Internally, it is based on RGBA (red, green, blue, alpha) integer values with 8 bits per channel, representing values from 0 to 255.
 
@@ -373,4 +399,6 @@ Simple vector algebra is also a rather common task, which is why ``bewegung`` of
     >>> m @ g2D
     <Vector2D x=3.535534e-01 y=-2.775558e-17 dtype=float>
 
-Besides simple vector algebra, a lot of ``bewegung``'s functions and methods expect geometric input using vector classes.
+.. note::
+
+    Besides simple vector algebra, a lot of ``bewegung``'s functions and methods expect geometric input using vector classes.
