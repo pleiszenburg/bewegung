@@ -111,6 +111,8 @@ The "empty" layer in the "Background" sequence receives a background color, a da
 
 The video frames are *rendered in parallel*. The ``processes`` parameter of the ``Video.render`` method defines the number of parallel rendering processes. It is set to the `number of logical cores`_ of the computer's CPU(s). ``bewegung`` evaluates every layer once per video frame and composes all layers to an image - the actual video frame. Because of the parallel nature of ``bewegung``, the *generation of frames may occur out-of-order*. However, the video frames are always forwarded to the video encoder in the right order.
 
+Videos can be encoded with different encoders. By default, ``bewegung`` encodes to ``H.264``. In the above example, a gif-encoder is used instead - producing an animated gif-file.
+
 .. _number of logical cores: https://docs.python.org/3/library/multiprocessing.html#multiprocessing.cpu_count
 
 Prepare Tasks
