@@ -183,6 +183,7 @@ Similar to ``PIL.Image.new``, the function call ``v.canvas(backend = 'pillow')``
 - ``color``, a background color. Uses ``Pillow``'s default, black.
 - ``width``, mapped to ``size`` if provided together with ``height``.
 - ``height``, mapped to ``size`` if provided together with ``width``.
+- ``background_color``, mapped to ``color``. Accepts ``bewegung.Color`` objects.
 
 Backend: ``datashader``
 -----------------------

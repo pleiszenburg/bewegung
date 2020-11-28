@@ -70,7 +70,8 @@ class Backend(BackendBase):
         if 'background_color' in kwargs.keys() and 'facecolor' in kwargs.keys():
             kwargs.pop('background_color')
         if 'background_color' in kwargs.keys():
-            assert isinstance(kwargs['background_color'], ColorABC)
+            if not isinstance(kwargs['background_color'], ColorABC):
+                raise TypeError('color expected')
             kwargs['facecolor'] = f'#{kwargs.pop("background_color").as_hex():s}'
         if 'facecolor' not in kwargs.keys():
             kwargs['facecolor'] = '#FFFFFF00'

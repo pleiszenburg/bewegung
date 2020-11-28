@@ -33,7 +33,7 @@ from typing import Callable
 from PIL.Image import Image, new
 
 from ._base import BackendBase
-from ..abc import VideoABC
+from ..abc import ColorABC, VideoABC
 from ..typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -49,6 +49,7 @@ class Backend(BackendBase):
 
         if 'mode' not in kwargs.keys():
             kwargs['mode'] = 'RGBA'
+
         if 'size' in kwargs.keys() and 'width' in kwargs.keys():
             kwargs.pop('width')
         if 'size' in kwargs.keys() and 'height' in kwargs.keys():
@@ -59,6 +60,13 @@ class Backend(BackendBase):
             if 'width' not in kwargs.keys() and 'height' not in kwargs.keys():
                 raise ValueError('width or height missing')
             kwargs['size'] = (kwargs.pop('width'), kwargs.pop('height'))
+
+        if 'color' in kwargs.keys() and 'background_color' in kwargs.keys():
+            kwargs.pop('background_color')
+        if 'background_color' in kwargs.keys():
+            if not isinstance(kwargs['background_color'], ColorABC):
+                raise TypeError('color expected')
+            kwargs['color'] = kwargs.pop("background_color").as_rgba_int()
 
         return lambda: new(**kwargs)
 
