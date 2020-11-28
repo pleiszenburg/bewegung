@@ -122,7 +122,7 @@ class BackendBase(BackendABC):
         """
         Internal method: Checks whether or not a certain object is an allowed return type within the backend
 
-        Must be reimplemented!
+        Can be reimplemented.
 
         Args:
             obj : The objects which is supposed to be checked
