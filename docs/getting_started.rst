@@ -213,15 +213,17 @@ One of ``bewegung``'s key features is its ability to work with multiple drawing 
 .. code:: python
 
     from multiprocessing import cpu_count
-    from bewegung import Video, Color
+    from math import sin, pi
+    from bewegung import Video, Color, FFmpegGifEncoder
 
-    v = Video(width = 1920, height = 1080, seconds = 10.0)
+    v = Video(width = 480, height = 270, seconds = 2.0, fps = 30)
 
     @v.sequence()
     class SomeSequence:
 
         def __init__(self):
-            self._x, self._y = [], []
+            self._x = [x * 2 * pi / len(v) for x in range(len(v))]
+            self._y = [sin(x) for x in self._x]
 
         @v.layer(
             canvas = v.canvas(background_color = Color(200, 200, 200)),
@@ -232,20 +234,28 @@ One of ``bewegung``'s key features is its ability to work with multiple drawing 
         @v.layer(
             canvas = v.canvas(
                 backend = 'matplotlib', # configure layer to use matplotlib
-                tight_layout = True, # pass parameters to new matplotlib figures
+                dpi = 150, # pass parameters to new matplotlib figures
             ),
         )
-        def growing_parabola(self,
+        def growing_sinwave(self,
             time,
             canvas, # this is now actually a matplotlib figure
         ):
-            self._x.append(time.index)
-            self._y.append(time.index ** 2)
             ax = canvas.subplots()
-            ax.plot(self._x, self._y)
+            ax.set_xlim(0, 2 * pi)
+            ax.set_ylim(-1, 1)
+            ax.plot(self._x[:time.index+1], self._y[:time.index+1])
             return canvas
 
-    v.render(video_fn = 'video.mp4', processes = cpu_count())
+    v.render(
+        video_fn = 'video.gif',
+        processes = cpu_count(),
+        encoder = FFmpegGifEncoder(),
+    )
+
+.. image:: _static/backend_mixed.gif
+  :width: 480
+  :alt: Mixed backends output
 
 The ``Video.canvas`` method allows to specify and configure backends once per layer. Most of its parameters are passed on to the backend library unmodified. If required, ``bewegung`` fills certain parameters with reasonable defaults or fixes inconsistencies that may be problematic in the context of generating videos. For details, see :ref:`chapter on drawing <drawing>`.
 
