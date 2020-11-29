@@ -20,7 +20,13 @@ The ``Video.canvas`` method is typically used to configure a layer. It returns a
     canvas_a = canvas_factory() # produce a new canvas
     canvas_b = canvas_factory() # produce yet another new canvas
 
-In the context of a layer's configuration, the use of ``Video.canvas`` looks as follows. Note that ``DrawingBoard`` is in fact the default backend, so it usually does not have to be explicitly selected. A new, pre-configured canvas of the requested type is fed into the layer method for every individual video frame.
+In the context of a layer's configuration, the use of ``Video.canvas`` looks as follows.
+
+.. note::
+
+    ``DrawingBoard`` is the default backend, so it usually does not have to be explicitly selected.
+
+A new, pre-configured canvas of the requested type is fed into the layer method for every individual video frame.
 
 .. code:: python
 
@@ -35,7 +41,11 @@ In the context of a layer's configuration, the use of ``Video.canvas`` looks as 
         def bar(self, canvas): # a new canvas is generated and passed once per frame
             return canvas
 
-Parameters of the ``Video.canvas`` method other than ``backend``, i.e. the name of the selected backend, are usually forwarded to the underlying library. However, the various backends of ``bewegung`` may fill certain parameters with reasonable defaults or fix inconsistencies that can be problematic in the context of generating videos. See chapters on individual backends below.
+Parameters of the ``Video.canvas`` method other than ``backend``, i.e. the name of the selected backend, are usually forwarded to the underlying library.
+
+.. warning::
+
+    The various backends of ``bewegung`` may fill certain parameters of their underlying libraries with reasonable defaults or fix inconsistencies that can be problematic in the context of generating videos. See chapters on individual backends below.
 
 Inventory of ``backends``
 -------------------------
@@ -55,7 +65,7 @@ Backends are "lazy" objects. They only import the underlying library if actually
 Backend: ``DrawingBoard``
 -------------------------
 
-The ``DrawingBoard`` backend provides relatively easy facilities for drawing lines, circles, other geometric primitives, text and SVGs. It is not meant for complex drawings or performance. A detailed :ref:`description of its API <drawingboardapi>` is provided below. ``DrawingBoard`` is essentially a wrapper around ``pycairo``. Besides, ``bewegung`` also offers an explicit :ref:`cairo backend <backendcairo>`. If no backend is specified, layers will typically fall back to ``DrawingBoard``. A simple example using ``DrawingBoard`` looks as follows:
+The ``DrawingBoard`` backend provides relatively easy facilities for drawing lines, circles, other geometric primitives, text and SVGs. It is not meant for complex drawings or performance. A detailed :ref:`description of its API <drawingboardapi>` is provided below. ``DrawingBoard`` is essentially a wrapper around ``cairo``, ``Pango`` and ``rsvg``. Besides, ``bewegung`` also offers an explicit :ref:`cairo backend <backendcairo>`. If no backend is specified, layers will typically fall back to ``DrawingBoard``. A simple example using ``DrawingBoard`` looks as follows:
 
 .. code:: python
 
@@ -243,7 +253,11 @@ Similar to ``datashader.Canvas``, the function call ``v.canvas(backend = 'datash
 - ``width``, mapped to ``plot_width``
 - ``height``, mapped to ``plot_height``
 
-Layer methods are expected to return ``datashader.transfer_functions.Image`` objects or, alternatively, Pillow Image objects. If a ``datashader.transfer_functions.Image`` object is returned, ``bewegung`` will mirror the image along the x-axis, i.e. the y-axis will be flipped. This makes the output consistent with ``Pillow`` and ``pycairo``, were the y-axes is positive downwards. The flip can be avoided by manually converting the image to a Pillow Image object before returning, i.e. ``return img.as_pil()`` in the above example.
+Layer methods are expected to return ``datashader.transfer_functions.Image`` objects or, alternatively, Pillow Image objects.
+
+.. warning::
+
+    If a ``datashader.transfer_functions.Image`` object is returned, ``bewegung`` will mirror the image along the x-axis, i.e. the y-axis will be flipped. This makes the output consistent with ``Pillow`` and ``pycairo``, were the y-axes is positive downwards. The flip can be avoided by manually converting the image to a Pillow Image object before returning, i.e. ``return img.as_pil()`` in the above example.
 
 Backend: ``matplotlib``
 -----------------------
@@ -299,7 +313,11 @@ Similar to ``matplotlib.pyplot.figure``, the function call ``v.canvas(backend = 
 - ``background_color``, mapped to ``facecolor``. Accepts ``bewegung.Color`` objects.
 - ``managed``, a boolean, by default ``True``. This value indicates whether the the ``matplotlib.figure.Figure`` object is "managed" by ``bewegung``. If ``True``, ``bewegung`` will close, i.e. destroy, a figure that is returned by a layer method.
 
-Layer methods are expected to return ``matplotlib.figure.Figure`` objects. By default, ``bewegung`` will "manage" them for saving resources, i.e. the returned ``matplotlib.figure.Figure`` objects are automatically closed once returned.
+Layer methods are expected to return ``matplotlib.figure.Figure`` objects.
+
+.. warning::
+
+    By default, ``bewegung`` will "manage" ``matplotlib.figure.Figure`` objects for saving resources, i.e. the returned ``matplotlib.figure.Figure`` objects are automatically closed once returned. This can be avoided by setting ``managed`` to ``False``.
 
 .. _acceleratingmatplotlib:
 
@@ -311,7 +329,13 @@ Aside from its rich set of features, ``matplotlib`` is known for its mediocre pe
 .. _mplcairo: https://github.com/matplotlib/mplcairo
 .. _different backends for rendering: https://matplotlib.org/faq/usage_faq.html#what-is-a-backend
 
-In animation frameworks for ``matplotlib``, such as the "offical" `matplotlib.animation`_ sub-package, it is common practice to re-use and update existing figure and subplot / axes objects. This speeds up the rendering process considerably. This strategy is also supported by ``bewegung``. It should be noted that this approach requires some deeper understanding of ``matplotlib``'s facilities. The following code illustrates the approach.
+In animation frameworks for ``matplotlib``, such as the "official" `matplotlib.animation`_ sub-package, it is common practice to re-use and update existing figure and subplot / axes objects. This speeds up the rendering process considerably. This strategy is also supported by ``bewegung``.
+
+.. warning::
+
+    For optimal results, the suggested approach requires some deeper understanding of ``matplotlib``'s facilities.
+
+The following code illustrates the approach.
 
 .. _matplotlib.animation: https://matplotlib.org/api/animation_api.html
 
