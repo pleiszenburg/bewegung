@@ -379,7 +379,7 @@ The following example illustrates how to build a custom backend around the ``num
         backends,
     )
 
-    class NumbyBackend(BackendBase):
+    class NumpyBackend(BackendBase):
 
         def __init__(self):
 
@@ -419,7 +419,7 @@ The following example illustrates how to build a custom backend around the ``num
 
             return fromarray(obj, mode = 'RGBA') # convert to Pillow Image and return
 
-    backends['numpy'] = NumbyBackend() # register backend
+    backends['numpy'] = NumpyBackend() # register backend
 
     v = Video(width = 480, height = 270, seconds = 1.0)
 
