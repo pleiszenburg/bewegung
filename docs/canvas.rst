@@ -371,7 +371,7 @@ The following example illustrates how to build a custom backend around the ``num
 
 .. code:: python
 
-    from typing import Callable
+    from typing import Any, Callable
     from PIL.Image import Image, fromarray
     from bewegung import (
         Video,
@@ -408,7 +408,7 @@ The following example illustrates how to build a custom backend around the ``num
 
             self._type = np.ndarray # set type so it can be recognized
 
-        def _to_pil(self, obj: Image) -> Image:
+        def _to_pil(self, obj: Any) -> Image:
 
             if obj.dtype != self._np.uint8:
                 raise TypeError('unhandled datatype')

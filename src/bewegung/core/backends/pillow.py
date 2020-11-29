@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Callable
+from typing import Any, Callable
 
 from PIL.Image import Image, new
 
@@ -74,7 +74,7 @@ class Backend(BackendBase):
 
         self._type = Image
 
-    def _to_pil(self, obj: Image) -> Image:
+    def _to_pil(self, obj: Any) -> Image:
 
         if obj.mode != 'RGBA':
             raise TypeError('unhandled image mode')

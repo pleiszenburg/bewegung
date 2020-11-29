@@ -110,8 +110,6 @@ class Backend(BackendBase):
 
     def _to_pil(self, obj: Any) -> Image:
 
-        assert isinstance(obj, self._Figure)
-
         obj.canvas.draw()
 
         buffer = obj.canvas.renderer.buffer_rgba()

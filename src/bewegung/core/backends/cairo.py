@@ -76,7 +76,6 @@ class Backend(BackendBase):
 
     def _to_pil(self, obj: Any) -> Image:
 
-        assert isinstance(obj, self._type)
         if obj.get_format() != self._Format.ARGB32:
             raise TypeError('ImageSurface uses unhandled format')
 

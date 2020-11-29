@@ -90,8 +90,6 @@ class Backend(BackendBase):
 
     def _to_pil(self, obj: Any) -> Image:
 
-        assert isinstance(obj, self._DS_Image)
-
         cvs = obj.to_pil()
         if cvs.mode != 'RGBA':
             raise TypeError('unhandled image mode')

@@ -166,6 +166,8 @@ class BackendBase(BackendABC):
 
         if not self._loaded:
             self.load()
+        if not self._isinstance(obj):
+            raise TypeError('unkown / unhandled canvas type')
 
         return self._to_pil(obj)
 

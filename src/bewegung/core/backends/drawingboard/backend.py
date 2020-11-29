@@ -62,8 +62,6 @@ class Backend(BackendBase):
 
     def _to_pil(self, obj: Any) -> Image:
 
-        assert isinstance(obj, self._type)
-
         image = obj.as_pil()
 
         assert image.mode == 'RGBA'
