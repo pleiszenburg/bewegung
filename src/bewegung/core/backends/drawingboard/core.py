@@ -525,3 +525,19 @@ class DrawingBoard(DrawingBoardABC):
         """
 
         return self._surface
+
+    @property
+    def width(self) -> int:
+        """
+        Width of canvas
+        """
+
+        return self._width
+
+    @property
+    def height(self) -> int:
+        """
+        Height of canvas
+        """
+
+        return self._height
