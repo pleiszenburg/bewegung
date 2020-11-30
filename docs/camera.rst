@@ -2,3 +2,6 @@
 ==============================
 
 Foo bar.
+
+.. autoclass:: bewegung.Camera
+    :members:
