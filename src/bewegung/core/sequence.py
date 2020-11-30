@@ -40,10 +40,21 @@ from .typeguard import typechecked
 @typechecked
 class Sequence(SequenceABC):
     """
-    Mutable. Holds layers and prepare tasks. "Base class".
+    Holds layers and prepare tasks. "Base class" for user-defined sequences.
+    Actually, new classes are created by making this class inherit from user-defined sequence classes.
+    Do not instantiate this class - use the ``Video.sequence`` decorator instead.
+
+    Mutable.
+
+    Args:
+        start : Begin of sequence within video
+        stop : End of sequence within video
+        video : Video object
     """
 
     def __init__(self, start: TimeABC, stop: TimeABC, video: VideoABC):
+
+        # consistency checks are performed in Video.sequence
 
         self._start, self._stop = start, stop
         self._video, self._ctx = video, video.ctx
@@ -62,10 +73,17 @@ class Sequence(SequenceABC):
         return self._length.index
 
     def __contains__(self, time: TimeABC) -> bool:
+        """
+        Checks whether a ``Time`` is within the sequence.
+        """
 
         return self._start <= time and time < self._stop
 
     def reset(self):
+        """
+        Calls the constructor of the user-defined sequence class.
+        Used to reset the sequence for a (new) rendering run.
+        """
 
         super().__init__()
 
@@ -79,20 +97,32 @@ class Sequence(SequenceABC):
 
     @property
     def start(self) -> TimeABC:
+        """
+        Begin of sequence within video
+        """
 
         return self._start
 
     @property
     def stop(self) -> TimeABC:
+        """
+        End of sequence within video
+        """
 
         return self._stop
 
     @property
     def video(self) -> VideoABC:
+        """
+        "Parent" video object
+        """
 
         return self._video
 
     @property
     def ctx(self) -> Dict:
+        """
+        "Parent" context dictionary
+        """
 
         return self._ctx
