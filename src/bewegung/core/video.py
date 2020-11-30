@@ -200,6 +200,9 @@ class Video(VideoABC):
     def time(self, index: int) -> TimeABC:
         """
         Generates a new ``Time`` object from a given number of frames based on the video's frames per second.
+
+        Args:
+            index : number of frames
         """
 
         return self._length.time(index = index)
@@ -207,6 +210,9 @@ class Video(VideoABC):
     def time_from_seconds(self, seconds: Union[float, int]) -> TimeABC:
         """
         Generates a new ``Time`` object from a given time in seconds based on the video's frames per second.
+
+        Args:
+            seconds : time in seconds
         """
 
         return self._length.time_from_seconds(seconds = seconds)
