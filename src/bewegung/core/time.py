@@ -43,6 +43,10 @@ class Time(TimeABC):
     """
     This class represents time both as number of frames (the index) and time in seconds.
     For conversion, it has an internal frames per second state.
+    Operators for basic arithmetic such as add and substract are implemented.
+    Comparison operators are implemented.
+    Operations can only be performed on ``Time`` objects with equal frames per second.
+    If frames per second are unequal, an exception will be raised.
 
     Immutable.
 
@@ -52,17 +56,28 @@ class Time(TimeABC):
     """
 
     def __init__(self, fps: int = FPS_DEFAULT, index: int = 0):
+
         if fps <= 0:
-            raise ValueError()
+            raise ValueError('there must be at least one frame per second')
+
         self._fps, self._index = fps, index
 
     def __repr__(self) -> str:
+
         return f'<Time index={self._index:d} seconds={self.seconds:.03f}s fps={self._fps:d}>'
 
     def __int__(self) -> int:
+        """
+        If converted to an integer, the frame number (index) will be exposed.
+        """
+
         return self._index
 
     def __float__(self) -> float:
+        """
+        If converted to a floating point number, the time in seconds will be exposed.
+        """
+
         return self.seconds
 
     def __eq__(self, other: TimeABC) -> bool:
