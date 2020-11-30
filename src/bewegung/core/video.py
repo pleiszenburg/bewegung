@@ -202,7 +202,7 @@ class Video(VideoABC):
         Generates a new ``Time`` object from a given number of frames based on the video's frames per second.
 
         Args:
-            index : number of frames
+            index : Number of frames
         """
 
         return self._length.time(index = index)
@@ -212,7 +212,7 @@ class Video(VideoABC):
         Generates a new ``Time`` object from a given time in seconds based on the video's frames per second.
 
         Args:
-            seconds : time in seconds
+            seconds : Time in seconds
         """
 
         return self._length.time_from_seconds(seconds = seconds)
