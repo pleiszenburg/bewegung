@@ -10,6 +10,7 @@ Foo bar.
    time
    video
    sequences
+   pool
    prepare_tasks
    layer_tasks
    effects
