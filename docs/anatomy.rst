@@ -8,8 +8,8 @@ Foo bar.
    :caption: The Individual Pieces Explained
 
    time
+   video
    sequences
    prepare_tasks
    layer_tasks
    effects
-   video
