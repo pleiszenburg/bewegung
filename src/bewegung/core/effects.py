@@ -42,7 +42,12 @@ from .typeguard import typechecked
 @typechecked
 class EffectBase(EffectABC):
     """
-    Mutable. Base for all effect classes - not effect on its own.
+    Base for all effect classes - not an effect on its own. Derive new effect classes from this class.
+    Decorator for layers.
+
+    Mutable.
+
+    If the orginal cunstructor method is overridden, it method must be called from child class.
     """
 
     def __init__(self):
@@ -59,7 +64,11 @@ class EffectBase(EffectABC):
 
     def __call__(self, layer: LayerABC) -> LayerABC:
         """
-        Decorator function.
+        Decorator function, decorating :class:`bewegung.core.layer.Layer` objects (wrapping user-defined layer methods).
+        The effect is registered via :meth:`bewegung.core.layer.Layer.register_effect` and returned otherwise unchanged.
+
+        Args:
+            layer : Layer to which the effect is applied.
         """
 
         layer.register_effect(self)
@@ -72,7 +81,21 @@ class EffectBase(EffectABC):
         time: TimeABC,
         ) -> PIL_Image.Image:
         """
-        Internal interface for layer. Do not re-implement.
+        Internal interface for layer objects. Applies the effect to a Pillow Image object and returns the modified image.
+        The function automatically determines what arguments the ``apply`` method of an actual effect requests other than ``cvs``.
+        Possible options are:
+
+        - video: Parent video object
+        - sequence: Parent sequence object
+        - time: Time within parent video
+
+        Do not override!
+
+        Args:
+            cvs : Input Pillow Image object
+            video : Parent video object
+            sequence : Parent sequence object
+            time : Time within parent video
         """
 
         kwargs = {}
@@ -90,7 +113,12 @@ class EffectBase(EffectABC):
 
     def apply(self, cvs: PIL_Image.Image):
         """
-        Re-implement this for effects.
+        Applies effect to image.
+
+        Must be reimplemented!
+
+        Args:
+            cvs : Input Pillow Image object
         """
 
         raise NotImplementedError()
@@ -101,8 +129,17 @@ class EffectBase(EffectABC):
 
 @typechecked
 class FadeInEffect(EffectBase):
+    """
+    Fade-in effect. Decorator for layers.
+
+    Args:
+        blend_time : Duration of effect
+    """
 
     def __init__(self, blend_time: TimeABC):
+
+        if blend_time.index < 0:
+            raise ValueError('time must be positive or zero')
 
         super().__init__()
         self._blend_time = blend_time
@@ -121,8 +158,17 @@ class FadeInEffect(EffectBase):
 
 @typechecked
 class FadeOutEffect(EffectBase):
+    """
+    Fade-out effect. Decorator for layers.
+
+    Args:
+        blend_time : Duration of effect
+    """
 
     def __init__(self, blend_time: TimeABC):
+
+        if blend_time.index < 0:
+            raise ValueError('time must be positive or zero')
 
         super().__init__()
         self._blend_time = blend_time
