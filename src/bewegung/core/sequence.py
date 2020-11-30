@@ -49,7 +49,7 @@ class Sequence(SequenceABC):
     Args:
         start : Begin of sequence within video
         stop : End of sequence within video
-        video : Video object
+        video : Parent video object
     """
 
     def __init__(self, start: TimeABC, stop: TimeABC, video: VideoABC):
