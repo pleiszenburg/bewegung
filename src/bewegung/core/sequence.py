@@ -75,6 +75,9 @@ class Sequence(SequenceABC):
     def __contains__(self, time: TimeABC) -> bool:
         """
         Checks whether a ``Time`` is within the sequence.
+
+        Args:
+            time : Time within parent video
         """
 
         return self._start <= time and time < self._stop
