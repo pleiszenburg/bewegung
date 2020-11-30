@@ -41,7 +41,14 @@ from .typeguard import typechecked
 @typechecked
 class Time(TimeABC):
     """
+    This class represents time both as number of frames (the index) and time in seconds.
+    For conversion, it has an internal frames per second state.
+
     Immutable.
+
+    Args:
+        fps : Frames per second
+        index : Number of frames
     """
 
     def __init__(self, fps: int = FPS_DEFAULT, index: int = 0):
@@ -96,32 +103,73 @@ class Time(TimeABC):
 
     @property
     def fps(self) -> int:
+        """
+        Frames per second
+        """
+
         return self._fps
 
     @property
     def index(self) -> int:
+        """
+        Time as number of frames
+        """
+
         return self._index
 
     @property
     def seconds(self) -> float:
+        """
+        Time in seconds
+        """
+
         return self._index / self._fps # float
 
     def time(self, index: int) -> TimeABC:
+        """
+        Generates a new ``Time`` object from a given number of frames based on the time's frames per second.
+
+        Args:
+            index : Number of frames
+        """
 
         return type(self)(fps = self._fps, index = index)
 
     def time_from_seconds(self, seconds: Union[float, int]) -> TimeABC:
+        """
+        Generates a new ``Time`` object from a given time in seconds based on the time's frames per second.
+
+        Args:
+            seconds : Time in seconds
+        """
 
         return type(self).from_seconds(fps = self._fps, seconds = seconds)
 
     @classmethod
     def from_seconds(cls, fps: int = FPS_DEFAULT, seconds: Union[float, int] = 1.0) -> TimeABC:
+        """
+        Constructs a new ``Time`` object from frames per second and seconds.
+
+        Args:
+            fps : Frames per second
+            seconds : Time in seconds
+        """
+
         if isinstance(seconds, int):
             seconds = float(seconds)
+
         return cls(fps = fps, index = round(seconds * fps))
 
     @classmethod
     def range(cls, start: TimeABC, stop: TimeABC) -> Generator[TimeABC, None, None]:
+        """
+        Generator function, similar to Python's range. Generates Time objects instead, frame by frame.
+
+        Args:
+            start : Start time of range. ``start.fps`` must be equal to ``stop.fps``.
+            stop : Stop time of range (not included). ``start.fps`` must be equal to ``stop.fps``.
+        """
+
         if start.fps != stop.fps:
             raise ValueError()
         if start.index >= stop.index:
