@@ -10,13 +10,6 @@ Foo bar.
 
 :meth:`bewegung.Video.sequence`
 
-..
-
-    .. autoclass:: bewegung.Video
-        :members: sequence
-        :noindex:
-
-
 The ``Sequence`` API
 --------------------
 
