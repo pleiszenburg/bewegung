@@ -98,7 +98,7 @@ class TimeScale(TimeScaleABC):
         Frames per second
         """
 
-        return self._start._fps
+        return self._start.fps
 
     @property
     def start(self) -> TimeABC:
