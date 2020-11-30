@@ -45,7 +45,17 @@ from .vector import Vector2D
 @typechecked
 class Layer(LayerABC):
     """
-    Mutable. Callable Layer Function/Method Wrapper, handling effects
+    Callable layer method wrapper (decorator), managing rendering and application of effects.
+    Do not instantiate this class or derive from it - use the :meth:`bewegung.Video.layer` decorator instead!
+
+    Mutable.
+
+    Args:
+        method : Wrapped layer method from a user-defined sequence class
+        zindex : A number, managed by an index pool, representing the relative position within a stack of ``layer`` tasks.
+        video : Parent video object
+        canvas : A function pointer, generating a new canvas once per frame for the ``layer`` task.
+        offset : The layer's offset relative to the top-left corner of the video. The y-axis is downwards positive.
     """
 
     def __init__(self,
@@ -55,6 +65,8 @@ class Layer(LayerABC):
         canvas: Union[Callable, None] = None,
         offset: Union[Vector2DABC, None] = None,
     ):
+
+        # consistency checks are performed in Video.layer
 
         if offset is None:
             offset = Vector2D(0, 0)
@@ -75,6 +87,24 @@ class Layer(LayerABC):
         return f'<Layer name={self._method.__name__:s} zindex={self._zindex_tag:d}>'
 
     def __call__(self, sequence: SequenceABC, time: TimeABC) -> PIL_Image.Image:
+        """
+        Wraps layer method from a user-defined sequence class.
+        This method determines what parameters the user-defined layer method requested.
+        Possible options are:
+
+        - ``time``: The absolute time within the parent video
+        - ``reltime``: The relative time within the parent sequence
+        - ``canvas``: An empty canvas
+
+        Subsequently, the user-defined layer method is called with the requested parameters.
+        It then converts the returned canvas to a Pillow Image object
+        by making the currently loaded backends recognize the returned canvas type.
+        Finally, effects are applied and the Image object is returned.
+
+        Args:
+            sequence : Parent sequence
+            time : Time within video
+        """
 
         kwargs = {}
         cvs_start = None
@@ -111,10 +141,8 @@ class Layer(LayerABC):
         return cvs
 
     def __get__(self, obj, objtype = None):
-        """
-        Simulate func_descr_get() in Objects/funcobject.c
-        https://stackoverflow.com/q/26226604/1672565
-        """
+        # Simulate ``func_descr_get()`` in ``Objects/funcobject.c``, see `stackoverflow`_.
+        # .. _stackoverflow: https://stackoverflow.com/q/26226604/1672565
 
         if obj is None:
             return self
@@ -122,15 +150,28 @@ class Layer(LayerABC):
         return MethodType(self, obj)
 
     @property
-    def zindex_tag(self):
+    def zindex_tag(self) -> int:
+        """
+        z-index of layer
+        """
 
         return self._zindex_tag
 
     def register_effect(self, effect: EffectABC):
+        """
+        Interface used by effects decorators to register themselves. See :meth:`bewegung.EffectBase.__call__`.
+        """
 
         self._effects.append(effect)
 
     def _to_pil(self, obj: Any) -> PIL_Image.Image:
+        """
+        Detects the datatype of the canvas returned by the user-defined layer method and tries to convert it to a Pillow Image.
+        Raises a type error if none of the currently loaded backends recognizes the canvas type.
+
+        Args:
+            obj : A canvas object
+        """
 
         for backend in backends.values():
             if backend.isinstance(obj, hard = False):
