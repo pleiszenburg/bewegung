@@ -46,7 +46,7 @@ from .typeguard import typechecked
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-class BaseEncoder(EncoderABC):
+class EncoderBase(EncoderABC):
     """
     Mutable. Context manager. Wraps video envoders.
     """
@@ -153,7 +153,7 @@ class BaseEncoder(EncoderABC):
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-class FFmpegH264Encoder(BaseEncoder):
+class FFmpegH264Encoder(EncoderBase):
     """
     Mutable. Context manager. Wraps FFmpeg with H.264.
 
@@ -243,7 +243,7 @@ class FFmpegH264Encoder(BaseEncoder):
         self._proc = None
 
 @typechecked
-class FFmpegGifEncoder(BaseEncoder):
+class FFmpegGifEncoder(EncoderBase):
     """
     Mutable. Context manager. Wraps FFmpeg with gif.
 

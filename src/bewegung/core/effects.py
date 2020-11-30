@@ -40,7 +40,7 @@ from .typeguard import typechecked
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-class BaseEffect(EffectABC):
+class EffectBase(EffectABC):
     """
     Mutable. Base for all effect classes - not effect on its own.
     """
@@ -100,7 +100,7 @@ class BaseEffect(EffectABC):
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-class FadeInEffect(BaseEffect):
+class FadeInEffect(EffectBase):
 
     def __init__(self, blend_time: TimeABC):
 
@@ -120,7 +120,7 @@ class FadeInEffect(BaseEffect):
         return PIL_Image.merge('RGBA', (r, g, b, a))
 
 @typechecked
-class FadeOutEffect(BaseEffect):
+class FadeOutEffect(EffectBase):
 
     def __init__(self, blend_time: TimeABC):
 
