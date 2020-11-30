@@ -1,9 +1,7 @@
-Defining Videos
-===============
+Compositing: Anatomy of a Video
+===============================
 
-Anatomy of a Videos ...
-
-Foo bar
+Foo bar.
 
 .. toctree::
    :maxdepth: 2
@@ -14,4 +12,4 @@ Foo bar
    prepare_tasks
    layer_tasks
    effects
-   video_class
+   video

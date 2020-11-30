@@ -13,7 +13,7 @@ User's Guide
    getting_started
    gallery
    canvas
-   video
+   anatomy
    algebra
    debug
 
