@@ -1,5 +1,5 @@
-The ``Video`` Class
-===================
+The ``Video`` API
+=================
 
 Foo bar.
 
