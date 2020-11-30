@@ -15,3 +15,4 @@ Foo bar.
 
 .. autoclass:: bewegung.core.layer.Layer
     :members:
+    :private-members:
