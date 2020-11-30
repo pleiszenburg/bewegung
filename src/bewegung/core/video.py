@@ -199,7 +199,7 @@ class Video(VideoABC):
 
     def time(self, index: int) -> TimeABC:
         """
-        Generates a new ``Time`` object from a given number of frames based on the video's frames per second.
+        Generates a new :class:`bewegung.Time` object from a given number of frames based on the video's frames per second.
 
         Args:
             index : Number of frames
@@ -209,7 +209,7 @@ class Video(VideoABC):
 
     def time_from_seconds(self, seconds: Union[float, int]) -> TimeABC:
         """
-        Generates a new ``Time`` object from a given time in seconds based on the video's frames per second.
+        Generates a new :class:`bewegung.Time` object from a given time in seconds based on the video's frames per second.
 
         Args:
             seconds : Time in seconds
@@ -265,7 +265,8 @@ class Video(VideoABC):
         length: Union[Time, None] = None,
     ) -> Callable:
         """
-        A **decorator** for decorating ``sequence`` classes.
+        A **decorator** for decorating user-defined ``sequence`` classes.
+        New classes are created by making :class:`bewegung.core.sequence.Sequence` inherit from the user-defined sequence classes.
 
         Args:
             start : Time of start of sequence within the video.
@@ -375,6 +376,7 @@ class Video(VideoABC):
     ) -> Callable:
         """
         A **decorator** for decorating ``layer`` methods (tasks) within ``sequence`` classes.
+        Methods are wrapped with callable :class:`bewegung.core.layer.Layer` objects.
 
         Args:
             zindex : A number, managed by an index pool, representing the relative position within a stack of ``layer`` tasks. If not provided, the new layer will be created on top.
