@@ -42,7 +42,7 @@ class Sequence(SequenceABC):
     """
     Holds layers and prepare tasks. "Base class" for user-defined sequences.
     Actually, new classes are created by making this class inherit from user-defined sequence classes.
-    Do not instantiate this class - use the ``Video.sequence`` decorator instead.
+    Do not instantiate this class or derive from it - use the :meth:`bewegung.Video.sequence` decorator instead!
 
     Mutable.
 
