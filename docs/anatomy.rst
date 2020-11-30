@@ -13,3 +13,4 @@ Foo bar.
    prepare_tasks
    layer_tasks
    effects
+   encoders
