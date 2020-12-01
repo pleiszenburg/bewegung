@@ -63,6 +63,21 @@ from .vector import (
 
 @typechecked
 class Camera(CameraABC):
+    """
+    A virtual camera for 3D to 2D projections.
+    3D vectors are projected onto a 2D plane and returned combined with the absolute distance to the camera in 3D space.
+    Vector arrays can be handled if ``numpy`` and ``numba`` are present.
+
+    Mutable.
+
+    Args:
+        position : Position in 3D space
+        direction : Direction of view in 3D space
+        roll : Roll angle in radians
+        planeOffset : Center offset of 2D plane
+        planeFactor : Scaling factor for the 2D plane
+        planeYFlip : Allows to invert y-axes of 2D plane, i.e. switch to positive downwards
+    """
 
     def __init__(self,
         position: Union[Vector3D, None] = None,
@@ -95,6 +110,7 @@ class Camera(CameraABC):
         self._update_plane()
 
     def __repr__(self) -> str:
+
         return (
             '<Camera '
             f'id={id(self):x} '
@@ -141,9 +157,18 @@ class Camera(CameraABC):
 
     @property
     def direction(self) -> Vector3D:
+        """
+        Direction of view in 3D space
+        """
+
         return self._direction
+
     @direction.setter
     def direction(self, value: Vector3D):
+        """
+        Direction of view in 3D space
+        """
+
         self._direction.update_from_vector(value)
         if not math.isclose(self._direction.mag, 1.0):
             self._direction.mul(1.0 / self._direction.mag)
@@ -151,41 +176,93 @@ class Camera(CameraABC):
 
     @property
     def roll(self) -> float:
+        """
+        Roll angle in radians
+        """
+
         return self._roll
+
     @roll.setter
     def roll(self, value: float):
+        """
+        Roll angle in radians
+        """
+
         self._roll = value
         self._update_plane()
 
     @property
     def position(self) -> Vector3D:
+        """
+        Position in 3D space
+        """
+
         return self._position
+
     @position.setter
     def position(self, value: Vector3D):
+        """
+        Position in 3D space
+        """
+
         self._position.update_from_vector(value)
 
     @property
     def planeFactor(self) -> float:
+        """
+        Scaling factor for the 2D plane
+        """
+
         return self._planeFactor
+
     @planeFactor.setter
     def planeFactor(self, value: float):
+        """
+        Scaling factor for the 2D plane
+        """
+
         self._planeFactor = value
 
     @property
     def planeOffset(self) -> Vector2D:
+        """
+        Center offset of 2D plane
+        """
+
         return self._planeOffset
+
     @planeOffset.setter
     def planeOffset(self, value: Vector2D):
+        """
+        Center offset of 2D plane
+        """
+
         self._planeOffset.update_from_vector(value)
 
     @property
     def planeYFlip(self) -> bool:
+        """
+        Allows to invert y-axes of 2D plane, i.e. switch to positive downwards
+        """
+
         return self._planeYFlip
+
     @planeYFlip.setter
     def planeYFlip(self, value: bool):
+        """
+        Allows to invert y-axes of 2D plane, i.e. switch to positive downwards
+        """
+
         self._planeYFlip = value
 
     def get_point(self, point3D: Vector3D) -> Vector2Ddist:
+        """
+        Projects a 3D vector onto a 2D plane.
+        Returns a 2D vector combined with the absolute distance to the camera in 3D space.
+
+        Args:
+            point3D : point in 3D space
+        """
 
         ma = [
             [self._planeX.x, self._planeY.x, -(point3D.x - self._position.x), -self._direction.x],
@@ -237,38 +314,45 @@ class Camera(CameraABC):
             dist = (point3D - self._position).mag,
             )
 
-    def get_points(self, points_3d: VectorArray3D) -> VectorArray2Ddist:
+    def get_points(self, points3d: VectorArray3D) -> VectorArray2Ddist:
+        """
+        Projects a 3D vector array onto a 2D plane.
+        Returns a 2D vector array combined with the absolute distances to the camera in 3D space.
+
+        Args:
+            points3d : points in 3D space
+        """
 
         if np is None:
             raise NotImplementedError('numpy is not available')
 
         position = self._position.as_ndarray() # type
         planeOffset = self._planeOffset.as_ndarray() # type
-        points_3d = points_3d.as_ndarray() # type
+        points3d = points3d.as_ndarray() # type
         planeFactor = np.float32(self._planeFactor) # type
 
         ma = np.array([
             [self._planeX.x, self._planeY.x, 0.0, -self._direction.x],
             [self._planeX.y, self._planeY.y, 0.0, -self._direction.y],
             [self._planeX.z, self._planeY.z, 0.0, -self._direction.z],
-            ], dtype = points_3d.dtype) # type / matrix
+            ], dtype = points3d.dtype) # type / matrix
         empty = np.array([
             np.nan,
             np.nan,
             np.nan,
-            ], dtype = points_3d.dtype) # NaN placeholder
-        points_2d = np.zeros(points_3d.shape, dtype = points_3d.dtype) # type / target
+            ], dtype = points3d.dtype) # NaN placeholder
+        points2d = np.zeros(points3d.shape, dtype = points3d.dtype) # type / target
 
         self._get_points_jit(
-            points_3d, points_2d,
+            points3d, points2d,
             ma, position, empty, planeOffset,
             planeFactor, self._planeYFlip,
             )
 
         return VectorArray2Ddist(
-            x = points_2d[:, 0],
-            y = points_2d[:, 1],
-            dist = points_2d[:, 2],
+            x = points2d[:, 0],
+            y = points2d[:, 1],
+            dist = points2d[:, 2],
             )
 
     @staticmethod
