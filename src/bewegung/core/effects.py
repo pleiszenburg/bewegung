@@ -88,6 +88,7 @@ class EffectBase(EffectABC):
         - video: Parent video object
         - sequence: Parent sequence object
         - time: Time within parent video
+        - reltime: Relative time within parent sequence
 
         Do not override!
 
@@ -106,6 +107,8 @@ class EffectBase(EffectABC):
                 kwargs['sequence'] = sequence
             elif arg == 'time':
                 kwargs['time'] = time
+            elif arg == 'reltime':
+                kwargs['reltime'] = time - sequence.start
             else:
                 raise ValueError('unknown argument')
 
