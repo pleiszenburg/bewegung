@@ -3,15 +3,15 @@
 Layers / Layer Tasks
 ====================
 
-The ``Video.layer`` API
---------------------------
+The ``Video.layer`` Decorator
+-----------------------------
 
 Foo bar.
 
 :meth:`bewegung.Video.layer`
 
-The ``Layer`` API
---------------------
+The ``Layer`` Class
+-------------------
 
 Foo bar.
 

@@ -5,8 +5,8 @@ Videos
 
 Foo bar.
 
-The ``Video`` API
------------------
+The ``Video`` Class
+-------------------
 
 Foo bar.
 

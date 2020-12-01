@@ -17,8 +17,8 @@ Defining Custom Encoders
 
 Foo bar.
 
-The ``EncoderBase`` API
-~~~~~~~~~~~~~~~~~~~~~~~
+The ``EncoderBase`` Class
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: bewegung.EncoderBase
     :members:

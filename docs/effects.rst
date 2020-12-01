@@ -17,8 +17,8 @@ Defining Custom Effects
 
 Foo bar.
 
-The ``EffectBase`` API
-~~~~~~~~~~~~~~~~~~~~~~
+The ``EffectBase`` Class
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: bewegung.EffectBase
     :members:

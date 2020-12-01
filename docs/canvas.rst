@@ -98,8 +98,8 @@ The function call ``v.canvas(backend = 'drawingboard')`` accepts additional keyw
 
 .. _drawingboardapi:
 
-The ``DrawingBoard`` API
-~~~~~~~~~~~~~~~~~~~~~~~~
+The ``DrawingBoard`` Class
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``DrawingBoard`` class makes use of :ref:`vectors <vectors>` and :ref:`colors <colors>`.
 

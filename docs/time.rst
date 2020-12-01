@@ -5,16 +5,16 @@ Time
 
 Foo bar.
 
-The ``Time`` API
-----------------
+The ``Time`` Class
+------------------
 
 Foo bar.
 
 .. autoclass:: bewegung.Time
     :members:
 
-The ``TimeScale`` API
----------------------
+The ``TimeScale`` Class
+-----------------------
 
 Foo bar.
 

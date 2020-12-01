@@ -5,15 +5,15 @@ Sequences
 
 Foo bar.
 
-The ``Video.sequence`` API
---------------------------
+The ``Video.sequence`` Decorator
+--------------------------------
 
 Foo bar.
 
 :meth:`bewegung.Video.sequence`
 
-The ``Sequence`` API
---------------------
+The ``Sequence`` Class
+----------------------
 
 Foo bar.
 

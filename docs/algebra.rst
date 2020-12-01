@@ -3,7 +3,7 @@ Linear Algebra
 
 .. toctree::
    :maxdepth: 2
-   :caption: Table of Contents
+   :caption: The API in detail
 
    vectors
    camera
