@@ -133,7 +133,7 @@ class FadeInEffect(EffectBase):
     Fade-in effect. Decorator for layers.
 
     Args:
-        blend_time : Duration of effect
+        blend_time : Duration of effect relative to the beginning of the parent sequence
     """
 
     def __init__(self, blend_time: TimeABC):
@@ -162,7 +162,7 @@ class FadeOutEffect(EffectBase):
     Fade-out effect. Decorator for layers.
 
     Args:
-        blend_time : Duration of effect
+        blend_time : Duration of effect relative to the beginning of the parent sequence
     """
 
     def __init__(self, blend_time: TimeABC):
