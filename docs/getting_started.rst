@@ -263,6 +263,8 @@ The ``Video.canvas`` method allows to specify and configure backends once per la
 
     A backend can, if necessary, alter default values of the backend's underlying library.
 
+.. _requesting_parameters:
+
 Requesting Parameters in Layers and Prepare Tasks
 -------------------------------------------------
 
