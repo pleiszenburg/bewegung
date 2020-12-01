@@ -67,6 +67,8 @@ class EffectBase(EffectABC):
         Decorator function, decorating :class:`bewegung.core.layer.Layer` objects (wrapping user-defined layer methods).
         The effect is registered via :meth:`bewegung.core.layer.Layer.register_effect` and returned otherwise unchanged.
 
+        Do not override!
+
         Args:
             layer : Layer to which the effect is applied.
         """
