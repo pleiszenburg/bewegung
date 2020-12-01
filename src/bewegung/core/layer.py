@@ -160,6 +160,9 @@ class Layer(LayerABC):
     def register_effect(self, effect: EffectABC):
         """
         Interface used by effects decorators to register themselves. See :meth:`bewegung.EffectBase.__call__`.
+
+        Args:
+            effect : Configured effect object
         """
 
         self._effects.append(effect)
