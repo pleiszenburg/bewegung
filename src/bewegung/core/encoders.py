@@ -48,7 +48,16 @@ from .typeguard import typechecked
 @typechecked
 class EncoderBase(EncoderABC):
     """
-    Mutable. Context manager. Wraps video envoders.
+    Encoder classes wrap video envoder tools and libraries such as ``ffmpeg``.
+    Encoder objects are callable and return themselves when called. This mechanism is used to (re-) configure the encoder object.
+    Encoder objects also use Python's context manager protocol and expose ``BinaryIO`` objects, i.e. streams, as a context for actual encoding.
+    :meth:`bewegung.Video.render` will write rendered images as RGB bitmaps to this stream so the encoder can pick them up.
+    Encoder objects can either be "running" or "idling". They can also either be "configured" or "unconfigured".
+    In the latter case, they will not allow to encode a video.
+
+    Mutable.
+
+    If the orginal cunstructor method is overridden, it must be called from child class.
     """
 
     def __init__(self):
@@ -86,16 +95,32 @@ class EncoderBase(EncoderABC):
 
     @property
     def configured(self) -> bool:
+        """
+        Has the encoder been configured?
+
+        Do not override!
+        """
 
         return self._video_fn is not None
 
     @property
     def running(self) -> bool:
+        """
+        Is the encoder currently running?
+
+        Do not override!
+        """
 
         return self._stream is not None
 
     @property
     def stream(self) -> BinaryIO:
+        """
+        Exposes the input stream of the encoder.
+        If the encoder is not running, trying to access this attribute raises an exception.
+
+        Do not override!
+        """
 
         if not self.running:
             raise RuntimeError('encoder is not running')
@@ -104,12 +129,29 @@ class EncoderBase(EncoderABC):
 
     @property
     def video_fn(self) -> str:
+        """
+        Exposes the name/path of the target video file.
+        If the encoder is not configured, trying to access this attribute raises an exception.
+
+        Do not override!
+        """
+
+        if not self.configured:
+            raise RuntimeError('encoder is not configured')
 
         return self._video_fn
 
     @video_fn.setter
     def video_fn(self, value: str):
+        """
+        Exposes the name/path of the target video file.
+        If the encoder is not configured, trying to access this attribute raises an exception.
 
+        Do not override!
+        """
+
+        if not self.configured:
+            raise RuntimeError('encoder is not configured')
         if self.running:
             raise RuntimeError('encoder is currently running')
         if len(value) == 0:
@@ -118,6 +160,11 @@ class EncoderBase(EncoderABC):
         self._video_fn = value
 
     def __enter__(self) -> BinaryIO:
+        """
+        Context manager entry point. Returns the encoder's input stream.
+
+        Do not override!
+        """
 
         if not self.configured:
             raise RuntimeError('encoder has not been configured')
@@ -128,6 +175,11 @@ class EncoderBase(EncoderABC):
         return self._stream
 
     def _enter(self) -> BinaryIO:
+        """
+        Starts the encoder. Returns the encoder's input stream.
+
+        Must be reimplemented!
+        """
 
         raise NotImplementedError()
 
@@ -137,6 +189,11 @@ class EncoderBase(EncoderABC):
         exc_value: Union[Exception, None],
         traceback: Union[TracebackType, None],
     ):
+        """
+        Context manager exit point.
+
+        Do not override!
+        """
 
         if not self.running:
             raise RuntimeError('encoder is not running')
@@ -145,6 +202,11 @@ class EncoderBase(EncoderABC):
         self._exit()
 
     def _exit(self):
+        """
+        Stops the encoder.
+
+        Must be reimplemented!
+        """
 
         raise NotImplementedError()
 
