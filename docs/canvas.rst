@@ -62,6 +62,8 @@ All backends can be accessed via the ``backends`` dictionary, which represents t
 
 Backends are "lazy" objects. They only import the underlying library if actually used. For most intents and purposes, working with ``Video.canvas`` is sufficient. Further details about the common structure of backends are provided in the :ref:`sections on custom backends <custombackends>`.
 
+.. _drawingboard:
+
 Backend: ``DrawingBoard``
 -------------------------
 
@@ -199,6 +201,8 @@ Similar to ``PIL.Image.new``, the function call ``v.canvas(backend = 'pillow')``
 - ``width``, mapped to ``size`` if provided together with ``height``.
 - ``height``, mapped to ``size`` if provided together with ``width``.
 - ``background_color``, mapped to ``color``. Accepts ``bewegung.Color`` objects.
+
+.. _datashader:
 
 Backend: ``datashader``
 -----------------------
