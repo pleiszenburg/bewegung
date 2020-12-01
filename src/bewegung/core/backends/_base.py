@@ -46,7 +46,7 @@ class BackendBase(BackendABC):
 
     Backend objects are mutable.
 
-    If the orginal cunstructor method is overridden, it method must be called from child class.
+    If the orginal cunstructor method is overridden, it must be called from child class.
     """
 
     _name = None

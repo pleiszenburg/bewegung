@@ -47,7 +47,7 @@ class EffectBase(EffectABC):
 
     Mutable.
 
-    If the orginal cunstructor method is overridden, it method must be called from child class.
+    If the orginal cunstructor method is overridden, it must be called from child class.
     """
 
     def __init__(self):
