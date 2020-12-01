@@ -107,6 +107,10 @@ The ``DrawingBoard`` class makes use of :ref:`vectors <vectors>` and :ref:`color
     :members:
     :private-members:
 
+.. note::
+
+    The ``DrawingBoard`` class can, most efficiently, be accessed via ``bewegung.backends['drawingboard'].type``.
+
 .. _backendcairo:
 
 Backend: ``pycairo``
