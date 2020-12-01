@@ -1,3 +1,5 @@
+.. _layer_tasks:
+
 Layers / Layer Tasks
 ====================
 

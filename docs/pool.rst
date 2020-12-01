@@ -1,3 +1,5 @@
+.. _index_pool:
+
 Index Pools
 ===========
 
