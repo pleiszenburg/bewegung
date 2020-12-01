@@ -8,6 +8,4 @@ Foo bar.
 The ``Video.prepare`` Decorator
 -------------------------------
 
-Foo bar.
-
-:meth:`bewegung.Video.prepare`
+This method is used to decorate prepare task methods within user-defined :ref:`sequence <sequences>` classes. See :meth:`bewegung.Video.prepare` method for further details.
