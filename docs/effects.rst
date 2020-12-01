@@ -24,6 +24,10 @@ The ``EffectBase`` Class
     :members:
     :private-members:
 
+.. note::
+
+    Similar to prepare task methods and layer task methods, the ``apply`` method in classes derived from :class:`bewegung.EffectBase` can :ref:`request parameters on demand <requesting_parameters>`. See :meth:`bewegung.EffectBase.apply_` for details.
+
 A Minimal Effect based on ``opencv``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
