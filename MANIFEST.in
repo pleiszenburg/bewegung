@@ -1,0 +1,6 @@
+recursive-include docs/ *.py
+recursive-include docs/ *.rst
+recursive-include docs/_static/ *.png
+recursive-include docs/_static/ *.gif
+include docs/Makefile
+include docs/make.bat
