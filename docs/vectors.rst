@@ -3,8 +3,6 @@
 Vectors and Vector Arrays
 =========================
 
-Foo bar.
-
 Vector Classes
 --------------
 
