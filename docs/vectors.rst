@@ -23,6 +23,9 @@ Vector Array Classes
 .. autoclass:: bewegung.VectorArray2D
     :members:
 
+.. autoclass:: bewegung.VectorArray2Ddist
+    :members:
+
 .. autoclass:: bewegung.VectorArray3D
     :members:
 
