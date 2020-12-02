@@ -48,7 +48,7 @@ from .typeguard import typechecked
 @typechecked
 class EncoderBase(EncoderABC):
     """
-    Encoder classes wrap video envoder tools and libraries such as ``ffmpeg``.
+    Encoder classes wrap video encoding tools and libraries such as ``ffmpeg``.
     Encoder objects are callable and return themselves when called. This mechanism is used to (re-) configure the encoder object.
     Encoder objects also use Python's context manager protocol and expose ``BinaryIO`` objects, i.e. streams, as a context for actual encoding.
     :meth:`bewegung.Video.render` will write rendered images as RGB bitmaps to this stream so the encoder can pick them up.
@@ -57,7 +57,7 @@ class EncoderBase(EncoderABC):
 
     Mutable.
 
-    If the orginal cunstructor method is overridden, it must be called from child class.
+    If the orginal cunstructor method is overridden, it must be called from the child class.
     """
 
     def __init__(self):
