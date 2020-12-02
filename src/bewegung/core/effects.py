@@ -65,7 +65,7 @@ class EffectBase(EffectABC):
     def __call__(self, layer: LayerABC) -> LayerABC:
         """
         Decorator function, decorating :class:`bewegung.core.layer.Layer` objects (wrapping user-defined layer methods).
-        The effect is registered via :meth:`bewegung.core.layer.Layer.register_effect` and returned otherwise unchanged.
+        The effect is registered via :meth:`bewegung.core.layer.Layer.register_effect` and returns the otherwise unchanged layer object.
 
         Do not override!
 
