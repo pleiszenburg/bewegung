@@ -105,20 +105,20 @@ The output looks as follows:
   :width: 480
   :alt: Complex example output
 
-Compared to the initial minimal example, the above complex example contains two sequences with one layer each. The video, the layers and the sequences are a lot more configured. The video for instance is not defined based on its length in seconds. Instead, the number of frames is provided. Besides, the video is not using ``bewegung``'s default frame rate of 60 fps but 30 fps instead.
+Compared to the initial minimal example, the above complex example contains two :ref:`sequences <sequences>` with one :ref:`layer <layer_tasks>` each. The :ref:`video <video>`, the layers and the sequences are a lot more configured. The video for instance is not defined based on its length in seconds. Instead, the number of frames is provided. Besides, the video is not using ``bewegung``'s default frame rate of 60 fps but 30 fps instead.
 
-The "empty" layer in the "Background" sequence receives a background color, a dark gray tone. It is provided with an explicit z-index at the bottom of the stack of layers. The "SomeForeground" sequence begins 1 second into the video and ends one second before the end of the video. The "moving_red_ball" layer has a transparent background color so the "empty" layer from the "Background" sequence becomes visible. It is also provided with an explicit z-index - this time at the top of the stack of layers. In addition, the "moving_red_ball" layer is decorated with *video effects*, making it to fade in and out.
+The "empty" layer in the "Background" sequence receives a background :ref:`color <colors>`, a dark gray tone. It is provided with an explicit z-index at the bottom of the stack of layers. The "SomeForeground" sequence begins 1 second into the video and ends one second before the end of the video. The "moving_red_ball" layer has a transparent background color so the "empty" layer from the "Background" sequence becomes visible. It is also provided with an explicit z-index - this time at the top of the stack of layers. In addition, the "moving_red_ball" layer is decorated with *video effects*, making it to fade in and out.
 
-The video frames are *rendered in parallel*. The ``processes`` parameter of the ``Video.render`` method defines the number of parallel rendering processes. It is set to the `number of logical cores`_ of the computer's CPU(s). ``bewegung`` evaluates every layer once per video frame and composes all layers to an image - the actual video frame. Because of the parallel nature of ``bewegung``, the *generation of frames may occur out-of-order*. However, the video frames are always forwarded to the video encoder in the right order.
+The video frames are *rendered in parallel*. The ``processes`` parameter of the :meth:`bewegung.Video.render` method defines the number of parallel rendering processes. It is set to the `number of logical cores`_ of the computer's CPU(s). ``bewegung`` evaluates every layer once per video frame and composes all layers to an image - the actual video frame. Because of the parallel nature of ``bewegung``, the *generation of frames may occur out-of-order*. However, the video frames are always forwarded to the video encoder in the right order.
 
-Videos can be encoded with different encoders. By default, ``bewegung`` encodes to ``H.264``. In the above example, a gif-encoder is used instead - producing an animated gif-file.
+Videos can be encoded with different :ref:`encoders <encoders>`. By default, ``bewegung`` encodes to ``H.264``. In the above example, a gif-encoder is used instead - producing an animated gif-file.
 
 .. _number of logical cores: https://docs.python.org/3/library/multiprocessing.html#multiprocessing.cpu_count
 
 Prepare Tasks
 -------------
 
-In may be necessary to prepare or compute data prior to drawing onto a canvas. It may even be the case that multiple layers rely on the same data, which has to be prepared once per video frame. This is where *prepare tasks* become useful. They work very much like layers. There is a special decorator for indicating them. Prepare tasks can also be ordered in a system similar to the z-index of layers, the prepare-order (``preporder``).
+In may be necessary to prepare or compute data prior to drawing onto a canvas. It may even be the case that multiple layers rely on the same data, which has to be prepared once per video frame. This is where *prepare tasks* become useful. They work very much like layers. There is a special decorator for indicating them. :ref:`Prepare tasks <prepare_tasks>` can also be ordered in a system similar to the z-index of layers, the prepare-order (``preporder``).
 
 .. note::
 
@@ -193,22 +193,22 @@ For debugging and development, it can be very useful to be able to selectively r
         time = v.time_from_seconds(1.0), # frame at 1 second
         ) # returns a Pillow.Image object
 
-Instead of calling ``Video.render``, the video object can be manually *reset* by calling ``Video.reset``. A reset is usually taken care of by the video render method, but if individual frames are desired instead, it has to be called at least once before the first video frame is generated. Once this is done, frames can be selected based on their time and rendered with ``Video.render_frame``. This method can both directly store the frame into a file and return it as a ``Pillow.Image`` object, see `Pillow documentation`_.
+Instead of calling :meth:`bewegung.Video.render`, the video object can be manually *reset* by calling :meth:`bewegung.Video.reset`. A reset is usually taken care of by the video render method, but if individual frames are desired instead, it has to be called at least once before the first video frame is generated. Once this is done, frames can be selected based on their time and rendered with :meth:`bewegung.Video.render_frame`. This method can both directly store the frame into a file and return it as a ``Pillow.Image`` object, see `Pillow documentation`_.
 
 .. note::
 
-    Reset video objects (``Video.reset``) at least once before rendering individual frames (``Video.render_frame``)!
+    Reset video objects (:meth:`bewegung.Video.reset`) at least once before rendering individual frames (:meth:`bewegung.Video.render_frame`)!
 
 .. _Pillow documentation: https://pillow.readthedocs.io/en/stable/reference/Image.html#the-image-class
 
 Using & Mixing Backends
 -----------------------
 
-One of ``bewegung``'s key features is its ability to work with multiple drawing and plotting systems simultaneously. ``bewegung`` offers its own drawing system, ``DrawingBoard``, which is used both in the :ref:`minimal <minimalexample>` and in the :ref:`complex example <complexexample>` at the beginning of this chapter. It is based on ``pycairo``. ``pycairo`` can of cause also be used directly. In addition, ``bewegung`` directly integrates ``matplotlib``, ``datashader`` and ``Pillow``. The mentioned libraries are referred to as *backends*. A new, custom backend can easily be added. A backend is typically chosen once per layer, although it is feasible make this process even more flexible.
+One of ``bewegung``'s key features is its ability to work with multiple drawing and plotting systems simultaneously - the :ref:`backends <drawing>`. ``bewegung`` offers its own drawing system, :ref:`DrawingBoard <drawingboard>`, which is used both in the :ref:`minimal <minimalexample>` and in the :ref:`complex example <complexexample>` at the beginning of this chapter. It is based on ``pycairo``. ``pycairo`` can of cause also be used directly. In addition, ``bewegung`` directly integrates ``matplotlib``, ``datashader`` and ``Pillow``. The mentioned libraries are referred to as *backends*. A new, :ref:`custom backend <custombackends>` can easily be added. A backend is typically chosen once per layer, although it is feasible make this process even more flexible.
 
 .. note::
 
-    Backends are loaded (in Python-terms *imported*) on demand. If a backend is not required, the underlying library does not have to be present / installed.
+    :ref:`Backends <drawing>` are loaded (in Python-terms *imported*) on demand. If a backend is not required, the underlying library does not have to be present / installed.
 
 .. code:: python
 
@@ -257,7 +257,7 @@ One of ``bewegung``'s key features is its ability to work with multiple drawing 
   :width: 480
   :alt: Mixed backends output
 
-The ``Video.canvas`` method allows to specify and configure backends once per layer. Most of its parameters are passed on to the backend library unmodified. If required, ``bewegung`` fills certain parameters with reasonable defaults or fixes inconsistencies that may be problematic in the context of generating videos. For details, see :ref:`chapter on drawing <drawing>`.
+The :meth:`bewegung.Video.canvas` method allows to specify and configure backends once per layer. Most of its parameters are passed on to the backend library unmodified. If required, ``bewegung`` fills certain parameters with reasonable defaults or fixes inconsistencies that may be problematic in the context of generating videos. For details, see :ref:`chapter on drawing <drawing>`.
 
 .. note::
 
@@ -268,7 +268,7 @@ The ``Video.canvas`` method allows to specify and configure backends once per la
 Requesting Parameters in Layers and Prepare Tasks
 -------------------------------------------------
 
-Both prepare task methods and layer methods can request information and canvases based on their actual demand. ``bewegung`` first analyzes what a method requests. It then generates the requested objects and passes them on to the prepare task or layer method.
+Both :ref:`prepare task <prepare_tasks>` methods and :ref:`layer task <layer_tasks>` methods can request information and canvases based on their actual demand. ``bewegung`` first analyzes what a method requests. It then generates the requested objects and passes them on to the prepare task or layer method.
 
 .. code:: python
 
@@ -316,7 +316,7 @@ If the canvas object is not returned, ``bewegung`` will assume that the user has
 Working with Time
 -----------------
 
-Describing time within a videos is handled by special ``Time`` objects. They encapsulate two representations of time: An *index* representing a frame number and an actual *time in seconds*. The conversion between the two depends on the *frames per second* (*fps*). A lot of basic arithmetic is implemented for ``Time`` objects.
+Describing time within a videos is handled by special :class:`bewegung.Time` objects. They encapsulate two representations of time: An *index* representing a frame number and an actual *time in seconds*. The conversion between the two depends on the *frames per second* (*fps*). A lot of basic arithmetic is implemented for :class:`bewegung.Time` objects.
 
 .. code:: ipython
 
@@ -335,7 +335,7 @@ Describing time within a videos is handled by special ``Time`` objects. They enc
     >>> float(c)
     0.8333333333333334
 
-Because the need of taking care of the frames per second all the time can be annoying, every ``Time`` and ``Video`` object allows to generate new time objects based on its frames per second state.
+Because the need of taking care of the frames per second all the time can be annoying, every :class:`bewegung.Time` and :class:`bewegung.Video` object allows to generate new :class:`bewegung.Time` objects based on its frames per second state.
 
 .. code:: ipython
 
@@ -357,7 +357,7 @@ Because the need of taking care of the frames per second all the time can be ann
     >>> print(e)
     <Time index=175 seconds=7.000s fps=25>
 
-For easily working with "accelerated" or "slowed down" time, i.e. time-lapse or slow-motion videos, ``bewegung`` also offers a ``TimeScale`` class.
+For easily working with "accelerated" or "slowed down" time, i.e. time-lapse or slow-motion videos, ``bewegung`` also offers a :class:`bewegung.TimeScale` class.
 
 Convenience Functionality
 -------------------------
@@ -368,7 +368,7 @@ Convenience Functionality
 
     Most of this functionality is only little optimized for speed. It is therefore not meant as a substitute for professional libraries doing those exact things.
 
-Because many of ``bewegung``'s backends have their own interpretations of colors and color models, ``bewegung`` offers a unified ``Color`` class. Internally, it is based on RGBA (red, green, blue, alpha) integer values with 8 bits per channel, representing values from 0 to 255.
+Because many of ``bewegung``'s backends have their own interpretations of colors and color models, ``bewegung`` offers a unified :class:`bewegung.Color` class. Internally, it is based on RGBA (red, green, blue, alpha) integer values with 8 bits per channel, representing values from 0 to 255.
 
 .. code:: ipython
 
@@ -387,7 +387,7 @@ Because many of ``bewegung``'s backends have their own interpretations of colors
     >>> Color.from_hex('FF0000')
     <Color r=255 g=0 b=0 a=255>
 
-Simple vector algebra is also a rather common task, which is why ``bewegung`` offers vector classes (``Vector2D``, ``Vector2Ddist``, ``Vector3D``) and vector array classes (``VectorArray2D``, ``VectorArray2Ddist``, ``VectorArray3D``) as well as a ``Matrix`` class. While the vector classes simply hold two or three Python numbers, the vector array classes are wrappers around ``numpy`` arrays. The ``Matrix`` class is meant for simple tasks like rotations. A ``Camera`` class allows to define a "pinhole camera" in 3D space which can project 3D vectors onto a 2D plane. The "dist" variants of the 2D vector and vector array classes not only contain an "x" and a "y" value but also the absolute distance to a Camera in 3D space as a third parameter, which can be important for depth perception.
+Simple vector algebra is also a rather common task, which is why ``bewegung`` offers vector classes (:class:`bewegung.Vector2D`, :class:`bewegung.Vector2Ddist`, :class:`bewegung.Vector3D`) and vector array classes (:class:`bewegung.VectorArray2D`, :class:`bewegung.VectorArray2Ddist`, :class:`bewegung.VectorArray3D`) as well as a :class:`bewegung.Matrix` class. While the vector classes simply hold two or three Python numbers, the vector array classes are wrappers around ``numpy`` arrays. The :class:`bewegung.Matrix` class is meant for simple tasks like rotations. A :class:`bewegung.Camera` class allows to define a "pinhole camera" in 3D space which can project 3D vectors onto a 2D plane. The "dist" variants of the 2D vector and vector array classes not only contain an "x" and a "y" value but also the absolute distance to a Camera in 3D space as a third parameter, which can be important for depth perception.
 
 .. code:: ipython
 
