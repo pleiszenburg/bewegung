@@ -109,9 +109,9 @@ Dependencies:
 - ``numpy``
 - ``matploblib``
 - ``pycairo``
-- ``mplcairo``
+- ``mplcairo`` (optional, but highly recommended dependency)
 
-The `cairo library`_ and its headers must be installed, see `pycairo's documentation`_.
+The `cairo library`_ and its headers must be installed, see `pycairo's documentation`_. If ``mplcairo`` can not be installed or is not present for whatever reason, ``bewegung`` will show a warning and fall back to ``matplotlib``'s internal ``cairo`` backend.
 
 Faster Camera
 ~~~~~~~~~~~~~

@@ -337,6 +337,10 @@ Aside from its rich set of features, ``matplotlib`` is known for its mediocre pe
 .. _mplcairo: https://github.com/matplotlib/mplcairo
 .. _different backends for rendering: https://matplotlib.org/faq/usage_faq.html#what-is-a-backend
 
+.. warning::
+
+    If ``mplcairo`` can not be installed or is not present for whatever reason, ``bewegung`` will show a warning and fall back to ``matplotlib``'s internal ``cairo`` backend.
+
 In animation frameworks for ``matplotlib``, such as the "official" `matplotlib.animation`_ sub-package, it is common practice to re-use and update existing figure and subplot / axes objects. This speeds up the rendering process considerably. This strategy is also supported by ``bewegung``.
 
 .. warning::

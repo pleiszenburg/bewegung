@@ -29,8 +29,9 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from typing import Any, Callable
+import warnings
 
-from PIL.Image import Image, fromarray
+from PIL.Image import Image, fromarray, frombuffer, merge
 
 from ._base import BackendBase
 from ..abc import ColorABC, NumberTypes, VideoABC
@@ -50,6 +51,8 @@ class Backend(BackendBase):
         super().__init__()
 
         self._plt, self._Figure = None, None
+
+        self._mplcairo_present = False
 
     def _prototype(self, video: VideoABC, **kwargs) -> Callable:
 
@@ -97,9 +100,18 @@ class Backend(BackendBase):
 
     def _load(self):
 
-        import mplcairo.base # import before matplotlib
+        try:
+            import mplcairo.base # import before matplotlib
+            self._mplcairo_present = True
+        except ModuleNotFoundError:
+            warnings.warn('`mplcairo` matplotlib backend is not installed, falling back to `cairo`')
+
         import matplotlib
-        matplotlib.use("module://mplcairo.base", force = True) # use mplcairo.base as non-GUI backend
+        matplotlib.use(
+            "module://mplcairo.base" if self._mplcairo_present else "cairo",
+            force = True,
+        ) # use mplcairo.base as non-GUI backend
+
         import matplotlib.pyplot as plt # import pyplot last
         from matplotlib.figure import Figure
 
@@ -110,12 +122,26 @@ class Backend(BackendBase):
 
     def _to_pil(self, obj: Any) -> Image:
 
-        obj.canvas.draw()
+        if self._mplcairo_present:
 
-        buffer = obj.canvas.renderer.buffer_rgba()
-        assert buffer.dtype.name == 'uint8' # TODO cairo & mplcairo also support RGBA128F
+            obj.canvas.draw()
 
-        image = fromarray(buffer) # depends on matplotlib backend - https://stackoverflow.com/q/57316491/1672565
+            buffer = obj.canvas.renderer.buffer_rgba()
+            assert buffer.dtype.name == 'uint8' # TODO cairo & mplcairo also support RGBA128F
+
+            image = fromarray(buffer) # depends on matplotlib backend - https://stackoverflow.com/q/57316491/1672565
+
+        else:
+
+            surface = obj.canvas._get_printed_image_surface() # returns ARGB32 cairo surface
+
+            image = frombuffer(
+                mode = 'RGBa',
+                size = (surface.get_width(), surface.get_height()),
+                data = surface.get_data().tobytes(), # call to "tobytes" required because of RGBa mode
+                )
+            b, g, r, a = image.split()
+            image = merge('RGBa', (r, g, b, a)).convert("RGBA")
 
         if hasattr(obj, '__bewegung_managed__'): # close flagged image
             self._plt.close(obj)
