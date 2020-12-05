@@ -4,6 +4,17 @@ Installation
 Quick Install Guide
 -------------------
 
+`bewegung` can be installed both via ``conda`` and via ``pip``. In principle, ``bewegung`` works across all modern operating systems.
+
+.. note::
+
+    In terms of memory usage and performance, ``bewegung`` behaves best on Unix-like systems due to `Windows's lack of "fork"`_.
+
+.. _Windows's lack of "fork": https://stackoverflow.com/q/985281/1672565
+
+Via ``pip``
+~~~~~~~~~~~
+
 ``bewegung`` can be installed with Python's package manager ``pip``:
 
 .. code:: bash
@@ -24,18 +35,29 @@ All further Python dependencies are optional and allow to use certain optional c
 
     Certain **non-Python components must installed separately and before invoking the above command**. For further instructions, see :ref:`detailed installation instructions <detailedinstallation>`. Most notably, ``ffmpeg`` should be installed for producing actual video files instead of video frames as individual files.
 
-In principle, ``bewegung`` works across all modern operating systems.
+Via ``conda``
+~~~~~~~~~~~~~
+
+An almost complete installation can be triggered by running:
+
+.. code:: bash
+
+    conda install -c conda-forge bewegung
 
 .. note::
 
-    In terms of memory usage and performance, ``bewegung`` behaves best on Unix-like systems due to `Windows's lack of "fork"`_.
+    `mplcairo`_, a dependency of ``bewegung`` and alternative backend for ``matplotlib``, is currently not available via ``conda`` and must be installed manually. ``bewegung`` :ref:`does also work without mplcairo present <acceleratingmatplotlib>` and falls back to the ``cairo`` backend of ``matplotlib``.
 
-.. _Windows's lack of "fork": https://stackoverflow.com/q/985281/1672565
+.. _mplcairo: https://github.com/matplotlib/mplcairo
 
 .. _detailedinstallation:
 
-Detailed Installation Options
------------------------------
+Detailed Installation Options (``pip``)
+---------------------------------------
+
+.. note::
+
+    This section is only relevant if you install ``bewegung`` with ``pip``.
 
 Video File Encoding
 ~~~~~~~~~~~~~~~~~~~
@@ -109,9 +131,13 @@ Dependencies:
 - ``numpy``
 - ``matploblib``
 - ``pycairo``
-- ``mplcairo`` (optional, but highly recommended dependency)
+- ``mplcairo`` (optional, but :ref:`highly recommended <acceleratingmatplotlib>`)
 
-The `cairo library`_ and its headers must be installed, see `pycairo's documentation`_. If ``mplcairo`` can not be installed or is not present for whatever reason, ``bewegung`` will show a warning and fall back to ``matplotlib``'s internal ``cairo`` backend.
+The `cairo library`_ and its headers must be installed, see `pycairo's documentation`_.
+
+.. note::
+
+    If ``mplcairo`` can not be installed or is not present for whatever reason, ``bewegung`` will show a warning and fall back to ``matplotlib``'s internal ``cairo`` backend.
 
 Faster Camera
 ~~~~~~~~~~~~~
