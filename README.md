@@ -8,7 +8,7 @@
 
 `bewegung` can be installed both via ``conda`` and via ``pip``.
 
-### Via ``pip``
+### Via `pip`
 
 A bare minimum of `bewegung` can be installed with Python's package manager `pip`:
 
@@ -24,7 +24,7 @@ pip install -vU bewegung[all]
 
 Certain non-Python components must installed separately and before invoking the above command. [For detailed instructions, see documentation](https://bewegung.readthedocs.io/en/latest/installation.html). Most notably, `ffmpeg` should be installed for producing actual video files instead of video frames as individual files. See [download section](https://ffmpeg.org/download.html) of the `ffmpeg` project website for further instructions.
 
-### Via ``conda``
+### Via `conda`
 
 An almost complete installation can be triggered by running:
 
@@ -32,7 +32,7 @@ An almost complete installation can be triggered by running:
 conda install -c conda-forge bewegung
 ```
 
-Please note that [mplcairo](https://github.com/matplotlib/mplcairo), a dependency of `bewegung` and alternative backend for `matplotlib`, is currently not available via `conda` and must be installed manually. `bewegung` [does also work without `mplcairo` present](https://bewegung.readthedocs.io/en/latest/canvas.html#acceleratingmatplotlib) and falls back to the `cairo` backend of matplotlib.
+Please note that [mplcairo](https://github.com/matplotlib/mplcairo), a dependency of `bewegung` and alternative backend for `matplotlib`, is currently not available via `conda` and must be installed manually. `bewegung` [does also work without `mplcairo` present](https://bewegung.readthedocs.io/en/latest/canvas.html#acceleratingmatplotlib) and falls back to the `cairo` backend of `matplotlib`.
 
 ## Example
 
