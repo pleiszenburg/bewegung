@@ -1,8 +1,17 @@
 # BEWEGUNG
 
+*/bəˈveːɡʊŋ/ ([German, noun, feminine: motion/movement/animation](https://dict.leo.org/englisch-deutsch/bewegung))*
+
+[[![docs_master](https://readthedocs.org/projects/bewegung/badge/?version=latest&style=flat-square "Documentation Status: master / release")](https://bewegung.readthedocs.io/en/latest/)
+[![license](https://img.shields.io/pypi/l/bewegung.svg?style=flat-square "LGPL 2.1")](https://github.com/pleiszenburg/bewegung/blob/master/LICENSE)
+[![status](https://img.shields.io/pypi/status/bewegung.svg?style=flat-square "Project Development Status")](https://github.com/pleiszenburg/bewegung/issues)
+[![pypi_version](https://img.shields.io/pypi/v/bewegung.svg?style=flat-square "pypi version")](https://pypi.python.org/pypi/bewegung)
+[![conda_version](https://anaconda.org/conda-forge/bewegung/badges/version.svg "conda version")](https://pypi.python.org/pypi/bewegung)
+[![pypi_versions](https://img.shields.io/pypi/pyversions/bewegung.svg?style=flat-square "Available on PyPi - the Python Package Index")](https://pypi.python.org/pypi/bewegung)
+
 ## Synopsis
 
-[`bewegung`](https://dict.leo.org/englisch-deutsch/bewegung) is a versatile video renderer, primarily targeting scientific visualizations of large quantities of data. Its core concepts are *sequences* and *layers*. Sequences describe a certain time span within a video and can overlap. Each sequence can hold multiple layers. Layers can be generated with [`cairo`](https://cairographics.org/), [`Pillow`](https://pillow.readthedocs.io), [`datashader`](https://datashader.org/), [`matplotlib`](https://matplotlib.org/) and `bewegung`'s internal drawing system [`DrawingBoard`](https://bewegung.readthedocs.io/en/latest/canvas.html). Final compositing of every video frame and video effects are implemented via `Pillow`. Video encoding is handled by `ffmpeg`. `bewegung` also includes a simple [vector algebra system](https://bewegung.readthedocs.io/en/latest/vectors.html) and a ["camera" for 3D to 2D projections](https://bewegung.readthedocs.io/en/latest/camera.html). `bewegung` is developed with ease of use, compute time and memory efficiency in mind.
+`bewegung` is a versatile video renderer, primarily targeting scientific visualizations of large quantities of data. Its core concepts are *sequences* and *layers*. Sequences describe a certain time span within a video and can overlap. Each sequence can hold multiple layers. Layers can be generated with [`cairo`](https://cairographics.org/), [`Pillow`](https://pillow.readthedocs.io), [`datashader`](https://datashader.org/), [`matplotlib`](https://matplotlib.org/) and `bewegung`'s internal drawing system [`DrawingBoard`](https://bewegung.readthedocs.io/en/latest/canvas.html). Final compositing of every video frame and video effects are implemented via `Pillow`. Video encoding is handled by `ffmpeg`. `bewegung` also includes a simple [vector algebra system](https://bewegung.readthedocs.io/en/latest/vectors.html) and a ["camera" for 3D to 2D projections](https://bewegung.readthedocs.io/en/latest/camera.html). `bewegung` is developed with ease of use, compute time and memory efficiency in mind.
 
 ## Installation
 
