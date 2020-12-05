@@ -2,7 +2,7 @@
 
 */bəˈveːɡʊŋ/ ([German, noun, feminine: motion/movement/animation](https://dict.leo.org/englisch-deutsch/bewegung))*
 
-[[![docs_master](https://readthedocs.org/projects/bewegung/badge/?version=latest&style=flat-square "Documentation Status: master / release")](https://bewegung.readthedocs.io/en/latest/)
+[![docs_master](https://readthedocs.org/projects/bewegung/badge/?version=latest&style=flat-square "Documentation Status: master / release")](https://bewegung.readthedocs.io/en/latest/)
 [![license](https://img.shields.io/pypi/l/bewegung.svg?style=flat-square "LGPL 2.1")](https://github.com/pleiszenburg/bewegung/blob/master/LICENSE)
 [![status](https://img.shields.io/pypi/status/bewegung.svg?style=flat-square "Project Development Status")](https://github.com/pleiszenburg/bewegung/issues)
 [![pypi_version](https://img.shields.io/pypi/v/bewegung.svg?style=flat-square "pypi version")](https://pypi.python.org/pypi/bewegung)
