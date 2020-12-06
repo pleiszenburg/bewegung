@@ -6,7 +6,7 @@
 [![license](https://img.shields.io/pypi/l/bewegung.svg?style=flat-square "LGPL 2.1")](https://github.com/pleiszenburg/bewegung/blob/master/LICENSE)
 [![status](https://img.shields.io/pypi/status/bewegung.svg?style=flat-square "Project Development Status")](https://github.com/pleiszenburg/bewegung/issues)
 [![pypi_version](https://img.shields.io/pypi/v/bewegung.svg?style=flat-square "pypi version")](https://pypi.python.org/pypi/bewegung)
-[![conda_version](https://anaconda.org/conda-forge/bewegung/badges/version.svg "conda version")](https://pypi.python.org/pypi/bewegung)
+[![conda_version](https://img.shields.io/conda/vn/conda-forge/bewegung.svg?style=flat-square "conda version")](https://anaconda.org/conda-forge/bewegung)
 [![pypi_versions](https://img.shields.io/pypi/pyversions/bewegung.svg?style=flat-square "Available on PyPi - the Python Package Index")](https://pypi.python.org/pypi/bewegung)
 
 ## Synopsis
