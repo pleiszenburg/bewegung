@@ -19,19 +19,19 @@
 
 ### Via `pip`
 
-A bare minimum of `bewegung` can be installed with Python's package manager `pip`:
+A bare **minimum** of `bewegung` can be installed with Python's package manager `pip`:
 
 ```bash
 pip install -vU bewegung
 ```
 
-A complete installation of all optional Python components and development tools can be triggered by running:
+A **complete** installation of all optional Python components and development tools can be triggered by running:
 
 ```bash
 pip install -vU bewegung[all]
 ```
 
-Certain non-Python components must installed separately and before invoking the above command. [For detailed instructions, see documentation](https://bewegung.readthedocs.io/en/latest/installation.html). Most notably, `ffmpeg` should be installed for producing actual video files instead of video frames as individual files. See [download section](https://ffmpeg.org/download.html) of the `ffmpeg` project website for further instructions.
+Certain non-Python **prerequisites** must installed separately and before invoking the above command. [For detailed instructions, see documentation](https://bewegung.readthedocs.io/en/latest/installation.html). Most notably, `ffmpeg` should be installed for producing actual video files instead of video frames as individual files. See [download section](https://ffmpeg.org/download.html) of the `ffmpeg` project website for further instructions.
 
 ### Via `conda`
 
