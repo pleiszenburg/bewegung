@@ -53,9 +53,9 @@ You can directly test it by running:
 curl https://raw.githubusercontent.com/pleiszenburg/bewegung/master/demo/demo.py | python
 ```
 
-This result should look like this:
+This resulting `video.mp4` file should look like this:
 
-[![bewegung standard demo](https://img.youtube.com/vi/5KldBStctRU/0.jpg)](https://www.youtube.com/watch?v=5KldBStctRU)
+[![bewegung standard demo](https://img.youtube.com/vi/4NFXQ73weMA/sddefault.jpg)](https://www.youtube.com/watch?v=4NFXQ73weMA)
 
 ## Usage
 
