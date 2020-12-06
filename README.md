@@ -50,7 +50,7 @@ See [`demo.py`](https://github.com/pleiszenburg/bewegung/blob/master/demo/demo.p
 You can directly test it by running:
 
 ```bash
-curl https://raw.githubusercontent.com/pleiszenburg/bewegung/master/demo/demo.py | python
+curl https://raw.githubusercontent.com/pleiszenburg/bewegung/master/demo/demo.py | python3
 ```
 
 This resulting `video.mp4` file should look like this:

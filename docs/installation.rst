@@ -59,7 +59,7 @@ You can directly run the `standard demo`_ of ``bewegung``:
 
 .. code:: bash
 
-    curl https://raw.githubusercontent.com/pleiszenburg/bewegung/master/demo/demo.py | python
+    curl https://raw.githubusercontent.com/pleiszenburg/bewegung/master/demo/demo.py | python3
 
 This resulting ``video.mp4`` file should look like this:
 
