@@ -237,11 +237,9 @@ class DrawingBoard(DrawingBoardABC):
             if raw is None:
                 if len(fn) == 0:
                     raise ValueError('filename must not be empty')
-                with open(fn, 'rb') as f:
-                    raw = f.read()
-                svg = Rsvg.Handle.new_from_data(raw)
-            else:
                 svg = Rsvg.Handle.new_from_file(fn)
+            else:
+                svg = Rsvg.Handle.new_from_data(raw)
 
         if point is None:
             point = Vector2D(0.0, 0.0)
