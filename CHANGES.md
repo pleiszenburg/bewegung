@@ -2,7 +2,8 @@
 
 ## 0.0.3 (2020-12-XX)
 
-- (TBD)
+- FEATURE: `DrawingBoard.make_svg` can generate SVG object handles from raw binary data.
+- FIX: `DrawingBoard.draw_svg` can draw raw SVG data without crashing.
 
 ## 0.0.2 (2020-12-05)
 
