@@ -29,9 +29,14 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 import math
-import os
 
-import psutil
+try:
+    import psutil
+    CPU_CORES = psutil.cpu_count(logical = False)
+except ModuleNotFoundError: # fallback
+    import multiprocessing
+    CPU_CORES = multiprocessing.cpu_count() // 2 # assume HT
+    CPU_CORES = 1 if CPU_CORES < 1 else CPU_CORES
 
 from bewegung import (
     Color, Video,
@@ -41,6 +46,23 @@ from bewegung import (
     )
 
 DrawingBoard = backends['drawingboard'].type
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# CONST
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+SVG_LOGO = """<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 170 170"
+   width="170"
+   height="170"
+>
+  <path
+     style="fill:#b4b4b4;fill-opacity:1;"
+     d="m 275.57824,185.64694 -154.01,-67.09663 135.11238,-99.828253 z"
+     transform="rotate(-44.941938,124.56725,280.97355)" />
+</svg>
+""".encode('utf-8')
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ROUTINES
@@ -166,7 +188,7 @@ def main():
 
         def __init__(self):
 
-            self._svg = DrawingBoard.make_svg(os.path.join(os.path.dirname(__file__), "demo.svg"))
+            self._svg = DrawingBoard.make_svg(raw = SVG_LOGO)
             self._font = DrawingBoard.make_font('Arial', 25.0)
 
         @FadeInEffect(v.time_from_seconds(0.8))
@@ -195,7 +217,7 @@ def main():
             return canvas
 
     v.render(
-        processes = psutil.cpu_count(logical = False),
+        processes = CPU_CORES,
         video_fn = 'video_mpl.mp4',
         )
 
