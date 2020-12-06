@@ -15,25 +15,44 @@ Quick Install Guide
 Via ``pip``
 ~~~~~~~~~~~
 
-``bewegung`` can be installed with Python's package manager ``pip``:
+``bewegung`` can easily be installed with Python's package manager ``pip`` in a **minimal configuration** as it has only one "hard" Python dependency, `the Pillow library`_:
 
 .. code:: bash
 
     pip install -vU bewegung
 
-``bewegung`` has only one "hard" Python dependency, `the Pillow library`_.
-
 .. _the Pillow library: https://pillow.readthedocs.io
 
-All further Python dependencies are optional and allow to use certain optional components of ``bewegung``. A **complete installation** of all Python components and development tools can be triggered by running:
+All further Python dependencies are optional and allow to use certain optional components of ``bewegung``. A **complete installation** of all Python components and development tools involves the installation of a number of prerequisites. On a Debian/Ubuntu Linux system for instance, those can be installed as follows:
 
 .. code:: bash
 
-    pip install -vU bewegung[all]
+    sudo apt-get install \
+        build-essential pkg-config \
+        python3-venv python3-dev \
+        libcairo2 libcairo2-dev \
+        gir1.2-gtk-3.0 libgirepository1.0-dev \
+        libpango-1.0-0 libpango1.0-dev \
+        libpangocairo-1.0-0 \
+        ffmpeg
 
 .. warning::
 
-    Certain **non-Python components must installed separately and before invoking the above command**. For further instructions, see :ref:`detailed installation instructions <detailedinstallation>`. Most notably, ``ffmpeg`` should be installed for producing actual video files instead of video frames as individual files.
+    The names of packages and the overall installation procedure of the mentioned prerequisites do vary between different Linux distributions and operating systems.
+
+Once all prerequisites are present, ``bewegung`` can be installed. It is recommended to install it into a new virtual environment:
+
+.. code:: bash
+
+    python3 -m venv env # create virtual environment
+    source env/bin/activate # activate virtual environment
+    pip install -vU pip setuptools wheel # install & update setup toolchain
+
+The actual installation of ``bewegung`` can now be triggered as follows:
+
+.. code:: bash
+
+    pip install -vU bewegung[all] # install bewegung
 
 Via ``conda``
 ~~~~~~~~~~~~~
