@@ -1,6 +1,6 @@
 # Changes
 
-## 0.0.3 (2020-12-XX)
+## 0.0.3 (2020-12-06)
 
 - FEATURE: `DrawingBoard.make_svg` can generate SVG object handles from raw binary data.
 - FEATURE: Demos are self-contained.
