@@ -1,16 +1,21 @@
 Installation
 ============
 
-Quick Install Guide
+System Requirements
 -------------------
 
-`bewegung` can be installed both via ``conda`` and via ``pip``. In principle, ``bewegung`` works across all modern operating systems.
+In principle, ``bewegung`` works across all modern operating systems. ``bewegung`` is fully parallelized, so it significantly benefits from higher numbers of cores. Its memory consumption hugely depends on the complexity of the project. For example, ``bewegung``'s relatively simple `standard demo`_ requires at least 2 GBytes of RAM on a headless server or 4 GBytes of RAM on a desktop. Swapping is generally a bad idea - swap should be completely deactivated if possible.
 
 .. note::
 
     In terms of memory usage and performance, ``bewegung`` behaves best on Unix-like systems due to `Windows's lack of "fork"`_.
 
 .. _Windows's lack of "fork": https://stackoverflow.com/q/985281/1672565
+
+Quick Install Guide
+-------------------
+
+`bewegung` can be installed both via ``conda`` and via ``pip``.
 
 Via ``pip``
 ~~~~~~~~~~~
