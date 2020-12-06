@@ -50,6 +50,25 @@ An almost complete installation can be triggered by running:
 
 .. _mplcairo: https://github.com/matplotlib/mplcairo
 
+Validate Installation
+~~~~~~~~~~~~~~~~~~~~~
+
+You can directly run the `standard demo`_ of ``bewegung``:
+
+.. _standard demo: https://github.com/pleiszenburg/bewegung/blob/master/demo/demo.py
+
+.. code:: bash
+
+    curl https://raw.githubusercontent.com/pleiszenburg/bewegung/master/demo/demo.py | python
+
+This resulting ``video.mp4`` file should look like this:
+
+.. |standard_demo| image:: https://img.youtube.com/vi/4NFXQ73weMA/sddefault.jpg
+	:target: https://www.youtube.com/watch?v=4NFXQ73weMA
+	:alt: bewegung standard demo
+
+|standard_demo|
+
 .. _detailedinstallation:
 
 Detailed Installation Options (``pip``)
