@@ -1,10 +1,10 @@
 Installation
 ============
 
-Quick Install Guide
+System Requirements
 -------------------
 
-`bewegung` can be installed both via ``conda`` and via ``pip``. In principle, ``bewegung`` works across all modern operating systems.
+In principle, ``bewegung`` works across all modern operating systems. ``bewegung`` is fully parallelized, so it significantly benefits from higher numbers of cores. Its memory consumption hugely depends on the complexity of the project. For example, ``bewegung``'s relatively simple `standard demo`_ requires at least 2 GBytes of RAM on a headless server or 4 GBytes of RAM on a desktop. Swapping is generally a bad idea - swap should be completely deactivated if possible.
 
 .. note::
 
@@ -12,28 +12,52 @@ Quick Install Guide
 
 .. _Windows's lack of "fork": https://stackoverflow.com/q/985281/1672565
 
+Quick Install Guide
+-------------------
+
+`bewegung` can be installed both via ``conda`` and via ``pip``.
+
 Via ``pip``
 ~~~~~~~~~~~
 
-``bewegung`` can be installed with Python's package manager ``pip``:
+``bewegung`` can easily be installed with Python's package manager ``pip`` in a **minimal configuration** as it has only one "hard" Python dependency, `the Pillow library`_:
 
 .. code:: bash
 
     pip install -vU bewegung
 
-``bewegung`` has only one "hard" Python dependency, `the Pillow library`_.
-
 .. _the Pillow library: https://pillow.readthedocs.io
 
-All further Python dependencies are optional and allow to use certain optional components of ``bewegung``. A **complete installation** of all Python components and development tools can be triggered by running:
+All further Python dependencies are optional and allow to use certain optional components of ``bewegung``. A **complete installation** of all Python components and development tools involves the installation of a number of prerequisites. On a Debian/Ubuntu Linux system for instance, those can be installed as follows:
 
 .. code:: bash
 
-    pip install -vU bewegung[all]
+    sudo apt-get install \
+        build-essential pkg-config \
+        python3-venv python3-dev \
+        libcairo2 libcairo2-dev \
+        gir1.2-gtk-3.0 libgirepository1.0-dev \
+        libpango-1.0-0 libpango1.0-dev \
+        libpangocairo-1.0-0 \
+        ffmpeg
 
 .. warning::
 
-    Certain **non-Python components must installed separately and before invoking the above command**. For further instructions, see :ref:`detailed installation instructions <detailedinstallation>`. Most notably, ``ffmpeg`` should be installed for producing actual video files instead of video frames as individual files.
+    The names of packages and the overall installation procedure of the mentioned prerequisites do vary between different Linux distributions and operating systems.
+
+Once all prerequisites are present, ``bewegung`` can be installed. It is recommended to install it into a new virtual environment:
+
+.. code:: bash
+
+    python3 -m venv env # create virtual environment
+    source env/bin/activate # activate virtual environment
+    pip install -vU pip setuptools wheel # install & update setup toolchain
+
+The actual installation of ``bewegung`` can now be triggered as follows:
+
+.. code:: bash
+
+    pip install -vU bewegung[all] # install bewegung
 
 Via ``conda``
 ~~~~~~~~~~~~~
@@ -49,6 +73,25 @@ An almost complete installation can be triggered by running:
     `mplcairo`_, a dependency of ``bewegung`` and alternative backend for ``matplotlib``, is currently not available via ``conda`` and must be installed manually. ``bewegung`` :ref:`does also work without mplcairo present <acceleratingmatplotlib>` and falls back to the ``cairo`` backend of ``matplotlib``.
 
 .. _mplcairo: https://github.com/matplotlib/mplcairo
+
+Validate Installation
+~~~~~~~~~~~~~~~~~~~~~
+
+You can directly run the `standard demo`_ of ``bewegung``:
+
+.. _standard demo: https://github.com/pleiszenburg/bewegung/blob/master/demo/demo.py
+
+.. code:: bash
+
+    curl https://raw.githubusercontent.com/pleiszenburg/bewegung/master/demo/demo.py | python3
+
+This resulting ``video.mp4`` file should look like this:
+
+.. |standard_demo| image:: https://img.youtube.com/vi/4NFXQ73weMA/sddefault.jpg
+	:target: https://www.youtube.com/watch?v=4NFXQ73weMA
+	:alt: bewegung standard demo
+
+|standard_demo|
 
 .. _detailedinstallation:
 

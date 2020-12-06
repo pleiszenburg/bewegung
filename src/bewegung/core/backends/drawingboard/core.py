@@ -237,11 +237,9 @@ class DrawingBoard(DrawingBoardABC):
             if raw is None:
                 if len(fn) == 0:
                     raise ValueError('filename must not be empty')
-                with open(fn, 'rb') as f:
-                    raw = f.read()
-                svg = Rsvg.Handle.new_from_data(raw)
-            else:
                 svg = Rsvg.Handle.new_from_file(fn)
+            else:
+                svg = Rsvg.Handle.new_from_data(raw)
 
         if point is None:
             point = Vector2D(0.0, 0.0)
@@ -273,17 +271,31 @@ class DrawingBoard(DrawingBoardABC):
         svg.render_cairo(self._ctx)
 
     @staticmethod
-    def make_svg(fn: str) -> Rsvg.Handle:
+    def make_svg(
+        fn: Union[str, None] = None,
+        raw: Union[bytes, None] = None,
+        ) -> Rsvg.Handle:
         """
         Generates an rsvg handle for re-use.
 
+        The SVG's data can be provided with one of the two following options:
+
+        (1) a path/filename, from where the SVG can be loaded
+        (2) a raw sequence of bytes containing the SVG markup
+
         Args:
-            fn : Path to SVG file
+            fn : Path to SVG file (1)
+            raw : SVG markup (2)
         """
+
+        if not ((fn is not None) ^ (raw is not None)):
+            raise RuntimeError('SVG must be provided exactly once')
+
+        if raw is not None:
+            return Rsvg.Handle.new_from_data(raw)
 
         if len(fn) == 0:
             raise ValueError('filename must not be empty')
-
         return Rsvg.Handle.new_from_file(fn)
 
     @_geometry
