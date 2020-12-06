@@ -47,6 +47,16 @@ Please note that [mplcairo](https://github.com/matplotlib/mplcairo), a dependenc
 
 See [`demo.py`](https://github.com/pleiszenburg/bewegung/blob/master/demo/demo.py).
 
+You can directly test it by running:
+
+```bash
+curl https://raw.githubusercontent.com/pleiszenburg/bewegung/master/demo/demo.py | python
+```
+
+This result should look like this:
+
+[![bewegung standard demo](https://img.youtube.com/vi/5KldBStctRU/0.jpg)](https://www.youtube.com/watch?v=5KldBStctRU)
+
 ## Usage
 
 See [documentation](https://bewegung.readthedocs.io) (work in progress).
