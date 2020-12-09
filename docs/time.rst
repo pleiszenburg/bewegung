@@ -3,7 +3,7 @@
 Time
 ====
 
-Describing and handling *time* is a core functionality of ``bewegung``. While the library works with *discrete frame numbers* (also referred to as the *index*) internally, a user may want to interact with *time in seconds*. ``Time`` objects allows to do both. They handle the conversion between the two based on their internal *frames per second* state. ``Time`` objects support basic arithmetic.
+Describing and handling *time* is a core functionality of ``bewegung``. While the library works with *discrete frame numbers* (also referred to as the *index*) internally, a user may want to interact with *time in seconds*. ``Time`` objects allow to do both. They handle the conversion between the two based on their internal *frames per second* state. ``Time`` objects support basic arithmetic.
 
 .. note::
 
@@ -13,7 +13,7 @@ Describing and handling *time* is a core functionality of ``bewegung``. While th
 
     Operations between ``Time`` objects with a different frames per second state will fail, i.e. raise an exception.
 
-An animation is very likely representing real-world data in some slowed-down or accelerated way, i.e. as form of a *slow-motion* or *time-lapse* video. ``bewegung`` allows to convert time from custom formats to its internal system via the ``TimeScale`` class.
+An animation is very likely representing real-world data in some slowed-down or accelerated way, i.e. as a form of a *slow-motion* or *time-lapse* video. ``bewegung`` allows to convert time from custom formats to its internal system via the ``TimeScale`` class.
 
 The ``Time`` Class
 ------------------
