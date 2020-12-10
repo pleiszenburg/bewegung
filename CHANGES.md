@@ -2,7 +2,7 @@
 
 ## 0.0.4 (2020-12-XX)
 
-- (TBD)
+- FIX: Center offset in `DrawgingBoard` cares about subpixels.
 
 ## 0.0.3 (2020-12-06)
 
