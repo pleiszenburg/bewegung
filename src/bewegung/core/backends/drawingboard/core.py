@@ -131,7 +131,7 @@ class DrawingBoard(DrawingBoardABC):
             )
 
         if self._offset != Vector2D(0.0, 0.0):
-            self._surface.set_device_offset(*self._offset.as_tuple())
+            self._surface.set_device_offset(self._offset.x * self._subpixels, self._offset.y * self._subpixels)
 
         if self._subpixels != 1:
             self._surface.set_device_scale(float(self._subpixels), float(self._subpixels))
