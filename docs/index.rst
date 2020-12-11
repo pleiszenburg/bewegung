@@ -2,9 +2,9 @@
 bewegung - a versatile video renderer
 =====================================
 
-*/bəˈveːɡʊŋ/ (German, noun, feminine: `motion/movement/animation`_)*
+*/bəˈveːɡʊŋ/* - German, noun, feminine: `motion / movement / animation`_
 
-.. _motion/movement/animation: https://dict.leo.org/englisch-deutsch/bewegung
+.. _motion / movement / animation: https://dict.leo.org/englisch-deutsch/bewegung
 
 .. |docs_master| image:: https://readthedocs.org/projects/bewegung/badge/?version=latest&style=flat-square
 	:target: https://bewegung.readthedocs.io/en/latest/
