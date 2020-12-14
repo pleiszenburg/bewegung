@@ -171,7 +171,7 @@ class VectorArray2D(VectorArray2DABC):
 
     def as_list(self) -> List[Vector2D]:
         """
-        Exports vector array as a list of :class:`bewegung.Vector2D` objects
+        Exports a list of :class:`bewegung.Vector2D` objects
         """
 
         dtype = dtype_np2py(self.dtype)
@@ -211,7 +211,7 @@ class VectorArray2D(VectorArray2DABC):
         Exports vector array as another vector array with new dtype
 
         Args:
-            dtype : Desired ``numpy`` data type of new vector
+            dtype : Desired ``numpy`` data type of new vector array
         """
 
         return self.copy() if self.dtype == np.dtype(dtype) else VectorArray2D(
@@ -255,7 +255,7 @@ class VectorArray2D(VectorArray2DABC):
     @property
     def x(self) -> np.ndarray:
         """
-        x component, mutable
+        x components, mutable
         """
 
         return self._x
@@ -268,7 +268,7 @@ class VectorArray2D(VectorArray2DABC):
     @property
     def y(self) -> np.ndarray:
         """
-        y component, mutable
+        y components, mutable
         """
 
         return self._y
