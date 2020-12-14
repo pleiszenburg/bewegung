@@ -282,6 +282,10 @@ class VectorArray2D(VectorArray2DABC):
     def from_iterable(cls, obj: VectorIterable2D, dtype: Dtype = FLOAT_DEFAULT) -> VectorArray2DABC:
         """
         Generates vector array object from an iterable of :class:`bewegung.Vector2D` objects
+
+        Args:
+            obj : iterable
+            dtype : Desired ``numpy`` data type of new vector array
         """
 
         if not isinstance(obj, list):

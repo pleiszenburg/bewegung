@@ -163,6 +163,10 @@ class VectorArray2Ddist(VectorArray2D):
     def from_iterable(cls, obj: VectorIterable2D, dtype: Dtype = FLOAT_DEFAULT) -> VectorArray2DABC:
         """
         Generates vector distance array object from an iterable of :class:`bewegung.Vector2Ddist` objects
+
+        Args:
+            obj : iterable
+            dtype : Desired ``numpy`` data type of new vector array
         """
 
         if not isinstance(obj, list):
