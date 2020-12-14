@@ -3,6 +3,8 @@
 ## 0.0.4 (2020-12-XX)
 
 - FIX: Center offset in `DrawgingBoard` cares about subpixels.
+- FIX: `bewegung` would fail to work at all without `numpy` present.
+- DOCS: Completed vector chapters on algebra and camera as well as cross-references to classes and methods.
 
 ## 0.0.3 (2020-12-06)
 
