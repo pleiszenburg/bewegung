@@ -265,7 +265,7 @@ class Vector2D(Vector2DABC):
     @property
     def dtype(self) -> Type:
         """
-        (Python) data type
+        (Python) data type of vector components
         """
 
         return self._dtype
