@@ -1,3 +1,5 @@
+.. _gallery:
+
 Gallery
 =======
 
@@ -37,3 +39,13 @@ This video is inspired by (and essentially a remake of) `Asteroid Discovery From
 .. _Orbital elements: https://en.wikipedia.org/wiki/Orbital_elements
 .. _Minor Planet Center: https://www.minorplanetcenter.net/data
 .. _poliastro: https://github.com/poliastro/poliastro
+
+Density Wave Theory
+-------------------
+
+.. youtube:: arWvq_9_0ak
+
+The `density wave theory`_ by Lin & Shu (1964) provides an explanation for stable arms of spiral galaxies. It is also an interesting and widely used theme for visualizations. The above example contains 10 million stars and highlights the secret location of `Magrathea`_.
+
+.. _density wave theory: https://en.wikipedia.org/wiki/Density_wave_theory
+.. _Magrathea: https://hitchhikers.fandom.com/wiki/Magrathea

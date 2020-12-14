@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # EXPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-__version__ = '0.0.3'
+__version__ = '0.0.4'
 
 from .core.camera import Camera
 from .core.backends import *

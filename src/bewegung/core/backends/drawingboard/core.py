@@ -129,14 +129,15 @@ class DrawingBoard(DrawingBoardABC):
             self._width * self._subpixels,
             self._height * self._subpixels,
             )
+
+        if self._offset != Vector2D(0.0, 0.0):
+            self._surface.set_device_offset(self._offset.x * self._subpixels, self._offset.y * self._subpixels)
+
         if self._subpixels != 1:
             self._surface.set_device_scale(float(self._subpixels), float(self._subpixels))
 
         self._ctx = cairo.Context(self._surface)
         self._set_background_color(background_color)
-
-        if self._offset != Vector2D(0.0, 0.0):
-            self._surface.set_device_offset(*self._offset.as_tuple())
 
     def __repr__(self) -> str:
 

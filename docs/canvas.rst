@@ -3,12 +3,12 @@
 Drawing: Canvas Types & Backends
 ================================
 
-``bewegung`` offers a set of "backends" for drawing on canvases. A specific backend can be selected and configured through the ``Video.canvas`` method. Full access to the inventory of backends and all of their functionality is provided through the ``backends`` dictionary.
+``bewegung`` offers a set of "backends" for drawing on canvases. A specific backend can be selected and configured through the :meth:`bewegung.Video.canvas` method. Full access to the inventory of backends and all of their functionality is provided through the ``backends`` dictionary.
 
 Canvas Factories: ``Video.canvas``
 ----------------------------------
 
-The ``Video.canvas`` method is typically used to configure a layer. It returns a "factory", i.e. a special function, which can be called to generate new pre-configured canvases of a certain type.
+The :meth:`bewegung.Video.canvas` method is typically used to configure a layer. It returns a "factory", i.e. a special function, which can be called to generate new pre-configured canvases of a certain type.
 
 .. code:: python
 
@@ -20,7 +20,7 @@ The ``Video.canvas`` method is typically used to configure a layer. It returns a
     canvas_a = canvas_factory() # produce a new canvas
     canvas_b = canvas_factory() # produce yet another new canvas
 
-In the context of a layer's configuration, the use of ``Video.canvas`` looks as follows.
+In the context of a layer's configuration, the use of :meth:`bewegung.Video.canvas` looks as follows.
 
 .. note::
 
@@ -41,7 +41,7 @@ A new, pre-configured canvas of the requested type is fed into the layer method 
         def bar(self, canvas): # a new canvas is generated and passed once per frame
             return canvas
 
-Parameters of the ``Video.canvas`` method other than ``backend``, i.e. the name of the selected backend, are usually forwarded to the underlying library.
+Parameters of the :meth:`bewegung.Video.canvas` method other than ``backend``, i.e. the name of the selected backend, are usually forwarded to the underlying library.
 
 .. warning::
 
@@ -60,7 +60,7 @@ All backends can be accessed via the ``backends`` dictionary, which represents t
     >>> [backend for backend in backends.values()]
     [<DrawingBoardBackend>, <PillowBackend>, <DatashaderBackend>, <CairoBackend>, <MatplotlibBackend>]
 
-Backends are "lazy" objects. They only import the underlying library if actually used. For most intents and purposes, working with ``Video.canvas`` is sufficient. Further details about the common structure of backends are provided in the :ref:`sections on custom backends <custombackends>`.
+Backends are "lazy" objects. They only import the underlying library if actually used. For most intents and purposes, working with :meth:`bewegung.Video.canvas` is sufficient. Further details about the common structure of backends are provided in the :ref:`sections on custom backends <custombackends>`.
 
 .. _drawingboard:
 
@@ -265,7 +265,7 @@ Layer methods are expected to return ``datashader.transfer_functions.Image`` obj
 
 .. warning::
 
-    If a ``datashader.transfer_functions.Image`` object is returned, ``bewegung`` will mirror the image along the x-axis, i.e. the y-axis will be flipped. This makes the output consistent with ``Pillow`` and ``pycairo``, were the y-axes is positive downwards. The flip can be avoided by manually converting the image to a Pillow Image object before returning, i.e. ``return img.as_pil()`` in the above example.
+    If a ``datashader.transfer_functions.Image`` object is returned, ``bewegung`` will mirror the image along the x-axis, i.e. the y-axis will be flipped. This makes the output consistent with ``Pillow`` and ``pycairo``, were the y-axis is positive downwards. The flip can be avoided by manually converting the image to a Pillow Image object before returning, i.e. ``return img.as_pil()`` in the above example.
 
 Backend: ``matplotlib``
 -----------------------
@@ -318,7 +318,7 @@ Similar to ``matplotlib.pyplot.figure``, the function call ``v.canvas(backend = 
 - ``height``, height *in pixels*. Mapped to ``figsize`` if provided together with ``width``. Converted to inches based on the value of ``dpi``.
 - ``tight_layout``, by default ``True``.
 - ``facecolor``, a background color.
-- ``background_color``, mapped to ``facecolor``. Accepts ``bewegung.Color`` objects.
+- ``background_color``, mapped to ``facecolor``. Accepts :class:`bewegung.Color` objects.
 - ``managed``, a boolean, by default ``True``. This value indicates whether the the ``matplotlib.figure.Figure`` object is "managed" by ``bewegung``. If ``True``, ``bewegung`` will close, i.e. destroy, a figure that is returned by a layer method.
 
 Layer methods are expected to return ``matplotlib.figure.Figure`` objects.
@@ -389,7 +389,7 @@ The less a figure changes, the faster the above code becomes. Depending on the d
 Defining & Registering Custom Backends
 --------------------------------------
 
-``bewegung`` allows to add new, custom backends. It is a two-step process. First, a backend class must be derived from ``bewegung.BackendBase``. Second, an instance / object of this class must be added to the ``bewegung.backends`` dictionary.
+``bewegung`` allows to add new, custom backends. It is a two-step process. First, a backend class must be derived from :class:`bewegung.BackendBase`. Second, an instance / object of this class must be added to the ``bewegung.backends`` dictionary.
 
 The ``BackendBase`` API
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -483,7 +483,7 @@ The ``_prototype`` method should return a factory function without parameters. I
 Cross-Backend Abstraction: Colors
 ---------------------------------
 
-All backends work with variations of RGB, RGBA or RGBa color spaces. Some use pre-multiplied alpha values, some do not. Some accept RGB values as floats from 0.0 to 1.0, some accept RGB values as integers from 0 to 255, some expect hexadecimal notations as strings. The ``Color`` class tries to provide a common base for working with RGB(A) colors in different notations.
+All backends work with variations of RGB, RGBA or RGBa color spaces. Some use pre-multiplied alpha values, some do not. Some accept RGB values as floats from 0.0 to 1.0, some accept RGB values as integers from 0 to 255, some expect hexadecimal notations as strings. The :class:`bewegung.Color` class tries to provide a common base for working with RGB(A) colors in different notations.
 
 The ``Color`` API
 ~~~~~~~~~~~~~~~~~

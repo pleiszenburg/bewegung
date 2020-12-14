@@ -50,7 +50,13 @@ from .single3d import Vector3D
 @typechecked
 class Matrix(MatrixABC):
     """
-    Mutable
+    A simple matrix implementation for rotating vectors
+
+    Mutable.
+
+    Args:
+        matrix : 2D or 3D arrangement in a list of lists containing Python numbers
+        dtype : Data type. Derived from entries in ``matrix`` if not explicitly provided.
     """
 
     def __init__(self, matrix = List[List[PyNumber]], dtype: Union[Type, None] = None):
@@ -69,12 +75,23 @@ class Matrix(MatrixABC):
         self._matrix = matrix
 
     def __repr__(self) -> str:
+        """
+        String representation for interactive use
+        """
+
         return f'<Matrix shape={len(self._matrix):d}x{len(self._matrix):d} dtype={self._dtype.__name__:s}>'
 
     def __matmul__(self, vector: Union[Vector2DABC, Vector3DABC]) -> Union[Vector2DABC, Vector3DABC]:
+        """
+        Multiplies the matrix with a vector and returns the resulting new vector.
+        Raises an exception if matrix and vector have different numbers of dimensions.
+
+        Args:
+            vector : A 2D or 3D vector
+        """
 
         vector = vector.as_tuple()
-        assert len(self._matrix) == len(vector)
+        assert self.ndim == len(vector)
 
         values = [
             sum([item_a * item_b for item_a, item_b in zip(line, vector)])
@@ -84,22 +101,65 @@ class Matrix(MatrixABC):
         return Vector2D(*values) if len(vector) == 2 else Vector3D(*values)
 
     def __getitem__(self, index: Tuple[int, int]) -> PyNumber:
+        """
+        Item access, returns value at position
+
+        Args:
+            index : Row and column index
+        """
+
         return self._matrix[index[0]][index[1]]
 
     def __setitem__(self, index: Tuple[int, int], value: PyNumber):
+        """
+        Item access, sets new value at position
+
+        Args:
+            index : Row and column index
+            value : New value
+        """
+
         self._matrix[index[0]][index[1]] = self._dtype(value)
 
     def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> ndarray:
+        """
+        Exports matrix as a ``numpy.ndarry`` object, shape ``(2, 2)`` or ``(3, 3)``.
+
+        Args:
+            dtype : Desired ``numpy`` data type of new vector
+        """
+
         if np is None:
             raise NotImplementedError('numpy is not available')
+
         return np.array(self._matrix, dtype = dtype)
 
     @property
     def dtype(self) -> Type:
+        """
+        (Python) data type of matrix components
+        """
+
         return self._dtype
 
+    @property
+    def ndim(self) -> int:
+        """
+        Number of dimensions, either ``2`` or ``3``.
+        """
+
+        return len(self._matrix)
+
     @classmethod
-    def from_ndarray(cls, matrix: np.ndarray, dtype: Type = float) -> MatrixABC:
+    def from_ndarray(cls, matrix: ndarray, dtype: Type = float) -> MatrixABC:
+        """
+        Generates new matrix object from ``numpy.ndarray`` object
+        of shape ``(2, 2)`` or ``(3, 3)``
+
+        Args:
+            matrix : Input data
+            dtype : Desired (Python) data type of matrix
+        """
 
         assert matrix.ndim == 2
         assert matrix.shape in ((2, 2), (3, 3))
@@ -112,6 +172,12 @@ class Matrix(MatrixABC):
 
     @classmethod
     def from_2d_rotation(cls, a: PyNumber) -> MatrixABC:
+        """
+        Generates new 2D matrix object from an angle
+
+        Args:
+            a : An angle in radians
+        """
 
         return cls([
             [cos(a), -sin(a)],
@@ -120,6 +186,13 @@ class Matrix(MatrixABC):
 
     @classmethod
     def from_3d_rotation(cls, v: Vector3DABC, a: PyNumber) -> MatrixABC:
+        """
+        Generates new 3D matrix object from a vector and an angle
+
+        Args:
+            v : A 3D vector
+            a : An angle in radians
+        """
 
         ca = cos(a)
         oca = 1 - ca

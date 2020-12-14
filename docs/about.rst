@@ -30,6 +30,7 @@ There are various libraries in the overall Python ecosystem which target tasks r
 - `manim`_: The ``manim`` package provides excellent functionality for generating explanatory math videos. It can handle LaTeX expressions and animate all sorts of mathematical expressions and transformations. Similar to ``bewegung``, it also integrates its own ``cairo``-based drawing system and encodes videos with ``ffmpeg``. In direct comparison to ``bewegung``, ``manim`` serves a completely different but also very interesting use-case.
 - `mayavi`_: The ``mayavi`` library has `excellent integrated features`_ for generating interactive, near-real-time 3D visualizations. It is fairly easy to use and provides graphics acceleration. It lacks built-in capabilities for generating videos.
 - `vispy`_: The ``vispy`` package is the undisputed crown jewel of real-time visualization of large quantities of data with Python. Its great performance comes at a price, however: The user has to write `OpenGL shaders`_ in C++, which is anything but trivial. ``vispy`` does not have built-in features for video export.
+- `glumpy`_: Very similar to ``vispy``, with even lower-level access to APIs and internal facilities. ``glumpy`` can export videos via ``ffmpeg`` and borrows code from ``MoviePy`` for this task.
 - `ffmpeg-python`_: The ``ffmpeg-python`` package is an object-oriented Python wrapper around the ``ffmpeg`` command line tool. It is an extremely powerful tool on its own, making the otherwise complicated and error-prone specification of ``ffmpeg`` options relatively easy. ``bewegung`` offers its own thin wrapper around ``ffmpeg``, which can be substituted by ``ffmpeg-python`` if desired.
 - `PyAV`_: Python bindings to the libraries underneath ``ffmpeg``. In a nutshell even far more complicated to use than the ``ffmpeg`` command line version.
 - `blender`_: A list of Python tools for animations would not be complete without ``Blender``. Although ``Blender`` is a GUI application, it is fully programmable & controllable through Python. ``Blender``'s features far exceed those of ``bewegung``. It can be argued that ``Blender`` serves different use-cases, primarily 3D modeling, lighting and video editing, while it can certainly also do what ``bewegung`` does - just different and slightly more complicated.
@@ -45,6 +46,7 @@ There are various libraries in the overall Python ecosystem which target tasks r
 .. _mayavi: https://docs.enthought.com/mayavi/mayavi/index.html
 .. _excellent integrated features: https://docs.enthought.com/mayavi/mayavi/mlab_animating.html
 .. _vispy: https://vispy.org/
+.. _glumpy: https://github.com/glumpy/glumpy
 .. _OpenGL shaders: https://www.khronos.org/opengl/wiki/Shader
 .. _ffmpeg-python: https://github.com/kkroening/ffmpeg-python
 .. _PyAV: https://github.com/PyAV-Org/PyAV

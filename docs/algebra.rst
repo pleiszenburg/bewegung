@@ -1,7 +1,11 @@
 Linear Algebra
 ==============
 
-``bewegung`` offers a bunch of convenience classes for tasks related to linear algebra. They are neither very performant nor feature-complete.
+``bewegung`` offers a bunch of convenience classes for tasks related to linear algebra.
+
+.. note::
+
+    The classes provided here are neither very performant nor feature-complete.
 
 .. toctree::
    :maxdepth: 2
