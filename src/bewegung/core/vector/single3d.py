@@ -322,8 +322,8 @@ class Vector3D(Vector3DABC):
 
         Args:
             radius : A radius
-            lon : An angle in radians
-            lat : An angle in radians
+            lon : An angle in degree
+            lat : An angle in degree
         """
 
         return cls.from_polar(
