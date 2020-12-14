@@ -37,11 +37,20 @@ Vector Array Classes
 
 The vector array classes describe arrays of individual vectors in 2D and 3D space. Vector arrays are "statically typed" and use ``numpy`` arrays for storing data. Just like ``numpy.ndarray`` objects, they expose a ``dtype`` property.
 
+The ``VectorArray2D`` class
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 .. autoclass:: bewegung.VectorArray2D
     :members:
 
+The ``VectorArray2Ddist`` class
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 .. autoclass:: bewegung.VectorArray2Ddist
     :members:
+
+The ``VectorArray3D`` class
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: bewegung.VectorArray3D
     :members:
