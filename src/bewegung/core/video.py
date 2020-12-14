@@ -64,8 +64,9 @@ _workers = {}
 class Video(VideoABC):
     """
     This class is the "core" of ``bewegung``.
-    It generates video objects.
-    It manages sequences, layers and preparation tasks and is responsible for rendering the actual video file.
+    It generates *video objects*.
+    They manage *sequences*, *layer tasks* and *prepare tasks*
+    Video objects are also responsible for rendering actual video files and individual frames.
 
     Video objects are mutable.
 
@@ -180,7 +181,7 @@ class Video(VideoABC):
     @property
     def preporder(self) -> IndexPool:
         """
-        Prepare-order index pool for prepare tasks (mutable)
+        Prepare-order :class:`bewegung.IndexPool` object for prepare tasks (mutable)
         """
 
         return self._preporder
@@ -188,7 +189,7 @@ class Video(VideoABC):
     @property
     def zindex(self) -> IndexPool:
         """
-        Z-index pool for layers (mutable)
+        Z-index :class:`bewegung.IndexPool` object for layers (mutable)
         """
 
         return self._zindex
@@ -224,8 +225,8 @@ class Video(VideoABC):
     def reset(self):
         """
         This method allows to reset a video object in preparation of a new render run.
-        It is automatically invoked when calling ``Video.render``.
-        It may instead be used before rendering indivual frames with ``Video.render_frame``.
+        It is automatically invoked when calling :meth:`bewegung.Video.render`.
+        It may instead be used before rendering indivual frames with :meth:`bewegung.Video.render_frame`.
         """
 
         for sequence in self._sequences:
@@ -333,7 +334,9 @@ class Video(VideoABC):
         A **decorator** for decorating ``prepare`` methods (tasks) within ``sequence`` classes.
 
         Args:
-            preporder : A number, managed by an index pool, representing the relative position within a set of ``prepare`` tasks. If not provided, the new task will be created at the end of the set.
+            preporder : A number, managed by an :class:`bewegung.IndexPool` object (:attr:`bewegung.Video.preporder`),
+                representing the relative position within a set of ``prepare`` tasks.
+                If not provided, the new task will be created at the end of the set.
         """
 
         if preporder is None:
@@ -379,8 +382,10 @@ class Video(VideoABC):
         Methods are wrapped with callable :class:`bewegung.core.layer.Layer` objects.
 
         Args:
-            zindex : A number, managed by an index pool, representing the relative position within a stack of ``layer`` tasks. If not provided, the new layer will be created on top.
-            canvas : A function pointer, generating a new canvas once per frame for the ``layer`` task.
+            zindex : A number, managed by an :class:`bewegung.IndexPool` object (:attr:`bewegung.Video.zindex`),
+                representing the relative position within a stack of ``layer`` tasks.
+                If not provided, the new layer will be created on top.
+            canvas : A function pointer to a factory function, generating a new canvas once per frame for the ``layer`` task.
             offset : The layer's offset relative to the top-left corner of the video. The y-axis is downwards positive.
         """
 
@@ -410,11 +415,11 @@ class Video(VideoABC):
 
     def canvas(self, backend: str = 'drawingboard', **kwargs) -> Callable:
         """
-        A method to create function pointers for functions generating new canvases.
-        The pointers can be passed to the ``canvas`` parameter in the ``layer`` decorator method.
+        A method to create function pointers to factory functions generating new canvases.
+        The pointers can be passed to the ``canvas`` parameter in the :meth:`bewegung.Video.layer` decorator method.
 
         Args:
-            backend : Selected type of canvas, i.e. name of desired backend.
+            backend : Selected type of canvas, i.e. name of desired :ref:`backend <drawing>`.
             kwargs : Keyword arguments of the selected backend's canvas creation function.
         """
 
@@ -443,13 +448,15 @@ class Video(VideoABC):
             batchsize : Maximum number of frames rendered by a worker process before the (old) worker is replaced by a new worker.
                 This option helps to prevent long rendering jobs from running out of memory.
             encoder : A video encoder object.
-                If omitted, the ffmpeg H.264 encoder will be selected.
-            frame_fn : A Python string template (representing a path) including an ``index`` integer placeholder.
+                If omitted, a :class:`bewegung.FFmpegH264Encoder` object will generated and used.
+            frame_fn : A Python string (representing a path) including an integer `replacement field`_ called ``index``.
                 If specified, individual frames will be stored here.
                 If omitted, no frames will be stored.
             video_fn: Location and name (path) of where to store the video file.
                 If omitted, no video will be rendered.
                 However, indivual frames may in fact still be rendered if ``frame_fn`` has been specified.
+
+        .. _replacement field: https://docs.python.org/3/library/stdtypes.html#str.format
         """
 
         if processes <= 0:
@@ -505,7 +512,7 @@ class Video(VideoABC):
         A method for rendering individual frames of the video.
 
         The frames can optionally be written to disk and/or returned to the caller.
-        **Before calling this method for the first time, ``Video.reset`` has to be invoked!**
+        **Before calling this method for the first time,** :meth:`bewegung.Video.reset` **must be invoked!**
 
         Args:
             time : Time of the frame relative to the beginning of the video
