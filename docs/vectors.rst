@@ -5,6 +5,10 @@ Vectors and Vector Arrays
 
 ``bewegung`` offers :ref:`vectors <vector_single>` and :ref:`vector arrays <vector_array>`. Both of them are available in 2D and 3D variants. In 2D space, there are additional variants exposing a "distance property". The distance can be used to describe a (relative) distance to a camera or observer, which is useful for various types of renderings. Finally, there is also a :ref:`matrix <matrix>` for simple tasks like rotations both in 2D and 3D space.
 
+.. note::
+
+    Besides simple vector algebra, a lot of ``bewegung``'s functions and methods expect geometric input using vector classes.
+
 .. _vector_single:
 
 Vector Classes
