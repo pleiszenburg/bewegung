@@ -1,6 +1,6 @@
 # Changes
 
-## 0.0.4 (2020-12-XX)
+## 0.0.4 (2020-12-14)
 
 - FIX: Center offset in `DrawgingBoard` cares about subpixels.
 - FIX: `bewegung` would fail to work at all without `numpy` present.
