@@ -72,6 +72,8 @@ class EncoderBase(EncoderABC):
         """
         Configures the encoder. Returns encoder object itself.
 
+        Do not override!
+
         Args:
             video : Video object
             video_fn : Location and name (path) of where to store the video file.
@@ -193,6 +195,11 @@ class EncoderBase(EncoderABC):
         Context manager exit point.
 
         Do not override!
+
+        Args:
+            exc_type : Type of exception
+            exc_value : Actual exception object
+            traceback : Related traceback object
         """
 
         if not self.running:
