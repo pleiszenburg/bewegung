@@ -7,9 +7,9 @@ Layer tasks are special, decorated methods within user-defined :ref:`sequence <s
 
 Layers can be configured to use a certain :ref:`backend for drawing <drawing>`. ``DrawingBoard`` is the default backend, see :ref:`here <drawingboard>`. It does not matter what kind of object a layer method returns as long as it is recognized by one of the currently loaded backends. If the canvas was provided by ``bewegung``, a layer method usually does not need to return it - ``bewegung`` will keep a reference on it. There are exceptions however: The :ref:`datashader backend <datashader>` for instance requires the user to convert the canvas to an image before the user must in fact return the image from the layer method.
 
-Layers may have an *offset* from the top-left corner of the video frame, where the y-axes is positive. The size, i.e. width and height, of a layer must be configured through its backend via the :meth:`bewegung.Video.canvas` method.
+Layers may have an *offset* from the top-left corner of the video frame, where the y-axes is positive downwards. The size, i.e. width and height, of a layer must be configured through its backend via the :meth:`bewegung.Video.canvas` method.
 
-Layers can be post-processed by an arbitrary number of :ref:`effects`. Effects are special decorator classes which are stacked on top of the layer decorator.
+Layers can be post-processed by an arbitrary number of :ref:`effects`. Effects are special decorator classes which are stacked on top of the :meth:`bewegung.Video.layer` decorator method.
 
 The ``Video.layer`` Decorator
 -----------------------------
