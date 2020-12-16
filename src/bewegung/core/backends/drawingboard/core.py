@@ -441,6 +441,29 @@ class DrawingBoard(DrawingBoardABC):
         self._ctx.fill()
 
     @_geometry
+    def draw_bezier(self,
+        a: Vector2DABC,
+        b: Vector2DABC,
+        c: Vector2DABC,
+        d: Vector2DABC,
+        **kwargs,
+        ):
+        """
+        Adds a bezier curve to the drawing.
+
+        Args:
+            a : A 2D vector representing P0
+            b : A 2D vector representing P1
+            c : A 2D vector representing P2
+            d : A 2D vector representing P3
+            kwargs : Arguments for line stroke (see ``_stroke``)
+        """
+
+        self._ctx.move_to(a.x, a.y)
+        self._ctx.curve_to(b.x, b.y, c.x, c.y, d.x, d.y)
+        self._stroke(**kwargs)
+
+    @_geometry
     def draw_circle(self,
         point: Vector2DABC,
         r: float = 1.0,
