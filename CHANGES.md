@@ -2,7 +2,8 @@
 
 ## 0.0.5 (2020-XX-XX)
 
-- (TBD)
+- FEATURE: Added `draw_bezier` method to `DrawgingBoard`.
+- DOCS: Added project logo.
 
 ## 0.0.4 (2020-12-14)
 
