@@ -1,3 +1,7 @@
+.. |logo| image:: _static/logo01.svg
+	:width: 300
+
+|logo|
 
 bewegung - a versatile video renderer
 =====================================
