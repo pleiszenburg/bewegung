@@ -381,7 +381,7 @@ class DrawingBoard(DrawingBoardABC):
     @staticmethod
     def make_font(family: str, size: float) -> Pango.FontDescription:
         """
-        Generates an Pango font description for re-use.
+        Generates a Pango font description for re-use.
 
         Args:
             familiy : Font family (name)
