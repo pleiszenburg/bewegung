@@ -1,8 +1,9 @@
 # Changes
 
-## 0.0.5 (2020-XX-XX)
+## 0.0.5 (2021-XX-XX)
 
 - FEATURE: Added `draw_bezier` method to `DrawgingBoard`.
+- FIX: Some text anchors would fail with activated type checking.
 - DOCS: Added project logo.
 
 ## 0.0.4 (2020-12-14)

@@ -364,13 +364,13 @@ class DrawingBoard(DrawingBoardABC):
     _anchor = {
         'tl': lambda width, height: Vector2D(0.0, 0.0), # top left
         'tc': lambda width, height: Vector2D(-width / 2, 0.0), # top center
-        'tr': lambda width, height: Vector2D(-width, 0.0), # top right
+        'tr': lambda width, height: Vector2D(float(-width), 0.0), # top right
         'cl': lambda width, height: Vector2D(0.0, -height / 2), # center left
         'cc': lambda width, height: Vector2D(-width / 2, -height / 2), # center center
-        'cr': lambda width, height: Vector2D(-width, -height / 2), # center right
-        'bl': lambda width, height: Vector2D(0.0, -height), # bottom left
-        'bc': lambda width, height: Vector2D(-width / 2, -height), # bottom center
-        'br': lambda width, height: Vector2D(-width, -height), # bottom right
+        'cr': lambda width, height: Vector2D(float(-width), -height / 2), # center right
+        'bl': lambda width, height: Vector2D(0.0, float(-height)), # bottom left
+        'bc': lambda width, height: Vector2D(-width / 2, float(-height)), # bottom center
+        'br': lambda width, height: Vector2D(float(-width), float(-height)), # bottom right
     }
     _alignment = {
         'l': Pango.Alignment.LEFT,
