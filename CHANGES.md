@@ -5,6 +5,7 @@
 - FEATURE: Added `draw_bezier` method to `DrawgingBoard`.
 - FEATURE: `Matrix` can rotate vector arrays.
 - FEATURE: Added operations (add, substract) between vectors and vector arrays.
+- FEATURE: Vectors and vector arrays expose angles.
 - FIX: Some text anchors would fail with activated type checking.
 - DOCS: Added project logo.
 
