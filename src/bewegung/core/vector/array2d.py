@@ -121,7 +121,7 @@ class VectorArray2D(VectorArray2DABC):
         """
 
         if isinstance(other, VectorArray2DABC):
-            assert len(self) in len(other)
+            assert len(self) == len(other)
         assert self.dtype == other.dtype
         return VectorArray2D(self.x + other.x, self.y + other.y)
 
@@ -138,7 +138,7 @@ class VectorArray2D(VectorArray2DABC):
         """
 
         if isinstance(other, VectorArray2DABC):
-            assert len(self) in len(other)
+            assert len(self) == len(other)
         assert self.dtype == other.dtype
         return VectorArray2D(self.x - other.x, self.y - other.y)
 
