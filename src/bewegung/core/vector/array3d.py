@@ -211,11 +211,7 @@ class VectorArray3D(VectorArray3DABC):
         Exports vector array as a tuple of polar vector components in ``numpy.ndarry`` objects
         """
 
-        return (
-            self.mag,
-            np.arccos(self._z / self.mag),
-            np.arctan2(self._y, self._x),
-            )
+        return (self.mag, self.theta, self.phi)
 
     def as_tuple(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """
@@ -270,6 +266,22 @@ class VectorArray3D(VectorArray3DABC):
         """
 
         return np.sqrt(self._x ** 2 + self._y ** 2 + self._z ** 2)
+
+    @property
+    def theta(self) -> np.ndarray:
+        """
+        The vectors' thetas in radians, computed on demand
+        """
+
+        return np.arccos(self._z / self.mag)
+
+    @property
+    def phi(self) -> np.ndarray:
+        """
+        The vectors' phis in radians, computed on demand
+        """
+
+        return np.arctan2(self._y, self._x)
 
     @property
     def x(self) -> np.ndarray:

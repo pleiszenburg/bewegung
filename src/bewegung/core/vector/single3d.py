@@ -190,11 +190,7 @@ class Vector3D(Vector3DABC):
         Exports vector as a tuple of polar coordinates
         """
 
-        return (
-            self.mag,
-            math.acos(self._z / self.mag),
-            math.atan2(self._y, self._x),
-            )
+        return (self.mag, self.theta, self.phi)
 
     def as_tuple(self) -> PyNumber3D:
         """
@@ -243,6 +239,22 @@ class Vector3D(Vector3DABC):
         """
 
         return math.sqrt(self._x ** 2 + self._y ** 2 + self._z ** 2)
+
+    @property
+    def theta(self) -> float:
+        """
+        The vector's theta in radians, computed on demand
+        """
+
+        return math.acos(self._z / self.mag)
+
+    @property
+    def phi(self) -> float:
+        """
+        The vector's phi in radians, computed on demand
+        """
+
+        return math.atan2(self._y, self._x)
 
     @property
     def x(self) -> PyNumber:
