@@ -122,7 +122,7 @@ class VectorArray2D(VectorArray2DABC):
 
         if isinstance(other, VectorArray2DABC):
             assert len(self) == len(other)
-        assert self.dtype == other.dtype
+            assert self.dtype == other.dtype
         return VectorArray2D(self.x + other.x, self.y + other.y)
 
     def __radd__(self, *args, **kwargs):
@@ -139,7 +139,7 @@ class VectorArray2D(VectorArray2DABC):
 
         if isinstance(other, VectorArray2DABC):
             assert len(self) == len(other)
-        assert self.dtype == other.dtype
+            assert self.dtype == other.dtype
         return VectorArray2D(self.x - other.x, self.y - other.y)
 
     def __rsub__(self, *args, **kwargs):
