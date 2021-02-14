@@ -38,7 +38,7 @@ except ModuleNotFoundError:
     np, ndarray = None, None
 from typeguard import typechecked
 
-from ..abc import Dtype, PyNumber, PyNumber3D, Vector3DABC
+from ..abc import Dtype, PyNumber, PyNumber3D, Vector3DABC, VectorArray3DABC
 from ..const import FLOAT_DEFAULT
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -101,23 +101,29 @@ class Vector3D(Vector3DABC):
 
         return math.isclose(self.x, other.x) and math.isclose(self.y, other.y) and math.isclose(self.z, other.z)
 
-    def __add__(self, other: Vector3DABC) -> Vector3DABC:
+    def __add__(self, other: Union[Vector3DABC, VectorArray3DABC]) -> Vector3DABC:
         """
-        Add operation between vectors
+        Add operation between vectors or a vector and a vector array
 
         Args:
             other : Another vector
         """
+
+        if isinstance(other, VectorArray3DABC):
+            return NotImplemented # hand off to array type
 
         return type(self)(self.x + other.x, self.y + other.y, self.z + other.z)
 
-    def __sub__(self, other: Vector3DABC) -> Vector3DABC:
+    def __sub__(self, other: Union[Vector3DABC, VectorArray3DABC]) -> Vector3DABC:
         """
-        Substract operator between vectors
+        Substract operator between vectors or a vector and a vector array
 
         Args:
             other : Another vector
         """
+
+        if isinstance(other, VectorArray3DABC):
+            return NotImplemented # hand off to array type
 
         return type(self)(self.x - other.x, self.y - other.y, self.z - other.z)
 

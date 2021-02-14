@@ -112,9 +112,9 @@ class VectorArray2D(VectorArray2DABC):
 
         return np.allclose(self.x, other.x) and np.allclose(self.y, other.y)
 
-    def __add__(self, other: VectorArray2DABC) -> VectorArray2DABC:
+    def __add__(self, other: Union[VectorArray2DABC, Vector2D]) -> VectorArray2DABC:
         """
-        Add operation between vector arrays
+        Add operation between vector arrays or a vector array and a vector
 
         Args:
             other : Another vector array of equal length
@@ -124,9 +124,13 @@ class VectorArray2D(VectorArray2DABC):
         assert self.dtype == other.dtype
         return VectorArray2D(self.x + other.x, self.y + other.y)
 
-    def __sub__(self, other: VectorArray2DABC) -> VectorArray2DABC:
+    def __radd__(self, *args, **kwargs):
+
+        return self.__add__(*args, **kwargs)
+
+    def __sub__(self, other: Union[VectorArray2DABC, Vector2D]) -> VectorArray2DABC:
         """
-        Substract operator between vector arrays
+        Substract operator between vector arrays or a vector array and a vector
 
         Args:
             other : Another vector array of equal length
@@ -135,6 +139,10 @@ class VectorArray2D(VectorArray2DABC):
         assert len(self) == len(other)
         assert self.dtype == other.dtype
         return VectorArray2D(self.x - other.x, self.y - other.y)
+
+    def __rsub__(self, *args, **kwargs):
+
+        return self.__sub__(*args, **kwargs)
 
     def __mul__(self, other: Number) -> VectorArray2DABC:
         """
