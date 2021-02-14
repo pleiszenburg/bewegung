@@ -207,7 +207,7 @@ class VectorArray2D(VectorArray2DABC):
         Exports vector array as a tuple of polar vector components in ``numpy.ndarry`` objects
         """
 
-        return self.mag, np.arctan2(self._y, self._x)
+        return self.mag, self.angle
 
     def as_tuple(self) -> Tuple[np.ndarray, np.ndarray]:
         """
@@ -261,6 +261,14 @@ class VectorArray2D(VectorArray2DABC):
         """
 
         return np.sqrt(self._x ** 2 + self._y ** 2)
+
+    @property
+    def angle(self) -> np.ndarray:
+        """
+        The vectors' angles in radians, computed on demand
+        """
+
+        return np.arctan2(self._y, self._x)
 
     @property
     def x(self) -> np.ndarray:

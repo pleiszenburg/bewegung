@@ -185,7 +185,7 @@ class Vector2D(Vector2DABC):
         Exports vector as a tuple of polar coordinates
         """
 
-        return self.mag, math.atan2(self._y, self._x)
+        return self.mag, self.angle
 
     def as_tuple(self) -> PyNumber2D:
         """
@@ -233,6 +233,14 @@ class Vector2D(Vector2DABC):
         """
 
         return math.sqrt(self._x ** 2 + self._y ** 2)
+
+    @property
+    def angle(self) -> float:
+        """
+        The vector's angle in radians, computed on demand
+        """
+
+        return math.atan2(self._y, self._x)
 
     @property
     def x(self) -> PyNumber:
