@@ -101,17 +101,17 @@ class Matrix(MatrixABC):
             vector : A 2D or 3D vector or array of vectors
         """
 
-        vector = vector.as_tuple()
-        assert self.ndim == len(vector)
+        vector_tuple = vector.as_tuple()
+        assert self.ndim == len(vector_tuple)
 
         values = [
-            sum([trigonometric * dimension for trigonometric, dimension in zip(line, vector)])
+            sum([trigonometric * dimension for trigonometric, dimension in zip(line, vector_tuple)])
             for line in self._matrix
         ]
 
         if any((isinstance(vector, datatype) for datatype in (Vector2DABC, Vector3DABC))):
-            return Vector2D(*values) if len(vector) == 2 else Vector3D(*values)
-        return VectorArray2D(*values) if len(vector) == 2 else VectorArray3D(*values)
+            return Vector2D(*values) if len(vector_tuple) == 2 else Vector3D(*values)
+        return VectorArray2D(*values) if len(vector_tuple) == 2 else VectorArray3D(*values)
 
     def __getitem__(self, index: Tuple[int, int]) -> PyNumber:
         """
