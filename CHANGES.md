@@ -3,6 +3,7 @@
 ## 0.0.5 (2021-XX-XX)
 
 - FEATURE: Added `draw_bezier` method to `DrawgingBoard`.
+- FEATURE: `Matrix` can rotate vector arrays.
 - FIX: Some text anchors would fail with activated type checking.
 - DOCS: Added project logo.
 
