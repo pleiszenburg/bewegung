@@ -192,9 +192,11 @@ class Matrix(MatrixABC):
             a : An angle in radians
         """
 
+        sa, ca = sin(a), cos(a)
+
         return cls([
-            [cos(a), -sin(a)],
-            [sin(a), cos(a)],
+            [ca, -sa],
+            [sa, ca],
         ])
 
     @classmethod
