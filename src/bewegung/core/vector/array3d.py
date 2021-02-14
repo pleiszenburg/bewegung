@@ -123,7 +123,8 @@ class VectorArray3D(VectorArray3DABC):
             other : Another vector array of equal length
         """
 
-        assert len(self) == len(other)
+        if isinstance(other, VectorArray3DABC):
+            assert len(self) in len(other)
         assert self.dtype == other.dtype
         return VectorArray3D(self.x + other.x, self.y + other.y, self.z + other.z)
 
@@ -139,7 +140,8 @@ class VectorArray3D(VectorArray3DABC):
             other : Another vector array of equal length
         """
 
-        assert len(self) == len(other)
+        if isinstance(other, VectorArray3DABC):
+            assert len(self) in len(other)
         assert self.dtype == other.dtype
         return VectorArray3D(self.x - other.x, self.y - other.y, self.z - other.z)
 
