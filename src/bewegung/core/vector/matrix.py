@@ -85,7 +85,7 @@ class Matrix(MatrixABC):
         String representation for interactive use
         """
 
-        return f'<Matrix shape={len(self._matrix):d}x{len(self._matrix):d} dtype={self._dtype.__name__:s}>'
+        return f'<Matrix ndim={len(self._matrix):d} dtype={self._dtype.__name__:s}>'
 
     def __matmul__(
         self,
