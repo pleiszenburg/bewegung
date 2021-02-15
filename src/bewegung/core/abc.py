@@ -64,6 +64,9 @@ class IndexPoolABC(ABC):
 class MatrixABC(ABC):
     pass
 
+class MatrixArrayABC(ABC):
+    pass
+
 class LayerABC(ABC):
     pass
 
