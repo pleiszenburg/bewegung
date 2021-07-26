@@ -2,6 +2,7 @@
 
 ## 0.0.5 (2021-XX-XX)
 
+- FEATURE: Python 3.9 support
 - FEATURE: Added `draw_bezier` method to `DrawgingBoard`.
 - FEATURE: `Matrix` can rotate vector arrays.
 - FEATURE: Added operations (add, substract) between vectors and vector arrays.
