@@ -8,7 +8,7 @@ https://github.com/pleiszenburg/bewegung
 
     src/bewegung/core/abc.py: Abstract base classes
 
-    Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
+    Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
 <LICENSE_BLOCK>
 The contents of this file are subject to the GNU Lesser General Public License

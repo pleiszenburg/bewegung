@@ -8,7 +8,7 @@ https://github.com/pleiszenburg/bewegung
 
     src/bewegung/core/vector/matrix.py: Simple 2x2/3x3 matrix for rotations
 
-    Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
+    Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
 <LICENSE_BLOCK>
 The contents of this file are subject to the GNU Lesser General Public License
