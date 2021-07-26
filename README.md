@@ -9,6 +9,7 @@
 [![conda_version](https://img.shields.io/conda/vn/conda-forge/bewegung.svg?style=flat-square "conda version")](https://anaconda.org/conda-forge/bewegung)
 [![pypi_versions](https://img.shields.io/pypi/pyversions/bewegung.svg?style=flat-square "Available on PyPi - the Python Package Index")](https://pypi.python.org/pypi/bewegung)
 [![chat](https://img.shields.io/matrix/bewegung:matrix.org.svg?style=flat-square "Matrix Chat Room")](https://matrix.to/#/#bewegung:matrix.org)
+[![mailing_list](https://img.shields.io/badge/mailing%20list-groups.io-8cbcd1.svg?style=flat-square "Mailing List")](https://groups.io/g/bewegung-dev)
 
 ## Synopsis
 

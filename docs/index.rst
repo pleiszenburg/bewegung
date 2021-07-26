@@ -31,8 +31,11 @@ bewegung - a versatile video renderer
 .. |chat| image:: https://img.shields.io/matrix/bewegung:matrix.org.svg?style=flat-square
 	:target: https://matrix.to/#/#bewegung:matrix.org
 	:alt: Matrix Chat Room
+.. |mailing_list| image:: https://img.shields.io/badge/mailing%20list-groups.io-8cbcd1.svg?style=flat-square
+	:target: https://groups.io/g/bewegung-dev
+	:alt: Mailing List
 
-|docs_master| |license| |status| |pypi_version| |conda_version| |pypi_versions| |chat|
+|docs_master| |license| |status| |pypi_version| |conda_version| |pypi_versions| |chat| |mailing_list|
 
 .. warning::
 
