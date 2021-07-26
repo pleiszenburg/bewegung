@@ -84,6 +84,19 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 #
 html_theme = 'sphinx_rtd_theme'
 
+# Values to pass into the template engine's context for all pages.
+html_context = {
+    'sidebar_external_links_caption': 'Links',
+    'sidebar_external_links': [
+        # ('<i class="fa fa-rss fa-fw"></i> Blog', 'https://www.000'),
+        ('<i class="fa fa-github fa-fw"></i> Source code', 'https://github.com/pleiszenburg/bewegung'),
+        ('<i class="fa fa-bug fa-fw"></i> Issue tracker', 'https://github.com/pleiszenburg/bewegung/issues'),
+        # ('<i class="fa fa-envelope fa-fw"></i> Mailing list', 'https://groups.io/g/bewegung-dev'),
+        ('<i class="fa fa-comments fa-fw"></i> Chat', 'https://matrix.to/#/#bewegung:matrix.org'),
+        # ('<i class="fa fa-file-text fa-fw"></i> Citation', 'https://doi.org/000'),
+    ],
+}
+
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
