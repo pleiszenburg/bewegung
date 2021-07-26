@@ -1,3 +1,5 @@
+![bewegung_logo](https://github.com/pleiszenburg/bewegung/blob/master/docs/_static/logo01.png?raw=true "bewegung logo")
+
 # BEWEGUNG
 
 */bəˈveːɡʊŋ/ ([German, noun, feminine: motion/movement/animation](https://dict.leo.org/englisch-deutsch/bewegung))*
