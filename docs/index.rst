@@ -28,8 +28,11 @@ bewegung - a versatile video renderer
 .. |pypi_versions| image:: https://img.shields.io/pypi/pyversions/bewegung.svg?style=flat-square
 	:target: https://pypi.python.org/pypi/bewegung
 	:alt: Available on PyPi - the Python Package Index
+.. |chat| image:: https://img.shields.io/matrix/bewegung:matrix.org.svg?style=flat-square
+	:target: https://matrix.to/#/#bewegung:matrix.org
+	:alt: Matrix Chat Room
 
-|docs_master| |license| |status| |pypi_version| |conda_version| |pypi_versions|
+|docs_master| |license| |status| |pypi_version| |conda_version| |pypi_versions| |chat|
 
 .. warning::
 
