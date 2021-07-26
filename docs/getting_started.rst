@@ -44,7 +44,7 @@ The following code snipped will create an empty, black video, 10 seconds long at
 Complex Example
 ---------------
 
-The following code snipped will create a 10 second long video at 30 fps in 1080p with a gray background and a red "ball" (filled circle) moving from the top left corner to the bottom right corner of the image:
+The following code snipped will create a 10 second long animated gif-file at 30 fps in 270p with a gray background and a red "ball" (filled circle) moving from the top left corner to the bottom right corner of the image:
 
 .. code:: python
 
