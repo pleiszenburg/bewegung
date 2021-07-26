@@ -37,15 +37,25 @@ bewegung - a versatile video renderer
 
 .. toctree::
    :maxdepth: 2
-   :caption: User's Guide - Table of Contents
+   :caption: Introduction
 
    about
    installation
    getting_started
    gallery
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Reference
+
    canvas
    anatomy
    algebra
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Advanced
+
    debug
 
 Indices and tables
