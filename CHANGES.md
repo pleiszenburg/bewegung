@@ -9,6 +9,7 @@
 - FEATURE: Vectors and vector arrays expose angles.
 - FIX: Some text anchors would fail with activated type checking.
 - DOCS: Added project logo.
+- DOCS: Small corrections in various places.
 
 ## 0.0.4 (2020-12-14)
 
