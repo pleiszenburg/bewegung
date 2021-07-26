@@ -66,6 +66,7 @@ extensions = [
     'sphinx_autodoc_typehints',
     'sphinx_rtd_theme',
     'sphinxembeddedvideos.youtube', # https://github.com/sphinx-contrib/youtube/issues/9#issuecomment-734295832
+    'myst_parser',
 ]
 
 # Add any paths that contain templates here, relative to this directory.

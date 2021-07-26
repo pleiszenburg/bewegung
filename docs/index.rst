@@ -64,6 +64,7 @@ bewegung - a versatile video renderer
 
    performance
    debug
+   changes
 
 Indices and tables
 ==================

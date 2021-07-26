@@ -70,6 +70,7 @@ extras_require = {
         "sphinx-autodoc-typehints",
         "sphinx-rtd-theme",
         "sphinxembeddedvideos", # https://github.com/sphinx-contrib/youtube/issues/9#issuecomment-734295832
+        "myst-parser", # markdown in sphinx
         "twine",
         "wheel",
     ],
