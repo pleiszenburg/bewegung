@@ -59,6 +59,7 @@ bewegung - a versatile video renderer
    :maxdepth: 2
    :caption: Advanced
 
+   performance
    debug
 
 Indices and tables
