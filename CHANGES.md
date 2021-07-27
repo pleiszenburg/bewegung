@@ -8,6 +8,7 @@
 - FEATURE: Added operations (add, subtract) between vectors and vector arrays.
 - FEATURE: Vectors and vector arrays expose angles.
 - FEATURE: Matrix chat room for support.
+- FEATURE: Groups.io mailing list for support.
 - FIX: Some text anchors would fail with activated type checking.
 - DOCS: Added project logo.
 - DOCS: Small corrections in various places.
