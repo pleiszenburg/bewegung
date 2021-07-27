@@ -67,4 +67,4 @@ See [documentation](https://bewegung.readthedocs.io) (work in progress).
 
 `bewegung`'s development status is "well-tested alpha". Its API should not be considered stable until the project is labeled "beta" or better, although significant changes are very unlikely.
 
-`bewegung` can be drastically accelerated by deactivating debugging features. See [relevant section in the documentation](https://bewegung.readthedocs.io/en/latest/debug.html).
+`bewegung` can be drastically accelerated by deactivating debugging features. See [relevant section in the documentation](https://bewegung.readthedocs.io/en/latest/performance.html#typecheckingperformance).
