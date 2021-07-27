@@ -63,7 +63,7 @@ This resulting `video.mp4` file should look like this:
 
 ## Usage
 
-See [documentation](https://bewegung.readthedocs.io) (work in progress).
+See [documentation](https://bewegung.readthedocs.io).
 
 `bewegung`'s development status is "well-tested alpha". Its API should not be considered stable until the project is labeled "beta" or better, although significant changes are very unlikely.
 
