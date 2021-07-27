@@ -90,11 +90,12 @@ html_context = {
     'sidebar_external_links_caption': 'Links',
     'sidebar_external_links': [
         # ('<i class="fa fa-rss fa-fw"></i> Blog', 'https://www.000'),
-        ('<i class="fa fa-github fa-fw"></i> Source code', 'https://github.com/pleiszenburg/bewegung'),
-        ('<i class="fa fa-bug fa-fw"></i> Issue tracker', 'https://github.com/pleiszenburg/bewegung/issues'),
-        ('<i class="fa fa-envelope fa-fw"></i> Mailing list', 'https://groups.io/g/bewegung-dev'),
+        ('<i class="fa fa-github fa-fw"></i> Source Code', 'https://github.com/pleiszenburg/bewegung'),
+        ('<i class="fa fa-bug fa-fw"></i> Issue Tracker', 'https://github.com/pleiszenburg/bewegung/issues'),
+        ('<i class="fa fa-envelope fa-fw"></i> Mailing List', 'https://groups.io/g/bewegung-dev'),
         ('<i class="fa fa-comments fa-fw"></i> Chat', 'https://matrix.to/#/#bewegung:matrix.org'),
         # ('<i class="fa fa-file-text fa-fw"></i> Citation', 'https://doi.org/000'),
+        ('<i class="fa fa-info-circle fa-fw"></i> pleiszenburg.de', 'http://www.pleiszenburg.de/'),
     ],
 }
 
