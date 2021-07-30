@@ -1,6 +1,6 @@
 # Changes
 
-## 0.0.5 (2021-XX-XX)
+## 0.0.5 (2021-07-30)
 
 - FEATURE: Python 3.9 support.
 - FEATURE: Added `draw_bezier` method to `DrawgingBoard`.
