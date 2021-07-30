@@ -1,5 +1,9 @@
 # Changes
 
+## 0.0.6 (2021-XX-XX)
+
+- TBD
+
 ## 0.0.5 (2021-07-30)
 
 - FEATURE: Python 3.9 support.
