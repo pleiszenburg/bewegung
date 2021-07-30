@@ -8,7 +8,7 @@ https://github.com/pleiszenburg/bewegung
 
     setup.py: Used for package distribution
 
-    Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
+    Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
 <LICENSE_BLOCK>
 The contents of this file are subject to the GNU Lesser General Public License
@@ -43,7 +43,7 @@ from docs.version import get_version
 
 # List all versions of Python which are supported
 python_minor_min = 6
-python_minor_max = 8
+python_minor_max = 9
 confirmed_python_versions = [
     "Programming Language :: Python :: 3.{MINOR:d}".format(MINOR=minor)
     for minor in range(python_minor_min, python_minor_max + 1)
@@ -70,6 +70,7 @@ extras_require = {
         "sphinx-autodoc-typehints",
         "sphinx-rtd-theme",
         "sphinxembeddedvideos", # https://github.com/sphinx-contrib/youtube/issues/9#issuecomment-734295832
+        "myst-parser", # markdown in sphinx
         "twine",
         "wheel",
     ],

@@ -8,7 +8,7 @@ https://github.com/pleiszenburg/bewegung
 
     src/bewegung/core/vector/single3d.py: Single 3D Vector
 
-    Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
+    Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
 <LICENSE_BLOCK>
 The contents of this file are subject to the GNU Lesser General Public License
@@ -38,7 +38,7 @@ except ModuleNotFoundError:
     np, ndarray = None, None
 from typeguard import typechecked
 
-from ..abc import Dtype, PyNumber, PyNumber3D, Vector3DABC
+from ..abc import Dtype, PyNumber, PyNumber3D, Vector3DABC, VectorArray3DABC
 from ..const import FLOAT_DEFAULT
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -101,23 +101,29 @@ class Vector3D(Vector3DABC):
 
         return math.isclose(self.x, other.x) and math.isclose(self.y, other.y) and math.isclose(self.z, other.z)
 
-    def __add__(self, other: Vector3DABC) -> Vector3DABC:
+    def __add__(self, other: Union[Vector3DABC, VectorArray3DABC]) -> Vector3DABC:
         """
-        Add operation between vectors
+        Add operation between vectors or a vector and a vector array
 
         Args:
             other : Another vector
         """
+
+        if isinstance(other, VectorArray3DABC):
+            return NotImplemented # hand off to array type
 
         return type(self)(self.x + other.x, self.y + other.y, self.z + other.z)
 
-    def __sub__(self, other: Vector3DABC) -> Vector3DABC:
+    def __sub__(self, other: Union[Vector3DABC, VectorArray3DABC]) -> Vector3DABC:
         """
-        Substract operator between vectors
+        Substract operator between vectors or a vector and a vector array
 
         Args:
             other : Another vector
         """
+
+        if isinstance(other, VectorArray3DABC):
+            return NotImplemented # hand off to array type
 
         return type(self)(self.x - other.x, self.y - other.y, self.z - other.z)
 
@@ -184,11 +190,7 @@ class Vector3D(Vector3DABC):
         Exports vector as a tuple of polar coordinates
         """
 
-        return (
-            self.mag,
-            math.acos(self._z / self.mag),
-            math.atan2(self._y, self._x),
-            )
+        return (self.mag, self.theta, self.phi)
 
     def as_tuple(self) -> PyNumber3D:
         """
@@ -237,6 +239,22 @@ class Vector3D(Vector3DABC):
         """
 
         return math.sqrt(self._x ** 2 + self._y ** 2 + self._z ** 2)
+
+    @property
+    def theta(self) -> float:
+        """
+        The vector's theta in radians, computed on demand
+        """
+
+        return math.acos(self._z / self.mag)
+
+    @property
+    def phi(self) -> float:
+        """
+        The vector's phi in radians, computed on demand
+        """
+
+        return math.atan2(self._y, self._x)
 
     @property
     def x(self) -> PyNumber:

@@ -1,3 +1,5 @@
+![bewegung_logo](https://github.com/pleiszenburg/bewegung/blob/master/docs/_static/logo01.png?raw=true "bewegung logo")
+
 # BEWEGUNG
 
 */bəˈveːɡʊŋ/ ([German, noun, feminine: motion/movement/animation](https://dict.leo.org/englisch-deutsch/bewegung))*
@@ -8,6 +10,8 @@
 [![pypi_version](https://img.shields.io/pypi/v/bewegung.svg?style=flat-square "pypi version")](https://pypi.python.org/pypi/bewegung)
 [![conda_version](https://img.shields.io/conda/vn/conda-forge/bewegung.svg?style=flat-square "conda version")](https://anaconda.org/conda-forge/bewegung)
 [![pypi_versions](https://img.shields.io/pypi/pyversions/bewegung.svg?style=flat-square "Available on PyPi - the Python Package Index")](https://pypi.python.org/pypi/bewegung)
+[![chat](https://img.shields.io/matrix/bewegung:matrix.org.svg?style=flat-square "Matrix Chat Room")](https://matrix.to/#/#bewegung:matrix.org)
+[![mailing_list](https://img.shields.io/badge/mailing%20list-groups.io-8cbcd1.svg?style=flat-square "Mailing List")](https://groups.io/g/bewegung-dev)
 
 ## Synopsis
 
@@ -59,8 +63,8 @@ This resulting `video.mp4` file should look like this:
 
 ## Usage
 
-See [documentation](https://bewegung.readthedocs.io) (work in progress).
+See [documentation](https://bewegung.readthedocs.io).
 
 `bewegung`'s development status is "well-tested alpha". Its API should not be considered stable until the project is labeled "beta" or better, although significant changes are very unlikely.
 
-`bewegung` can be drastically accelerated by deactivating debugging features. See [relevant section in the documentation](https://bewegung.readthedocs.io/en/latest/debug.html).
+`bewegung` can be drastically accelerated by deactivating debugging features. See [relevant section in the documentation](https://bewegung.readthedocs.io/en/latest/performance.html#typecheckingperformance).

@@ -8,7 +8,7 @@ https://github.com/pleiszenburg/bewegung
 
     docs/config.py: Docs config
 
-    Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
+    Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
 <LICENSE_BLOCK>
 The contents of this file are subject to the GNU Lesser General Public License
@@ -49,7 +49,7 @@ from docs.version import get_version
 
 project = 'bewegung'
 author = 'Sebastian M. Ernst'
-copyright = f'2020 {author:s}'
+copyright = f'2020-2021 {author:s}'
 
 # The full version, including alpha/beta/rc tags
 release = get_version()
@@ -66,6 +66,7 @@ extensions = [
     'sphinx_autodoc_typehints',
     'sphinx_rtd_theme',
     'sphinxembeddedvideos.youtube', # https://github.com/sphinx-contrib/youtube/issues/9#issuecomment-734295832
+    'myst_parser',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -83,6 +84,20 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
+
+# Values to pass into the template engine's context for all pages.
+html_context = {
+    'sidebar_external_links_caption': 'Links',
+    'sidebar_external_links': [
+        # ('<i class="fa fa-rss fa-fw"></i> Blog', 'https://www.000'),
+        ('<i class="fa fa-github fa-fw"></i> Source Code', 'https://github.com/pleiszenburg/bewegung'),
+        ('<i class="fa fa-bug fa-fw"></i> Issue Tracker', 'https://github.com/pleiszenburg/bewegung/issues'),
+        ('<i class="fa fa-envelope fa-fw"></i> Mailing List', 'https://groups.io/g/bewegung-dev'),
+        ('<i class="fa fa-comments fa-fw"></i> Chat', 'https://matrix.to/#/#bewegung:matrix.org'),
+        # ('<i class="fa fa-file-text fa-fw"></i> Citation', 'https://doi.org/000'),
+        ('<i class="fa fa-info-circle fa-fw"></i> pleiszenburg.de', 'http://www.pleiszenburg.de/'),
+    ],
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

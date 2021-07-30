@@ -1,5 +1,18 @@
 # Changes
 
+## 0.0.5 (2021-07-30)
+
+- FEATURE: Python 3.9 support.
+- FEATURE: Added `draw_bezier` method to `DrawgingBoard`.
+- FEATURE: `Matrix` can rotate vector arrays.
+- FEATURE: Added operations (add, subtract) between vectors and vector arrays.
+- FEATURE: Vectors and vector arrays expose angles.
+- FEATURE: Matrix chat room for support.
+- FEATURE: Groups.io mailing list for support.
+- FIX: Some text anchors would fail with activated type checking.
+- DOCS: Added project logo.
+- DOCS: Small corrections in various places.
+
 ## 0.0.4 (2020-12-14)
 
 - FIX: Center offset in `DrawgingBoard` cares about subpixels.

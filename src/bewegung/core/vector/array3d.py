@@ -8,7 +8,7 @@ https://github.com/pleiszenburg/bewegung
 
     src/bewegung/core/vector/array3d.py: 3D Vector Array
 
-    Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
+    Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
 <LICENSE_BLOCK>
 The contents of this file are subject to the GNU Lesser General Public License
@@ -115,29 +115,39 @@ class VectorArray3D(VectorArray3DABC):
 
         return np.allclose(self.x, other.x) and np.allclose(self.y, other.y) and np.allclose(self.z, other.z)
 
-    def __add__(self, other: VectorArray3DABC) -> VectorArray3DABC:
+    def __add__(self, other: Union[VectorArray3DABC, Vector3D]) -> VectorArray3DABC:
         """
-        Add operation between vector arrays
+        Add operation between vector arrays or a vector array and a vector
 
         Args:
             other : Another vector array of equal length
         """
 
-        assert len(self) == len(other)
-        assert self.dtype == other.dtype
+        if isinstance(other, VectorArray3DABC):
+            assert len(self) == len(other)
+            assert self.dtype == other.dtype
         return VectorArray3D(self.x + other.x, self.y + other.y, self.z + other.z)
 
-    def __sub__(self, other: VectorArray3DABC) -> VectorArray3DABC:
+    def __radd__(self, *args, **kwargs):
+
+        return self.__add__(*args, **kwargs)
+
+    def __sub__(self, other: Union[VectorArray3DABC, Vector3D]) -> VectorArray3DABC:
         """
-        Substract operator between vector arrays
+        Substract operator between vector arrays or a vector array and a vector
 
         Args:
             other : Another vector array of equal length
         """
 
-        assert len(self) == len(other)
-        assert self.dtype == other.dtype
+        if isinstance(other, VectorArray3DABC):
+            assert len(self) == len(other)
+            assert self.dtype == other.dtype
         return VectorArray3D(self.x - other.x, self.y - other.y, self.z - other.z)
+
+    def __rsub__(self, *args, **kwargs):
+
+        return self.__sub__(*args, **kwargs)
 
     def __mul__(self, other: Number) -> VectorArray3DABC:
         """
@@ -201,11 +211,7 @@ class VectorArray3D(VectorArray3DABC):
         Exports vector array as a tuple of polar vector components in ``numpy.ndarry`` objects
         """
 
-        return (
-            self.mag,
-            np.arccos(self._z / self.mag),
-            np.arctan2(self._y, self._x),
-            )
+        return (self.mag, self.theta, self.phi)
 
     def as_tuple(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """
@@ -260,6 +266,22 @@ class VectorArray3D(VectorArray3DABC):
         """
 
         return np.sqrt(self._x ** 2 + self._y ** 2 + self._z ** 2)
+
+    @property
+    def theta(self) -> np.ndarray:
+        """
+        The vectors' thetas in radians, computed on demand
+        """
+
+        return np.arccos(self._z / self.mag)
+
+    @property
+    def phi(self) -> np.ndarray:
+        """
+        The vectors' phis in radians, computed on demand
+        """
+
+        return np.arctan2(self._y, self._x)
 
     @property
     def x(self) -> np.ndarray:

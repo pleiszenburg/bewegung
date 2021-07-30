@@ -8,7 +8,7 @@ https://github.com/pleiszenburg/bewegung
 
     src/bewegung/core/vector/single2d.py: Single 2D Vector
 
-    Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
+    Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
 <LICENSE_BLOCK>
 The contents of this file are subject to the GNU Lesser General Public License
@@ -38,7 +38,7 @@ except ModuleNotFoundError:
     np, ndarray = None, None
 from typeguard import typechecked
 
-from ..abc import Dtype, PyNumber, PyNumber2D, Vector2DABC
+from ..abc import Dtype, PyNumber, PyNumber2D, Vector2DABC, VectorArray2DABC
 from ..const import FLOAT_DEFAULT
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -97,23 +97,29 @@ class Vector2D(Vector2DABC):
 
         return math.isclose(self.x, other.x) and math.isclose(self.y, other.y)
 
-    def __add__(self, other: Vector2DABC) -> Vector2DABC:
+    def __add__(self, other: Union[Vector2DABC, VectorArray2DABC]) -> Vector2DABC:
         """
-        Add operation between vectors
+        Add operation between vectors or a vector and a vector array
 
         Args:
             other : Another vector
         """
+
+        if isinstance(other, VectorArray2DABC):
+            return NotImplemented # hand off to array type
 
         return type(self)(self.x + other.x, self.y + other.y)
 
-    def __sub__(self, other: Vector2DABC) -> Vector2DABC:
+    def __sub__(self, other: Union[Vector2DABC, VectorArray2DABC]) -> Vector2DABC:
         """
-        Substract operator between vectors
+        Substract operator between vectors or a vector and a vector array
 
         Args:
             other : Another vector
         """
+
+        if isinstance(other, VectorArray2DABC):
+            return NotImplemented # hand off to array type
 
         return type(self)(self.x - other.x, self.y - other.y)
 
@@ -179,7 +185,7 @@ class Vector2D(Vector2DABC):
         Exports vector as a tuple of polar coordinates
         """
 
-        return self.mag, math.atan2(self._y, self._x)
+        return self.mag, self.angle
 
     def as_tuple(self) -> PyNumber2D:
         """
@@ -227,6 +233,14 @@ class Vector2D(Vector2DABC):
         """
 
         return math.sqrt(self._x ** 2 + self._y ** 2)
+
+    @property
+    def angle(self) -> float:
+        """
+        The vector's angle in radians, computed on demand
+        """
+
+        return math.atan2(self._y, self._x)
 
     @property
     def x(self) -> PyNumber:

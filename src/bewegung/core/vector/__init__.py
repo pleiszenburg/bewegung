@@ -8,7 +8,7 @@ https://github.com/pleiszenburg/bewegung
 
     src/bewegung/core/vector/__init__.py: Vector algebra module root
 
-    Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
+    Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
 <LICENSE_BLOCK>
 The contents of this file are subject to the GNU Lesser General Public License
@@ -42,5 +42,6 @@ if _np is not None:
     from .array2d import VectorArray2D
     from .array2ddist import VectorArray2Ddist
     from .array3d import VectorArray3D
+    from .matrixarray import MatrixArray
 
 del _np

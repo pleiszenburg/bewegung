@@ -8,7 +8,7 @@ https://github.com/pleiszenburg/bewegung
 
     src/bewegung/core/backends/drawingboard/core.py: Simple 2D cairo renderer
 
-    Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
+    Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
 <LICENSE_BLOCK>
 The contents of this file are subject to the GNU Lesser General Public License
@@ -364,13 +364,13 @@ class DrawingBoard(DrawingBoardABC):
     _anchor = {
         'tl': lambda width, height: Vector2D(0.0, 0.0), # top left
         'tc': lambda width, height: Vector2D(-width / 2, 0.0), # top center
-        'tr': lambda width, height: Vector2D(-width, 0.0), # top right
+        'tr': lambda width, height: Vector2D(float(-width), 0.0), # top right
         'cl': lambda width, height: Vector2D(0.0, -height / 2), # center left
         'cc': lambda width, height: Vector2D(-width / 2, -height / 2), # center center
-        'cr': lambda width, height: Vector2D(-width, -height / 2), # center right
-        'bl': lambda width, height: Vector2D(0.0, -height), # bottom left
-        'bc': lambda width, height: Vector2D(-width / 2, -height), # bottom center
-        'br': lambda width, height: Vector2D(-width, -height), # bottom right
+        'cr': lambda width, height: Vector2D(float(-width), -height / 2), # center right
+        'bl': lambda width, height: Vector2D(0.0, float(-height)), # bottom left
+        'bc': lambda width, height: Vector2D(-width / 2, float(-height)), # bottom center
+        'br': lambda width, height: Vector2D(float(-width), float(-height)), # bottom right
     }
     _alignment = {
         'l': Pango.Alignment.LEFT,
@@ -381,7 +381,7 @@ class DrawingBoard(DrawingBoardABC):
     @staticmethod
     def make_font(family: str, size: float) -> Pango.FontDescription:
         """
-        Generates an Pango font description for re-use.
+        Generates a Pango font description for re-use.
 
         Args:
             familiy : Font family (name)
@@ -439,6 +439,29 @@ class DrawingBoard(DrawingBoardABC):
             self._ctx.line_to(point.x, point.y)
         self._ctx.set_source_rgba(*fill_color.as_rgba_float())
         self._ctx.fill()
+
+    @_geometry
+    def draw_bezier(self,
+        a: Vector2DABC,
+        b: Vector2DABC,
+        c: Vector2DABC,
+        d: Vector2DABC,
+        **kwargs,
+        ):
+        """
+        Adds a bezier curve to the drawing.
+
+        Args:
+            a : A 2D vector representing P0
+            b : A 2D vector representing P1
+            c : A 2D vector representing P2
+            d : A 2D vector representing P3
+            kwargs : Arguments for line stroke (see ``_stroke``)
+        """
+
+        self._ctx.move_to(a.x, a.y)
+        self._ctx.curve_to(b.x, b.y, c.x, c.y, d.x, d.y)
+        self._stroke(**kwargs)
 
     @_geometry
     def draw_circle(self,

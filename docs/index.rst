@@ -1,3 +1,7 @@
+.. |logo| image:: _static/logo01.svg
+	:width: 300
+
+|logo|
 
 bewegung - a versatile video renderer
 =====================================
@@ -24,8 +28,14 @@ bewegung - a versatile video renderer
 .. |pypi_versions| image:: https://img.shields.io/pypi/pyversions/bewegung.svg?style=flat-square
 	:target: https://pypi.python.org/pypi/bewegung
 	:alt: Available on PyPi - the Python Package Index
+.. |chat| image:: https://img.shields.io/matrix/bewegung:matrix.org.svg?style=flat-square
+	:target: https://matrix.to/#/#bewegung:matrix.org
+	:alt: Matrix Chat Room
+.. |mailing_list| image:: https://img.shields.io/badge/mailing%20list-groups.io-8cbcd1.svg?style=flat-square
+	:target: https://groups.io/g/bewegung-dev
+	:alt: Mailing List
 
-|docs_master| |license| |status| |pypi_version| |conda_version| |pypi_versions|
+|docs_master| |license| |status| |pypi_version| |conda_version| |pypi_versions| |chat| |mailing_list|
 
 .. warning::
 
@@ -33,16 +43,29 @@ bewegung - a versatile video renderer
 
 .. toctree::
    :maxdepth: 2
-   :caption: User's Guide - Table of Contents
+   :caption: Introduction
 
    about
    installation
    getting_started
    gallery
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Reference
+
    canvas
    anatomy
    algebra
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Advanced
+
+   performance
    debug
+   changes
+   support
 
 Indices and tables
 ==================

@@ -8,7 +8,7 @@ https://github.com/pleiszenburg/bewegung
 
     src/bewegung/core/vector/matrix.py: Simple 2x2/3x3 matrix for rotations
 
-    Copyright (C) 2020 Sebastian M. Ernst <ernst@pleiszenburg.de>
+    Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
 <LICENSE_BLOCK>
 The contents of this file are subject to the GNU Lesser General Public License
@@ -38,10 +38,16 @@ except ModuleNotFoundError:
     np, ndarray = None, None
 from typeguard import typechecked
 
-from ..abc import Dtype, MatrixABC, PyNumber, Vector2DABC, Vector3DABC
+from ..abc import (
+    Dtype, MatrixABC, PyNumber,
+    Vector2DABC, Vector3DABC,
+    VectorArray2DABC, VectorArray3DABC,
+    )
 from ..const import FLOAT_DEFAULT
 from .single2d import Vector2D
 from .single3d import Vector3D
+from .array2d import VectorArray2D
+from .array3d import VectorArray3D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -79,26 +85,33 @@ class Matrix(MatrixABC):
         String representation for interactive use
         """
 
-        return f'<Matrix shape={len(self._matrix):d}x{len(self._matrix):d} dtype={self._dtype.__name__:s}>'
+        return f'<Matrix ndim={len(self._matrix):d} dtype={self._dtype.__name__:s}>'
 
-    def __matmul__(self, vector: Union[Vector2DABC, Vector3DABC]) -> Union[Vector2DABC, Vector3DABC]:
+    def __matmul__(
+        self,
+        vector: Union[Vector2DABC, Vector3DABC, VectorArray2DABC, VectorArray3DABC]
+    ) -> Union[Vector2DABC, Vector3DABC, VectorArray2DABC, VectorArray3DABC]:
         """
-        Multiplies the matrix with a vector and returns the resulting new vector.
-        Raises an exception if matrix and vector have different numbers of dimensions.
+        Multiplies the matrix with a vector or array of vectors
+        and returns the resulting new vector or array of vectors.
+        Raises an exception if matrix and vector or
+        array of vectors have different numbers of dimensions.
 
         Args:
-            vector : A 2D or 3D vector
+            vector : A 2D or 3D vector or array of vectors
         """
 
-        vector = vector.as_tuple()
-        assert self.ndim == len(vector)
+        vector_tuple = vector.as_tuple()
+        assert self.ndim == len(vector_tuple)
 
         values = [
-            sum([item_a * item_b for item_a, item_b in zip(line, vector)])
+            sum([trigonometric * dimension for trigonometric, dimension in zip(line, vector_tuple)])
             for line in self._matrix
         ]
 
-        return Vector2D(*values) if len(vector) == 2 else Vector3D(*values)
+        if any((isinstance(vector, datatype) for datatype in (Vector2DABC, Vector3DABC))):
+            return Vector2D(*values) if len(vector_tuple) == 2 else Vector3D(*values)
+        return VectorArray2D(*values) if len(vector_tuple) == 2 else VectorArray3D(*values)
 
     def __getitem__(self, index: Tuple[int, int]) -> PyNumber:
         """
@@ -179,9 +192,11 @@ class Matrix(MatrixABC):
             a : An angle in radians
         """
 
+        sa, ca = sin(a), cos(a)
+
         return cls([
-            [cos(a), -sin(a)],
-            [sin(a), cos(a)],
+            [ca, -sa],
+            [sa, ca],
         ])
 
     @classmethod
