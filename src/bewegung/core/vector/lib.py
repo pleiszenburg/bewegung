@@ -36,11 +36,14 @@ from typeguard import typechecked
 from ..abc import Dtype
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# CLASS
+# ROUTINES
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
 def dtype_np2py(dtype: Dtype) -> Type:
+    """
+    Map numpy dtypes to Python number types
+    """
 
     if np.issubdtype(dtype, np.integer):
         return int
