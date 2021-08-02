@@ -3,6 +3,7 @@
 ## 0.0.6 (2021-XX-XX)
 
 - FEATURE: All vector classes expose `ndim`, number of dimensions.
+- FEATURE: Common base class, `VectorABC`, for all vector classes.
 
 ## 0.0.5 (2021-07-30)
 

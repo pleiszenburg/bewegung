@@ -35,7 +35,7 @@ from typeguard import typechecked
 
 from .lib import dtype_np2py
 from .single2d import Vector2D
-from ..abc import Dtype, Number, VectorArray2DABC, VectorIterable2D
+from ..abc import Dtype, Number, VectorABC, VectorArray2DABC, VectorIterable2D
 from ..const import FLOAT_DEFAULT
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -43,7 +43,7 @@ from ..const import FLOAT_DEFAULT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-class VectorArray2D(VectorArray2DABC):
+class VectorArray2D(VectorABC, VectorArray2DABC):
     """
     An array of vectors in 2D space.
 

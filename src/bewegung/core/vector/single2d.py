@@ -38,7 +38,7 @@ except ModuleNotFoundError:
     np, ndarray = None, None
 from typeguard import typechecked
 
-from ..abc import Dtype, PyNumber, PyNumber2D, Vector2DABC, VectorArray2DABC
+from ..abc import Dtype, PyNumber, PyNumber2D, VectorABC, Vector2DABC, VectorArray2DABC
 from ..const import FLOAT_DEFAULT
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -46,7 +46,7 @@ from ..const import FLOAT_DEFAULT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-class Vector2D(Vector2DABC):
+class Vector2D(VectorABC, Vector2DABC):
     """
     A single vector in 2D space.
 
