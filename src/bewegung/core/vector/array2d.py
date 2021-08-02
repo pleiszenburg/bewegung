@@ -255,6 +255,14 @@ class VectorArray2D(VectorArray2DABC):
         return self._x.dtype
 
     @property
+    def ndim(self) -> int:
+        """
+        Number of dimensions
+        """
+
+        return 2
+
+    @property
     def mag(self) -> np.ndarray:
         """
         The vectors' magnitudes, computed on demand

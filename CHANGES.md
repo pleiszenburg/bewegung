@@ -2,7 +2,7 @@
 
 ## 0.0.6 (2021-XX-XX)
 
-- TBD
+- FEATURE: All vector classes expose `ndim`, number of dimensions.
 
 ## 0.0.5 (2021-07-30)
 

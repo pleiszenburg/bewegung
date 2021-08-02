@@ -284,6 +284,14 @@ class Vector2D(Vector2DABC):
 
         return self._dtype
 
+    @property
+    def ndim(self) -> int:
+        """
+        Number of dimensions
+        """
+
+        return 2
+
     @classmethod
     def from_polar(cls, radius: PyNumber, angle: PyNumber) -> Vector2DABC:
         """

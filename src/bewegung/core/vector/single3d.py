@@ -315,6 +315,14 @@ class Vector3D(Vector3DABC):
 
         return self._dtype
 
+    @property
+    def ndim(self) -> int:
+        """
+        Number of dimensions
+        """
+
+        return 3
+
     @classmethod
     def from_polar(cls, radius: PyNumber, theta: PyNumber, phi: PyNumber) -> Vector3DABC:
         """
