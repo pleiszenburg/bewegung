@@ -85,6 +85,9 @@ class TimeScaleABC(ABC):
 class VectorABC(ABC):
     pass
 
+class VectorArrayABC(ABC):
+    pass
+
 class VectorArray2DABC(ABC):
     pass
 
