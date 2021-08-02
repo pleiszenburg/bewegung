@@ -64,6 +64,7 @@ class VectorArray3D(VectorABC, VectorArray3DABC):
         assert x.shape[0] == y.shape[0] == z.shape[0]
         assert x.dtype == y.dtype == z.dtype
         self._x, self._y, self._z = x, y, z
+        self._iterstate = 0
 
     def __repr__(self) -> str:
         """
@@ -94,6 +95,26 @@ class VectorArray3D(VectorABC, VectorArray3DABC):
             return Vector3D(dtype(self._x[idx]), dtype(self._y[idx]), dtype(self._z[idx]), dtype = dtype)
 
         return VectorArray3D(self._x[idx].copy(), self._y[idx].copy(), self._z[idx].copy())
+
+    def __iter__(self) -> VectorArray3DABC:
+        """
+        Iterator interface (1/2)
+        """
+
+        return self
+
+    def __next__(self) -> Vector3D:
+        """
+        Iterator interface (2/2)
+        """
+
+        if self._iterstate == len(self):
+            self._iterstate = 0 # reset
+            raise StopIteration()
+
+        value = self[self._iterstate]
+        self._iterstate += 1 # increment
+        return value
 
     def __eq__(self, other: VectorArray3DABC) -> bool:
         """

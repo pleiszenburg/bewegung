@@ -4,6 +4,7 @@
 
 - FEATURE: All vector classes expose `ndim`, number of dimensions.
 - FEATURE: Common base class, `VectorABC`, for all vector classes.
+- FEATURE: Vector arrays are iterators.
 
 ## 0.0.5 (2021-07-30)
 
