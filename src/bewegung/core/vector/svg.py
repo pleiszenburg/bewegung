@@ -28,6 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+from math import ceil, floor, log10
 from typing import Union
 
 from typeguard import typechecked
@@ -37,7 +38,6 @@ from ..abc import VectorABC, VectorArrayABC, NumberTypes
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 
 @typechecked
 class Svg:
@@ -51,8 +51,10 @@ class Svg:
         assert size > 0
         self._size = size
 
-        self._radius = 0
         self._vectors = []
+        self._radius = 0
+        self._view = 0
+        self._scale_factor = 0
 
         if isinstance(vec, VectorABC):
             self._add_vector(vec)
@@ -61,10 +63,8 @@ class Svg:
 
     def _add_vector(self, vector: VectorABC):
 
-        if abs(vector.x) > self._radius:
-            self._radius = abs(vector.x)
-        if abs(vector.y) > self._radius:
-            self._radius = abs(vector.y)
+        self._update(vector.x)
+        self._update(vector.y)
 
         self._vectors.append(vector)
 
@@ -73,51 +73,119 @@ class Svg:
         for vector in vectors:
             self._add_vector(vector)
 
-    def _render_grid(self, scale_factor: float):
+    def _update(self, value: NumberTypes):
+
+        value = abs(float(value))
+
+        if value <= self._radius:
+            return
+
+        self._radius = value
+
+        self._scale_factor = 2 * self._radius / self._size
+
+        pos = floor(log10(self._radius))
+        self._view = ceil(self._radius / (10 ** pos)) * (10 ** pos)
+
+    def _line(
+        self,
+        x1: float = 0.0, y1: float = 0.0,
+        x2: float = 0.0, y2: float = 0.0,
+        color: str = '#FF0000',
+        opacity: float = 1.0,
+        width: float = 1.0,
+        dashed: bool = False,
+        m1: bool = False,
+        m2: bool = False,
+    ):
+
+        assert width > 0
+        assert len(color) == 7 and color[0] == '#'
+        assert 0.0 <= opacity <= 1.0
+
+        if (x1, y1) == (x2, y2):
+            return ''
+
+        dashes = f'stroke-dasharray="{self._scale_factor*4:e} {self._scale_factor*1:e}" ' if dashed else ''
+        markerid = f'arrow_{hash((x1, y1, x2, y2)):x}' if m1 or m2 else ''
+        markerfactor = self._size / 50
+        marker = (
+            '<defs>'
+            f'<marker id="{markerid:s}" '
+            'orient="auto" '
+            f'markerWidth="{markerfactor*2:e}" markerHeight="{markerfactor*1.5:e}" '
+            f'refX="{markerfactor*2:e}" refY="{markerfactor*0.75:e}">'
+            f'<path d="M0,0 V{markerfactor*1.5:e} L{markerfactor*2:e},{markerfactor*0.75:e} Z" '
+            f'fill="{color:s}"/>'
+            '</marker>'
+            '</defs>'
+        ) if m1 or m2 else ''
+        markerstart = f'marker-start="url(#{markerid:s})" ' if m1 else ''
+        markerend = f'marker-end="url(#{markerid:s})" ' if m2 else ''
 
         return (
+            f'{marker:s}'
             '<polyline '
             'fill="none" '
-            'stroke="#808080" '
-            f'stroke-width="{2*scale_factor:e}" '
-            f'points="{-self._radius:e},0.0 {self._radius:e},0.0" '
-            'opacity="1.0" />'
-            '<polyline '
-            'fill="none" '
-            'stroke="#000000" '
-            f'stroke-width="{2*scale_factor:e}" '
-            f'points="0.0,{-self._radius:e} 0.0,{self._radius:e}" '
-            'opacity="1.0" />'
+            f'stroke="{color:s}" '
+            f'stroke-width="{self._scale_factor * width:e}" '
+            f'points="{x1:e},{y1:e} {x2:e},{y2:e}" '
+            f'opacity="{opacity:e}" '
+            f'{dashes:s}'
+            f'{markerstart:s}'
+            f'{markerend:s}'
+            '/>'
         )
 
-    def _render_vector(self, vector: VectorABC, scale_factor: float, inverse_radius: float) -> str:
+    def _grid(self):
 
-        return (
-            '<polyline '
-            'fill="none" '
-            'stroke="#FF0000" '
-            f'stroke-width="{2*scale_factor:e}" '
-            f'points="0.0,0.0 {vector.x:e},{vector.y:e}" '
-            'opacity="1.0" />'
-        )
+        lines = [
+            self._line(x1 = -self._view, x2 = self._view, color = '#808080'),
+            self._line(y1 = -self._view, y2 = self._view, color = '#808080'),
+        ]
+
+        step = 10 ** floor(log10(self._radius))
+
+        for idx in range(-10, 11):
+            if idx == 0:
+                continue
+            tock = idx % 10 == 0
+            val = float(idx * step)
+            lines.append(self._line(
+                x1 = -self._view, y1 = val,
+                x2 = self._view, y2 = val,
+                color = '#808080' if tock else '#C0C0C0',
+                dashed = True,
+            ))
+            lines.append(self._line(
+                x1 = val, y1 = -self._view,
+                x2 = val, y2 = self._view,
+                color = '#808080' if tock else '#C0C0C0',
+                dashed = True,
+            ))
+
+        return ''.join(lines)
+
+    def _vector(self, vector: VectorABC) -> str:
+
+        return self._line(x2 = vector.x, y2 = vector.y, color = '#FF0000', m2 = True)
 
     def render(self) -> str:
 
         assert len(self._vectors) > 0
         assert self._radius > 0
-
-        scale_factor = 2 * self._radius / self._size
-        inverse_radius = 1 / self._radius
+        assert self._view >= self._radius
+        assert self._scale_factor > 0
 
         return (
             '<svg xmlns="http://www.w3.org/2000/svg" '
             'xmlns:xlink="http://www.w3.org/1999/xlink" '
             f'width="{self._size:e}" height="{self._size:e}" '
-            f'viewBox="{-self._radius:e} {-self._radius:e} {2*self._radius:e} {2*self._radius:e}" '
+            f'viewBox="{-self._view:e} {-self._view:e} {2*self._view:e} {2*self._view:e}" '
             f'preserveAspectRatio="xMinYMin meet">'
-            f'<g transform="matrix(1,0,0,-1,0,0)">'
-            f'{self._render_grid(scale_factor):s}'
-            f'{"".join([self._render_vector(vec, scale_factor, inverse_radius) for vec in self._vectors]):s}'
+            f'<g transform="matrix(1,0,0,-1,0,0)">' # invert y axis
+            f'{self._grid():s}'
+            f'{"".join([self._vector(vec) for vec in self._vectors]):s}'
             '</g>'
             '</svg>'
         )
