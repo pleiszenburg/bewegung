@@ -38,6 +38,7 @@ except ModuleNotFoundError:
     np, ndarray = None, None
 from typeguard import typechecked
 
+from .svg import Svg
 from ..abc import Dtype, PyNumber, PyNumber2D, VectorABC, Vector2DABC, VectorArray2DABC
 from ..const import FLOAT_DEFAULT
 
@@ -76,6 +77,10 @@ class Vector2D(VectorABC, Vector2DABC):
         if self._dtype == int:
             return f'<Vector2D x={self._x:d} y={self._y:d} dtype={self._dtype.__name__:s}>'
         return f'<Vector2D x={self._x:e} y={self._y:e} dtype={self._dtype.__name__:s}>'
+
+    def _repr_svg_(self) -> str:
+
+        return Svg(self).render()
 
     def __eq__(self, other: Vector2DABC) -> bool:
         """
