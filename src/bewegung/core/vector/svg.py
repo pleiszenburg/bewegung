@@ -55,6 +55,7 @@ class Svg:
         self._radius = 0
         self._view = 0
         self._scale_factor = 0
+        self._step = 0
 
         if isinstance(vec, VectorABC):
             self._add_vector(vec)
@@ -86,6 +87,8 @@ class Svg:
 
         pos = floor(log10(self._radius))
         self._view = ceil(self._radius / (10 ** pos)) * (10 ** pos)
+
+        self._step = 10 ** floor(log10(self._radius))
 
     def _line(
         self,
@@ -144,13 +147,11 @@ class Svg:
             self._line(y1 = -self._view, y2 = self._view, color = '#808080'),
         ]
 
-        step = 10 ** floor(log10(self._radius))
-
         for idx in range(-10, 11):
             if idx == 0:
                 continue
             tock = idx % 10 == 0
-            val = float(idx * step)
+            val = float(idx * self._step)
             lines.append(self._line(
                 x1 = -self._view, y1 = val,
                 x2 = self._view, y2 = val,
