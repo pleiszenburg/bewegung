@@ -184,9 +184,18 @@ class Svg:
             f'width="{self._size:e}" height="{self._size:e}" '
             f'viewBox="{-self._view:e} {-self._view:e} {2*self._view:e} {2*self._view:e}" '
             f'preserveAspectRatio="xMinYMin meet">'
+
             f'<g transform="matrix(1,0,0,-1,0,0)">' # invert y axis
             f'{self._grid():s}'
             f'{"".join([self._vector(vec) for vec in self._vectors]):s}'
             '</g>'
+
+            '<style>'
+            f'.step {{ font-family: monospace; font-size: {15*self._scale_factor:e}px; fill: #C0C0C0; }}'
+            '</style>'
+            f'<text x="{-self._view+5*self._scale_factor:e}" y="{self._view-5*self._scale_factor:e}" class="step">'
+            f'tick={self._step:0.0e}'
+            '</text>'
+
             '</svg>'
         )
