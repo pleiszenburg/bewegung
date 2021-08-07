@@ -28,12 +28,13 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from math import ceil, floor, log10
+from math import ceil, floor, log10, pi
 from typing import Union
 
 from typeguard import typechecked
 
 from ..abc import VectorABC, VectorArrayABC, NumberTypes
+from ..color import Color
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -169,7 +170,9 @@ class Svg:
 
     def _vector(self, vector: VectorABC) -> str:
 
-        return self._line(x2 = vector.x, y2 = vector.y, color = '#FF0000', m2 = True)
+        color = Color.from_hsv(vector.angle * 180 / pi, 1.0, 1.0).as_hex(alpha = False)
+
+        return self._line(x2 = vector.x, y2 = vector.y, color = f'#{color:s}', m2 = True)
 
     def render(self) -> str:
 
