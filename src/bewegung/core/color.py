@@ -28,6 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+from math import floor
 from typing import Tuple
 
 from .abc import ColorABC
@@ -201,3 +202,49 @@ class Color(ColorABC):
             )
             if not (color == 'a' and len(component) == 0)
         })
+
+    @classmethod
+    def from_hsv(cls,
+        h: float,
+        s: float,
+        v: float,
+    ):
+        """
+        Imports color from HSV
+
+        Args:
+            h : hue 0.0...360.0
+            s : saturation 0.0...1.0
+            v : value (brightness) 0.0...1.0
+        """
+
+        if not (0.0 <= h <= 360.0):
+            raise ValueError('hue value out of bounds (0.0...360.0)')
+        if not (0.0 <= s <= 1.0):
+            raise ValueError('saturation value out of bounds (0.0...1.0)')
+        if not (0.0 <= v <= 1.0):
+            raise ValueError('"value" (brightness) value out of bounds (0.0...1.0)')
+
+        hi = floor(h / 60)
+
+        f = h / 60 - hi
+
+        p = round(255 * v * (1 - s))
+        q = round(255 * v * (1 - s * f))
+        t = round(255 * v * (1 - s * (1 - f)))
+        v = round(255 * v)
+
+        if hi == 1:
+            return cls(q, v, p)
+        if hi == 2:
+            return cls(p, v, t)
+        if hi == 3:
+            return cls(p, q, v)
+        if hi == 4:
+            return cls(t, p, v)
+        if hi == 5:
+            return cls(v, p, q)
+        if hi in (0, 6):
+            return cls(v, t, p)
+
+        raise ValueError('Conversion from HSV to RGB failed')
