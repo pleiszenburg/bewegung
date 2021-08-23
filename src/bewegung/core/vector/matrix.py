@@ -184,6 +184,13 @@ class Matrix(MatrixABC):
 
         return tuple(tuple(item) for item in self._matrix)
 
+    def copy(self) -> MatrixABC:
+        """
+        Copies matrix
+        """
+
+        return type(self)(matrix = [line.copy() for line in self._matrix], dtype = self.dtype)
+
     @property
     def dtype(self) -> Type:
         """
