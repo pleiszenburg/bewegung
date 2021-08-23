@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from math import cos, sin
+from math import cos, sin, isclose
 from typing import List, Tuple, Type, Union
 
 try:
@@ -134,6 +134,36 @@ class Matrix(MatrixABC):
 
         self._matrix[index[0]][index[1]] = self._dtype(value)
 
+    def __eq__(self, other: MatrixABC) -> bool:
+        """
+        Equality check between matrices
+
+        Args:
+            other : Another matrix
+        """
+
+        if self.ndim != other.ndim:
+            return False
+
+        return self.as_tuple() == other.as_tuple()
+
+    def __mod__(self, other: MatrixABC) -> bool:
+        """
+        Is-close check between matrices
+
+        Args:
+            other : Another matrix
+        """
+
+        if self.ndim != other.ndim:
+            return False
+
+        return all(
+            isclose(number_a, number_b)
+            for line_a, line_b in zip(self.as_tuple(), other.as_tuple())
+            for number_a, number_b in zip(line_a, line_b)
+        )
+
     def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> ndarray:
         """
         Exports matrix as a ``numpy.ndarry`` object, shape ``(2, 2)`` or ``(3, 3)``.
@@ -146,6 +176,13 @@ class Matrix(MatrixABC):
             raise NotImplementedError('numpy is not available')
 
         return np.array(self._matrix, dtype = dtype)
+
+    def as_tuple(self) -> Tuple[Tuple[PyNumber, ...], ...]:
+        """
+        Exports matrix as a tuple of tuples
+        """
+
+        return tuple(tuple(item) for item in self._matrix)
 
     @property
     def dtype(self) -> Type:

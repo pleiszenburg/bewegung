@@ -7,6 +7,7 @@
 - FEATURE: Common base class, `VectorArrayABC`, for all vector array classes.
 - FEATURE: Vector arrays are iterators.
 - FEATURE: The `Color` class, using RGBA internally, can now import HSV values.
+- FEATURE: Added equality check, "is close" check and tuple export to `Matrix`.
 - FIX: Development dependency switched from unmaintained `python-language-server` to `python-lsp-server`.
 
 ## 0.0.5 (2021-07-30)
