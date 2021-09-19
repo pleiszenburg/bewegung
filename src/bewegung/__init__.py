@@ -30,7 +30,6 @@ specific language governing rights and limitations under the License.
 
 __version__ = '0.0.6'
 
-from .core.camera import Camera
 from .core.backends import *
 from .core.color import Color
 from .core.const import *

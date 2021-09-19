@@ -45,3 +45,5 @@ if _np is not None:
     from .matrixarray import MatrixArray
 
 del _np
+
+from .camera import Camera
