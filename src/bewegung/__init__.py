@@ -42,5 +42,6 @@ from .core.sequence import Sequence
 from .core.task import Task
 from .core.time import Time
 from .core.timescale import TimeScale
-from .core.vector import *
 from .core.video import Video
+
+from .linalg import *
