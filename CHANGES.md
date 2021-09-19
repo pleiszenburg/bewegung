@@ -9,6 +9,7 @@
 - FEATURE: The `Color` class, using RGBA internally, can now import HSV values.
 - FEATURE: Added equality check, "is close" check, tuple export and copy to `Matrix`.
 - FEATURE: New dedicated sub-module for `DrawingBoard` named `bewegung.drawingboard`, allowing direct import.
+- FEATURE: New dedicated sub-module for linear algebra named `bewegung.lingalg`.
 - FIX: Development dependency switched from unmaintained `python-language-server` to `python-lsp-server`.
 - FIX: Imports in `contrib` were broken.
 - FIX: `test` target in `makefile` was broken.
