@@ -9,6 +9,7 @@
 - FEATURE: The `Color` class, using RGBA internally, can now import HSV values.
 - FEATURE: Added equality check, "is close" check, tuple export and copy to `Matrix`.
 - FIX: Development dependency switched from unmaintained `python-language-server` to `python-lsp-server`.
+- FIX: Imports in `contrib` were broken.
 
 ## 0.0.5 (2021-07-30)
 
