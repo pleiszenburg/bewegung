@@ -55,52 +55,54 @@ from .matrix import Matrix
 @typechecked
 class MatrixArray(MatrixArrayABC):
     """
-    An array implementation of simple matrices for rotating vector arrays
+    An array implementation of simple matrices for rotating vectors and vector arrays
 
     Mutable.
 
-    TODO Stub!
-
     Args:
-        matrix : 2D or 3D arrangement in a list of lists containing Python numbers
-        dtype : Data type. Derived from entries in ``matrix`` if not explicitly provided.
+        matrix : 2D or 3D arrangement in a list of lists containing numpy nd arrays
     """
 
-    # def __init__(self, matrix = List[List[ndarray]]):
-    #
-    #     lines = len(matrix)
-    #     assert lines in (2, 3) # allow 2D and 3D
-    #     assert all((len(line) == lines for line in matrix))
-    #
-    #     self._length = matrix[0][0].shape[0]
-    #     assert all((
-    #         (item.ndim == 1 and item.shape[0] == self._length)
-    #         for line in matrix for item in line
-    #         ))
-    #
-    #     self._dtype = matrix[0][0].dtype
-    #     assert all((item.dtype == self._dtype for line in matrix for item in line))
-    #
-    #     self._matrix = matrix
-    #
-    # def __repr__(self) -> str:
-    #     """
-    #     String representation for interactive use
-    #     """
-    #
-    #     return f'<MatrixArray ndim={len(self._matrix):d} len={len(self):d}>'
-    #
-    # def __len__(self) -> int:
-    #     """
-    #     Length of array
-    #     """
-    #
-    #     return self._length
-    #
-    # def __matmul__(
-    #     self,
-    #     vector: Union[Vector2DABC, Vector3DABC, VectorArray2DABC, VectorArray3DABC]
-    # ) -> Union[Vector2DABC, Vector3DABC, VectorArray2DABC, VectorArray3DABC]:
+    def __init__(self, matrix = List[List[ndarray]]):
+
+        lines = len(matrix)
+        assert lines in (2, 3) # allow 2D and 3D
+        assert all((len(line) == lines for line in matrix))
+
+        self._length = matrix[0][0].shape[0]
+        self._dtype = matrix[0][0].dtype
+
+        assert all(
+            all((
+                item.ndim == 1,
+                item.shape[0] == self._length,
+                item.dtype == self._dtype,
+            ))
+            for line in matrix for item in line
+        )
+
+        self._matrix = matrix
+        self._iterstate = 0
+
+    def __repr__(self) -> str:
+        """
+        String representation for interactive use
+        """
+
+        return f'<MatrixArray ndim={len(self._matrix):d} len={len(self):d}>'
+
+    def __len__(self) -> int:
+        """
+        Length of array
+        """
+
+        return self._length
+
+    def __matmul__(
+        self,
+        vector: Union[Vector2DABC, Vector3DABC, VectorArray2DABC, VectorArray3DABC]
+    ) -> Union[Vector2DABC, Vector3DABC, VectorArray2DABC, VectorArray3DABC]:
+        pass
     #     """
     #     Multiplies the matrix with a vector or array of vectors
     #     and returns the resulting new vector or array of vectors.
@@ -122,8 +124,9 @@ class MatrixArray(MatrixArrayABC):
     #     if any((isinstance(vector, datatype) for datatype in (Vector2DABC, Vector3DABC))):
     #         return Vector2D(*values) if len(vector_tuple) == 2 else Vector3D(*values)
     #     return VectorArray2D(*values) if len(vector_tuple) == 2 else VectorArray3D(*values)
-    #
-    # def __getitem__(self, index: Union[Tuple[int, int, int], int, slice]) -> Union[PyNumber, Matrix]:
+
+    def __getitem__(self, index: Union[Tuple[int, int, int], int, slice]) -> Union[PyNumber, Matrix]:
+        pass
     #     """
     #     Item access, returns value at position
     #
@@ -146,8 +149,9 @@ class MatrixArray(MatrixArrayABC):
     #         ])
     #
     #     return dtype(self._matrix[index[0]][index[1]][index[2]])
-    #
-    # def __setitem__(self, index: Tuple[int, int], value: PyNumber):
+
+    def __setitem__(self, index: Tuple[int, int], value: PyNumber):
+        pass
     #     """
     #     Item access, sets new value at position
     #
@@ -157,8 +161,49 @@ class MatrixArray(MatrixArrayABC):
     #     """
     #
     #     self._matrix[index[0]][index[1]] = self._dtype(value)
-    #
-    # def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> ndarray:
+
+    def __iter__(self) -> MatrixArrayABC:
+        """
+        Iterator interface (1/2)
+        """
+
+        return self
+
+    def __next__(self) -> Matrix:
+        """
+        Iterator interface (2/2)
+        """
+
+        if self._iterstate == len(self):
+            self._iterstate = 0 # reset
+            raise StopIteration()
+
+        value = self[self._iterstate]
+        self._iterstate += 1 # increment
+        return value
+
+    def __eq__(self, other: MatrixArrayABC) -> bool:
+
+        pass
+
+    def __mod__(self, other: MatrixArrayABC) -> bool:
+
+        pass
+
+    def as_list(self) -> List[Matrix]:
+
+        """
+        Exports a list of :class:`bewegung.Matrix` objects
+        """
+
+        # dtype = dtype_np2py(self.dtype)
+        # return [
+        #     Matrix(dtype(self._x[idx]), dtype(self._y[idx]), dtype(self._z[idx]), dtype = dtype)
+        #     for idx in range(len(self))
+        # ]
+
+    def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> ndarray:
+        pass
     #     """
     #     Exports matrix as a ``numpy.ndarry`` object, shape ``(2, 2)`` or ``(3, 3)``.
     #
@@ -167,25 +212,40 @@ class MatrixArray(MatrixArrayABC):
     #     """
     #
     #     return np.array(self._matrix, dtype = dtype)
-    #
-    # @property
-    # def dtype(self) -> Type:
-    #     """
-    #     (Python) data type of matrix components
-    #     """
-    #
-    #     return self._dtype
-    #
-    # @property
-    # def ndim(self) -> int:
-    #     """
-    #     Number of dimensions, either ``2`` or ``3``.
-    #     """
-    #
-    #     return len(self._matrix)
-    #
-    # @classmethod
-    # def from_ndarray(cls, matrix: ndarray, dtype: Type = float) -> MatrixArrayABC:
+
+    def as_type(self) -> MatrixArrayABC:
+
+        pass
+
+    def copy(self) -> MatrixArrayABC:
+        """
+        Copies matrix
+        """
+
+        return type(self)(matrix = [
+            [item.copy() for item in line]
+            for line in self._matrix
+        ])
+
+    @property
+    def dtype(self) -> Type:
+        """
+        (Python) data type of matrix components
+        """
+
+        return self._dtype
+
+    @property
+    def ndim(self) -> int:
+        """
+        Number of dimensions, either ``2`` or ``3``.
+        """
+
+        return len(self._matrix)
+
+    @classmethod
+    def from_ndarray(cls, matrix: ndarray, dtype: Type = float) -> MatrixArrayABC:
+        pass
     #     """
     #     Generates new matrix object from ``numpy.ndarray`` object
     #     of shape ``(2, 2)`` or ``(3, 3)``
@@ -203,9 +263,10 @@ class MatrixArray(MatrixArrayABC):
     #         matrix = [[dtype(item) for item in line] for line in matrix]
     #
     #     return cls(matrix)
-    #
-    # @classmethod
-    # def from_2d_rotation(cls, a: ndarray) -> MatrixArrayABC:
+
+    @classmethod
+    def from_2d_rotation(cls, a: ndarray) -> MatrixArrayABC:
+        pass
     #     """
     #     Generates new 2D matrix object from an angle
     #
@@ -220,9 +281,10 @@ class MatrixArray(MatrixArrayABC):
     #         [ca, -sa],
     #         [sa, ca],
     #     ])
-    #
-    # @classmethod
-    # def from_3d_rotation(cls, v: Vector3DABC, a: PyNumber) -> MatrixArrayABC:
+
+    @classmethod
+    def from_3d_rotation(cls, v: Vector3DABC, a: PyNumber) -> MatrixArrayABC:
+        pass
     #     """
     #     Generates new 3D matrix object from a vector and an angle
     #
