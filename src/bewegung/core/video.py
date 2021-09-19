@@ -38,7 +38,8 @@ try:
 except ModuleNotFoundError:
     tqdm = lambda x: x
 
-from .abc import EncoderABC, LayerABC, SequenceABC, VideoABC, Vector2DABC, TimeABC
+from ..linalg import Vector2D
+from .abc import EncoderABC, LayerABC, SequenceABC, VideoABC, TimeABC
 from .backends import backends
 from .const import FPS_DEFAULT
 from .encoders import FFmpegH264Encoder
@@ -48,7 +49,6 @@ from .sequence import Sequence
 from .task import Task
 from .time import Time
 from .typeguard import typechecked
-from .vector import Vector2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # "GLOBALS" (FOR WORKERS)
@@ -375,7 +375,7 @@ class Video(VideoABC):
     def layer(self,
         zindex: Union[int, None] = None,
         canvas: Union[Callable, None] = None,
-        offset: Union[Vector2DABC, None] = None,
+        offset: Union[Vector2D, None] = None,
     ) -> Callable:
         """
         A **decorator** for decorating ``layer`` methods (tasks) within ``sequence`` classes.

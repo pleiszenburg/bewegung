@@ -33,10 +33,10 @@ from typing import Any, Callable, Union
 
 from PIL import Image as PIL_Image
 
-from .abc import EffectABC, LayerABC, SequenceABC, TimeABC, VideoABC, Vector2DABC
+from ..linalg import Vector2D
+from .abc import EffectABC, LayerABC, SequenceABC, TimeABC, VideoABC
 from .backends import backends
 from .typeguard import typechecked
-from .vector import Vector2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -65,7 +65,7 @@ class Layer(LayerABC):
         zindex: int,
         video: VideoABC,
         canvas: Union[Callable, None] = None,
-        offset: Union[Vector2DABC, None] = None,
+        offset: Union[Vector2D, None] = None,
     ):
 
         # consistency checks are performed in Video.layer
