@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/vector/svg.py: SVG output for vectors
+    src/bewegung/linalg/svg.py: SVG output for vectors
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -33,8 +33,8 @@ from typing import Union
 
 from typeguard import typechecked
 
-from ..abc import VectorABC, VectorArrayABC, NumberTypes
-from ..color import Color
+from ..core.abc import VectorABC, VectorArrayABC, NumberTypes
+from ..core.color import Color
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

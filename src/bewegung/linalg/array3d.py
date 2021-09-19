@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/vector/array3d.py: 3D Vector Array
+    src/bewegung/linalg/array3d.py: 3D Vector Array
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -33,10 +33,10 @@ from typing import List, Tuple, Union
 import numpy as np
 from typeguard import typechecked
 
+from ..core.abc import Dtype, Number, VectorArrayABC, VectorArray3DABC, VectorIterable3D
+from ..core.const import FLOAT_DEFAULT
 from .lib import dtype_np2py
 from .single3d import Vector3D
-from ..abc import Dtype, Number, VectorArrayABC, VectorArray3DABC, VectorIterable3D
-from ..const import FLOAT_DEFAULT
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/vector/lib.py: Vector library
+    src/bewegung/linalg/lib.py: Linear algebra library
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -33,7 +33,7 @@ from typing import Type
 import numpy as np
 from typeguard import typechecked
 
-from ..abc import Dtype
+from ..core.abc import Dtype
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ROUTINES
