@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/backends/drawingboard/core.py: Simple 2D cairo renderer
+    src/bewegung/drawingboard/core.py: Simple 2D cairo renderer
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -62,10 +62,10 @@ try:
 except ModuleNotFoundError:
     IPython = None
 
-from ...abc import DrawingBoardABC, Vector2DABC
-from ...color import Color
-from ...typeguard import typechecked
-from ...vector import Vector2D, Matrix
+from ..core.abc import DrawingBoardABC, Vector2DABC
+from ..core.color import Color
+from ..core.typeguard import typechecked
+from ..core.vector import Vector2D, Matrix
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/backends/drawingboard/backend.py: Simple 2D cairo renderer
+    src/bewegung/core/backends/drawingboard.py: Simple 2D cairo renderer
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -32,9 +32,9 @@ from typing import Any, Callable
 
 from PIL.Image import Image
 
-from .._base import BackendBase
-from ...abc import VideoABC
-from ...typeguard import typechecked
+from ._base import BackendBase
+from ..abc import VideoABC
+from ..typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -56,7 +56,7 @@ class Backend(BackendBase):
 
     def _load(self):
 
-        from .core import DrawingBoard
+        from ...drawingboard import DrawingBoard
 
         self._type = DrawingBoard
 
