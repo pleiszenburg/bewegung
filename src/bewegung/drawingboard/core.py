@@ -62,10 +62,10 @@ try:
 except ModuleNotFoundError:
     IPython = None
 
-from ..core.abc import DrawingBoardABC, Vector2DABC
+from ..core.abc import DrawingBoardABC
 from ..core.color import Color
 from ..core.typeguard import typechecked
-from ..core.vector import Vector2D, Matrix
+from ..linalg import Vector2D, Matrix
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -204,7 +204,7 @@ class DrawingBoard(DrawingBoardABC):
         fn: Union[str, None] = None,
         raw: Union[bytes, None] = None,
         svg: Union[Rsvg.Handle, None] = None,
-        point: Union[Vector2DABC, None] = None,
+        point: Union[Vector2D, None] = None,
         scale: float = 1.0,
         angle: float = 0.0,
         anchor: Union[Vector2D, str] = 'cc',
@@ -302,7 +302,7 @@ class DrawingBoard(DrawingBoardABC):
     @_geometry
     def draw_text(self,
         text: str = '',
-        point: Union[Vector2DABC, None] = None,
+        point: Union[Vector2D, None] = None,
         angle: float = 0.0,
         font: Union[Pango.FontDescription, None] = None,
         font_color: Union[Color, None] = None,
@@ -393,7 +393,7 @@ class DrawingBoard(DrawingBoardABC):
 
     @_geometry
     def draw_polygon(self,
-        *points: Vector2DABC,
+        *points: Vector2D,
         close: bool = False,
         **kwargs,
         ):
@@ -418,7 +418,7 @@ class DrawingBoard(DrawingBoardABC):
 
     @_geometry
     def draw_filledpolygon(self,
-        *points: Vector2DABC,
+        *points: Vector2D,
         fill_color: Union[Color, None] = None,
         ):
         """
@@ -442,10 +442,10 @@ class DrawingBoard(DrawingBoardABC):
 
     @_geometry
     def draw_bezier(self,
-        a: Vector2DABC,
-        b: Vector2DABC,
-        c: Vector2DABC,
-        d: Vector2DABC,
+        a: Vector2D,
+        b: Vector2D,
+        c: Vector2D,
+        d: Vector2D,
         **kwargs,
         ):
         """
@@ -465,7 +465,7 @@ class DrawingBoard(DrawingBoardABC):
 
     @_geometry
     def draw_circle(self,
-        point: Vector2DABC,
+        point: Vector2D,
         r: float = 1.0,
         **kwargs,
         ):
@@ -489,7 +489,7 @@ class DrawingBoard(DrawingBoardABC):
 
     @_geometry
     def draw_filledcircle(self,
-        point: Vector2DABC,
+        point: Vector2D,
         r: float = 1.0,
         fill_color: Union[Color, None] = None,
         ):
