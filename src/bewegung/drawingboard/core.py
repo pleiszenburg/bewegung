@@ -62,10 +62,10 @@ try:
 except ModuleNotFoundError:
     IPython = None
 
-from ..core.abc import DrawingBoardABC
 from ..core.color import Color
 from ..core.typeguard import typechecked
 from ..linalg import Vector2D, Matrix
+from .abc import DrawingBoardABC
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

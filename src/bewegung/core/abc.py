@@ -49,9 +49,6 @@ class CameraABC(ABC):
 class ColorABC(ABC):
     pass
 
-class DrawingBoardABC(ABC):
-    pass
-
 class EffectABC(ABC):
     pass
 
