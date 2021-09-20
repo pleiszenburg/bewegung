@@ -28,13 +28,14 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+from numbers import Number
 from typing import Any, Callable
 import warnings
 
 from PIL.Image import Image, fromarray, frombuffer, merge
 
 from ._base import BackendBase
-from ..abc import ColorABC, NumberTypes, VideoABC
+from ..abc import ColorABC, VideoABC
 from ..typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -63,8 +64,8 @@ class Backend(BackendBase):
                 kwargs['width'] = video.width
             if 'height' not in kwargs.keys():
                 kwargs['height'] = video.height
-            assert isinstance(kwargs['width'], NumberTypes)
-            assert isinstance(kwargs['height'], NumberTypes)
+            assert isinstance(kwargs['width'], Number)
+            assert isinstance(kwargs['height'], Number)
             kwargs['figsize'] = (
                 kwargs.pop('width') / kwargs['dpi'],
                 kwargs.pop('height') / kwargs['dpi'],
