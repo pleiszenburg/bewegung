@@ -29,11 +29,12 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from math import ceil, floor, log10, pi
+from numbers import Number
 from typing import Union
 
 from typeguard import typechecked
 
-from ..core.abc import VectorABC, VectorArrayABC, NumberTypes
+from ..core.abc import VectorABC, VectorArrayABC
 from ..core.color import Color
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -46,7 +47,7 @@ class Svg:
     Wrap vectors into SVG
     """
 
-    def __init__(self, vec: Union[VectorABC, VectorArrayABC], size: NumberTypes = 300):
+    def __init__(self, vec: Union[VectorABC, VectorArrayABC], size: Number = 300):
 
         size = float(size)
         assert size > 0
@@ -75,7 +76,7 @@ class Svg:
         for vector in vectors:
             self._add_vector(vector)
 
-    def _update(self, value: NumberTypes):
+    def _update(self, value: Number):
 
         value = abs(float(value))
 

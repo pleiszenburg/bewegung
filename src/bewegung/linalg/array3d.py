@@ -28,12 +28,13 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+from numbers import Number
 from typing import List, Tuple, Union
 
 import numpy as np
 from typeguard import typechecked
 
-from ..core.abc import Dtype, Number, VectorArrayABC, VectorArray3DABC, VectorIterable3D
+from ..core.abc import Dtype, VectorArrayABC, VectorArray3DABC, VectorIterable3D
 from ..core.const import FLOAT_DEFAULT
 from .lib import dtype_np2py
 from .single3d import Vector3D
