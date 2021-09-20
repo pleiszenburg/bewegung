@@ -33,7 +33,7 @@ from typing import Type
 import numpy as np
 from typeguard import typechecked
 
-from ..core.abc import Dtype
+from .abc import Dtype
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ROUTINES

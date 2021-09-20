@@ -35,9 +35,10 @@ from numpy import ndarray
 
 from typeguard import typechecked
 
-from ..core.abc import Dtype, PyNumber
+from ..core.abc import PyNumber
 from ..core.const import FLOAT_DEFAULT
 from .abc import (
+    Dtype,
     MatrixArrayABC,
     Vector2DABC,
     Vector3DABC,

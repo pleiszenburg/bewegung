@@ -31,11 +31,6 @@ specific language governing rights and limitations under the License.
 from abc import ABC
 from typing import Tuple, Union
 
-try:
-    import numpy as np
-except ModuleNotFoundError:
-    np = None
-
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASSES
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -80,8 +75,3 @@ class VideoABC(ABC):
 PyNumber = Union[int, float]
 PyNumber2D = Union[Tuple[int, int], Tuple[float, float]]
 PyNumber3D = Union[Tuple[int, int, int], Tuple[float, float, float]]
-
-if np is not None:
-    Dtype = Union[str, np.dtype]
-else:
-    Dtype = None # HACK

@@ -31,6 +31,11 @@ specific language governing rights and limitations under the License.
 from abc import ABC
 from typing import Generator, List, Tuple, Union
 
+try:
+    import numpy as np
+except ModuleNotFoundError:
+    np = None
+
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASSES
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -77,3 +82,8 @@ VectorIterable3D = Union[
     Tuple[Vector3DABC],
     Generator[Vector3DABC, None, None],
 ]
+
+if np is not None:
+    Dtype = Union[str, np.dtype]
+else:
+    Dtype = None # HACK
