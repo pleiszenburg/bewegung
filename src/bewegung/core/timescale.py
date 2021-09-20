@@ -29,9 +29,10 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from datetime import datetime
+from numbers import Number
 from typing import Type
 
-from .abc import PyNumber, TimeABC, TimeScaleABC
+from .abc import TimeABC, TimeScaleABC
 from .time import Time
 from .typeguard import typechecked
 
@@ -53,7 +54,7 @@ class TimeScale(TimeScaleABC):
         stop_scaled : A number representing the end of the the scaled time interval. Must have the same datatype as ``start_scaled``.
     """
 
-    def __init__(self, start: TimeABC, start_scaled: PyNumber, stop: TimeABC, stop_scaled: PyNumber):
+    def __init__(self, start: TimeABC, start_scaled: Number, stop: TimeABC, stop_scaled: Number):
 
         if start.fps != stop.fps:
             raise ValueError()
@@ -117,7 +118,7 @@ class TimeScale(TimeScaleABC):
         return self._stop
 
     @property
-    def start_scaled(self) -> PyNumber:
+    def start_scaled(self) -> Number:
         """
         Scaled start time
         """
@@ -125,14 +126,14 @@ class TimeScale(TimeScaleABC):
         return self._start_scaled
 
     @property
-    def stop_scaled(self) -> PyNumber:
+    def stop_scaled(self) -> Number:
         """
         Scaled stop time
         """
 
         return self._stop_scaled
 
-    def scaled2time(self, scaled_time: PyNumber) -> TimeABC:
+    def scaled2time(self, scaled_time: Number) -> TimeABC:
         """
         Converts scaled time to time in animation
 
@@ -148,7 +149,7 @@ class TimeScale(TimeScaleABC):
 
         return Time(fps = self._start.fps, index = self._start.index + index)
 
-    def time2scaled(self, time: TimeABC) -> PyNumber:
+    def time2scaled(self, time: TimeABC) -> Number:
         """
         Converts time in animation to scaled time
 
