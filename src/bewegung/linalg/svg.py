@@ -34,8 +34,8 @@ from typing import Union
 
 from typeguard import typechecked
 
-from ..core.abc import VectorABC, VectorArrayABC
 from ..core.color import Color
+from .abc import VectorABC, VectorArrayABC
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

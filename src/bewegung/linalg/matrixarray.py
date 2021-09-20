@@ -35,12 +35,15 @@ from numpy import ndarray
 
 from typeguard import typechecked
 
-from ..core.abc import (
-    Dtype, MatrixArrayABC, PyNumber,
-    Vector2DABC, Vector3DABC,
-    VectorArray2DABC, VectorArray3DABC,
-    )
+from ..core.abc import Dtype, PyNumber
 from ..core.const import FLOAT_DEFAULT
+from .abc import (
+    MatrixArrayABC,
+    Vector2DABC,
+    Vector3DABC,
+    VectorArray2DABC,
+    VectorArray3DABC,
+)
 from .lib import dtype_np2py
 from .single2d import Vector2D
 from .single3d import Vector3D

@@ -32,7 +32,8 @@ from typeguard import typechecked
 
 from typing import Type, Union
 
-from ..core.abc import PyNumber, Vector2DABC
+from ..core.abc import PyNumber
+from .abc import Vector2DABC
 from .single2d import Vector2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

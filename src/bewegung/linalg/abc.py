@@ -25,5 +25,55 @@ specific language governing rights and limitations under the License.
 """
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# IMPORT
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+from abc import ABC
+from typing import Generator, List, Tuple, Union
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASSES
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+class CameraABC(ABC):
+    pass
+
+class MatrixABC(ABC):
+    pass
+
+class MatrixArrayABC(ABC):
+    pass
+
+class VectorABC(ABC):
+    pass
+
+class VectorArrayABC(ABC):
+    pass
+
+class VectorArray2DABC(ABC):
+    pass
+
+class VectorArray3DABC(ABC):
+    pass
+
+class Vector2DABC(ABC):
+    pass
+
+class Vector3DABC(ABC):
+    pass
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Types
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+VectorIterable2D = Union[
+    List[Vector2DABC],
+    Tuple[Vector2DABC],
+    Generator[Vector2DABC, None, None],
+]
+
+VectorIterable3D = Union[
+    List[Vector3DABC],
+    Tuple[Vector3DABC],
+    Generator[Vector3DABC, None, None],
+]

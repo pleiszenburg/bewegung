@@ -29,7 +29,7 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from abc import ABC
-from typing import Generator, List, Tuple, Union
+from typing import Tuple, Union
 
 try:
     import numpy as np
@@ -43,9 +43,6 @@ except ModuleNotFoundError:
 class BackendABC(ABC):
     pass
 
-class CameraABC(ABC):
-    pass
-
 class ColorABC(ABC):
     pass
 
@@ -56,12 +53,6 @@ class EncoderABC(ABC):
     pass
 
 class IndexPoolABC(ABC):
-    pass
-
-class MatrixABC(ABC):
-    pass
-
-class MatrixArrayABC(ABC):
     pass
 
 class LayerABC(ABC):
@@ -79,24 +70,6 @@ class TimeABC(ABC):
 class TimeScaleABC(ABC):
     pass
 
-class VectorABC(ABC):
-    pass
-
-class VectorArrayABC(ABC):
-    pass
-
-class VectorArray2DABC(ABC):
-    pass
-
-class VectorArray3DABC(ABC):
-    pass
-
-class Vector2DABC(ABC):
-    pass
-
-class Vector3DABC(ABC):
-    pass
-
 class VideoABC(ABC):
     pass
 
@@ -112,15 +85,3 @@ if np is not None:
     Dtype = Union[str, np.dtype]
 else:
     Dtype = None # HACK
-
-VectorIterable2D = Union[
-    List[Vector2DABC],
-    Tuple[Vector2DABC],
-    Generator[Vector2DABC, None, None],
-]
-
-VectorIterable3D = Union[
-    List[Vector3DABC],
-    Tuple[Vector3DABC],
-    Generator[Vector3DABC, None, None],
-]
