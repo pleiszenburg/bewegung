@@ -43,4 +43,6 @@ from .core.time import Time
 from .core.timescale import TimeScale
 from .core.video import Video
 
+from .lib import *
+
 from .linalg import *
