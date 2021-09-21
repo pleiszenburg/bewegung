@@ -23,6 +23,6 @@ The ``Layer`` Class
 
     Do not work with this class directly. Use the :meth:`bewegung.Video.layer` method instead.
 
-.. autoclass:: bewegung.core.layer.Layer
+.. autoclass:: bewegung.animation.Layer
     :members:
     :private-members:
