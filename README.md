@@ -65,6 +65,6 @@ This resulting `video.mp4` file should look like this:
 
 See [documentation](https://bewegung.readthedocs.io).
 
-`bewegung`'s development status is "well-tested alpha". Its API should not be considered stable until the project is labeled "beta" or better, although significant changes are very unlikely.
+`bewegung`'s development status is "well-tested alpha". Its API should not be considered stable until the project is labeled "beta" or better.
 
 `bewegung` can be drastically accelerated by deactivating debugging features. See [relevant section in the documentation](https://bewegung.readthedocs.io/en/latest/performance.html#typecheckingperformance).
