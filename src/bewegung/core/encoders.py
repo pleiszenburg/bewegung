@@ -32,6 +32,7 @@ from types import TracebackType
 from typing import BinaryIO, Union, Type
 from subprocess import Popen, PIPE, DEVNULL
 
+from ..lib import typechecked
 from .abc import EncoderABC, VideoABC
 from .const import (
     PIPE_BUFFER_DEFAULT,
@@ -39,7 +40,6 @@ from .const import (
     FFMPEG_PRESET_DEFAULT,
     FFPMEG_TUNE_DEFAULT,
     )
-from .typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS: BASE

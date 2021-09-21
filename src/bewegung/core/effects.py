@@ -32,8 +32,8 @@ import math
 
 from PIL import Image as PIL_Image
 
+from ..lib import typechecked
 from .abc import EffectABC, LayerABC, SequenceABC, TimeABC, VideoABC
-from .typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS: BASE

@@ -30,8 +30,8 @@ specific language governing rights and limitations under the License.
 
 from typing import Dict
 
+from ..lib import typechecked
 from .abc import SequenceABC, TimeABC, VideoABC
-from .typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

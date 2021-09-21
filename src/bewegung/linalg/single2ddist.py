@@ -28,10 +28,9 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typeguard import typechecked
-
 from typing import Type, Union
 
+from ..lib import typechecked
 from .abc import PyNumber, Vector2DABC
 from .single2d import Vector2D
 

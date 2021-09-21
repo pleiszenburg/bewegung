@@ -33,8 +33,7 @@ from typing import List, Tuple, Type, Union
 import numpy as np
 from numpy import ndarray
 
-from typeguard import typechecked
-
+from ..lib import typechecked
 from .abc import (
     Dtype,
     MatrixArrayABC,

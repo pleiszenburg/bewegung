@@ -32,9 +32,9 @@ from datetime import datetime
 from numbers import Number
 from typing import Type
 
+from ..lib import typechecked
 from .abc import TimeABC, TimeScaleABC
 from .time import Time
-from .typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS: TimeScale

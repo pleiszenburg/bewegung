@@ -32,8 +32,8 @@ from numbers import Number
 from typing import List, Union
 
 import numpy as np
-from typeguard import typechecked
 
+from ..lib import typechecked
 from .abc import (
     Dtype,
     Vector2DABC,

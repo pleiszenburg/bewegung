@@ -38,6 +38,7 @@ try:
 except ModuleNotFoundError:
     tqdm = lambda x: x
 
+from ..lib import typechecked
 from ..linalg import Vector2D
 from .abc import EncoderABC, LayerABC, SequenceABC, VideoABC, TimeABC
 from .backends import backends
@@ -48,7 +49,6 @@ from .layer import Layer
 from .sequence import Sequence
 from .task import Task
 from .time import Time
-from .typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # "GLOBALS" (FOR WORKERS)

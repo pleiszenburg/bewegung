@@ -36,8 +36,8 @@ try:
     from numpy import ndarray
 except ModuleNotFoundError:
     np, ndarray = None, None
-from typeguard import typechecked
 
+from ..lib import typechecked
 from .abc import (
     Dtype,
     MatrixABC,

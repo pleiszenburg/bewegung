@@ -31,8 +31,8 @@ specific language governing rights and limitations under the License.
 from typing import Type
 
 import numpy as np
-from typeguard import typechecked
 
+from ..lib import typechecked
 from .abc import Dtype
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

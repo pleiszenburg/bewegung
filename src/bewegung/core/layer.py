@@ -33,10 +33,10 @@ from typing import Any, Callable, Union
 
 from PIL import Image as PIL_Image
 
+from ..lib import typechecked
 from ..linalg import Vector2D
 from .abc import EffectABC, LayerABC, SequenceABC, TimeABC, VideoABC
 from .backends import backends
-from .typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

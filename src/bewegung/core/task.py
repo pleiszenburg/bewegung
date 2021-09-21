@@ -30,8 +30,8 @@ specific language governing rights and limitations under the License.
 
 from typing import Any, Callable
 
+from ..lib import typechecked
 from .abc import SequenceABC, TaskABC, TimeABC
-from .typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

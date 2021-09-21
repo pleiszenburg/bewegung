@@ -31,8 +31,8 @@ specific language governing rights and limitations under the License.
 from math import floor
 from typing import Tuple
 
+from ..lib import typechecked
 from .abc import ColorABC
-from .typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

@@ -14,6 +14,7 @@
 - FIX: Development dependency switched from unmaintained `python-language-server` to `python-lsp-server`.
 - FIX: Imports in `contrib` were broken.
 - FIX: `test` target in `makefile` was broken.
+- FIX: `typeguard` was not really an optional dependency.
 
 ## 0.0.5 (2021-07-30)
 

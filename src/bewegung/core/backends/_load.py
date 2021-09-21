@@ -33,7 +33,7 @@ from typing import Any
 import importlib
 import os
 
-from ..typeguard import typechecked
+from ...lib import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

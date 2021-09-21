@@ -30,9 +30,9 @@ specific language governing rights and limitations under the License.
 
 from typing import Generator, Union
 
+from ..lib import typechecked
 from .abc import TimeABC
 from .const import FPS_DEFAULT
-from .typeguard import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

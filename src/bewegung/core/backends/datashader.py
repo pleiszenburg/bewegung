@@ -33,9 +33,9 @@ from typing import Any, Callable
 from PIL.Image import Image
 from PIL import ImageOps
 
-from ._base import BackendBase
+from ...lib import typechecked
 from ..abc import VideoABC
-from ..typeguard import typechecked
+from ._base import BackendBase
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

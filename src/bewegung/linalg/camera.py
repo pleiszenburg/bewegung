@@ -46,7 +46,7 @@ except ModuleNotFoundError:
         return wrapper
     boolean, float32, float64 = None, tuple(), tuple()
 
-from ..core.typeguard import typechecked
+from ..lib import typechecked
 from .abc import CameraABC
 from .matrix import Matrix
 from .single2d import Vector2D

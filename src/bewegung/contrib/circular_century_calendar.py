@@ -36,7 +36,7 @@ from typing import List, Union
 from PIL.Image import Image, new, LANCZOS
 
 from ..core.color import Color
-from ..core.typeguard import typechecked
+from ..lib import typechecked
 from ..drawingboard import DrawingBoard
 from ..linalg import Matrix, Vector2D
 
