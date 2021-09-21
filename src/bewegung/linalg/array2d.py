@@ -34,13 +34,13 @@ from typing import List, Tuple, Union
 import numpy as np
 from typeguard import typechecked
 
-from ..core.const import FLOAT_DEFAULT
 from .abc import (
     Dtype,
     VectorArrayABC,
     VectorArray2DABC,
     VectorIterable2D,
 )
+from .const import FLOAT_DEFAULT
 from .lib import dtype_np2py
 from .single2d import Vector2D
 

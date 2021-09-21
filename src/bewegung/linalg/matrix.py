@@ -38,7 +38,6 @@ except ModuleNotFoundError:
     np, ndarray = None, None
 from typeguard import typechecked
 
-from ..core.const import FLOAT_DEFAULT
 from .abc import (
     Dtype,
     MatrixABC,
@@ -48,6 +47,7 @@ from .abc import (
     VectorArray2DABC,
     VectorArray3DABC,
 )
+from .const import FLOAT_DEFAULT
 from .single2d import Vector2D
 from .single3d import Vector3D
 from .array2d import VectorArray2D

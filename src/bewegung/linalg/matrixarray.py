@@ -35,7 +35,6 @@ from numpy import ndarray
 
 from typeguard import typechecked
 
-from ..core.const import FLOAT_DEFAULT
 from .abc import (
     Dtype,
     MatrixArrayABC,
@@ -45,6 +44,7 @@ from .abc import (
     VectorArray2DABC,
     VectorArray3DABC,
 )
+from .const import FLOAT_DEFAULT
 from .lib import dtype_np2py
 from .single2d import Vector2D
 from .single3d import Vector3D
