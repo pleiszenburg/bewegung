@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/__init__.py: Package root
+    src/bewegung/lib/_typeguard.py: Wrapper around typeguard (optional)
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -25,11 +25,10 @@ specific language governing rights and limitations under the License.
 """
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# EXPORT
+# IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-__version__ = '0.0.6'
-
-from .animation import *
-from .lib import *
-from .linalg import *
+try:
+    from typeguard import typechecked
+except ModuleNotFoundError:
+    typechecked = lambda x: x

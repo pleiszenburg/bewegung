@@ -6,6 +6,16 @@
 - FEATURE: Common base class, `VectorABC`, for all vector classes.
 - FEATURE: Common base class, `VectorArrayABC`, for all vector array classes.
 - FEATURE: Vector arrays are iterators.
+- FEATURE: The `Color` class, using RGBA internally, can now import HSV values.
+- FEATURE: Added equality check, "is close" check, tuple export and copy to `Matrix`.
+- FEATURE: New dedicated sub-module for core animation engine named `bewegung.animation`.
+- FEATURE: New dedicated sub-module for `DrawingBoard` named `bewegung.drawingboard`, now allowing direct import.
+- FEATURE: New dedicated sub-module for linear algebra named `bewegung.lingalg`.
+- FEATURE: Cleanup of internal type hierarchy.
+- FIX: Development dependency switched from unmaintained `python-language-server` to `python-lsp-server`.
+- FIX: Imports in `contrib` were broken.
+- FIX: `test` target in `makefile` was broken.
+- FIX: `typeguard` was not really an optional dependency.
 
 ## 0.0.5 (2021-07-30)
 

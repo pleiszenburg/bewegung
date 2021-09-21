@@ -42,10 +42,9 @@ from bewegung import (
     Camera, Color, Video,
     Vector2D, Vector3D, VectorArray3D,
     FadeInEffect, FadeOutEffect,
-    backends,
     )
 
-DrawingBoard = backends['drawingboard'].type
+from bewegung.drawingboard import DrawingBoard
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CONST

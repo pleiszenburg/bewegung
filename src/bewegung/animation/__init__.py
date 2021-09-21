@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/__init__.py: Package root
+    src/bewegung/animation/__init__.py: Animation engine
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -28,8 +28,14 @@ specific language governing rights and limitations under the License.
 # EXPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-__version__ = '0.0.6'
-
-from .animation import *
-from .lib import *
-from .linalg import *
+from ._backends import *
+from ._const import *
+from ._effects import EffectBase, FadeInEffect, FadeOutEffect
+from ._encoders import EncoderBase, FFmpegH264Encoder, FFmpegGifEncoder
+from ._indexpool import IndexPool
+from ._layer import Layer
+from ._sequence import Sequence
+from ._task import Task
+from ._time import Time
+from ._timescale import TimeScale
+from ._video import Video

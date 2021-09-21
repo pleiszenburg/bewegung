@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/__init__.py: Package root
+    src/bewegung/linalg/__init__.py: Linear algebra module root
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -28,8 +28,24 @@ specific language governing rights and limitations under the License.
 # EXPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-__version__ = '0.0.6'
+from .const import FLOAT_DEFAULT
 
-from .animation import *
-from .lib import *
-from .linalg import *
+from .single2d import Vector2D
+from .single2ddist import Vector2Ddist
+from .single3d import Vector3D
+from .matrix import Matrix
+
+try:
+    import numpy as _np
+except ModuleNotFoundError:
+    _np = None
+
+if _np is not None:
+    from .array2d import VectorArray2D
+    from .array2ddist import VectorArray2Ddist
+    from .array3d import VectorArray3D
+    from .matrixarray import MatrixArray
+
+del _np
+
+from .camera import Camera

@@ -35,12 +35,9 @@ from typing import List, Union
 
 from PIL.Image import Image, new, LANCZOS
 
-from ..core.canvas import inventory
-from ..core.color import Color
-from ..core.vector import Matrix, Vector2D
-from ..core.typeguard import typechecked
-
-DrawingBoard = inventory['drawingboard'].type
+from ..lib import Color, typechecked
+from ..drawingboard import DrawingBoard
+from ..linalg import Matrix, Vector2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

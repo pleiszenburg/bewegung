@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/__init__.py: Package root
+    src/bewegung/animation/_backends/__init__.py: Collects backend types for layers
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -28,8 +28,5 @@ specific language governing rights and limitations under the License.
 # EXPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-__version__ = '0.0.6'
-
-from .animation import *
-from .lib import *
-from .linalg import *
+from ._load import backends
+from ._base import BackendBase

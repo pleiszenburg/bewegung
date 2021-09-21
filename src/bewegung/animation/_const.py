@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/__init__.py: Package root
+    src/bewegung/animation/_const.py: Const values
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -25,11 +25,13 @@ specific language governing rights and limitations under the License.
 """
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# EXPORT
+# CONST
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-__version__ = '0.0.6'
+FPS_DEFAULT = 60
 
-from .animation import *
-from .lib import *
-from .linalg import *
+FFMPEG_CRF_DEFAULT = 17
+FFMPEG_PRESET_DEFAULT = "slow"
+FFPMEG_TUNE_DEFAULT = "animation"
+
+PIPE_BUFFER_DEFAULT = 134217728 # 128 MByte

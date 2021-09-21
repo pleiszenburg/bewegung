@@ -36,8 +36,6 @@ upload:
 	done
 
 test:
-	-rm -r frames/
-	mkdir frames
-	python demo.py
+	python demo/demo.py
 
 .PHONY: clean docs release test

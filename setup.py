@@ -63,7 +63,7 @@ __version__ = get_version()
 extras_require = {
     "dev": [
         "black",
-        "python-language-server[all]",
+        "python-lsp-server[all]", # superseeding python-language-server
         "psutil",
         "setuptools",
         "Sphinx",

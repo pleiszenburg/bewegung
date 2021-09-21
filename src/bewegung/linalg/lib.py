@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/__init__.py: Package root
+    src/bewegung/linalg/lib.py: Linear algebra library
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -25,11 +25,29 @@ specific language governing rights and limitations under the License.
 """
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# EXPORT
+# IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-__version__ = '0.0.6'
+from typing import Type
 
-from .animation import *
-from .lib import *
-from .linalg import *
+import numpy as np
+
+from ..lib import typechecked
+from .abc import Dtype
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# ROUTINES
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+@typechecked
+def dtype_np2py(dtype: Dtype) -> Type:
+    """
+    Map numpy dtypes to Python number types
+    """
+
+    if np.issubdtype(dtype, np.integer):
+        return int
+    elif np.issubdtype(dtype, np.floating):
+        return float
+    else:
+        raise TypeError("numpy dtype can not be mapped on Python number types")

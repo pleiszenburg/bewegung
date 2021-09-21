@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/__init__.py: Package root
+    src/bewegung/animation/_abc.py: Abstract base classes
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -25,11 +25,41 @@ specific language governing rights and limitations under the License.
 """
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# EXPORT
+# IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-__version__ = '0.0.6'
+from abc import ABC
 
-from .animation import *
-from .lib import *
-from .linalg import *
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# CLASSES
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+class BackendABC(ABC):
+    pass
+
+class EffectABC(ABC):
+    pass
+
+class EncoderABC(ABC):
+    pass
+
+class IndexPoolABC(ABC):
+    pass
+
+class LayerABC(ABC):
+    pass
+
+class SequenceABC(ABC):
+    pass
+
+class TaskABC(ABC):
+    pass
+
+class TimeABC(ABC):
+    pass
+
+class TimeScaleABC(ABC):
+    pass
+
+class VideoABC(ABC):
+    pass
