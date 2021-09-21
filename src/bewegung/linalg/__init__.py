@@ -28,6 +28,8 @@ specific language governing rights and limitations under the License.
 # EXPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+from .const import FLOAT_DEFAULT
+
 from .single2d import Vector2D
 from .single2ddist import Vector2Ddist
 from .single3d import Vector3D
