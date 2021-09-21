@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/typeguard.py: Wrapper around typeguard (optional)
+    src/bewegung/lib/_typeguard.py: Wrapper around typeguard (optional)
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
