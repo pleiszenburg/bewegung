@@ -87,3 +87,7 @@ if np is not None:
     Dtype = Union[str, np.dtype]
 else:
     Dtype = None # HACK
+
+PyNumber = Union[int, float]
+PyNumber2D = Union[Tuple[int, int], Tuple[float, float]]
+PyNumber3D = Union[Tuple[int, int, int], Tuple[float, float, float]]

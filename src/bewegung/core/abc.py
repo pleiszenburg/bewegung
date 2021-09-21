@@ -29,7 +29,6 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from abc import ABC
-from typing import Tuple, Union
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASSES
@@ -67,11 +66,3 @@ class TimeScaleABC(ABC):
 
 class VideoABC(ABC):
     pass
-
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# Types
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-PyNumber = Union[int, float]
-PyNumber2D = Union[Tuple[int, int], Tuple[float, float]]
-PyNumber3D = Union[Tuple[int, int, int], Tuple[float, float, float]]

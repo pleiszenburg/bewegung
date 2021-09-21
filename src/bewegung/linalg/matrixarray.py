@@ -35,11 +35,11 @@ from numpy import ndarray
 
 from typeguard import typechecked
 
-from ..core.abc import PyNumber
 from ..core.const import FLOAT_DEFAULT
 from .abc import (
     Dtype,
     MatrixArrayABC,
+    PyNumber,
     Vector2DABC,
     Vector3DABC,
     VectorArray2DABC,

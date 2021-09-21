@@ -38,10 +38,11 @@ except ModuleNotFoundError:
     np, ndarray = None, None
 from typeguard import typechecked
 
-from ..core.abc import PyNumber, PyNumber3D
 from ..core.const import FLOAT_DEFAULT
 from .abc import (
     Dtype,
+    PyNumber,
+    PyNumber3D,
     VectorABC,
     Vector3DABC,
     VectorArray3DABC,
