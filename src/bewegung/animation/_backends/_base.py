@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/animation/backends/_base.py: Backend base class
+    src/bewegung/animation/_backends/_base.py: Backend base class
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -33,7 +33,7 @@ from typing import Any, Callable, Type
 from PIL.Image import Image
 
 from ...lib import typechecked
-from ..abc import BackendABC, VideoABC
+from .._abc import BackendABC, VideoABC
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

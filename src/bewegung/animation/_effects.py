@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/animation/effects.py: Video frame effects
+    src/bewegung/animation/_effects.py: Video frame effects
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -33,7 +33,7 @@ import math
 from PIL import Image as PIL_Image
 
 from ..lib import typechecked
-from .abc import EffectABC, LayerABC, SequenceABC, TimeABC, VideoABC
+from ._abc import EffectABC, LayerABC, SequenceABC, TimeABC, VideoABC
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS: BASE

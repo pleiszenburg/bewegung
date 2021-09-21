@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/animation/timescale.py: Time scaling
+    src/bewegung/animation/_timescale.py: Time scaling
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -33,8 +33,8 @@ from numbers import Number
 from typing import Type
 
 from ..lib import typechecked
-from .abc import TimeABC, TimeScaleABC
-from .time import Time
+from ._abc import TimeABC, TimeScaleABC
+from ._time import Time
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS: TimeScale

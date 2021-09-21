@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/animation/video.py: Parallel video frame renderer
+    src/bewegung/animation/_video.py: Parallel video frame renderer
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -40,15 +40,15 @@ except ModuleNotFoundError:
 
 from ..lib import typechecked
 from ..linalg import Vector2D
-from .abc import EncoderABC, LayerABC, SequenceABC, VideoABC, TimeABC
-from .backends import backends
-from .const import FPS_DEFAULT
-from .encoders import FFmpegH264Encoder
-from .indexpool import IndexPool
-from .layer import Layer
-from .sequence import Sequence
-from .task import Task
-from .time import Time
+from ._abc import EncoderABC, LayerABC, SequenceABC, VideoABC, TimeABC
+from ._backends import backends
+from ._const import FPS_DEFAULT
+from ._encoders import FFmpegH264Encoder
+from ._indexpool import IndexPool
+from ._layer import Layer
+from ._sequence import Sequence
+from ._task import Task
+from ._time import Time
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # "GLOBALS" (FOR WORKERS)

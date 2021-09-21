@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/animation/task.py: Render task
+    src/bewegung/animation/_backends/_load.py: Backend inventory and loader
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -28,49 +28,43 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Any, Callable
+from typing import Any
 
-from ..lib import typechecked
-from .abc import SequenceABC, TaskABC, TimeABC
+import importlib
+import os
+
+from ...lib import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-class Task(TaskABC):
+class _Inventory(dict):
     """
-    Task for video renderer. Tasks can be ordered.
+    Backend inventory (a dict, more or less).
+    Mutable.
     """
 
-    def __init__(self,
-        sequence: SequenceABC,
-        index: int,
-        task: Callable,
-    ):
+    def __init__(self):
 
-        self._sequence = sequence
-        self._index = index
-        self._task = task
+        super().__init__()
+        path = os.path.dirname(__file__)
+        backend_modules = [
+            item[:-3] if item.lower().endswith('.py') else item
+            for item in os.listdir(path)
+            if not item.startswith('_') and not item.startswith('.')
+            ]
 
-    def __repr__(self) -> str:
+        for name in backend_modules:
+            self[name] = importlib.import_module(f'bewegung.animation._backends.{name:s}').Backend()
 
-        return f'<Task index={self._index:d}>'
+    def isinstance(self, obj: Any) -> bool:
 
-    def __call__(self, time: TimeABC) -> Any:
+        return any((backend.isinstance(obj) for backend in self.values()))
 
-        return self._task(time)
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# EXPORT
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    def __lt__(self, other: TaskABC) -> bool:
-
-        return self.index < other.index
-
-    @property
-    def index(self) -> int:
-
-        return self._index
-
-    @property
-    def sequence(self) -> SequenceABC:
-
-        return self._sequence
+backends = _Inventory()

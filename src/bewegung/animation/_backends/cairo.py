@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/animation/backends/cairo.py: Cairo backend
+    src/bewegung/animation/_backends/cairo.py: Cairo backend
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -33,7 +33,7 @@ from typing import Any, Callable
 from PIL.Image import Image, frombuffer, merge
 
 from ...lib import typechecked
-from ..abc import VideoABC
+from .._abc import VideoABC
 from ._base import BackendBase
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

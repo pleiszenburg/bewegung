@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/animation/backends/datashader.py: Datashader backend
+    src/bewegung/animation/_backends/datashader.py: Datashader backend
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -34,7 +34,7 @@ from PIL.Image import Image
 from PIL import ImageOps
 
 from ...lib import typechecked
-from ..abc import VideoABC
+from .._abc import VideoABC
 from ._base import BackendBase
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

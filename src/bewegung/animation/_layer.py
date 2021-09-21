@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/animation/layer.py: Layer function/method wrapper
+    src/bewegung/animation/_layer.py: Layer function/method wrapper
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -35,8 +35,8 @@ from PIL import Image as PIL_Image
 
 from ..lib import typechecked
 from ..linalg import Vector2D
-from .abc import EffectABC, LayerABC, SequenceABC, TimeABC, VideoABC
-from .backends import backends
+from ._abc import EffectABC, LayerABC, SequenceABC, TimeABC, VideoABC
+from ._backends import backends
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/animation/sequence.py: Video Sequence
+    src/bewegung/animation/_sequence.py: Video Sequence
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -31,7 +31,7 @@ specific language governing rights and limitations under the License.
 from typing import Dict
 
 from ..lib import typechecked
-from .abc import SequenceABC, TimeABC, VideoABC
+from ._abc import SequenceABC, TimeABC, VideoABC
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

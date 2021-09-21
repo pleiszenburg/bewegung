@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/animation/time.py: Time handling
+    src/bewegung/animation/_time.py: Time handling
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -31,8 +31,8 @@ specific language governing rights and limitations under the License.
 from typing import Generator, Union
 
 from ..lib import typechecked
-from .abc import TimeABC
-from .const import FPS_DEFAULT
+from ._abc import TimeABC
+from ._const import FPS_DEFAULT
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

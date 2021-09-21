@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/animation/encoders.py: Wrapper for video encoders
+    src/bewegung/animation/_encoders.py: Wrapper for video encoders
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -33,8 +33,8 @@ from typing import BinaryIO, Union, Type
 from subprocess import Popen, PIPE, DEVNULL
 
 from ..lib import typechecked
-from .abc import EncoderABC, VideoABC
-from .const import (
+from ._abc import EncoderABC, VideoABC
+from ._const import (
     PIPE_BUFFER_DEFAULT,
     FFMPEG_CRF_DEFAULT,
     FFMPEG_PRESET_DEFAULT,

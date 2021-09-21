@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/animation/indexpool.py: Pools of unique index values
+    src/bewegung/animation/_indexpool.py: Pools of unique index values
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -31,7 +31,7 @@ specific language governing rights and limitations under the License.
 from typing import List
 
 from ..lib import typechecked
-from .abc import IndexPoolABC
+from ._abc import IndexPoolABC
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
