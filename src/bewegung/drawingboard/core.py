@@ -62,8 +62,7 @@ try:
 except ModuleNotFoundError:
     IPython = None
 
-from ..core.color import Color
-from ..lib import typechecked
+from ..lib import Color, typechecked
 from ..linalg import Vector2D, Matrix
 from .abc import DrawingBoardABC
 

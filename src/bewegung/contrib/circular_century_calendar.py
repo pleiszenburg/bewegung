@@ -35,8 +35,7 @@ from typing import List, Union
 
 from PIL.Image import Image, new, LANCZOS
 
-from ..core.color import Color
-from ..lib import typechecked
+from ..lib import Color, typechecked
 from ..drawingboard import DrawingBoard
 from ..linalg import Matrix, Vector2D
 

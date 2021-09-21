@@ -37,9 +37,6 @@ from abc import ABC
 class BackendABC(ABC):
     pass
 
-class ColorABC(ABC):
-    pass
-
 class EffectABC(ABC):
     pass
 

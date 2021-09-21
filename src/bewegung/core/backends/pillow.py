@@ -32,8 +32,8 @@ from typing import Any, Callable
 
 from PIL.Image import Image, new
 
-from ...lib import typechecked
-from ..abc import ColorABC, VideoABC
+from ...lib import Color, typechecked
+from ..abc import VideoABC
 from ._base import BackendBase
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -64,7 +64,7 @@ class Backend(BackendBase):
         if 'color' in kwargs.keys() and 'background_color' in kwargs.keys():
             kwargs.pop('background_color')
         if 'background_color' in kwargs.keys():
-            if not isinstance(kwargs['background_color'], ColorABC):
+            if not isinstance(kwargs['background_color'], Color):
                 raise TypeError('color expected')
             kwargs['color'] = kwargs.pop("background_color").as_rgba_int()
 

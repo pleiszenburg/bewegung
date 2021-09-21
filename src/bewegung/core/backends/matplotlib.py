@@ -34,8 +34,8 @@ import warnings
 
 from PIL.Image import Image, fromarray, frombuffer, merge
 
-from ...lib import typechecked
-from ..abc import ColorABC, VideoABC
+from ...lib import Color, typechecked
+from ..abc import VideoABC
 from ._base import BackendBase
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -74,7 +74,7 @@ class Backend(BackendBase):
         if 'background_color' in kwargs.keys() and 'facecolor' in kwargs.keys():
             kwargs.pop('background_color')
         if 'background_color' in kwargs.keys():
-            if not isinstance(kwargs['background_color'], ColorABC):
+            if not isinstance(kwargs['background_color'], Color):
                 raise TypeError('color expected')
             kwargs['facecolor'] = f'#{kwargs.pop("background_color").as_hex():s}'
         if 'facecolor' not in kwargs.keys():

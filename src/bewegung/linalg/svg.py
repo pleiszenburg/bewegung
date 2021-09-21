@@ -32,8 +32,7 @@ from math import ceil, floor, log10, pi
 from numbers import Number
 from typing import Union
 
-from ..core.color import Color
-from ..lib import typechecked
+from ..lib import Color, typechecked
 from .abc import VectorABC, VectorArrayABC
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

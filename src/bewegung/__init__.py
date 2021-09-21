@@ -31,7 +31,6 @@ specific language governing rights and limitations under the License.
 __version__ = '0.0.6'
 
 from .core.backends import *
-from .core.color import Color
 from .core.const import *
 from .core.effects import EffectBase, FadeInEffect, FadeOutEffect
 from .core.encoders import EncoderBase, FFmpegH264Encoder, FFmpegGifEncoder
