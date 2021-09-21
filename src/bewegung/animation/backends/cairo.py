@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/backends/pillow.py: Pillow backend
+    src/bewegung/animation/backends/cairo.py: Cairo backend
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -30,9 +30,9 @@ specific language governing rights and limitations under the License.
 
 from typing import Any, Callable
 
-from PIL.Image import Image, new
+from PIL.Image import Image, frombuffer, merge
 
-from ...lib import Color, typechecked
+from ...lib import typechecked
 from ..abc import VideoABC
 from ._base import BackendBase
 
@@ -43,40 +43,46 @@ from ._base import BackendBase
 @typechecked
 class Backend(BackendBase):
 
-    _name = 'Pillow'
+    _name = 'Cairo'
+
+    def __init__(self):
+
+        super().__init__()
+
+        self._FORMAT_ARGB32 = None
+        self._Format = None
 
     def _prototype(self, video: VideoABC, **kwargs) -> Callable:
 
-        if 'mode' not in kwargs.keys():
-            kwargs['mode'] = 'RGBA'
+        if 'format' not in kwargs.keys():
+            kwargs['format'] = self._FORMAT_ARGB32
+        if 'width' not in kwargs.keys():
+            kwargs['width'] = video.width
+        if 'height' not in kwargs.keys():
+            kwargs['height'] = video.height
 
-        if 'size' in kwargs.keys() and 'width' in kwargs.keys():
-            kwargs.pop('width')
-        if 'size' in kwargs.keys() and 'height' in kwargs.keys():
-            kwargs.pop('height')
-        if 'size' not in kwargs.keys():
-            kwargs['size'] = (video.width, video.height)
-        else:
-            if 'width' not in kwargs.keys() and 'height' not in kwargs.keys():
-                raise ValueError('width or height missing')
-            kwargs['size'] = (kwargs.pop('width'), kwargs.pop('height'))
+        assert len(kwargs) == 3
 
-        if 'color' in kwargs.keys() and 'background_color' in kwargs.keys():
-            kwargs.pop('background_color')
-        if 'background_color' in kwargs.keys():
-            if not isinstance(kwargs['background_color'], Color):
-                raise TypeError('color expected')
-            kwargs['color'] = kwargs.pop("background_color").as_rgba_int()
-
-        return lambda: new(**kwargs)
+        return lambda: self._type(kwargs['format'], kwargs['width'], kwargs['height'])
 
     def _load(self):
 
-        self._type = Image
+        from cairo import FORMAT_ARGB32, ImageSurface, Format
+
+        self._type = ImageSurface
+
+        self._FORMAT_ARGB32 = FORMAT_ARGB32
+        self._Format = Format
 
     def _to_pil(self, obj: Any) -> Image:
 
-        if obj.mode != 'RGBA':
-            raise TypeError('unhandled image mode')
+        if obj.get_format() != self._Format.ARGB32:
+            raise TypeError('ImageSurface uses unhandled format')
 
-        return obj
+        image = frombuffer(
+            mode = 'RGBa',
+            size = (obj.get_width(), obj.get_height()),
+            data = obj.get_data().tobytes(), # call to "tobytes" required because of RGBa mode
+            )
+        b, g, r, a = image.split()
+        return merge('RGBa', (r, g, b, a)).convert("RGBA")

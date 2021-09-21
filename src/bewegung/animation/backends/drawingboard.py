@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/abc.py: Abstract base classes
+    src/bewegung/animation/backends/drawingboard.py: Simple 2D cairo renderer
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -28,38 +28,42 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from abc import ABC
+from typing import Any, Callable
+
+from PIL.Image import Image
+
+from ...lib import typechecked
+from ..abc import VideoABC
+from ._base import BackendBase
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# CLASSES
+# CLASS
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class BackendABC(ABC):
-    pass
+@typechecked
+class Backend(BackendBase):
 
-class EffectABC(ABC):
-    pass
+    _name = 'DrawingBoard'
 
-class EncoderABC(ABC):
-    pass
+    def _prototype(self, video: VideoABC, **kwargs) -> Callable:
 
-class IndexPoolABC(ABC):
-    pass
+        if 'width' not in kwargs.keys():
+            kwargs['width'] = video.width
+        if 'height' not in kwargs.keys():
+            kwargs['height'] = video.height
 
-class LayerABC(ABC):
-    pass
+        return lambda: self._type(**kwargs)
 
-class SequenceABC(ABC):
-    pass
+    def _load(self):
 
-class TaskABC(ABC):
-    pass
+        from ...drawingboard import DrawingBoard
 
-class TimeABC(ABC):
-    pass
+        self._type = DrawingBoard
 
-class TimeScaleABC(ABC):
-    pass
+    def _to_pil(self, obj: Any) -> Image:
 
-class VideoABC(ABC):
-    pass
+        image = obj.as_pil()
+
+        assert image.mode == 'RGBA'
+
+        return image

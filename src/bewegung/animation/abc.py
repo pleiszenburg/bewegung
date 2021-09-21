@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/const.py: Const values
+    src/bewegung/animation/abc.py: Abstract base classes
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -25,13 +25,41 @@ specific language governing rights and limitations under the License.
 """
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# CONST
+# IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-FPS_DEFAULT = 60
+from abc import ABC
 
-FFMPEG_CRF_DEFAULT = 17
-FFMPEG_PRESET_DEFAULT = "slow"
-FFPMEG_TUNE_DEFAULT = "animation"
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# CLASSES
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-PIPE_BUFFER_DEFAULT = 134217728 # 128 MByte
+class BackendABC(ABC):
+    pass
+
+class EffectABC(ABC):
+    pass
+
+class EncoderABC(ABC):
+    pass
+
+class IndexPoolABC(ABC):
+    pass
+
+class LayerABC(ABC):
+    pass
+
+class SequenceABC(ABC):
+    pass
+
+class TaskABC(ABC):
+    pass
+
+class TimeABC(ABC):
+    pass
+
+class TimeScaleABC(ABC):
+    pass
+
+class VideoABC(ABC):
+    pass

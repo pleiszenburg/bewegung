@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/core/backends/drawingboard.py: Simple 2D cairo renderer
+    src/bewegung/animation/backends/pillow.py: Pillow backend
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -30,9 +30,9 @@ specific language governing rights and limitations under the License.
 
 from typing import Any, Callable
 
-from PIL.Image import Image
+from PIL.Image import Image, new
 
-from ...lib import typechecked
+from ...lib import Color, typechecked
 from ..abc import VideoABC
 from ._base import BackendBase
 
@@ -43,27 +43,40 @@ from ._base import BackendBase
 @typechecked
 class Backend(BackendBase):
 
-    _name = 'DrawingBoard'
+    _name = 'Pillow'
 
     def _prototype(self, video: VideoABC, **kwargs) -> Callable:
 
-        if 'width' not in kwargs.keys():
-            kwargs['width'] = video.width
-        if 'height' not in kwargs.keys():
-            kwargs['height'] = video.height
+        if 'mode' not in kwargs.keys():
+            kwargs['mode'] = 'RGBA'
 
-        return lambda: self._type(**kwargs)
+        if 'size' in kwargs.keys() and 'width' in kwargs.keys():
+            kwargs.pop('width')
+        if 'size' in kwargs.keys() and 'height' in kwargs.keys():
+            kwargs.pop('height')
+        if 'size' not in kwargs.keys():
+            kwargs['size'] = (video.width, video.height)
+        else:
+            if 'width' not in kwargs.keys() and 'height' not in kwargs.keys():
+                raise ValueError('width or height missing')
+            kwargs['size'] = (kwargs.pop('width'), kwargs.pop('height'))
+
+        if 'color' in kwargs.keys() and 'background_color' in kwargs.keys():
+            kwargs.pop('background_color')
+        if 'background_color' in kwargs.keys():
+            if not isinstance(kwargs['background_color'], Color):
+                raise TypeError('color expected')
+            kwargs['color'] = kwargs.pop("background_color").as_rgba_int()
+
+        return lambda: new(**kwargs)
 
     def _load(self):
 
-        from ...drawingboard import DrawingBoard
-
-        self._type = DrawingBoard
+        self._type = Image
 
     def _to_pil(self, obj: Any) -> Image:
 
-        image = obj.as_pil()
+        if obj.mode != 'RGBA':
+            raise TypeError('unhandled image mode')
 
-        assert image.mode == 'RGBA'
-
-        return image
+        return obj
