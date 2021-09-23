@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/linalg/__init__.py: Linear algebra module root
+    src/bewegung/linalg/_numpy.py: Wrapper around numpy (optional)
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -25,24 +25,11 @@ specific language governing rights and limitations under the License.
 """
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# EXPORT
+# IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from ._const import FLOAT_DEFAULT
-
-from ._single2d import Vector2D
-from ._single2ddist import Vector2Ddist
-from ._single3d import Vector3D
-from ._matrix import Matrix
-
-from ._numpy import np as _np
-
-if _np is not None:
-    from ._array2d import VectorArray2D
-    from ._array2ddist import VectorArray2Ddist
-    from ._array3d import VectorArray3D
-    from ._matrixarray import MatrixArray
-
-del _np
-
-from ._camera import Camera
+try:
+    import numpy as np
+    from numpy import ndarray
+except ModuleNotFoundError:
+    np, ndarray = None, None

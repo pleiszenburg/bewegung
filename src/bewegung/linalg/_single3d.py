@@ -31,12 +31,6 @@ specific language governing rights and limitations under the License.
 import math
 from typing import Tuple, Type, Union
 
-try:
-    import numpy as np
-    from numpy import ndarray
-except ModuleNotFoundError:
-    np, ndarray = None, None
-
 from ..lib import typechecked
 from ._abc import (
     Dtype,
@@ -46,6 +40,7 @@ from ._abc import (
     Vector3DABC,
     VectorArray3DABC,
 )
+from ._numpy import np, ndarray
 from ._const import FLOAT_DEFAULT
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

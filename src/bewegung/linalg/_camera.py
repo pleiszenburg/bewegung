@@ -33,11 +33,6 @@ import sys
 from typing import Union
 
 try:
-    import numpy as np
-except ModuleNotFoundError:
-    np = None
-
-try:
     from numba import jit, float32, float64, boolean
 except ModuleNotFoundError:
     def jit(*jit_args, **jit_kwargs):
@@ -49,6 +44,7 @@ except ModuleNotFoundError:
 from ..lib import typechecked
 from ._abc import CameraABC
 from ._matrix import Matrix
+from ._numpy import np
 from ._single2d import Vector2D
 from ._single2ddist import Vector2Ddist
 from ._single3d import Vector3D

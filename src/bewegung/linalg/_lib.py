@@ -30,10 +30,9 @@ specific language governing rights and limitations under the License.
 
 from typing import Type
 
-import numpy as np
-
 from ..lib import typechecked
 from ._abc import Dtype
+from ._numpy import np
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ROUTINES

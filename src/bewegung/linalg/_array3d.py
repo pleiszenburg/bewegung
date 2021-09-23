@@ -31,8 +31,6 @@ specific language governing rights and limitations under the License.
 from numbers import Number
 from typing import List, Tuple, Union
 
-import numpy as np
-
 from ..lib import typechecked
 from ._abc import (
     Dtype,
@@ -42,6 +40,7 @@ from ._abc import (
 )
 from ._const import FLOAT_DEFAULT
 from ._lib import dtype_np2py
+from ._numpy import np
 from ._single3d import Vector3D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

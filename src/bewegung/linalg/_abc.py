@@ -31,10 +31,7 @@ specific language governing rights and limitations under the License.
 from abc import ABC
 from typing import Generator, List, Tuple, Union
 
-try:
-    import numpy as np
-except ModuleNotFoundError:
-    np = None
+from ._numpy import np
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASSES

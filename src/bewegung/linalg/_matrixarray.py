@@ -30,9 +30,6 @@ specific language governing rights and limitations under the License.
 
 from typing import List, Tuple, Type, Union
 
-import numpy as np
-from numpy import ndarray
-
 from ..lib import typechecked
 from ._abc import (
     Dtype,
@@ -45,6 +42,7 @@ from ._abc import (
 )
 from ._const import FLOAT_DEFAULT
 from ._lib import dtype_np2py
+from ._numpy import np, ndarray
 from ._single2d import Vector2D
 from ._single3d import Vector3D
 from ._array2d import VectorArray2D
