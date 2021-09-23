@@ -5,10 +5,10 @@ black:
 clean:
 	-rm -r build/*
 	-(cd docs/; make clean)
-	find src/ docs/ -name '*.pyc' -exec rm -f {} +
-	find src/ docs/ -name '*.pyo' -exec rm -f {} +
-	find src/ docs/ -name '*~' -exec rm -f {} +
-	find src/ docs/ -name '__pycache__' -exec rm -fr {} +
+	find src/ docs/ tests/ -name '*.pyc' -exec rm -f {} +
+	find src/ docs/ tests/ -name '*.pyo' -exec rm -f {} +
+	find src/ docs/ tests/ -name '*~' -exec rm -f {} +
+	find src/ docs/ tests/ -name '__pycache__' -exec rm -fr {} +
 	find src/ -name '*.htm' -exec rm -f {} +
 	find src/ -name '*.html' -exec rm -f {} +
 	find src/ -name '*.so' -exec rm -f {} +
