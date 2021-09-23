@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    tests/linalg/test_single2d_operations.py: Vector operations 2D
+    tests/linalg/test_single2d_operations.py: Vector operations 3D
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -35,7 +35,7 @@ from hypothesis import (
     strategies as st,
 )
 
-from bewegung import Vector2D
+from bewegung import Vector3D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # TESTS: INT
@@ -44,48 +44,56 @@ from bewegung import Vector2D
 @given(
     x1 = st.integers(),
     y1 = st.integers(),
+    z1 = st.integers(),
     x2 = st.integers(),
     y2 = st.integers(),
+    z2 = st.integers(),
 )
-def test_add_int(x1, y1, x2, y2):
+def test_add_int(x1, y1, z1, x2, y2, z2):
 
-    v1 = Vector2D(x1, y1)
-    v2 = Vector2D(x2, y2)
+    v1 = Vector3D(x1, y1, z1)
+    v2 = Vector3D(x2, y2, z2)
 
     v3 = v1 + v2
 
     assert v3.x == x1 + x2
     assert v3.y == y1 + y2
+    assert v3.z == z1 + z2
 
 @given(
     x1 = st.integers(),
     y1 = st.integers(),
+    z1 = st.integers(),
     x2 = st.integers(),
     y2 = st.integers(),
+    z2 = st.integers(),
 )
-def test_sub_int(x1, y1, x2, y2):
+def test_sub_int(x1, y1, z1, x2, y2, z2):
 
-    v1 = Vector2D(x1, y1)
-    v2 = Vector2D(x2, y2)
+    v1 = Vector3D(x1, y1, z1)
+    v2 = Vector3D(x2, y2, z2)
 
     v3 = v1 - v2
 
     assert v3.x == x1 - x2
     assert v3.y == y1 - y2
+    assert v3.z == z1 - z2
 
 @given(
     x1 = st.integers(),
     y1 = st.integers(),
+    z1 = st.integers(),
     scalar = st.floats() | st.integers(),
 )
-def test_mul_int(x1, y1, scalar):
+def test_mul_int(x1, y1, z1, scalar):
 
-    v1 = Vector2D(x1, y1)
+    v1 = Vector3D(x1, y1, z1)
 
     v2 = v1 * scalar
 
     x2 = x1 * scalar
     y2 = y1 * scalar
+    z2 = z1 * scalar
 
     assert type(scalar) == v2.dtype
 
@@ -99,19 +107,26 @@ def test_mul_int(x1, y1, scalar):
     else:
         assert v2.y == y2
 
+    if isnan(z2):
+        assert isnan(v2.z)
+    else:
+        assert v2.z == z2
+
 @given(
     x1 = st.integers(),
     y1 = st.integers(),
+    z1 = st.integers(),
     scalar = st.floats() | st.integers(),
 )
-def test_mul_inplace_int(x1, y1, scalar):
+def test_mul_inplace_int(x1, y1, z1, scalar):
 
-    v1 = Vector2D(x1, y1)
+    v1 = Vector3D(x1, y1, z1)
 
     v1.mul(scalar)
 
     x_ = x1 * scalar
     y_ = y1 * scalar
+    z_ = z1 * scalar
 
     assert type(scalar) == v1.dtype
 
@@ -125,6 +140,11 @@ def test_mul_inplace_int(x1, y1, scalar):
     else:
         assert v1.y == y_
 
+    if isnan(z_):
+        assert isnan(v1.z)
+    else:
+        assert v1.z == z_
+
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # TESTS: FLOAT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -132,18 +152,21 @@ def test_mul_inplace_int(x1, y1, scalar):
 @given(
     x1 = st.floats(),
     y1 = st.floats(),
+    z1 = st.floats(),
     x2 = st.floats(),
     y2 = st.floats(),
+    z2 = st.floats(),
 )
-def test_add_float(x1, y1, x2, y2):
+def test_add_float(x1, y1, z1, x2, y2, z2):
 
-    v1 = Vector2D(x1, y1)
-    v2 = Vector2D(x2, y2)
+    v1 = Vector3D(x1, y1, z1)
+    v2 = Vector3D(x2, y2, z2)
 
     v3 = v1 + v2
 
     x3 = x1 + x2
     y3 = y1 + y2
+    z3 = z1 + z2
 
     if isnan(x3):
         assert isnan(v3.x)
@@ -155,21 +178,29 @@ def test_add_float(x1, y1, x2, y2):
     else:
         assert v3.y == y3
 
+    if isnan(z3):
+        assert isnan(v3.z)
+    else:
+        assert v3.z == z3
+
 @given(
     x1 = st.floats(),
     y1 = st.floats(),
+    z1 = st.floats(),
     x2 = st.floats(),
     y2 = st.floats(),
+    z2 = st.floats(),
 )
-def test_sub_float(x1, y1, x2, y2):
+def test_sub_float(x1, y1, z1, x2, y2, z2):
 
-    v1 = Vector2D(x1, y1)
-    v2 = Vector2D(x2, y2)
+    v1 = Vector3D(x1, y1, z1)
+    v2 = Vector3D(x2, y2, z2)
 
     v3 = v1 - v2
 
     x3 = x1 - x2
     y3 = y1 - y2
+    z3 = z1 - z2
 
     if isnan(x3):
         assert isnan(v3.x)
@@ -181,19 +212,26 @@ def test_sub_float(x1, y1, x2, y2):
     else:
         assert v3.y == y3
 
+    if isnan(z3):
+        assert isnan(v3.z)
+    else:
+        assert v3.z == z3
+
 @given(
     x1 = st.floats(),
     y1 = st.floats(),
+    z1 = st.floats(),
     scalar = st.floats() | st.integers(),
 )
-def test_mul_float(x1, y1, scalar):
+def test_mul_float(x1, y1, z1, scalar):
 
-    v1 = Vector2D(x1, y1)
+    v1 = Vector3D(x1, y1, z1)
 
     v2 = v1 * scalar
 
     x2 = x1 * scalar
     y2 = y1 * scalar
+    z2 = z1 * scalar
 
     assert float == v2.dtype
 
@@ -207,19 +245,26 @@ def test_mul_float(x1, y1, scalar):
     else:
         assert v2.y == y2
 
+    if isnan(z2):
+        assert isnan(v2.z)
+    else:
+        assert v2.z == z2
+
 @given(
     x1 = st.floats(),
     y1 = st.floats(),
+    z1 = st.floats(),
     scalar = st.floats() | st.integers(),
 )
-def test_mul_inplace_float(x1, y1, scalar):
+def test_mul_inplace_float(x1, y1, z1, scalar):
 
-    v1 = Vector2D(x1, y1)
+    v1 = Vector3D(x1, y1, z1)
 
     v1.mul(scalar)
 
     x_ = x1 * scalar
     y_ = y1 * scalar
+    z_ = z1 * scalar
 
     assert float == v1.dtype
 
@@ -232,3 +277,8 @@ def test_mul_inplace_float(x1, y1, scalar):
         assert isnan(v1.y)
     else:
         assert v1.y == y_
+
+    if isnan(z_):
+        assert isnan(v1.z)
+    else:
+        assert v1.z == z_
