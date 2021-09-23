@@ -73,6 +73,32 @@ def test_sub_int(x1, y1, x2, y2):
     assert v3.x == x1 - x2
     assert v3.y == y1 - y2
 
+@given(
+    x1 = st.integers(),
+    y1 = st.integers(),
+    scalar = st.floats() | st.integers(),
+)
+def test_mul_int(x1, y1, scalar):
+
+    v1 = Vector2D(x1, y1)
+
+    v2 = v1 * scalar
+
+    x2 = x1 * scalar
+    y2 = y1 * scalar
+
+    assert type(scalar) == v2.dtype
+
+    if isnan(x2):
+        assert isnan(v2.x)
+    else:
+        assert v2.x == x2
+
+    if isnan(y2):
+        assert isnan(v2.y)
+    else:
+        assert v2.y == y2
+
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # TESTS: FLOAT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -128,3 +154,29 @@ def test_sub_float(x1, y1, x2, y2):
         assert isnan(v3.y)
     else:
         assert v3.y == y3
+
+@given(
+    x1 = st.floats(),
+    y1 = st.floats(),
+    scalar = st.floats() | st.integers(),
+)
+def test_mul_float(x1, y1, scalar):
+
+    v1 = Vector2D(x1, y1)
+
+    v2 = v1 * scalar
+
+    x2 = x1 * scalar
+    y2 = y1 * scalar
+
+    assert v1.dtype == v2.dtype
+
+    if isnan(x2):
+        assert isnan(v2.x)
+    else:
+        assert v2.x == x2
+
+    if isnan(y2):
+        assert isnan(v2.y)
+    else:
+        assert v2.y == y2
