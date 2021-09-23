@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/linalg/single2d.py: Single 2D Vector
+    src/bewegung/linalg/_single2d.py: Single 2D Vector
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -38,7 +38,7 @@ except ModuleNotFoundError:
     np, ndarray = None, None
 
 from ..lib import typechecked
-from .abc import (
+from ._abc import (
     Dtype,
     PyNumber,
     PyNumber2D,
@@ -46,8 +46,8 @@ from .abc import (
     Vector2DABC,
     VectorArray2DABC,
 )
-from .const import FLOAT_DEFAULT
-from .svg import Svg
+from ._const import FLOAT_DEFAULT
+from ._svg import Svg
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

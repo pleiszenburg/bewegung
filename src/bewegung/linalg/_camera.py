@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/linalg/camera.py: Simple pinhole camera
+    src/bewegung/linalg/_camera.py: Simple pinhole camera
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -47,13 +47,13 @@ except ModuleNotFoundError:
     boolean, float32, float64 = None, tuple(), tuple()
 
 from ..lib import typechecked
-from .abc import CameraABC
-from .matrix import Matrix
-from .single2d import Vector2D
-from .single2ddist import Vector2Ddist
-from .single3d import Vector3D
-from .array2ddist import VectorArray2Ddist
-from .array3d import VectorArray3D
+from ._abc import CameraABC
+from ._matrix import Matrix
+from ._single2d import Vector2D
+from ._single2ddist import Vector2Ddist
+from ._single3d import Vector3D
+from ._array2ddist import VectorArray2Ddist
+from ._array3d import VectorArray3D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

@@ -28,12 +28,12 @@ specific language governing rights and limitations under the License.
 # EXPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from .const import FLOAT_DEFAULT
+from ._const import FLOAT_DEFAULT
 
-from .single2d import Vector2D
-from .single2ddist import Vector2Ddist
-from .single3d import Vector3D
-from .matrix import Matrix
+from ._single2d import Vector2D
+from ._single2ddist import Vector2Ddist
+from ._single3d import Vector3D
+from ._matrix import Matrix
 
 try:
     import numpy as _np
@@ -41,11 +41,11 @@ except ModuleNotFoundError:
     _np = None
 
 if _np is not None:
-    from .array2d import VectorArray2D
-    from .array2ddist import VectorArray2Ddist
-    from .array3d import VectorArray3D
-    from .matrixarray import MatrixArray
+    from ._array2d import VectorArray2D
+    from ._array2ddist import VectorArray2Ddist
+    from ._array3d import VectorArray3D
+    from ._matrixarray import MatrixArray
 
 del _np
 
-from .camera import Camera
+from ._camera import Camera

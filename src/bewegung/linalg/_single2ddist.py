@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/linalg/single2ddist.py: Single 2D Vector with distance parameter
+    src/bewegung/linalg/_single2ddist.py: Single 2D Vector with distance parameter
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -31,8 +31,8 @@ specific language governing rights and limitations under the License.
 from typing import Type, Union
 
 from ..lib import typechecked
-from .abc import PyNumber, Vector2DABC
-from .single2d import Vector2D
+from ._abc import PyNumber, Vector2DABC
+from ._single2d import Vector2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

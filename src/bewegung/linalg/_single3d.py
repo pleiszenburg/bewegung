@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/linalg/single3d.py: Single 3D Vector
+    src/bewegung/linalg/_single3d.py: Single 3D Vector
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -38,7 +38,7 @@ except ModuleNotFoundError:
     np, ndarray = None, None
 
 from ..lib import typechecked
-from .abc import (
+from ._abc import (
     Dtype,
     PyNumber,
     PyNumber3D,
@@ -46,7 +46,7 @@ from .abc import (
     Vector3DABC,
     VectorArray3DABC,
 )
-from .const import FLOAT_DEFAULT
+from ._const import FLOAT_DEFAULT
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

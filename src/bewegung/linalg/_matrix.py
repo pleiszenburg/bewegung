@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/linalg/matrix.py: Simple 2x2/3x3 matrix for rotations
+    src/bewegung/linalg/_matrix.py: Simple 2x2/3x3 matrix for rotations
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -38,7 +38,7 @@ except ModuleNotFoundError:
     np, ndarray = None, None
 
 from ..lib import typechecked
-from .abc import (
+from ._abc import (
     Dtype,
     MatrixABC,
     PyNumber,
@@ -47,11 +47,11 @@ from .abc import (
     VectorArray2DABC,
     VectorArray3DABC,
 )
-from .const import FLOAT_DEFAULT
-from .single2d import Vector2D
-from .single3d import Vector3D
-from .array2d import VectorArray2D
-from .array3d import VectorArray3D
+from ._const import FLOAT_DEFAULT
+from ._single2d import Vector2D
+from ._single3d import Vector3D
+from ._array2d import VectorArray2D
+from ._array3d import VectorArray3D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

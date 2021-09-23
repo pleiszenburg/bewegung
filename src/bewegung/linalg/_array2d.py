@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/linalg/array3d.py: 3D Vector Array
+    src/bewegung/linalg/_array2d.py: 2D Vector Array
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -34,42 +34,39 @@ from typing import List, Tuple, Union
 import numpy as np
 
 from ..lib import typechecked
-from .abc import (
+from ._abc import (
     Dtype,
     VectorArrayABC,
-    VectorArray3DABC,
-    VectorIterable3D,
+    VectorArray2DABC,
+    VectorIterable2D,
 )
-from .const import FLOAT_DEFAULT
-from .lib import dtype_np2py
-from .single3d import Vector3D
+from ._const import FLOAT_DEFAULT
+from ._lib import dtype_np2py
+from ._single2d import Vector2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-class VectorArray3D(VectorArrayABC, VectorArray3DABC):
+class VectorArray2D(VectorArrayABC, VectorArray2DABC):
     """
-    An array of vectors in 3D space.
+    An array of vectors in 2D space.
 
     Mutable.
 
     Args:
-        x : x components. Must have the same dtype like ``y`` and ``z``.
-        y : y components. Must have the same dtype like ``x`` and ``z``.
-        z : z components. Must have the same dtype like ``x`` and ``y``.
+        x : x components. Must have the same dtype like ``y``.
+        y : y components. Must have the same dtype like ``x``.
     """
 
-
-    def __init__(self, x: np.ndarray, y: np.ndarray, z: np.ndarray):
+    def __init__(self, x: np.ndarray, y: np.ndarray):
 
         assert x.ndim == 1
         assert y.ndim == 1
-        assert z.ndim == 1
-        assert x.shape[0] == y.shape[0] == z.shape[0]
-        assert x.dtype == y.dtype == z.dtype
-        self._x, self._y, self._z = x, y, z
+        assert x.shape[0] == y.shape[0]
+        assert x.dtype == y.dtype
+        self._x, self._y = x, y
         self._iterstate = 0
 
     def __repr__(self) -> str:
@@ -77,7 +74,7 @@ class VectorArray3D(VectorArrayABC, VectorArray3DABC):
         String representation for interactive use
         """
 
-        return f'<VectorArray3D len={len(self):d}>'
+        return f'<VectorArray2D len={len(self):d}>'
 
     def __len__(self) -> int:
         """
@@ -86,11 +83,11 @@ class VectorArray3D(VectorArrayABC, VectorArray3DABC):
 
         return self._x.shape[0]
 
-    def __getitem__(self, idx: Union[int, slice]) -> Union[Vector3D, VectorArray3DABC]:
+    def __getitem__(self, idx: Union[int, slice]) -> Union[Vector2D, VectorArray2DABC]:
         """
         Item access, returning an independent object - either
-        a :class:`bewegung.Vector3D` (index access) or
-        a :class:`bewegung.VectorArray§D` (slicing)
+        a :class:`bewegung.Vector2D` (index access) or
+        a :class:`bewegung.VectorArray2D` (slicing)
 
         Args:
             idx : Either an index or a slice
@@ -98,18 +95,18 @@ class VectorArray3D(VectorArrayABC, VectorArray3DABC):
 
         if isinstance(idx, int):
             dtype = dtype_np2py(self.dtype)
-            return Vector3D(dtype(self._x[idx]), dtype(self._y[idx]), dtype(self._z[idx]), dtype = dtype)
+            return Vector2D(dtype(self._x[idx]), dtype(self._y[idx]), dtype = dtype)
 
-        return VectorArray3D(self._x[idx].copy(), self._y[idx].copy(), self._z[idx].copy())
+        return VectorArray2D(self._x[idx].copy(), self._y[idx].copy())
 
-    def __iter__(self) -> VectorArray3DABC:
+    def __iter__(self) -> VectorArray2DABC:
         """
         Iterator interface (1/2)
         """
 
         return self
 
-    def __next__(self) -> Vector3D:
+    def __next__(self) -> Vector2D:
         """
         Iterator interface (2/2)
         """
@@ -122,7 +119,7 @@ class VectorArray3D(VectorArrayABC, VectorArray3DABC):
         self._iterstate += 1 # increment
         return value
 
-    def __eq__(self, other: VectorArray3DABC) -> bool:
+    def __eq__(self, other: VectorArray2DABC) -> bool:
         """
         Equality check between vector arrays
 
@@ -130,9 +127,9 @@ class VectorArray3D(VectorArrayABC, VectorArray3DABC):
             other : Another vector array of equal length
         """
 
-        return np.array_equal(self.x, other.x) and np.array_equal(self.y, other.y) and np.array_equal(self.z, other.z)
+        return np.array_equal(self.x, other.x) and np.array_equal(self.y, other.y)
 
-    def __mod__(self, other: VectorArray3DABC) -> bool:
+    def __mod__(self, other: VectorArray2DABC) -> bool:
         """
         Is-close check between vector arrays
 
@@ -140,9 +137,9 @@ class VectorArray3D(VectorArrayABC, VectorArray3DABC):
             other : Another vector array of equal length
         """
 
-        return np.allclose(self.x, other.x) and np.allclose(self.y, other.y) and np.allclose(self.z, other.z)
+        return np.allclose(self.x, other.x) and np.allclose(self.y, other.y)
 
-    def __add__(self, other: Union[VectorArray3DABC, Vector3D]) -> VectorArray3DABC:
+    def __add__(self, other: Union[VectorArray2DABC, Vector2D]) -> VectorArray2DABC:
         """
         Add operation between vector arrays or a vector array and a vector
 
@@ -150,16 +147,16 @@ class VectorArray3D(VectorArrayABC, VectorArray3DABC):
             other : Another vector array of equal length
         """
 
-        if isinstance(other, VectorArray3DABC):
+        if isinstance(other, VectorArray2DABC):
             assert len(self) == len(other)
             assert self.dtype == other.dtype
-        return VectorArray3D(self.x + other.x, self.y + other.y, self.z + other.z)
+        return VectorArray2D(self.x + other.x, self.y + other.y)
 
     def __radd__(self, *args, **kwargs):
 
         return self.__add__(*args, **kwargs)
 
-    def __sub__(self, other: Union[VectorArray3DABC, Vector3D]) -> VectorArray3DABC:
+    def __sub__(self, other: Union[VectorArray2DABC, Vector2D]) -> VectorArray2DABC:
         """
         Substract operator between vector arrays or a vector array and a vector
 
@@ -167,16 +164,16 @@ class VectorArray3D(VectorArrayABC, VectorArray3DABC):
             other : Another vector array of equal length
         """
 
-        if isinstance(other, VectorArray3DABC):
+        if isinstance(other, VectorArray2DABC):
             assert len(self) == len(other)
             assert self.dtype == other.dtype
-        return VectorArray3D(self.x - other.x, self.y - other.y, self.z - other.z)
+        return VectorArray2D(self.x - other.x, self.y - other.y)
 
     def __rsub__(self, *args, **kwargs):
 
         return self.__sub__(*args, **kwargs)
 
-    def __mul__(self, other: Number) -> VectorArray3DABC:
+    def __mul__(self, other: Number) -> VectorArray2DABC:
         """
         Multiplication with scalar
 
@@ -184,7 +181,7 @@ class VectorArray3D(VectorArrayABC, VectorArray3DABC):
             other : A number
         """
 
-        return VectorArray3D(self._x * other, self._y * other, self._z * other)
+        return VectorArray2D(self._x * other, self._y * other)
 
     def mul(self, scalar: Number):
         """
@@ -196,9 +193,8 @@ class VectorArray3D(VectorArrayABC, VectorArray3DABC):
 
         np.multiply(self._x, scalar, out = self._x)
         np.multiply(self._y, scalar, out = self._y)
-        np.multiply(self._z, scalar, out = self._z)
 
-    def __matmul__(self, other: VectorArray3DABC) -> np.ndarray:
+    def __matmul__(self, other: VectorArray2DABC) -> np.ndarray:
         """
         Scalar product between vector arrays
 
@@ -208,46 +204,46 @@ class VectorArray3D(VectorArrayABC, VectorArray3DABC):
 
         assert len(self) == len(other)
         assert self.dtype == other.dtype
-        return self.x * other.x + self.y * other.y + self.z * other.z
+        return self.x * other.x + self.y * other.y
 
-    def as_list(self) -> List[Vector3D]:
+    def as_list(self) -> List[Vector2D]:
         """
-        Exports a list of :class:`bewegung.Vector3D` objects
+        Exports a list of :class:`bewegung.Vector2D` objects
         """
 
         dtype = dtype_np2py(self.dtype)
         return [
-            Vector3D(dtype(self._x[idx]), dtype(self._y[idx]), dtype(self._z[idx]), dtype = dtype)
+            Vector2D(dtype(self._x[idx]), dtype(self._y[idx]), dtype = dtype)
             for idx in range(len(self))
         ]
 
     def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> np.ndarray:
         """
-        Exports vector array as a ``numpy.ndarry`` object, shape ``(len(self), 3)``.
+        Exports vector array as a ``numpy.ndarry`` object, shape ``(len(self), 2)``.
 
         Args:
             dtype : Desired ``numpy`` data type of new vector
         """
 
-        a = np.zeros((len(self), 3), dtype = self.dtype)
-        a[:, 0], a[:, 1], a[:, 2] = self._x, self._y, self._z
+        a = np.zeros((len(self), 2), dtype = self.dtype)
+        a[:, 0], a[:, 1] = self._x, self._y
         return a if a.dtype == np.dtype(dtype) else a.astype(dtype)
 
-    def as_polar_tuple(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    def as_polar_tuple(self) -> Tuple[np.ndarray, np.ndarray]:
         """
         Exports vector array as a tuple of polar vector components in ``numpy.ndarry`` objects
         """
 
-        return (self.mag, self.theta, self.phi)
+        return self.mag, self.angle
 
-    def as_tuple(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    def as_tuple(self) -> Tuple[np.ndarray, np.ndarray]:
         """
         Exports vector array as a tuple of vector components in ``numpy.ndarry`` objects
         """
 
-        return self._x.copy(), self._y.copy(), self._z.copy()
+        return self._x.copy(), self._y.copy()
 
-    def as_type(self, dtype: Dtype) -> VectorArray3DABC:
+    def as_type(self, dtype: Dtype) -> VectorArray2DABC:
         """
         Exports vector array as another vector array with new dtype
 
@@ -255,28 +251,27 @@ class VectorArray3D(VectorArrayABC, VectorArray3DABC):
             dtype : Desired ``numpy`` data type of new vector array
         """
 
-        return self.copy() if self.dtype == np.dtype(dtype) else VectorArray3D(
-            self._x.astype(dtype), self._y.astype(dtype), self._z.astype(dtype),
+        return self.copy() if self.dtype == np.dtype(dtype) else VectorArray2D(
+            self._x.astype(dtype), self._y.astype(dtype),
         )
 
-    def copy(self) -> VectorArray3DABC:
+    def copy(self) -> VectorArray2DABC:
         """
         Copies vector array
         """
 
-        return VectorArray3D(self._x.copy(), self._y.copy(), self._z.copy())
+        return VectorArray2D(self._x.copy(), self._y.copy())
 
-    def update_from_vector(self, other: VectorArray3DABC):
+    def update_from_vector(self, other: VectorArray2DABC):
         """
         Updates vector components with data from another vector array
 
         Args:
-            x : x components. Must have the same dtype like ``y`` and ``z``.
-            y : y components. Must have the same dtype like ``x`` and ``z``.
-            z : z components. Must have the same dtype like ``x`` and ``y``.
+            x : x components. Must have the same dtype like ``y``.
+            y : y components. Must have the same dtype like ``x``.
         """
 
-        self._x[:], self._y[:], self._z[:] = other.x[:], other.y[:], other.z[:]
+        self._x[:], self._y[:] = other.x[:], other.y[:]
 
     @property
     def dtype(self) -> np.dtype:
@@ -292,7 +287,7 @@ class VectorArray3D(VectorArrayABC, VectorArray3DABC):
         Number of dimensions
         """
 
-        return 3
+        return 2
 
     @property
     def mag(self) -> np.ndarray:
@@ -300,20 +295,12 @@ class VectorArray3D(VectorArrayABC, VectorArray3DABC):
         The vectors' magnitudes, computed on demand
         """
 
-        return np.sqrt(self._x ** 2 + self._y ** 2 + self._z ** 2)
+        return np.sqrt(self._x ** 2 + self._y ** 2)
 
     @property
-    def theta(self) -> np.ndarray:
+    def angle(self) -> np.ndarray:
         """
-        The vectors' thetas in radians, computed on demand
-        """
-
-        return np.arccos(self._z / self.mag)
-
-    @property
-    def phi(self) -> np.ndarray:
-        """
-        The vectors' phis in radians, computed on demand
+        The vectors' angles in radians, computed on demand
         """
 
         return np.arctan2(self._y, self._x)
@@ -344,23 +331,10 @@ class VectorArray3D(VectorArrayABC, VectorArray3DABC):
         ""
         raise NotImplementedError()
 
-    @property
-    def z(self) -> np.ndarray:
-        """
-        z components, mutable
-        """
-
-        return self._z
-
-    @z.setter
-    def z(self, value: float):
-        ""
-        raise NotImplementedError()
-
     @classmethod
-    def from_iterable(cls, obj: VectorIterable3D, dtype: Dtype = FLOAT_DEFAULT) -> VectorArray3DABC:
+    def from_iterable(cls, obj: VectorIterable2D, dtype: Dtype = FLOAT_DEFAULT) -> VectorArray2DABC:
         """
-        Generates vector array object from an iterable of :class:`bewegung.Vector3D` objects
+        Generates vector array object from an iterable of :class:`bewegung.Vector2D` objects
 
         Args:
             obj : iterable
@@ -371,54 +345,25 @@ class VectorArray3D(VectorArrayABC, VectorArray3DABC):
             obj = list(obj)
         x = np.zeros((len(obj),), dtype = dtype)
         y = np.zeros((len(obj),), dtype = dtype)
-        z = np.zeros((len(obj),), dtype = dtype)
         for idx, item in enumerate(obj):
-            x[idx], y[idx], z[idx] = item.x, item.y, item.z
-        return cls(x = x, y = y, z = z,)
+            x[idx], y[idx] = item.x, item.y
+        return cls(x = x, y = y,)
 
     @classmethod
-    def from_polar(cls, radius: np.ndarray, theta: np.ndarray, phi: np.ndarray) -> VectorArray3DABC:
+    def from_polar(cls, radius: np.ndarray, angle: np.ndarray) -> VectorArray2DABC:
         """
         Generates vector array object from arrays of polar vector components
 
         Args:
             radius : Radius components
-            theta : Angle components in radians
-            phi : Angle components in radians
+            angle : Angle components in radians
         """
 
         assert radius.ndim == 1
-        assert theta.ndim == 1
-        assert phi.ndim == 1
-        assert radius.shape[0] == theta.shape[0] == phi.shape[0]
-        assert radius.dtype == theta.dtype == phi.dtype
-        RadiusSinTheta = radius * np.sin(theta)
-        return cls(
-            x = RadiusSinTheta * np.cos(phi),
-            y = RadiusSinTheta * np.sin(phi),
-            z = radius * np.cos(theta),
-            )
-
-    @classmethod
-    def from_geographic(cls, radius: np.ndarray, lon: np.ndarray, lat: np.ndarray) -> VectorArray3DABC:
-        """
-        Generates vector array object from arrays of geographic polar vector components
-
-        Args:
-            radius : Radius components
-            lon : Angle components in degree
-            lat : Angle components in degree
-        """
-
-        assert radius.ndim == 1
-        assert lon.ndim == 1
-        assert lat.ndim == 1
-        assert radius.shape[0] == lon.shape[0] == lat.shape[0]
-        assert radius.dtype == lon.dtype == lat.dtype
-        rad2deg = np.dtype(radius.dtype).type(np.pi / 180.0)
-        halfpi = np.dtype(radius.dtype).type(np.pi / 2.0)
-        return cls.from_polar(
-            radius = radius,
-            theta = halfpi - (lat * rad2deg),
-            phi = lon * rad2deg,
-            )
+        assert angle.ndim == 1
+        assert radius.shape[0] == angle.shape[0]
+        assert radius.dtype == angle.dtype
+        x, y = np.cos(angle), np.sin(angle)
+        np.multiply(x, radius, out = x)
+        np.multiply(y, radius, out = y)
+        return cls(x = x, y = y,)

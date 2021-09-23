@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/linalg/array2ddist.py: 2D Vector Array with distance parameter
+    src/bewegung/linalg/_array2ddist.py: 2D Vector Array with distance parameter
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -34,16 +34,16 @@ from typing import List, Union
 import numpy as np
 
 from ..lib import typechecked
-from .abc import (
+from ._abc import (
     Dtype,
     Vector2DABC,
     VectorArray2DABC,
     VectorIterable2D,
 )
-from .const import FLOAT_DEFAULT
-from .lib import dtype_np2py
-from .single2ddist import Vector2Ddist
-from .array2d import VectorArray2D
+from ._const import FLOAT_DEFAULT
+from ._lib import dtype_np2py
+from ._single2ddist import Vector2Ddist
+from ._array2d import VectorArray2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
