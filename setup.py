@@ -62,7 +62,9 @@ __version__ = get_version()
 # Requirements
 extras_require = {
     "dev": [
+        "coverage",
         "black",
+        "hypothesis",
         "python-lsp-server[all]", # superseeding python-language-server
         "psutil",
         "setuptools",
@@ -71,6 +73,8 @@ extras_require = {
         "sphinx-rtd-theme",
         "sphinxembeddedvideos", # https://github.com/sphinx-contrib/youtube/issues/9#issuecomment-734295832
         "myst-parser", # markdown in sphinx
+        "pytest",
+        "pytest-cov",
         "twine",
         "wheel",
     ],

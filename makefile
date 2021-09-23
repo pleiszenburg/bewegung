@@ -16,6 +16,9 @@ clean:
 	-rm -r dist/*
 	-rm -r src/*.egg-info
 
+demo:
+	python demo/demo.py
+
 docs:
 	@(cd docs; make clean; make html)
 
@@ -36,6 +39,12 @@ upload:
 	done
 
 test:
-	python demo/demo.py
+	make docs
+	make test_quick
 
-.PHONY: clean docs release test
+test_quick:
+	make clean
+	HYPOTHESIS_PROFILE=dev pytest --cov=bewegung --cov-config=setup.cfg --hypothesis-show-statistics # --capture=no
+	coverage html
+
+.PHONY: clean demo docs release test
