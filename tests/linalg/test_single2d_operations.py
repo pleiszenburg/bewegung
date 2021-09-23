@@ -38,7 +38,7 @@ from hypothesis import (
 from bewegung import Vector2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# TESTS
+# TESTS: INT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @given(
@@ -58,6 +58,26 @@ def test_add_int(x1, y1, x2, y2):
     assert v3.y == y1 + y2
 
 @given(
+    x1 = st.integers(),
+    y1 = st.integers(),
+    x2 = st.integers(),
+    y2 = st.integers(),
+)
+def test_sub_int(x1, y1, x2, y2):
+
+    v1 = Vector2D(x1, y1)
+    v2 = Vector2D(x2, y2)
+
+    v3 = v1 - v2
+
+    assert v3.x == x1 - x2
+    assert v3.y == y1 - y2
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# TESTS: FLOAT
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+@given(
     x1 = st.floats(),
     y1 = st.floats(),
     x2 = st.floats(),
@@ -72,6 +92,32 @@ def test_add_float(x1, y1, x2, y2):
 
     x3 = x1 + x2
     y3 = y1 + y2
+
+    if isnan(x3):
+        assert isnan(v3.x)
+    else:
+        assert v3.x == x3
+
+    if isnan(y3):
+        assert isnan(v3.y)
+    else:
+        assert v3.y == y3
+
+@given(
+    x1 = st.floats(),
+    y1 = st.floats(),
+    x2 = st.floats(),
+    y2 = st.floats(),
+)
+def test_sub_float(x1, y1, x2, y2):
+
+    v1 = Vector2D(x1, y1)
+    v2 = Vector2D(x2, y2)
+
+    v3 = v1 - v2
+
+    x3 = x1 - x2
+    y3 = y1 - y2
 
     if isnan(x3):
         assert isnan(v3.x)
