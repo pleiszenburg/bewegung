@@ -29,11 +29,12 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+import os
+
 from setuptools import (
     find_packages,
     setup,
 )
-import os
 
 from docs.version import get_version
 
@@ -111,7 +112,7 @@ extras_require = {
     ],
 }
 extras_require["all"] = list(
-    {rq for target in extras_require.keys() for rq in extras_require[target]}
+    {rq for target in extras_require.values() for rq in extras_require}
 )
 extras_require["docs"] = list(set(extras_require["all"]) - {'PyGObject'})
 
