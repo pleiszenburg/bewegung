@@ -12,6 +12,7 @@
 - FEATURE: New dedicated sub-module for `DrawingBoard` named `bewegung.drawingboard`, now allowing direct import.
 - FEATURE: New dedicated sub-module for linear algebra named `bewegung.lingalg`.
 - FEATURE: Cleanup of internal type hierarchy.
+- FEATURE: Added test suite with some initial tests.
 - FIX: Development dependency switched from unmaintained `python-language-server` to `python-lsp-server`.
 - FIX: Imports in `contrib` were broken.
 - FIX: `test` target in `makefile` was broken.
