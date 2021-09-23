@@ -111,9 +111,11 @@ extras_require = {
         "typeguard", # for type checking (optional)
     ],
 }
-extras_require["all"] = list(
-    {rq for target in extras_require.values() for rq in extras_require}
-)
+extras_require["all"] = list({
+    rq
+    for target in extras_require.values()
+    for rq in target
+})
 extras_require["docs"] = list(set(extras_require["all"]) - {'PyGObject'})
 
 # Install package
