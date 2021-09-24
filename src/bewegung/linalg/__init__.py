@@ -30,6 +30,9 @@ specific language governing rights and limitations under the License.
 
 from ._const import FLOAT_DEFAULT
 
+from ._single import Vector
+from ._array import VectorArray
+
 from ._single2d import Vector2D
 from ._single2ddist import Vector2Ddist
 from ._single3d import Vector3D

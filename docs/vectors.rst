@@ -16,6 +16,12 @@ Vector Classes
 
 The vector classes describe individual vectors in 2D and 3D space. Vectors are "statically typed", use Python number types and can either have ``int`` or ``float`` components. The data type of a vector is exposed through its ``dtype`` property.
 
+The ``Vector`` base class
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: bewegung.Vector
+    :members:
+
 The ``Vector2D`` class
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -40,6 +46,12 @@ Vector Array Classes
 --------------------
 
 The vector array classes describe arrays of individual vectors in 2D and 3D space. Vector arrays are "statically typed" and use ``numpy`` arrays for storing data. Just like ``numpy.ndarray`` objects, they expose a ``dtype`` property.
+
+The ``VectorArray`` base class
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: bewegung.VectorArray
+    :members:
 
 The ``VectorArray2D`` class
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
