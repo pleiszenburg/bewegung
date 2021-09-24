@@ -41,6 +41,20 @@ from bewegung import Vector2D
 # TESTS: INT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+def test_repr():
+
+    v1 = Vector2D(0, 0)
+    v2 = Vector2D(0.0, 0.0)
+
+    v1r = repr(v1)
+    v2r = repr(v2)
+
+    assert 'Vector2D' in v1r
+    assert 'Vector2D' in v2r
+
+    assert 'dtype=int' in v1r
+    assert 'dtype=float' in v2r
+
 @given(
     x1 = st.floats(),
     y1 = st.floats(),
