@@ -29,13 +29,14 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from math import cos, sin, isclose
+from numbers import Number
 from typing import List, Tuple, Type, Union
 
 from ..lib import typechecked
 from ._abc import (
     Dtype,
     MatrixABC,
-    PyNumber,
+    Numbers,
     Vector2DABC,
     Vector3DABC,
     VectorArray2DABC,
@@ -64,7 +65,7 @@ class Matrix(MatrixABC):
         dtype : Data type. Derived from entries in ``matrix`` if not explicitly provided.
     """
 
-    def __init__(self, matrix = List[List[PyNumber]], dtype: Union[Type, None] = None):
+    def __init__(self, matrix = List[List[Numbers]], dtype: Union[Type, None] = None):
 
         lines = len(matrix)
         assert lines in (2, 3) # allow 2D and 3D
@@ -112,7 +113,7 @@ class Matrix(MatrixABC):
             return Vector2D(*values) if len(vector_tuple) == 2 else Vector3D(*values)
         return VectorArray2D(*values) if len(vector_tuple) == 2 else VectorArray3D(*values)
 
-    def __getitem__(self, index: Tuple[int, int]) -> PyNumber:
+    def __getitem__(self, index: Tuple[int, int]) -> Number:
         """
         Item access, returns value at position
 
@@ -122,7 +123,7 @@ class Matrix(MatrixABC):
 
         return self._matrix[index[0]][index[1]]
 
-    def __setitem__(self, index: Tuple[int, int], value: PyNumber):
+    def __setitem__(self, index: Tuple[int, int], value: Number):
         """
         Item access, sets new value at position
 
@@ -176,7 +177,7 @@ class Matrix(MatrixABC):
 
         return np.array(self._matrix, dtype = dtype)
 
-    def as_tuple(self) -> Tuple[Tuple[PyNumber, ...], ...]:
+    def as_tuple(self) -> Tuple[Tuple[Numbers, ...], ...]:
         """
         Exports matrix as a tuple of tuples
         """
@@ -227,7 +228,7 @@ class Matrix(MatrixABC):
         return cls(matrix, dtype = dtype)
 
     @classmethod
-    def from_2d_rotation(cls, a: PyNumber) -> MatrixABC:
+    def from_2d_rotation(cls, a: Number) -> MatrixABC:
         """
         Generates new 2D matrix object from an angle
 
@@ -243,7 +244,7 @@ class Matrix(MatrixABC):
         ])
 
     @classmethod
-    def from_3d_rotation(cls, v: Vector3DABC, a: PyNumber) -> MatrixABC:
+    def from_3d_rotation(cls, v: Vector3DABC, a: Number) -> MatrixABC:
         """
         Generates new 3D matrix object from a vector and an angle
 

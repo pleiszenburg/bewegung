@@ -29,13 +29,13 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 import math
+from numbers import Number
 from typing import Tuple, Type, Union
 
 from ..lib import typechecked
 from ._abc import (
     Dtype,
-    PyNumber,
-    PyNumber2D,
+    Number2D,
     VectorABC,
     Vector2DABC,
     VectorArray2DABC,
@@ -61,7 +61,7 @@ class Vector2D(VectorABC, Vector2DABC):
         dtype : Data type. Derived from ``x`` and ``y`` if not explicitly provided.
     """
 
-    def __init__(self, x: PyNumber, y: PyNumber, dtype: Union[Type, None] = None):
+    def __init__(self, x: Number, y: Number, dtype: Union[Type, None] = None):
 
         assert type(x) == type(y)
         if dtype is None:
@@ -130,7 +130,7 @@ class Vector2D(VectorABC, Vector2DABC):
 
         return type(self)(self.x - other.x, self.y - other.y)
 
-    def __mul__(self, other: PyNumber) -> Vector2DABC:
+    def __mul__(self, other: Number) -> Vector2DABC:
         """
         Multiplication with scalar
 
@@ -140,7 +140,7 @@ class Vector2D(VectorABC, Vector2DABC):
 
         return type(self)(self._x * other, self._y * other)
 
-    def mul(self, scalar: PyNumber):
+    def mul(self, scalar: Number):
         """
         In-place multiplication with scalar
 
@@ -153,7 +153,7 @@ class Vector2D(VectorABC, Vector2DABC):
         assert type(self._x) == type(self._y)
         self._dtype = type(self._x)
 
-    def __matmul__(self, other: Vector2DABC) -> PyNumber:
+    def __matmul__(self, other: Vector2DABC) -> Number:
         """
         Scalar product between vectors
 
@@ -194,7 +194,7 @@ class Vector2D(VectorABC, Vector2DABC):
 
         return self.mag, self.angle
 
-    def as_tuple(self) -> PyNumber2D:
+    def as_tuple(self) -> Number2D:
         """
         Exports vector as a tuple
         """
@@ -208,7 +208,7 @@ class Vector2D(VectorABC, Vector2DABC):
 
         return type(self)(self._x, self._y, self._dtype)
 
-    def update(self, x: PyNumber, y: PyNumber):
+    def update(self, x: Number, y: Number):
         """
         Updates vector components
 
@@ -250,7 +250,7 @@ class Vector2D(VectorABC, Vector2DABC):
         return math.atan2(self._y, self._x)
 
     @property
-    def x(self) -> PyNumber:
+    def x(self) -> Number:
         """
         x component
         """
@@ -258,7 +258,7 @@ class Vector2D(VectorABC, Vector2DABC):
         return self._x
 
     @x.setter
-    def x(self, value: PyNumber):
+    def x(self, value: Number):
         """
         x component
         """
@@ -267,7 +267,7 @@ class Vector2D(VectorABC, Vector2DABC):
         self._x = value
 
     @property
-    def y(self) -> PyNumber:
+    def y(self) -> Number:
         """
         y component
         """
@@ -275,7 +275,7 @@ class Vector2D(VectorABC, Vector2DABC):
         return self._y
 
     @y.setter
-    def y(self, value: PyNumber):
+    def y(self, value: Number):
         """
         y component
         """
@@ -300,7 +300,7 @@ class Vector2D(VectorABC, Vector2DABC):
         return 2
 
     @classmethod
-    def from_polar(cls, radius: PyNumber, angle: PyNumber) -> Vector2DABC:
+    def from_polar(cls, radius: Number, angle: Number) -> Vector2DABC:
         """
         Generates vector object from polar coordinates
 

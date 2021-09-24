@@ -29,13 +29,13 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 import math
+from numbers import Number
 from typing import Tuple, Type, Union
 
 from ..lib import typechecked
 from ._abc import (
     Dtype,
-    PyNumber,
-    PyNumber3D,
+    Number3D,
     VectorABC,
     Vector3DABC,
     VectorArray3DABC,
@@ -64,7 +64,7 @@ class Vector3D(VectorABC, Vector3DABC):
     _rad2deg = math.pi / 180.0
     _halfpi = math.pi / 2.0
 
-    def __init__(self, x: PyNumber, y: PyNumber, z: PyNumber, dtype: Union[Type, None] = None):
+    def __init__(self, x: Number, y: Number, z: Number, dtype: Union[Type, None] = None):
 
         assert type(x) == type(y) == type(z)
         if dtype is None:
@@ -129,7 +129,7 @@ class Vector3D(VectorABC, Vector3DABC):
 
         return type(self)(self.x - other.x, self.y - other.y, self.z - other.z)
 
-    def __mul__(self, other: PyNumber) -> Vector3DABC:
+    def __mul__(self, other: Number) -> Vector3DABC:
         """
         Multiplication with scalar
 
@@ -139,7 +139,7 @@ class Vector3D(VectorABC, Vector3DABC):
 
         return type(self)(self._x * other, self._y * other, self._z * other)
 
-    def mul(self, scalar: PyNumber):
+    def mul(self, scalar: Number):
         """
         In-place multiplication with scalar
 
@@ -153,7 +153,7 @@ class Vector3D(VectorABC, Vector3DABC):
         assert type(self._x) == type(self._y) == type(self._z)
         self._dtype = type(self._x)
 
-    def __matmul__(self, other: Vector3DABC) -> PyNumber:
+    def __matmul__(self, other: Vector3DABC) -> Number:
         """
         Scalar product between vectors
 
@@ -194,7 +194,7 @@ class Vector3D(VectorABC, Vector3DABC):
 
         return (self.mag, self.theta, self.phi)
 
-    def as_tuple(self) -> PyNumber3D:
+    def as_tuple(self) -> Number3D:
         """
         Exports vector as a tuple
         """
@@ -208,7 +208,7 @@ class Vector3D(VectorABC, Vector3DABC):
 
         return type(self)(self._x, self._y, self._z, self._dtype)
 
-    def update(self, x: PyNumber, y: PyNumber, z: PyNumber):
+    def update(self, x: Number, y: Number, z: Number):
         """
         Updates vector components
 
@@ -259,7 +259,7 @@ class Vector3D(VectorABC, Vector3DABC):
         return math.atan2(self._y, self._x)
 
     @property
-    def x(self) -> PyNumber:
+    def x(self) -> Number:
         """
         x component
         """
@@ -267,7 +267,7 @@ class Vector3D(VectorABC, Vector3DABC):
         return self._x
 
     @x.setter
-    def x(self, value: PyNumber):
+    def x(self, value: Number):
         """
         x component
         """
@@ -276,7 +276,7 @@ class Vector3D(VectorABC, Vector3DABC):
         self._x = value
 
     @property
-    def y(self) -> PyNumber:
+    def y(self) -> Number:
         """
         y component
         """
@@ -284,7 +284,7 @@ class Vector3D(VectorABC, Vector3DABC):
         return self._y
 
     @y.setter
-    def y(self, value: PyNumber):
+    def y(self, value: Number):
         """
         y component
         """
@@ -293,7 +293,7 @@ class Vector3D(VectorABC, Vector3DABC):
         self._y = value
 
     @property
-    def z(self) -> PyNumber:
+    def z(self) -> Number:
         """
         z component
         """
@@ -301,7 +301,7 @@ class Vector3D(VectorABC, Vector3DABC):
         return self._z
 
     @z.setter
-    def z(self, value: PyNumber):
+    def z(self, value: Number):
         """
         z component
         """
@@ -326,7 +326,7 @@ class Vector3D(VectorABC, Vector3DABC):
         return 3
 
     @classmethod
-    def from_polar(cls, radius: PyNumber, theta: PyNumber, phi: PyNumber) -> Vector3DABC:
+    def from_polar(cls, radius: Number, theta: Number, phi: Number) -> Vector3DABC:
         """
         Generates vector object from polar coordinates
 
@@ -344,7 +344,7 @@ class Vector3D(VectorABC, Vector3DABC):
             )
 
     @classmethod
-    def from_geographic(cls, radius: PyNumber, lon: PyNumber, lat: PyNumber) -> Vector3DABC:
+    def from_geographic(cls, radius: Number, lon: Number, lat: Number) -> Vector3DABC:
         """
         Generates vector object from geographic polar coordinates
 

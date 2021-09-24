@@ -28,13 +28,13 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+from numbers import Number
 from typing import List, Tuple, Type, Union
 
 from ..lib import typechecked
 from ._abc import (
     Dtype,
     MatrixArrayABC,
-    PyNumber,
     Vector2DABC,
     Vector3DABC,
     VectorArray2DABC,
@@ -126,7 +126,7 @@ class MatrixArray(MatrixArrayABC):
     #         return Vector2D(*values) if len(vector_tuple) == 2 else Vector3D(*values)
     #     return VectorArray2D(*values) if len(vector_tuple) == 2 else VectorArray3D(*values)
 
-    def __getitem__(self, index: Union[Tuple[int, int, int], int, slice]) -> Union[PyNumber, Matrix]:
+    def __getitem__(self, index: Union[Tuple[int, int, int], int, slice]) -> Union[Number, Matrix]:
         pass
     #     """
     #     Item access, returns value at position
@@ -151,7 +151,7 @@ class MatrixArray(MatrixArrayABC):
     #
     #     return dtype(self._matrix[index[0]][index[1]][index[2]])
 
-    def __setitem__(self, index: Tuple[int, int], value: PyNumber):
+    def __setitem__(self, index: Tuple[int, int], value: Number):
         pass
     #     """
     #     Item access, sets new value at position
@@ -284,7 +284,7 @@ class MatrixArray(MatrixArrayABC):
     #     ])
 
     @classmethod
-    def from_3d_rotation(cls, v: Vector3DABC, a: PyNumber) -> MatrixArrayABC:
+    def from_3d_rotation(cls, v: Vector3DABC, a: Number) -> MatrixArrayABC:
         pass
     #     """
     #     Generates new 3D matrix object from a vector and an angle

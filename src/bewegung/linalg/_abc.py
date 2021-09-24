@@ -29,7 +29,8 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from abc import ABC
-from typing import Generator, List, Tuple, Union
+from numbers import Number
+from typing import Generator, List, Tuple, TypeVar, Union
 
 from ._numpy import np
 
@@ -85,6 +86,6 @@ if np is not None:
 else:
     Dtype = None # HACK
 
-PyNumber = Union[int, float]
-PyNumber2D = Union[Tuple[int, int], Tuple[float, float]]
-PyNumber3D = Union[Tuple[int, int, int], Tuple[float, float, float]]
+Numbers = TypeVar('N', bound = Number)
+Number2D = Tuple[Numbers, Numbers]
+Number3D = Tuple[Numbers, Numbers, Numbers]

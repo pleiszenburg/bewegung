@@ -28,10 +28,11 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+from numbers import Number
 from typing import Type, Union
 
 from ..lib import typechecked
-from ._abc import PyNumber, Vector2DABC
+from ._abc import Vector2DABC
 from ._single2d import Vector2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -50,7 +51,7 @@ class Vector2Ddist(Vector2D):
         dtype : Data type. Derived from ``x`` and ``y`` if not explicitly provided.
     """
 
-    def __init__(self, x: PyNumber, y: PyNumber, dist: PyNumber, dtype: Union[Type, None] = None):
+    def __init__(self, x: Number, y: Number, dist: Number, dtype: Union[Type, None] = None):
 
         super().__init__(x = x, y = y, dtype = dtype)
         assert isinstance(dist, self._dtype)
@@ -65,7 +66,7 @@ class Vector2Ddist(Vector2D):
             return f'<Vector2Ddist x={self._x:d} y={self._y:d} dist={self._dist:d} dtype={self._dtype.__name__:s}>'
         return f'<Vector2Ddist x={self._x:e} y={self._y:e} dist={self._dist:e} dtype={self._dtype.__name__:s}>'
 
-    def mul(self, scalar: PyNumber):
+    def mul(self, scalar: Number):
         ""
         raise NotImplementedError()
 
@@ -83,7 +84,7 @@ class Vector2Ddist(Vector2D):
 
         return type(self)(self._x, self._y, self._dist, dtype = self._dtype)
 
-    def update(self, x: PyNumber, y: PyNumber):
+    def update(self, x: Number, y: Number):
         ""
         raise NotImplementedError()
 
@@ -92,7 +93,7 @@ class Vector2Ddist(Vector2D):
         raise NotImplementedError()
 
     @property
-    def x(self) -> PyNumber:
+    def x(self) -> Number:
         """
         x component
         """
@@ -100,12 +101,12 @@ class Vector2Ddist(Vector2D):
         return self._x
 
     @x.setter
-    def x(self, value: PyNumber):
+    def x(self, value: Number):
         ""
         raise NotImplementedError()
 
     @property
-    def y(self) -> PyNumber:
+    def y(self) -> Number:
         """
         y component
         """
@@ -113,12 +114,12 @@ class Vector2Ddist(Vector2D):
         return self._y
 
     @y.setter
-    def y(self, value: PyNumber):
+    def y(self, value: Number):
         ""
         raise NotImplementedError()
 
     @property
-    def dist(self) -> PyNumber:
+    def dist(self) -> Number:
         """
         Distance component
         """
@@ -126,11 +127,11 @@ class Vector2Ddist(Vector2D):
         return self._dist
 
     @dist.setter
-    def dist(self, value: PyNumber):
+    def dist(self, value: Number):
         ""
         raise NotImplementedError()
 
     @classmethod
-    def from_polar(cls, radius: PyNumber, angle: PyNumber) -> Vector2DABC:
+    def from_polar(cls, radius: Number, angle: Number) -> Vector2DABC:
         ""
         raise NotImplementedError()
