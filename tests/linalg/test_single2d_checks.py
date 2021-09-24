@@ -98,3 +98,47 @@ def test_eq_types(x1, y1):
         assert v1f == v1
     else:
         assert v1f != v1
+
+def test_dtype():
+
+    v1 = Vector2D(0, 0)
+    v2 = Vector2D(0.0, 0.0)
+
+    v1i = v1.as_dtype(int)
+    v1f = v1.as_dtype(float)
+
+    assert v1i == v1
+    assert v1i is not v1
+    assert v1i.dtype == int
+
+    assert v1f == v1
+    assert v1f is not v1
+    assert v1f.dtype == float
+
+    v2i = v2.as_dtype(int)
+    v2f = v2.as_dtype(float)
+
+    assert v2i == v2
+    assert v2i is not v2
+    assert v2i.dtype == int
+
+    assert v2f == v2
+    assert v2f is not v2
+    assert v2f.dtype == float
+
+def test_tuple():
+
+    v1 = Vector2D(0, 0)
+    v2 = Vector2D(0.0, 0.0)
+
+    v1t = v1.as_tuple()
+    v2t = v2.as_tuple()
+
+    assert len(v1t) == 2
+    assert len(v2t) == 2
+
+    assert all(isinstance(item, int) for item in v1t)
+    assert all(isinstance(item, float) for item in v2t)
+
+    assert v1t == (0, 0)
+    assert v2t == (0.0, 0.0)
