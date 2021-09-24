@@ -34,10 +34,10 @@ from typing import List, Tuple, Union
 from ..lib import typechecked
 from ._abc import (
     Dtype,
-    VectorArrayABC,
     VectorArray3DABC,
     VectorIterable3D,
 )
+from ._array import VectorArray
 from ._const import FLOAT_DEFAULT
 from ._lib import dtype_np2py
 from ._numpy import np
@@ -48,7 +48,7 @@ from ._single3d import Vector3D
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-class VectorArray3D(VectorArrayABC, VectorArray3DABC):
+class VectorArray3D(VectorArray, VectorArray3DABC):
     """
     An array of vectors in 3D space.
 

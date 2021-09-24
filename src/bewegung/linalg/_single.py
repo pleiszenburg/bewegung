@@ -6,7 +6,7 @@ BEWEGUNG
 a versatile video renderer
 https://github.com/pleiszenburg/bewegung
 
-    src/bewegung/linalg/_abc.py: Abstract base classes
+    src/bewegung/linalg/_single.py: Single base class
 
     Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
@@ -28,58 +28,22 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from abc import ABC
-from numbers import Number
-from typing import Generator, List, Tuple, TypeVar, Union
+from abc import ABC, abstractmethod
 
-from ._numpy import np
+from ..lib import typechecked
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# CLASSES
+# CLASS
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class CameraABC(ABC):
-    pass
+@typechecked
+class Vector(ABC):
+    """
+    Abstract base class for all vector types.
 
-class MatrixABC(ABC):
-    pass
+    Not intended to be instantiated.
+    """
 
-class MatrixArrayABC(ABC):
-    pass
-
-class VectorArray2DABC(ABC):
-    pass
-
-class VectorArray3DABC(ABC):
-    pass
-
-class Vector2DABC(ABC):
-    pass
-
-class Vector3DABC(ABC):
-    pass
-
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# Types
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-VectorIterable2D = Union[
-    List[Vector2DABC],
-    Tuple[Vector2DABC],
-    Generator[Vector2DABC, None, None],
-]
-
-VectorIterable3D = Union[
-    List[Vector3DABC],
-    Tuple[Vector3DABC],
-    Generator[Vector3DABC, None, None],
-]
-
-if np is not None:
-    Dtype = Union[str, np.dtype]
-else:
-    Dtype = None # HACK
-
-Numbers = TypeVar('N', bound = Number)
-Number2D = Tuple[Numbers, Numbers]
-Number3D = Tuple[Numbers, Numbers, Numbers]
+    @abstractmethod
+    def __init__(self):
+        pass

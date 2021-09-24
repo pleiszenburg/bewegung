@@ -36,12 +36,12 @@ from ..lib import typechecked
 from ._abc import (
     Dtype,
     Number2D,
-    VectorABC,
     Vector2DABC,
     VectorArray2DABC,
 )
 from ._const import FLOAT_DEFAULT
 from ._numpy import np, ndarray
+from ._single import Vector
 from ._svg import Svg
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -49,7 +49,7 @@ from ._svg import Svg
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-class Vector2D(VectorABC, Vector2DABC):
+class Vector2D(Vector, Vector2DABC):
     """
     A single vector in 2D space.
 

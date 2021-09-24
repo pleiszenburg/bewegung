@@ -33,7 +33,8 @@ from numbers import Number
 from typing import Union
 
 from ..lib import Color, typechecked
-from ._abc import VectorABC, VectorArrayABC
+from ._array import VectorArray
+from ._single import Vector
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -45,7 +46,7 @@ class Svg:
     Wrap vectors into SVG
     """
 
-    def __init__(self, vec: Union[VectorABC, VectorArrayABC], size: Number = 300):
+    def __init__(self, vec: Union[Vector, VectorArray], size: Number = 300):
 
         size = float(size)
         assert size > 0
@@ -57,19 +58,19 @@ class Svg:
         self._scale_factor = 0
         self._step = 0
 
-        if isinstance(vec, VectorABC):
+        if isinstance(vec, Vector):
             self._add_vector(vec)
         else:
             self._add_vectors(vec)
 
-    def _add_vector(self, vector: VectorABC):
+    def _add_vector(self, vector: Vector):
 
         self._update(vector.x)
         self._update(vector.y)
 
         self._vectors.append(vector)
 
-    def _add_vectors(self, vectors: VectorArrayABC):
+    def _add_vectors(self, vectors: VectorArray):
 
         for vector in vectors:
             self._add_vector(vector)
@@ -167,7 +168,7 @@ class Svg:
 
         return ''.join(lines)
 
-    def _vector(self, vector: VectorABC) -> str:
+    def _vector(self, vector: Vector) -> str:
 
         color = Color.from_hsv(vector.angle * 180 / pi, 1.0, 1.0).as_hex(alpha = False)
 

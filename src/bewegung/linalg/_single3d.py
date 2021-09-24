@@ -36,19 +36,19 @@ from ..lib import typechecked
 from ._abc import (
     Dtype,
     Number3D,
-    VectorABC,
     Vector3DABC,
     VectorArray3DABC,
 )
-from ._numpy import np, ndarray
 from ._const import FLOAT_DEFAULT
+from ._numpy import np, ndarray
+from ._single import Vector
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-class Vector3D(VectorABC, Vector3DABC):
+class Vector3D(Vector, Vector3DABC):
     """
     A single vector in 3D space.
 

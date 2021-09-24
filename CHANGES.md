@@ -3,8 +3,8 @@
 ## 0.0.6 (2021-XX-XX)
 
 - FEATURE: All vector and vector array classes expose `ndim`, number of dimensions.
-- FEATURE: Common base class, `VectorABC`, for all vector classes.
-- FEATURE: Common base class, `VectorArrayABC`, for all vector array classes.
+- FEATURE: Common base class, `Vector`, for all vector classes.
+- FEATURE: Common base class, `VectorArray`, for all vector array classes.
 - FEATURE: Vector arrays are iterators.
 - FEATURE: The `Color` class, using RGBA internally, can now import HSV values.
 - FEATURE: Added equality check, "is close" check, tuple export and copy to `Matrix`.
