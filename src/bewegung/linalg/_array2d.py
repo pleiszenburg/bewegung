@@ -28,6 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+from collections.abc import Iterable
 from numbers import Number
 from typing import List, Tuple, Union
 
@@ -35,7 +36,6 @@ from ..lib import typechecked
 from ._abc import (
     Dtype,
     VectorArray2DABC,
-    VectorIterable2D,
 )
 from ._array import VectorArray
 from ._const import FLOAT_DEFAULT
@@ -331,7 +331,7 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
         raise NotImplementedError()
 
     @classmethod
-    def from_iterable(cls, obj: VectorIterable2D, dtype: Dtype = FLOAT_DEFAULT) -> VectorArray2DABC:
+    def from_iterable(cls, obj: Iterable[Vector2D], dtype: Dtype = FLOAT_DEFAULT) -> VectorArray2DABC:
         """
         Generates vector array object from an iterable of :class:`bewegung.Vector2D` objects
 

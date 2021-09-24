@@ -30,7 +30,7 @@ specific language governing rights and limitations under the License.
 
 from abc import ABC
 from numbers import Number
-from typing import Generator, List, Tuple, TypeVar, Union
+from typing import Tuple, TypeVar, Union
 
 from ._numpy import np
 
@@ -62,18 +62,6 @@ class Vector3DABC(ABC):
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # Types
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-VectorIterable2D = Union[
-    List[Vector2DABC],
-    Tuple[Vector2DABC],
-    Generator[Vector2DABC, None, None],
-]
-
-VectorIterable3D = Union[
-    List[Vector3DABC],
-    Tuple[Vector3DABC],
-    Generator[Vector3DABC, None, None],
-]
 
 if np is not None:
     Dtype = Union[str, np.dtype]

@@ -28,6 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+from collections.abc import Iterable
 from numbers import Number
 from typing import List, Tuple, Union
 
@@ -35,7 +36,6 @@ from ..lib import typechecked
 from ._abc import (
     Dtype,
     VectorArray3DABC,
-    VectorIterable3D,
 )
 from ._array import VectorArray
 from ._const import FLOAT_DEFAULT
@@ -357,7 +357,7 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
         raise NotImplementedError()
 
     @classmethod
-    def from_iterable(cls, obj: VectorIterable3D, dtype: Dtype = FLOAT_DEFAULT) -> VectorArray3DABC:
+    def from_iterable(cls, obj: Iterable[Vector3D], dtype: Dtype = FLOAT_DEFAULT) -> VectorArray3DABC:
         """
         Generates vector array object from an iterable of :class:`bewegung.Vector3D` objects
 
