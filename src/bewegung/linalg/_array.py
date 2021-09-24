@@ -29,6 +29,7 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from abc import ABC, abstractmethod
+from collections.abc import Iterable
 
 from ..lib import typechecked
 
@@ -37,7 +38,7 @@ from ..lib import typechecked
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-class VectorArray(ABC):
+class VectorArray(ABC, Iterable):
     """
     Abstract base class for all vector array types.
 
