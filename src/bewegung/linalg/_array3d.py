@@ -203,6 +203,10 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
 
         return VectorArray3D(self._x * other, self._y * other, self._z * other)
 
+    def __rmul__(self, *args, **kwargs):
+
+        return self.__mul__(*args, **kwargs)
+
     def mul(self, scalar: Number):
         """
         In-place multiplication with scalar

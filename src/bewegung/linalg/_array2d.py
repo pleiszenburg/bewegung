@@ -200,6 +200,10 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
 
         return VectorArray2D(self._x * other, self._y * other)
 
+    def __rmul__(self, *args, **kwargs):
+
+        return self.__mul__(*args, **kwargs)
+
     def mul(self, scalar: Number):
         """
         In-place multiplication with scalar
