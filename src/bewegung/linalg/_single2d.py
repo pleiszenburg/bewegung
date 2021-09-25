@@ -30,14 +30,14 @@ specific language governing rights and limitations under the License.
 
 import math
 from numbers import Number
-from typing import Tuple, Type, Union
+from typing import Any, Tuple, Type, Union
 
 from ..lib import typechecked
 from ._abc import (
     Dtype,
+    NotImplementedType,
     Number2D,
     Vector2DABC,
-    VectorArray2DABC,
 )
 from ._const import FLOAT_DEFAULT
 from ._numpy import np, ndarray
@@ -104,7 +104,7 @@ class Vector2D(Vector, Vector2DABC):
 
         return math.isclose(self.x, other.x) and math.isclose(self.y, other.y)
 
-    def __add__(self, other: Union[Vector2DABC, VectorArray2DABC]) -> Vector2DABC:
+    def __add__(self, other: Any) -> Union[Vector2DABC, NotImplementedType]:
         """
         Add operation between vectors or a vector and a vector array
 
@@ -112,12 +112,12 @@ class Vector2D(Vector, Vector2DABC):
             other : Another vector
         """
 
-        if isinstance(other, VectorArray2DABC):
-            return NotImplemented # hand off to array type
+        if not isinstance(other, Vector2DABC):
+            return NotImplemented
 
         return type(self)(self.x + other.x, self.y + other.y)
 
-    def __sub__(self, other: Union[Vector2DABC, VectorArray2DABC]) -> Vector2DABC:
+    def __sub__(self, other: Any) -> Union[Vector2DABC, NotImplementedType]:
         """
         Substract operator between vectors or a vector and a vector array
 
@@ -125,12 +125,12 @@ class Vector2D(Vector, Vector2DABC):
             other : Another vector
         """
 
-        if isinstance(other, VectorArray2DABC):
-            return NotImplemented # hand off to array type
+        if not isinstance(other, Vector2DABC):
+            return NotImplemented
 
         return type(self)(self.x - other.x, self.y - other.y)
 
-    def __mul__(self, other: Number) -> Vector2DABC:
+    def __mul__(self, other: Any) -> Union[Vector2DABC, NotImplementedType]:
         """
         Multiplication with scalar
 
@@ -138,7 +138,20 @@ class Vector2D(Vector, Vector2DABC):
             other : A number
         """
 
+        if not isinstance(other, Number):
+            return NotImplemented
+
         return type(self)(self._x * other, self._y * other)
+
+    def __rmul__(self, other: Any) -> Union[Vector2DABC, NotImplementedType]:
+        """
+        Multiplication with scalar
+
+        Args:
+            other : A number
+        """
+
+        return self.__mul__(other)
 
     def mul(self, scalar: Number):
         """
@@ -153,13 +166,16 @@ class Vector2D(Vector, Vector2DABC):
         assert type(self._x) == type(self._y)
         self._dtype = type(self._x)
 
-    def __matmul__(self, other: Vector2DABC) -> Number:
+    def __matmul__(self, other: Any) -> Union[Number, NotImplementedType]:
         """
         Scalar product between vectors
 
         Args:
             other : Another vector
         """
+
+        if not isinstance(other, Vector2DABC):
+            return NotImplemented
 
         return self.x * other.x + self.y * other.y
 

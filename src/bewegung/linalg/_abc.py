@@ -71,3 +71,8 @@ else:
 Numbers = TypeVar('N', bound = Number)
 Number2D = Tuple[Numbers, Numbers]
 Number3D = Tuple[Numbers, Numbers, Numbers]
+
+try:
+    from typing import NotImplementedType # re-introduced in Python 3.10
+except ImportError:
+    NotImplementedType = type(NotImplemented)

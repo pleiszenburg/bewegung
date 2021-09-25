@@ -232,3 +232,17 @@ def test_mul_inplace_float(x1, y1, scalar):
         assert isnan(v1.y)
     else:
         assert v1.y == y_
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# TESTS: R-OPERATIONS
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+def test_rmul():
+
+    v1 = Vector2D(2, 3)
+
+    v2 = 4 * v1
+
+    assert isinstance(v2, Vector2D)
+    assert v1 is not v2
+    assert v2 == Vector2D(8, 12)
