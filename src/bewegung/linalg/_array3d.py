@@ -30,11 +30,12 @@ specific language governing rights and limitations under the License.
 
 from collections.abc import Iterable
 from numbers import Number
-from typing import List, Tuple, Union
+from typing import Any, List, Tuple, Union
 
 from ..lib import typechecked
 from ._abc import (
     Dtype,
+    NotImplementedType,
     VectorArray3DABC,
 )
 from ._array import VectorArray
@@ -121,7 +122,7 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
         self._iterstate += 1 # increment
         return value
 
-    def __eq__(self, other: VectorArray3DABC) -> bool:
+    def __eq__(self, other: Any) -> Union[bool, NotImplementedType]:
         """
         Equality check between vector arrays
 
@@ -129,9 +130,12 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
             other : Another vector array of equal length
         """
 
+        if not isinstance(other, VectorArray3DABC):
+            return NotImplemented
+
         return np.array_equal(self.x, other.x) and np.array_equal(self.y, other.y) and np.array_equal(self.z, other.z)
 
-    def __mod__(self, other: VectorArray3DABC) -> bool:
+    def __mod__(self, other: Any) -> Union[bool, NotImplementedType]:
         """
         Is-close check between vector arrays
 
@@ -139,9 +143,12 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
             other : Another vector array of equal length
         """
 
+        if not isinstance(other, VectorArray3DABC):
+            return NotImplemented
+
         return np.allclose(self.x, other.x) and np.allclose(self.y, other.y) and np.allclose(self.z, other.z)
 
-    def __add__(self, other: Union[VectorArray3DABC, Vector3D]) -> VectorArray3DABC:
+    def __add__(self, other: Any) -> Union[VectorArray3DABC, NotImplementedType]:
         """
         Add operation between vector arrays or a vector array and a vector
 
@@ -149,16 +156,20 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
             other : Another vector array of equal length
         """
 
+        if not any(isinstance(other, t) for t in (VectorArray3DABC, Vector3D)):
+            return NotImplemented
+
         if isinstance(other, VectorArray3DABC):
             assert len(self) == len(other)
             assert self.dtype == other.dtype
+
         return VectorArray3D(self.x + other.x, self.y + other.y, self.z + other.z)
 
     def __radd__(self, *args, **kwargs):
 
         return self.__add__(*args, **kwargs)
 
-    def __sub__(self, other: Union[VectorArray3DABC, Vector3D]) -> VectorArray3DABC:
+    def __sub__(self, other: Any) -> Union[VectorArray3DABC, NotImplementedType]:
         """
         Substract operator between vector arrays or a vector array and a vector
 
@@ -166,22 +177,29 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
             other : Another vector array of equal length
         """
 
+        if not any(isinstance(other, t) for t in (VectorArray3DABC, Vector3D)):
+            return NotImplemented
+
         if isinstance(other, VectorArray3DABC):
             assert len(self) == len(other)
             assert self.dtype == other.dtype
+
         return VectorArray3D(self.x - other.x, self.y - other.y, self.z - other.z)
 
     def __rsub__(self, *args, **kwargs):
 
         return self.__sub__(*args, **kwargs)
 
-    def __mul__(self, other: Number) -> VectorArray3DABC:
+    def __mul__(self, other: Any) -> Union[VectorArray3DABC, NotImplementedType]:
         """
         Multiplication with scalar
 
         Args:
             other : A number
         """
+
+        if not isinstance(other, Number):
+            return NotImplemented
 
         return VectorArray3D(self._x * other, self._y * other, self._z * other)
 
@@ -197,7 +215,7 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
         np.multiply(self._y, scalar, out = self._y)
         np.multiply(self._z, scalar, out = self._z)
 
-    def __matmul__(self, other: VectorArray3DABC) -> np.ndarray:
+    def __matmul__(self, other: Any) -> Union[np.ndarray, NotImplementedType]:
         """
         Scalar product between vector arrays
 
@@ -205,8 +223,12 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
             other : Another vector array of equal length
         """
 
+        if not isinstance(other, VectorArray3DABC):
+            return NotImplemented
+
         assert len(self) == len(other)
         assert self.dtype == other.dtype
+
         return self.x * other.x + self.y * other.y + self.z * other.z
 
     def as_list(self) -> List[Vector3D]:
