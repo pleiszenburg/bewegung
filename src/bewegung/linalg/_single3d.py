@@ -142,15 +142,9 @@ class Vector3D(Vector, Vector3DABC):
 
         return type(self)(self._x * other, self._y * other, self._z * other)
 
-    def __rmul__(self, other: Any) -> Union[Vector3DABC, NotImplementedType]:
-        """
-        Multiplication with scalar
+    def __rmul__(self, *args, **kwargs):
 
-        Args:
-            other : A number
-        """
-
-        return self.__mul__(other)
+        return self.__mul__(*args, **kwargs)
 
     def mul(self, scalar: Number):
         """

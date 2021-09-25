@@ -143,15 +143,9 @@ class Vector2D(Vector, Vector2DABC):
 
         return type(self)(self._x * other, self._y * other)
 
-    def __rmul__(self, other: Any) -> Union[Vector2DABC, NotImplementedType]:
-        """
-        Multiplication with scalar
+    def __rmul__(self, *args, **kwargs):
 
-        Args:
-            other : A number
-        """
-
-        return self.__mul__(other)
+        return self.__mul__(*args, **kwargs)
 
     def mul(self, scalar: Number):
         """
