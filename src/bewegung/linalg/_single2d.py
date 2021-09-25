@@ -84,7 +84,7 @@ class Vector2D(Vector, Vector2DABC):
 
         return Svg(self).render()
 
-    def __eq__(self, other: Vector2DABC) -> bool:
+    def __eq__(self, other: Any) -> Union[bool, NotImplementedType]:
         """
         Equality check between vectors
 
@@ -92,15 +92,21 @@ class Vector2D(Vector, Vector2DABC):
             other : Another vector
         """
 
+        if not isinstance(other, Vector2DABC):
+            return NotImplemented
+
         return (self.x == other.x) and (self.y == other.y)
 
-    def __mod__(self, other: Vector2DABC) -> bool:
+    def __mod__(self, other: Any) -> Union[bool, NotImplementedType]:
         """
         Is-close check (relevant for dtype ``float``) between vectors
 
         Args:
             other : Another vector
         """
+
+        if not isinstance(other, Vector2DABC):
+            return NotImplemented
 
         return math.isclose(self.x, other.x) and math.isclose(self.y, other.y)
 

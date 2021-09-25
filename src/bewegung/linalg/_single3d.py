@@ -83,7 +83,7 @@ class Vector3D(Vector, Vector3DABC):
             return f'<Vector3D x={self._x:d} y={self._y:d} z={self._z:d} dtype={self._dtype.__name__:s}>'
         return f'<Vector3D x={self._x:e} y={self._y:e} z={self._z:e} dtype={self._dtype.__name__:s}>'
 
-    def __eq__(self, other: Vector3DABC) -> bool:
+    def __eq__(self, other: Any) -> Union[bool, NotImplementedType]:
         """
         Equality check between vectors
 
@@ -91,15 +91,21 @@ class Vector3D(Vector, Vector3DABC):
             other : Another vector
         """
 
+        if not isinstance(other, Vector3DABC):
+            return NotImplemented
+
         return (self.x == other.x) and (self.y == other.y) and (self.z == other.z)
 
-    def __mod__(self, other: Vector3DABC) -> bool:
+    def __mod__(self, other: Any) -> Union[bool, NotImplementedType]:
         """
         Is-close check (relevant for dtype ``float``) between vectors
 
         Args:
             other : Another vector
         """
+
+        if not isinstance(other, Vector3DABC):
+            return NotImplemented
 
         return math.isclose(self.x, other.x) and math.isclose(self.y, other.y) and math.isclose(self.z, other.z)
 
