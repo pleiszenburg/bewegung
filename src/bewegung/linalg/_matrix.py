@@ -199,7 +199,7 @@ class Matrix(MatrixABC):
         Copies matrix
         """
 
-        return type(self)(matrix = [line.copy() for line in self._matrix], dtype = self.dtype)
+        return type(self)(matrix = [row.copy() for row in self._matrix], dtype = self.dtype)
 
     @property
     def dtype(self) -> Type:
@@ -233,7 +233,7 @@ class Matrix(MatrixABC):
 
         matrix = matrix.tolist()
         if isinstance(matrix[0][0], int):
-            matrix = [[dtype(item) for item in line] for line in matrix]
+            matrix = [[dtype(item) for item in row] for row in matrix]
 
         return cls(matrix, dtype = dtype)
 
