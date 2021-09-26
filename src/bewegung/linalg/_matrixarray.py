@@ -287,7 +287,8 @@ class MatrixArray(MatrixArrayABC):
     def from_3d_rotation(cls, v: Vector3DABC, a: Number) -> MatrixArrayABC:
         pass
     #     """
-    #     Generates new 3D matrix object from a vector and an angle
+    #     Generates new 3D matrix object from a vector and an angle.
+    #     Rotates by angle around vector.
     #
     #     Args:
     #         v : A 3D vector
