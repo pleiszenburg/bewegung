@@ -30,24 +30,24 @@ specific language governing rights and limitations under the License.
 
 from math import cos, sin, isclose
 from numbers import Number
-from typing import List, Tuple, Type, Union
+from typing import Any, List, Tuple, Type, Union
 
 from ..lib import typechecked
 from ._abc import (
     Dtype,
     MatrixABC,
+    NotImplementedType,
     Numbers,
-    Vector2DABC,
     Vector3DABC,
-    VectorArray2DABC,
-    VectorArray3DABC,
 )
-from ._const import FLOAT_DEFAULT
-from ._numpy import np, ndarray
-from ._single2d import Vector2D
-from ._single3d import Vector3D
+from ._array import VectorArray
 from ._array2d import VectorArray2D
 from ._array3d import VectorArray3D
+from ._const import FLOAT_DEFAULT
+from ._numpy import np, ndarray
+from ._single import Vector
+from ._single2d import Vector2D
+from ._single3d import Vector3D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -67,15 +67,15 @@ class Matrix(MatrixABC):
 
     def __init__(self, matrix = List[List[Numbers]], dtype: Union[Type, None] = None):
 
-        lines = len(matrix)
-        assert lines in (2, 3) # allow 2D and 3D
-        assert all((len(line) == lines for line in matrix))
+        rows = len(matrix)
+        assert rows in (2, 3) # allow 2D and 3D
+        assert all((len(row) == rows for row in matrix)) # check columns
 
         if dtype is None:
             dtype = type(matrix[0][0])
         else:
             assert isinstance(matrix[0][0], dtype)
-        assert all((all((isinstance(number, dtype) for number in line)) for line in matrix))
+        assert all((all((isinstance(number, dtype) for number in row)) for row in matrix))
 
         self._dtype = dtype
         self._matrix = matrix
@@ -87,10 +87,7 @@ class Matrix(MatrixABC):
 
         return f'<Matrix ndim={len(self._matrix):d} dtype={self._dtype.__name__:s}>'
 
-    def __matmul__(
-        self,
-        vector: Union[Vector2DABC, Vector3DABC, VectorArray2DABC, VectorArray3DABC]
-    ) -> Union[Vector2DABC, Vector3DABC, VectorArray2DABC, VectorArray3DABC]:
+    def __matmul__(self, other: Any) -> Union[Vector, VectorArray, NotImplementedType]:
         """
         Multiplies the matrix with a vector or array of vectors
         and returns the resulting new vector or array of vectors.
@@ -98,19 +95,26 @@ class Matrix(MatrixABC):
         array of vectors have different numbers of dimensions.
 
         Args:
-            vector : A 2D or 3D vector or array of vectors
+            other : A 2D or 3D vector or array of vectors
         """
 
-        vector_tuple = vector.as_tuple()
+        if not any(isinstance(other, t) for t in (Vector, VectorArray)):
+            return NotImplemented
+
+        vector_tuple = other.as_tuple()
         assert self.ndim == len(vector_tuple)
 
         values = [
-            sum([trigonometric * dimension for trigonometric, dimension in zip(line, vector_tuple)])
-            for line in self._matrix
+            sum([
+                trigonometric * dimension
+                for trigonometric, dimension in zip(row, vector_tuple)
+            ])
+            for row in self._matrix
         ]
 
-        if any((isinstance(vector, datatype) for datatype in (Vector2DABC, Vector3DABC))):
+        if isinstance(other, Vector):
             return Vector2D(*values) if len(vector_tuple) == 2 else Vector3D(*values)
+
         return VectorArray2D(*values) if len(vector_tuple) == 2 else VectorArray3D(*values)
 
     def __getitem__(self, index: Tuple[int, int]) -> Number:
@@ -134,7 +138,7 @@ class Matrix(MatrixABC):
 
         self._matrix[index[0]][index[1]] = self._dtype(value)
 
-    def __eq__(self, other: MatrixABC) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """
         Equality check between matrices
 
@@ -142,18 +146,24 @@ class Matrix(MatrixABC):
             other : Another matrix
         """
 
+        if not isinstance(other, MatrixABC):
+            return NotImplemented
+
         if self.ndim != other.ndim:
             return False
 
         return self.as_tuple() == other.as_tuple()
 
-    def __mod__(self, other: MatrixABC) -> bool:
+    def __mod__(self, other: Any) -> bool:
         """
         Is-close check between matrices
 
         Args:
             other : Another matrix
         """
+
+        if not isinstance(other, MatrixABC):
+            return NotImplemented
 
         if self.ndim != other.ndim:
             return False
@@ -246,7 +256,8 @@ class Matrix(MatrixABC):
     @classmethod
     def from_3d_rotation(cls, v: Vector3DABC, a: Number) -> MatrixABC:
         """
-        Generates new 3D matrix object from a vector and an angle
+        Generates new 3D matrix object from a vector and an angle.
+        Rotates by angle around vector.
 
         Args:
             v : A 3D vector
