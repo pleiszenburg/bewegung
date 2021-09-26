@@ -138,7 +138,7 @@ class Matrix(MatrixABC):
 
         self._matrix[index[0]][index[1]] = self._dtype(value)
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: Any) -> Union[bool, NotImplementedType]:
         """
         Equality check between matrices
 
@@ -154,7 +154,7 @@ class Matrix(MatrixABC):
 
         return self.as_tuple() == other.as_tuple()
 
-    def __mod__(self, other: Any) -> bool:
+    def __mod__(self, other: Any) -> Union[bool, NotImplementedType]:
         """
         Is-close check between matrices
 
