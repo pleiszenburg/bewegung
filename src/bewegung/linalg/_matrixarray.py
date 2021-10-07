@@ -29,20 +29,23 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from numbers import Number
-from typing import List, Tuple, Type, Union
+from typing import Any, List, Tuple, Type, Union
 
 from ..lib import typechecked
 from ._abc import (
     Dtype,
     MatrixArrayABC,
+    NotImplementedType,
     Vector2DABC,
     Vector3DABC,
     VectorArray2DABC,
     VectorArray3DABC,
 )
 from ._const import FLOAT_DEFAULT
+from ._array import VectorArray
 from ._lib import dtype_np2py
 from ._numpy import np, ndarray
+from ._single import Vector
 from ._single2d import Vector2D
 from ._single3d import Vector3D
 from ._array2d import VectorArray2D
@@ -56,7 +59,7 @@ from ._matrix import Matrix
 @typechecked
 class MatrixArray(MatrixArrayABC):
     """
-    An array implementation of simple matrices for rotating vectors and vector arrays
+    An array implementation of simple matrices for transforming vectors and vector arrays
 
     Mutable.
 
@@ -104,32 +107,40 @@ class MatrixArray(MatrixArrayABC):
 
         return self._length
 
-    def __matmul__(
-        self,
-        vector: Union[Vector2DABC, Vector3DABC, VectorArray2DABC, VectorArray3DABC]
-    ) -> Union[Vector2DABC, Vector3DABC, VectorArray2DABC, VectorArray3DABC]:
-        pass
-    #     """
-    #     Multiplies the matrix with a vector or array of vectors
-    #     and returns the resulting new vector or array of vectors.
-    #     Raises an exception if matrix and vector or
-    #     array of vectors have different numbers of dimensions.
-    #
-    #     Args:
-    #         vector : A 2D or 3D vector or array of vectors
-    #     """
-    #
-    #     vector_tuple = vector.as_tuple()
-    #     assert self.ndim == len(vector_tuple)
-    #
-    #     values = [
-    #         sum([trigonometric * dimension for trigonometric, dimension in zip(line, vector_tuple)])
-    #         for line in self._matrix
-    #     ]
-    #
-    #     if any((isinstance(vector, datatype) for datatype in (Vector2DABC, Vector3DABC))):
-    #         return Vector2D(*values) if len(vector_tuple) == 2 else Vector3D(*values)
-    #     return VectorArray2D(*values) if len(vector_tuple) == 2 else VectorArray3D(*values)
+    def __matmul__(self, other: Any) -> Union[VectorArray, NotImplementedType]:
+        """
+        Multiplies the matrix array with a vector or array of vectors
+        and returns the resulting new vector or array of vectors.
+        Raises an exception if matrix and vector or
+        array of vectors have different numbers of dimensions.
+
+        Args:
+            vector : A 2D or 3D vector or array of vectors
+        """
+
+        if not any(isinstance(other, t) for t in (Vector, VectorArray)):
+            return NotImplemented
+
+        if self.ndim != other.ndim:
+            raise ValueError('dimension mismatch')
+
+        if len(self) > 1 and isinstance(other, VectorArray):
+            if len(other) > 1 and len(self) != len(other):
+                raise ValueError('length mismatch')
+
+        vector_tuple = other.as_tuple(copy = False) if isinstance(other, VectorArray) else other.as_tuple()
+
+        sum_ = lambda x: np.sum(np.array(x))
+
+        values = [
+            sum_([
+                matrix_element * vector_coordinate
+                for matrix_element, vector_coordinate in zip(matrix_row, vector_tuple)
+            ])
+            for matrix_row in self._matrix
+        ]
+
+        return VectorArray2D(*values) if len(vector_tuple) == 2 else VectorArray3D(*values)
 
     def __getitem__(self, index: Union[Tuple[int, int, int], int, slice]) -> Union[Number, Matrix]:
         pass
