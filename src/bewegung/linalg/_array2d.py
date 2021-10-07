@@ -261,12 +261,18 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
 
         return self.mag, self.angle
 
-    def as_tuple(self) -> Tuple[np.ndarray, np.ndarray]:
+    def as_tuple(self, copy = True) -> Tuple[np.ndarray, np.ndarray]:
         """
         Exports vector array as a tuple of vector components in ``numpy.ndarry`` objects
+
+        Args:
+            copy : Provide a copy underlying ``numpy.ndarry``
         """
 
-        return self._x.copy(), self._y.copy()
+        if copy:
+            return self._x.copy(), self._y.copy()
+
+        return self._x, self._y
 
     def as_type(self, dtype: Dtype) -> VectorArray2DABC:
         """

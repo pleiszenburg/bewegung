@@ -7,6 +7,7 @@
 - FEATURE: Common base class, `VectorArray`, for all vector array classes.
 - FEATURE: Vector arrays are iterators.
 - FEATURE: Added missing right-hand-side operators to `Vector` and `VectorArray` classes.
+- FEATURE: Tuple export of `VectorArray` types can optionally provide direct access to underlying ``ndarray``s, i.e. new ``copy`` parameter can be set to ``False``.
 - FEATURE: The `Color` class, using RGBA internally, can now import HSV values.
 - FEATURE: Added equality check, "is close" check, tuple export and copy to `Matrix`.
 - FEATURE: New dedicated sub-module for core animation engine named `bewegung.animation`.
