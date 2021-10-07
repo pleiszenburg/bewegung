@@ -56,7 +56,7 @@ from ._single3d import Vector3D
 @typechecked
 class Matrix(MatrixABC):
     """
-    A simple matrix implementation for rotating vectors
+    A simple matrix implementation for transforming vectors and vector arrays
 
     Mutable.
 
@@ -106,15 +106,22 @@ class Matrix(MatrixABC):
         if not any(isinstance(other, t) for t in (Vector, VectorArray)):
             return NotImplemented
 
-        vector_tuple = other.as_tuple()
-        assert self.ndim == len(vector_tuple)
+        if self.ndim != other.ndim:
+            raise ValueError('dimension mismatch')
+
+        vector_tuple = other.as_tuple(copy = False) if isinstance(other, VectorArray) else other.as_tuple()
+
+        if isinstance(other, VectorArray) and np is not None:
+            sum_ = lambda x: np.sum(np.array(x))
+        else:
+            sum_ = sum
 
         values = [
-            sum([
-                trigonometric * dimension
-                for trigonometric, dimension in zip(row, vector_tuple)
+            sum_([
+                matrix_element * vector_coordinate
+                for matrix_element, vector_coordinate in zip(matrix_row, vector_tuple)
             ])
-            for row in self._matrix
+            for matrix_row in self._matrix
         ]
 
         if isinstance(other, Vector):
