@@ -85,7 +85,12 @@ class Matrix(MatrixABC):
         String representation for interactive use
         """
 
-        return f'<Matrix ndim={len(self._matrix):d} dtype={self._dtype.__name__:s}>'
+        dtype = getattr(
+            self._dtype, '__name__',
+            str(self._dtype), # fallback, numpy
+        )
+
+        return f'<Matrix ndim={len(self._matrix):d} dtype={dtype:s}>'
 
     def __matmul__(self, other: Any) -> Union[Vector, VectorArray, NotImplementedType]:
         """

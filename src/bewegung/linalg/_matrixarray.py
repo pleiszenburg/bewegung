@@ -90,7 +90,12 @@ class MatrixArray(MatrixArrayABC):
         String representation for interactive use
         """
 
-        return f'<MatrixArray ndim={len(self._matrix):d} len={len(self):d}>'
+        dtype = getattr(
+            self._dtype, '__name__',
+            str(self._dtype), # fallback, numpy
+        )
+
+        return f'<MatrixArray ndim={len(self._matrix):d} dtype={dtype:s} len={len(self):d}>'
 
     def __len__(self) -> int:
         """
