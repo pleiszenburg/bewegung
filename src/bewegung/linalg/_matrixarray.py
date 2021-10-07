@@ -130,13 +130,11 @@ class MatrixArray(MatrixArrayABC):
 
         vector_tuple = other.as_tuple(copy = False) if isinstance(other, VectorArray) else other.as_tuple()
 
-        sum_ = lambda x: np.sum(np.array(x))
-
         values = [
-            sum_([
+            np.sum(np.array([
                 matrix_element * vector_coordinate
                 for matrix_element, vector_coordinate in zip(matrix_row, vector_tuple)
-            ])
+            ]))
             for matrix_row in self._matrix
         ]
 
