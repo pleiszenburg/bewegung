@@ -66,9 +66,9 @@ class MatrixArray(MatrixArrayABC):
 
     def __init__(self, matrix = List[List[ndarray]]):
 
-        lines = len(matrix)
-        assert lines in (2, 3) # allow 2D and 3D
-        assert all((len(line) == lines for line in matrix))
+        rows = len(matrix)
+        assert rows in (2, 3) # allow 2D and 3D
+        assert all((len(row) == rows for row in matrix))
 
         self._length = matrix[0][0].shape[0]
         self._dtype = matrix[0][0].dtype
