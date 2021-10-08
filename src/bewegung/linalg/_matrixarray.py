@@ -181,13 +181,41 @@ class MatrixArray(MatrixArrayABC):
         self._iterstate += 1 # increment
         return value
 
-    def __eq__(self, other: MatrixArrayABC) -> bool:
+    def __eq__(self, other: Any) -> Union[bool, NotImplementedType]:
+        """
+        Equality check between matrix arrays
 
-        pass
+        Args:
+            other : Another matrix array of equal length
+        """
 
-    def __mod__(self, other: MatrixArrayABC) -> bool:
+        if not isinstance(other, MatrixArrayABC):
+            return NotImplemented
 
-        pass
+        if len(self) != len(other):
+            return False
+
+        return all((
+            # TODO
+        ))
+
+    def __mod__(self, other: Any) -> Union[bool, NotImplementedType]:
+        """
+        Is-close check between matrix arrays
+
+        Args:
+            other : Another matrix array of equal length
+        """
+
+        if not isinstance(other, MatrixArrayABC):
+            return NotImplemented
+
+        if len(self) != len(other):
+            return False
+
+        return all((
+            # TODO
+        ))
 
     def as_list(self) -> List[Matrix]:
 
