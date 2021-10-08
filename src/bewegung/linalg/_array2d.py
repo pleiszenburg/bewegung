@@ -261,7 +261,7 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
 
         return self.mag, self.angle
 
-    def as_tuple(self, copy = True) -> Tuple[np.ndarray, np.ndarray]:
+    def as_tuple(self, copy: bool = True) -> Tuple[np.ndarray, np.ndarray]:
         """
         Exports vector array as a tuple of vector components in ``numpy.ndarry`` objects
 

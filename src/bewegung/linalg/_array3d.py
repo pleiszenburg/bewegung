@@ -265,7 +265,7 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
 
         return (self.mag, self.theta, self.phi)
 
-    def as_tuple(self, copy = True) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    def as_tuple(self, copy: bool = True) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """
         Exports vector array as a tuple of vector components in ``numpy.ndarry`` objects
 
