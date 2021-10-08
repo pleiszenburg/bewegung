@@ -36,17 +36,12 @@ from ._abc import (
     Dtype,
     MatrixArrayABC,
     NotImplementedType,
-    Vector2DABC,
-    Vector3DABC,
-    VectorArray2DABC,
-    VectorArray3DABC,
 )
 from ._const import FLOAT_DEFAULT
 from ._array import VectorArray
 from ._lib import dtype_np2py
 from ._numpy import np, ndarray
 from ._single import Vector
-from ._single2d import Vector2D
 from ._single3d import Vector3D
 from ._array2d import VectorArray2D
 from ._array3d import VectorArray3D
