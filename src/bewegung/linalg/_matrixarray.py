@@ -313,21 +313,22 @@ class MatrixArray(MatrixArrayABC):
 
     @classmethod
     def from_2d_rotation(cls, a: ndarray) -> MatrixArrayABC:
-        pass
-    #     """
-    #     Generates new 2D matrix object from an angle
-    #
-    #     Args:
-    #         a : An array of angles in radians
-    #     """
-    #
-    #     assert a.ndim == 1
-    #     sa, ca = np.sin(a), np.cos(a)
-    #
-    #     return cls([
-    #         [ca, -sa],
-    #         [sa, ca],
-    #     ])
+        """
+        Generates new 2D matrix array object from an array of angles
+
+        Args:
+            a : An array of angles in radians
+        """
+
+        if a.ndim != 1:
+            raise ValueError('dimension mismatch')
+
+        sa, ca = np.sin(a), np.cos(a)
+
+        return cls([
+            [ca, -sa],
+            [sa, ca.copy()],
+        ])
 
     @classmethod
     def from_3d_rotation(cls, v: Vector3DABC, a: Number) -> MatrixArrayABC:
