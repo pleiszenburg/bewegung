@@ -10,6 +10,7 @@
 - FEATURE: Tuple export of `VectorArray` types can optionally provide direct access to underlying ``ndarray``s, i.e. new ``copy`` parameter can be set to ``False``.
 - FEATURE: The `Color` class, using RGBA internally, can now import HSV values.
 - FEATURE: Added equality check, "is close" check, tuple export and copy to `Matrix`.
+- FEATURE: Added new `MatrixArray` class.
 - FEATURE: New dedicated sub-module for core animation engine named `bewegung.animation`.
 - FEATURE: New dedicated sub-module for `DrawingBoard` named `bewegung.drawingboard`, now allowing direct import.
 - FEATURE: New dedicated sub-module for linear algebra named `bewegung.lingalg`.
