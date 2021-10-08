@@ -227,11 +227,7 @@ class MatrixArray(MatrixArrayABC):
         Exports a list of :class:`bewegung.Matrix` objects
         """
 
-        # dtype = dtype_np2py(self.dtype)
-        # return [
-        #     Matrix(dtype(self._x[idx]), dtype(self._y[idx]), dtype(self._z[idx]), dtype = dtype)
-        #     for idx in range(len(self))
-        # ]
+        return [self[idx] for idx in range(len(self))]
 
     def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> ndarray:
         pass
