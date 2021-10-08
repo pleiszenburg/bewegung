@@ -229,15 +229,14 @@ class MatrixArray(MatrixArrayABC):
         return [self[idx] for idx in range(len(self))]
 
     def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> ndarray:
-        pass
-    #     """
-    #     Exports matrix as a ``numpy.ndarry`` object, shape ``(2, 2)`` or ``(3, 3)``.
-    #
-    #     Args:
-    #         dtype : Desired ``numpy`` data type of new vector
-    #     """
-    #
-    #     return np.array(self._matrix, dtype = dtype)
+        """
+        Exports matrix array as a ``numpy.ndarry`` object, shape ``(len(self), self.ndim, self.ndim)``.
+
+        Args:
+            dtype : Desired ``numpy`` data type of new vector
+        """
+
+        return np.moveaxis(np.array(self._matrix, dtype = dtype), 2, 0)
 
     def as_type(self) -> MatrixArrayABC:
 
