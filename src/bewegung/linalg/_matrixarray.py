@@ -251,9 +251,17 @@ class MatrixArray(MatrixArrayABC):
 
         return tuple(tuple(col for col in row) for row in self._matrix)
 
-    def as_type(self) -> MatrixArrayABC:
+    def as_type(self, dtype: Dtype) -> MatrixArrayABC:
+        """
+        Exports matrix array as another matrix array with new dtype
 
-        pass
+        Args:
+            dtype : Desired ``numpy`` data type of new vector array
+        """
+
+        return self.copy() if self.dtype == np.dtype(dtype) else Matrix([
+            [col.astype(dtype) for col in row] for row in self._matrix
+        ])
 
     def copy(self) -> MatrixArrayABC:
         """
