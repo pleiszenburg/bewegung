@@ -1,7 +1,7 @@
 Linear Algebra
 ==============
 
-``bewegung`` offers a bunch of convenience classes for tasks related to linear algebra.
+``bewegung`` offers a bunch of *convenience* classes for tasks related to linear algebra. They are isolated into a distinct sub-module named ``bewegung.linalg``.
 
 .. note::
 
@@ -12,4 +12,5 @@ Linear Algebra
    :caption: The API in detail
 
    vectors
+   matrices
    camera
