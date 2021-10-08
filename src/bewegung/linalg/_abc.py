@@ -30,7 +30,7 @@ specific language governing rights and limitations under the License.
 
 from abc import ABC
 from numbers import Number
-from typing import Tuple, TypeVar, Union
+from typing import Tuple, Type, TypeVar, Union
 
 from ._numpy import np
 
@@ -71,6 +71,8 @@ else:
 Numbers = TypeVar('N', bound = Number)
 Number2D = Tuple[Numbers, Numbers]
 Number3D = Tuple[Numbers, Numbers, Numbers]
+
+NumberType = Type[Number]
 
 try:
     from typing import NotImplementedType # re-introduced in Python 3.10
