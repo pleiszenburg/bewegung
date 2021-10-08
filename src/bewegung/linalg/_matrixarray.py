@@ -331,23 +331,34 @@ class MatrixArray(MatrixArrayABC):
         ])
 
     @classmethod
-    def from_3d_rotation(cls, v: Vector3DABC, a: Number) -> MatrixArrayABC:
-        pass
-    #     """
-    #     Generates new 3D matrix object from a vector and an angle.
-    #     Rotates by angle around vector.
-    #
-    #     Args:
-    #         v : A 3D vector
-    #         a : An angle in radians
-    #     """
-    #
-    #     ca = cos(a)
-    #     oca = 1 - ca
-    #     sa = sin(a)
-    #
-    #     return cls([
-    #         [ca + (v.x ** 2) * oca, v.x * v.y * oca - v.z * sa, v.x * v.y * oca + v.y * sa],
-    #         [v.y * v.x * oca + v.z * sa, ca + (v.y ** 2) * oca, v.y * v.z * oca - v.x * sa],
-    #         [v.z * v.x * oca - v.y * sa, v.z * v.y * oca + v.x * sa, ca + (v.z ** 2) * oca],
-    #     ])
+    def from_3d_rotation(cls, v: Union[Vector3D, VectorArray3D], a: Union[Number, ndarray]) -> MatrixArrayABC:
+        """
+        Generates new 3D matrix array object from a vector or vector array and
+        an angle or one-dimensional ``numpy.ndarray`` of angles.
+        Rotates by angle around vector.
+
+        Args:
+            v : A 3D vector or vector array
+            a : An angle or array of angles in radians
+        """
+
+        if not isinstance(v, VectorArray3D) and not isinstance(a, ndarray):
+            raise TypeError('neither v nor a are arrays')
+
+        if isinstance(a, ndarray) and a.ndim != 1:
+            raise ValueError('shape mismatch')
+
+        if isinstance(v, VectorArray3D) and isinstance(a, ndarray):
+            if len(v) != 1 and a.shape[0] != 1:
+                if len(v) != a.shape[0]:
+                    raise ValueError('length mismatch')
+
+        ca = np.cos(a)
+        oca = 1 - ca
+        sa = np.sin(a)
+
+        return cls([
+            [ca + (v.x ** 2) * oca, v.x * v.y * oca - v.z * sa, v.x * v.y * oca + v.y * sa],
+            [v.y * v.x * oca + v.z * sa, ca + (v.y ** 2) * oca, v.y * v.z * oca - v.x * sa],
+            [v.z * v.x * oca - v.y * sa, v.z * v.y * oca + v.x * sa, ca + (v.z ** 2) * oca],
+        ])
