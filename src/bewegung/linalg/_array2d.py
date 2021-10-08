@@ -266,7 +266,7 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
         Exports vector array as a tuple of vector components in ``numpy.ndarry`` objects
 
         Args:
-            copy : Provide a copy underlying ``numpy.ndarry``
+            copy : Provide a copy of underlying ``numpy.ndarry``
         """
 
         if copy:

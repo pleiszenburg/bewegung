@@ -270,7 +270,7 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
         Exports vector array as a tuple of vector components in ``numpy.ndarry`` objects
 
         Args:
-            copy : Provide a copy underlying ``numpy.ndarry``
+            copy : Provide a copy of underlying ``numpy.ndarry``
         """
 
         if copy:
