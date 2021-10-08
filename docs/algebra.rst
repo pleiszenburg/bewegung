@@ -1,7 +1,7 @@
 Linear Algebra
 ==============
 
-``bewegung`` offers a bunch of *convenience* classes for tasks related to linear algebra. They are isolated into a distinct sub-module named ``bewegung.linalg``.
+``bewegung`` offers a number of *convenience* classes for tasks related to linear algebra. They are isolated into a distinct sub-module named ``bewegung.linalg``.
 
 .. note::
 
