@@ -28,6 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+from collections.abc import Iterable
 from numbers import Number
 from typing import Any, List, Tuple, Type, Union
 
@@ -62,7 +63,9 @@ class MatrixArray(MatrixArrayABC):
         matrix : 2D or 3D arrangement in a list of lists containing numpy nd arrays
     """
 
-    def __init__(self, matrix = List[List[ndarray]]):
+    def __init__(self, matrix = Iterable[Iterable[ndarray]]):
+
+        matrix = [list(row) for row in matrix] # convert to lists or copy lists
 
         rows = len(matrix)
         assert rows in (2, 3) # allow 2D and 3D

@@ -28,9 +28,10 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+from collections.abc import Iterable
 from math import cos, sin, isclose
 from numbers import Number
-from typing import Any, List, Tuple, Type, Union
+from typing import Any, Tuple, Type, Union
 
 from ..lib import typechecked
 from ._abc import (
@@ -65,7 +66,9 @@ class Matrix(MatrixABC):
         dtype : Data type. Derived from entries in ``matrix`` if not explicitly provided.
     """
 
-    def __init__(self, matrix = List[List[Numbers]], dtype: Union[Type, None] = None):
+    def __init__(self, matrix = Iterable[Iterable[Numbers]], dtype: Union[Type, None] = None):
+
+        matrix = [list(row) for row in matrix] # convert to lists or copy lists
 
         rows = len(matrix)
         assert rows in (2, 3) # allow 2D and 3D
