@@ -192,12 +192,14 @@ class MatrixArray(MatrixArrayABC):
         if not isinstance(other, MatrixArrayABC):
             return NotImplemented
 
-        if len(self) != len(other):
+        if self.ndim != other.ndim or len(self) != len(other):
             return False
 
-        return all((
-            # TODO
-        ))
+        return all(
+            np.array_equal(self_col, other_col)
+            for self_row, other_row in zip(self._matrix, other._matrix)
+            for self_col, other_col in zip(self_row, other_row)
+        )
 
     def __mod__(self, other: Any) -> Union[bool, NotImplementedType]:
         """
@@ -210,12 +212,14 @@ class MatrixArray(MatrixArrayABC):
         if not isinstance(other, MatrixArrayABC):
             return NotImplemented
 
-        if len(self) != len(other):
+        if self.ndim != other.ndim or len(self) != len(other):
             return False
 
-        return all((
-            # TODO
-        ))
+        return all(
+            np.allclose(self_col, other_col)
+            for self_row, other_row in zip(self._matrix, other._matrix)
+            for self_col, other_col in zip(self_row, other_row)
+        )
 
     def as_list(self) -> List[Matrix]:
 
