@@ -238,6 +238,19 @@ class MatrixArray(MatrixArrayABC):
 
         return np.moveaxis(np.array(self._matrix, dtype = dtype), 2, 0)
 
+    def as_tuple(self, copy: bool = True) -> Tuple[Tuple[ndarray, ...], ...]:
+        """
+        Exports matrix array as a tuple of tuples of ``numpy.ndarray`` objects
+
+        Args:
+            copy : Provide a copy of underlying ``numpy.ndarry``
+        """
+
+        if copy:
+            return tuple(tuple(col.copy() for col in row) for row in self._matrix)
+
+        return tuple(tuple(col for col in row) for row in self._matrix)
+
     def as_type(self) -> MatrixArrayABC:
 
         pass
