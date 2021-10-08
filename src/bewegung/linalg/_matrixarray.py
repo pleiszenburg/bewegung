@@ -150,15 +150,15 @@ class MatrixArray(MatrixArrayABC):
 
         if isinstance(idx, slice):
             return MatrixArray([
-                [self._matrix[0][0][idx].copy(), self._matrix[0][1][idx].copy()],
-                [self._matrix[1][0][idx].copy(), self._matrix[1][1][idx].copy()],
+                [col[idx].copy() for col in row]
+                for row in self._matrix
             ])
 
         dtype = dtype_np2py(self.dtype)
 
-        return Matrix([
-            [dtype(self._matrix[0][0][idx]), dtype(self._matrix[0][1][idx])],
-            [dtype(self._matrix[1][0][idx]), dtype(self._matrix[1][1][idx])],
+        return MatrixArray([
+            [dtype(col[idx]) for col in row]
+            for row in self._matrix
         ])
 
     def __iter__(self) -> MatrixArrayABC:
