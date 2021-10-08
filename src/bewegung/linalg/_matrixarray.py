@@ -140,30 +140,26 @@ class MatrixArray(MatrixArrayABC):
 
         return VectorArray2D(*values) if len(vector_tuple) == 2 else VectorArray3D(*values)
 
-    def __getitem__(self, index: Union[Tuple[int, int, int], int, slice]) -> Union[Number, Matrix]:
-        pass
-    #     """
-    #     Item access, returns value at position
-    #
-    #     Args:
-    #         index : Row, column and position index
-    #     """
-    #
-    #     if isinstance(index, slice):
-    #         return MatrixArray([
-    #             [self._matrix[0][0][index].copy(), self._matrix[0][1][index].copy()],
-    #             [self._matrix[1][0][index].copy(), self._matrix[1][1][index].copy()],
-    #         ])
-    #
-    #     dtype = dtype_np2py(self.dtype)
-    #
-    #     if isinstance(index, int):
-    #         return Matrix([
-    #             [dtype(self._matrix[0][0][index]), dtype(self._matrix[0][1][index])],
-    #             [dtype(self._matrix[1][0][index]), dtype(self._matrix[1][1][index])],
-    #         ])
-    #
-    #     return dtype(self._matrix[index[0]][index[1]][index[2]])
+    def __getitem__(self, idx: Union[int, slice]) -> Union[Matrix, MatrixArrayABC]:
+        """
+        Item access, returns value at position
+
+        Args:
+            index : Row, column and position index
+        """
+
+        if isinstance(idx, slice):
+            return MatrixArray([
+                [self._matrix[0][0][idx].copy(), self._matrix[0][1][idx].copy()],
+                [self._matrix[1][0][idx].copy(), self._matrix[1][1][idx].copy()],
+            ])
+
+        dtype = dtype_np2py(self.dtype)
+
+        return Matrix([
+            [dtype(self._matrix[0][0][idx]), dtype(self._matrix[0][1][idx])],
+            [dtype(self._matrix[1][0][idx]), dtype(self._matrix[1][1][idx])],
+        ])
 
     def __setitem__(self, index: Tuple[int, int], value: Number):
         pass
