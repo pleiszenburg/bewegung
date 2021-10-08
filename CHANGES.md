@@ -2,6 +2,8 @@
 
 ## 0.0.6 (2021-XX-XX)
 
+Highlights: Major overhaul of linear algebra functionality, better package structure and a test suite.
+
 - FEATURE: All vector and vector array classes expose `ndim`, number of dimensions.
 - FEATURE: Common base class, `Vector`, for all vector classes.
 - FEATURE: Common base class, `VectorArray`, for all vector array classes.
