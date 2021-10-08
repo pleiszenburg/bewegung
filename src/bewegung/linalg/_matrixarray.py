@@ -257,12 +257,12 @@ class MatrixArray(MatrixArrayABC):
 
     def copy(self) -> MatrixArrayABC:
         """
-        Copies matrix
+        Copies matrix array
         """
 
-        return type(self)(matrix = [
-            [item.copy() for item in line]
-            for line in self._matrix
+        return type(self)([
+            [col.copy() for col in row]
+            for row in self._matrix
         ])
 
     @property
