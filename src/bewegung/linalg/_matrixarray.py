@@ -161,18 +161,6 @@ class MatrixArray(MatrixArrayABC):
             [dtype(self._matrix[1][0][idx]), dtype(self._matrix[1][1][idx])],
         ])
 
-    def __setitem__(self, index: Tuple[int, int], value: Number):
-        pass
-    #     """
-    #     Item access, sets new value at position
-    #
-    #     Args:
-    #         index : Row and column index
-    #         value : New value
-    #     """
-    #
-    #     self._matrix[index[0]][index[1]] = self._dtype(value)
-
     def __iter__(self) -> MatrixArrayABC:
         """
         Iterator interface (1/2)
