@@ -290,25 +290,26 @@ class MatrixArray(MatrixArrayABC):
         return len(self._matrix)
 
     @classmethod
-    def from_ndarray(cls, matrix: ndarray, dtype: Type = float) -> MatrixArrayABC:
-        pass
-    #     """
-    #     Generates new matrix object from ``numpy.ndarray`` object
-    #     of shape ``(2, 2)`` or ``(3, 3)``
-    #
-    #     Args:
-    #         matrix : Input data
-    #         dtype : Desired (Python) data type of matrix
-    #     """
-    #
-    #     assert matrix.ndim == 2
-    #     assert matrix.shape in ((2, 2), (3, 3))
-    #
-    #     matrix = matrix.tolist()
-    #     if isinstance(matrix[0][0], int):
-    #         matrix = [[dtype(item) for item in line] for line in matrix]
-    #
-    #     return cls(matrix)
+    def from_ndarray(cls, matrix_array: ndarray) -> MatrixArrayABC:
+        """
+        Generates new matrix array object from single ``numpy.ndarray``
+        object of shape ``(length, ndim, ndim)``
+
+        Args:
+            matrix_array : Input data
+        """
+
+        if matrix_array.ndim != 3:
+            raise ValueError('dimension mismatch: ndim != 3)')
+        if matrix_array.shape[1:] not in ((2, 2), (3, 3)):
+            raise ValueError('dimension mismatch: not 2x2 or 3x3)')
+
+        ndim = matrix_array.shape[1]
+
+        return cls([
+            [matrix_array[:, row, col] for col in range(ndim)]
+            for row in range(ndim)
+        ])
 
     @classmethod
     def from_2d_rotation(cls, a: ndarray) -> MatrixArrayABC:
