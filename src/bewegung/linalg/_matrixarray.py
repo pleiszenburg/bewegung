@@ -222,7 +222,6 @@ class MatrixArray(MatrixArrayABC):
         )
 
     def as_list(self) -> List[Matrix]:
-
         """
         Exports a list of :class:`bewegung.Matrix` objects
         """
