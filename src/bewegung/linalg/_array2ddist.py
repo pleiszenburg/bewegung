@@ -158,7 +158,7 @@ class VectorArray2Ddist(VectorArray2D):
 
         return VectorArray2Ddist(self._x.copy(), self._y.copy(), self._dist.copy())
 
-    def update_from_vector(self, other: VectorArray2DABC):
+    def update_from_vectorarray(self, other: VectorArray2DABC):
         ""
         raise NotImplementedError()
 

@@ -310,7 +310,7 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
 
         return VectorArray2D(self._x.copy(), self._y.copy())
 
-    def update_from_vector(self, other: VectorArray2DABC):
+    def update_from_vectorarray(self, other: VectorArray2DABC):
         """
         Updates vector components with data from another vector array
 

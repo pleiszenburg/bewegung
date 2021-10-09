@@ -315,7 +315,7 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
 
         return VectorArray3D(self._x.copy(), self._y.copy(), self._z.copy())
 
-    def update_from_vector(self, other: VectorArray3DABC):
+    def update_from_vectorarray(self, other: VectorArray3DABC):
         """
         Updates vector components with data from another vector array
 
