@@ -247,8 +247,10 @@ class Matrix(MatrixABC):
             dtype : Desired (Python) data type of matrix
         """
 
-        assert matrix.ndim == 2
-        assert matrix.shape in ((2, 2), (3, 3))
+        if matrix.ndim != 2:
+            raise ValueError('shape mismatch - ndim != 2')
+        if matrix.shape not in ((2, 2), (3, 3)):
+            raise ValueError('shape mismatch - not NxN')
 
         matrix = matrix.tolist()
         if isinstance(matrix[0][0], int):
