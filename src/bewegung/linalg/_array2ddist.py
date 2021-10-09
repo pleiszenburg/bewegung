@@ -61,14 +61,25 @@ class VectorArray2Ddist(VectorArray2D):
         dist : Distance components. Must have the same type like ``x`` and ``y``.
     """
 
-    def __init__(self, x: np.ndarray, y: np.ndarray, dist: np.ndarray):
-        assert dist.ndim == 1
-        assert x.shape[0] == y.shape[0] == dist.shape[0]
-        assert x.dtype == y.dtype == dist.dtype
+    def __init__(self, x: np.ndarray, y: np.ndarray, dist: np.ndarray, dtype: Union[Dtype, None] = None):
+
+        if dist.ndim != 1:
+            raise ValueError('inconsistent: dist.ndim != 1')
+        if not x.shape[0] == y.shape[0] == dist.shape[0]:
+            raise ValueError('inconsistent length')
+
+        if dtype is None:
+            if not x.dtype == y.dtype == dist.dtype:
+                raise TypeError('can not guess dtype - inconsistent')
+        else:
+            dist = dist if dist.dtype == np.dtype(dtype) else dist.astype(dtype)
+
         x.setflags(write = False)
         y.setflags(write = False)
         dist.setflags(write = False)
-        super().__init__(x = x, y = y,)
+
+        super().__init__(x = x, y = y, dtype = dtype)
+
         self._dist = dist
 
     def __repr__(self) -> str:
