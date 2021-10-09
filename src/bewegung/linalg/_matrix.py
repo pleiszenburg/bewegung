@@ -252,9 +252,7 @@ class Matrix(MatrixABC):
         if matrix.shape not in ((2, 2), (3, 3)):
             raise ValueError('shape mismatch - not NxN')
 
-        matrix = matrix.tolist()
-        if isinstance(matrix[0][0], int):
-            matrix = [[dtype(item) for item in row] for row in matrix]
+        matrix = [[dtype(col) for col in row] for row in matrix.tolist()]
 
         return cls(matrix, dtype = dtype)
 
