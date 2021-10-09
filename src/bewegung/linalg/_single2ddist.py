@@ -29,10 +29,13 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from numbers import Number
-from typing import Type, Union
+from typing import Union
 
 from ..lib import typechecked
-from ._abc import Vector2DABC
+from ._abc import (
+    NumberType,
+    Vector2DABC,
+)
 from ._single2d import Vector2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -51,10 +54,16 @@ class Vector2Ddist(Vector2D):
         dtype : Data type. Derived from ``x`` and ``y`` if not explicitly provided.
     """
 
-    def __init__(self, x: Number, y: Number, dist: Number, dtype: Union[Type, None] = None):
+    def __init__(self, x: Number, y: Number, dist: Number, dtype: Union[NumberType, None] = None):
 
         super().__init__(x = x, y = y, dtype = dtype)
-        assert isinstance(dist, self._dtype)
+
+        if dtype is None:
+            if not isinstance(dist, self._dtype):
+                raise TypeError('can not guess dtype - inconsistent')
+        else:
+            dist = self._dtype(dist)
+
         self._dist = dist
 
     def __repr__(self) -> str:
