@@ -30,13 +30,14 @@ specific language governing rights and limitations under the License.
 
 import math
 from numbers import Number
-from typing import Any, Tuple, Type, Union
+from typing import Any, Tuple, Union
 
 from ..lib import typechecked
 from ._abc import (
     Dtype,
     NotImplementedType,
     Number2D,
+    NumberType,
     Vector2DABC,
 )
 from ._const import FLOAT_DEFAULT
@@ -61,13 +62,14 @@ class Vector2D(Vector, Vector2DABC):
         dtype : Data type. Derived from ``x`` and ``y`` if not explicitly provided.
     """
 
-    def __init__(self, x: Number, y: Number, dtype: Union[Type, None] = None):
+    def __init__(self, x: Number, y: Number, dtype: Union[NumberType, None] = None):
 
-        assert type(x) == type(y)
         if dtype is None:
+            if type(x) != type(y):
+                raise TypeError('can not guess dtype - inconsistent')
             dtype = type(x)
         else:
-            assert dtype == type(x)
+            x, y = dtype(x), dtype(y)
 
         self._x, self._y, self._dtype = x, y, dtype
 
@@ -179,7 +181,7 @@ class Vector2D(Vector, Vector2DABC):
 
         return self.x * other.x + self.y * other.y
 
-    def as_dtype(self, dtype: Type) -> Vector2DABC:
+    def as_dtype(self, dtype: NumberType) -> Vector2DABC:
         """
         Generates new vector with desired data type and returns it.
 
@@ -300,7 +302,7 @@ class Vector2D(Vector, Vector2DABC):
         self._y = value
 
     @property
-    def dtype(self) -> Type:
+    def dtype(self) -> NumberType:
         """
         (Python) data type of vector components
         """
