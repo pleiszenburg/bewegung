@@ -81,14 +81,14 @@ class MatrixArray(MatrixArrayABC):
             raise ValueError('inconsistent length')
 
         if dtype is None:
-            self._dtype = matrix[0][0].dtype
-            if not all(col.dtype == self._dtype for row in matrix for col in row):
+            dtype = matrix[0][0].dtype
+            if not all(col.dtype == dtype for row in matrix for col in row):
                 raise TypeError('can not guess dtype - inconsistent')
         else:
-            self._dtype = np.dtype(dtype)
+            dtype = np.dtype(dtype)
             matrix = [
                 [
-                    col if col.dtype == self._dtype else col.astype(self._dtype)
+                    col if col.dtype == dtype else col.astype(dtype)
                     for col in row
                 ]
                 for row in matrix
@@ -103,8 +103,8 @@ class MatrixArray(MatrixArrayABC):
         """
 
         dtype = getattr(
-            self._dtype, '__name__',
-            str(self._dtype), # fallback, numpy
+            self.dtype, '__name__',
+            str(self.dtype), # fallback, numpy
         )
 
         return f'<MatrixArray ndim={len(self._matrix):d} dtype={dtype:s} len={len(self):d}>'
@@ -289,7 +289,7 @@ class MatrixArray(MatrixArrayABC):
         (Python) data type of matrix components
         """
 
-        return self._dtype
+        return self._matrix[0][0].dtype
 
     @property
     def ndim(self) -> int:
