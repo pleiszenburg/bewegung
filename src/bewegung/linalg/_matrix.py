@@ -95,7 +95,7 @@ class Matrix(MatrixABC):
             f' ({", ".join([str(col) for col in row]):s})' for row in self._matrix
         ])
 
-        return f'<Matrix ndim={len(self._matrix):d} dtype={dtype_name(self.dtype):s} values=(\n{values:s}\n)>'
+        return f'<Matrix values=(\n{values:s}\n) ndim={len(self._matrix):d} dtype={dtype_name(self.dtype):s}>'
 
     def __matmul__(self, other: Any) -> Union[Vector, VectorArray, NotImplementedType]:
         """
