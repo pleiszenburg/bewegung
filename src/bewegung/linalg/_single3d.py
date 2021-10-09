@@ -70,20 +70,19 @@ class Vector3D(Vector, Vector3DABC):
         if dtype is None:
             if not type(x) == type(y) == type(z):
                 raise TypeError('can not guess dtype - inconsistent')
-            dtype = type(x)
         else:
             x, y, z = dtype(x), dtype(y), dtype(z)
 
-        self._x, self._y, self._z, self._dtype = x, y, z, dtype
+        self._x, self._y, self._z = x, y, z
 
     def __repr__(self) -> str:
         """
         String representation for interactive use
         """
 
-        if self._dtype == int:
-            return f'<Vector3D x={self._x:d} y={self._y:d} z={self._z:d} dtype={self._dtype.__name__:s}>'
-        return f'<Vector3D x={self._x:e} y={self._y:e} z={self._z:e} dtype={self._dtype.__name__:s}>'
+        if self.dtype == int:
+            return f'<Vector3D x={self._x:d} y={self._y:d} z={self._z:d} dtype={self.dtype.__name__:s}>'
+        return f'<Vector3D x={self._x:e} y={self._y:e} z={self._z:e} dtype={self.dtype.__name__:s}>'
 
     def __eq__(self, other: Any) -> Union[bool, NotImplementedType]:
         """
@@ -169,8 +168,6 @@ class Vector3D(Vector, Vector3DABC):
         if not type(self._x) == type(self._y) == type(self._z):
             raise TypeError('inconsistent dtype')
 
-        self._dtype = type(self._x)
-
     def __matmul__(self, other: Any) -> Union[Number, NotImplementedType]:
         """
         Scalar product between vectors
@@ -192,7 +189,7 @@ class Vector3D(Vector, Vector3DABC):
             dtype : Desired data type of new vector
         """
 
-        if dtype == self._dtype:
+        if dtype == self.dtype:
             return self.copy()
         return type(self)(dtype(self._x), dtype(self._y), dtype(self._z), dtype)
 
@@ -227,7 +224,7 @@ class Vector3D(Vector, Vector3DABC):
         Copies vector
         """
 
-        return type(self)(self._x, self._y, self._z, self._dtype)
+        return type(self)(self._x, self._y, self._z, self.dtype)
 
     def update(self, x: Number, y: Number, z: Number):
         """
@@ -243,7 +240,6 @@ class Vector3D(Vector, Vector3DABC):
             raise TypeError('inconsistent dtype')
 
         self._x, self._y, self._z = x, y, z
-        self._dtype = type(self._x)
 
     def update_from_vector(self, other: Vector3DABC):
         """
@@ -257,7 +253,6 @@ class Vector3D(Vector, Vector3DABC):
             raise TypeError('inconsistent dtype')
 
         self._x, self._y, self._z = other.x, other.y, other.z
-        self._dtype = type(self._x)
 
     @property
     def mag(self) -> float:
@@ -297,7 +292,7 @@ class Vector3D(Vector, Vector3DABC):
         x component
         """
 
-        if not isinstance(value, self._dtype):
+        if not isinstance(value, self.dtype):
             raise TypeError('inconsistent dtype')
 
         self._x = value
@@ -316,7 +311,7 @@ class Vector3D(Vector, Vector3DABC):
         y component
         """
 
-        if not isinstance(value, self._dtype):
+        if not isinstance(value, self.dtype):
             raise TypeError('inconsistent dtype')
 
         self._y = value
@@ -335,7 +330,7 @@ class Vector3D(Vector, Vector3DABC):
         z component
         """
 
-        if not isinstance(value, self._dtype):
+        if not isinstance(value, self.dtype):
             raise TypeError('inconsistent dtype')
 
         self._z = value
@@ -346,7 +341,7 @@ class Vector3D(Vector, Vector3DABC):
         (Python) data type of vector components
         """
 
-        return self._dtype
+        return type(self._x)
 
     @property
     def ndim(self) -> int:
