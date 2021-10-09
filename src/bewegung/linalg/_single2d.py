@@ -67,20 +67,19 @@ class Vector2D(Vector, Vector2DABC):
         if dtype is None:
             if type(x) != type(y):
                 raise TypeError('can not guess dtype - inconsistent')
-            dtype = type(x)
         else:
             x, y = dtype(x), dtype(y)
 
-        self._x, self._y, self._dtype = x, y, dtype
+        self._x, self._y = x, y
 
     def __repr__(self) -> str:
         """
         String representation for interactive use
         """
 
-        if self._dtype == int:
-            return f'<Vector2D x={self._x:d} y={self._y:d} dtype={self._dtype.__name__:s}>'
-        return f'<Vector2D x={self._x:e} y={self._y:e} dtype={self._dtype.__name__:s}>'
+        if self.dtype == int:
+            return f'<Vector2D x={self._x:d} y={self._y:d} dtype={self.dtype.__name__:s}>'
+        return f'<Vector2D x={self._x:e} y={self._y:e} dtype={self.dtype.__name__:s}>'
 
     def _repr_svg_(self) -> str:
 
@@ -169,8 +168,6 @@ class Vector2D(Vector, Vector2DABC):
         if type(self._x) != type(self._y):
             raise TypeError('inconsistent dtype')
 
-        self._dtype = type(self._x)
-
     def __matmul__(self, other: Any) -> Union[Number, NotImplementedType]:
         """
         Scalar product between vectors
@@ -192,7 +189,7 @@ class Vector2D(Vector, Vector2DABC):
             dtype : Desired data type of new vector
         """
 
-        if dtype == self._dtype:
+        if dtype == self.dtype:
             return self.copy()
         return type(self)(dtype(self._x), dtype(self._y), dtype)
 
@@ -227,7 +224,7 @@ class Vector2D(Vector, Vector2DABC):
         Copies vector
         """
 
-        return type(self)(self._x, self._y, self._dtype)
+        return type(self)(self._x, self._y, self.dtype)
 
     def update(self, x: Number, y: Number):
         """
@@ -242,7 +239,6 @@ class Vector2D(Vector, Vector2DABC):
             raise TypeError('inconsistent dtype')
 
         self._x, self._y = x, y
-        self._dtype = type(self._x)
 
     def update_from_vector(self, other: Vector2DABC):
         """
@@ -256,7 +252,6 @@ class Vector2D(Vector, Vector2DABC):
             raise TypeError('inconsistent dtype')
 
         self._x, self._y = other.x, other.y
-        self._dtype = type(self._x)
 
     @property
     def mag(self) -> float:
@@ -288,7 +283,7 @@ class Vector2D(Vector, Vector2DABC):
         x component
         """
 
-        if not isinstance(value, self._dtype):
+        if not isinstance(value, self.dtype):
             raise TypeError('inconsistent dtype')
 
         self._x = value
@@ -307,7 +302,7 @@ class Vector2D(Vector, Vector2DABC):
         y component
         """
 
-        if not isinstance(value, self._dtype):
+        if not isinstance(value, self.dtype):
             raise TypeError('inconsistent dtype')
 
         self._y = value
@@ -318,7 +313,7 @@ class Vector2D(Vector, Vector2DABC):
         (Python) data type of vector components
         """
 
-        return self._dtype
+        return type(self._x)
 
     @property
     def ndim(self) -> int:
