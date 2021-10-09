@@ -45,6 +45,7 @@ from ._array import VectorArray
 from ._array2d import VectorArray2D
 from ._array3d import VectorArray3D
 from ._const import FLOAT_DEFAULT
+from ._lib import dtype_name
 from ._numpy import np, ndarray
 from ._single import Vector
 from ._single2d import Vector2D
@@ -90,16 +91,11 @@ class Matrix(MatrixABC):
         String representation for interactive use
         """
 
-        dtype = getattr(
-            self.dtype, '__name__',
-            str(self.dtype), # fallback, numpy
-        )
-
         values = ',\n'.join([
             f' ({", ".join([str(col) for col in row]):s})' for row in self._matrix
         ])
 
-        return f'<Matrix ndim={len(self._matrix):d} dtype={dtype:s} values=(\n{values:s}\n)>'
+        return f'<Matrix ndim={len(self._matrix):d} dtype={dtype_name(self.dtype):s} values=(\n{values:s}\n)>'
 
     def __matmul__(self, other: Any) -> Union[Vector, VectorArray, NotImplementedType]:
         """

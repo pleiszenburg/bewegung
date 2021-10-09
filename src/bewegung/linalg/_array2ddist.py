@@ -39,7 +39,7 @@ from ._abc import (
     VectorArray2DABC,
 )
 from ._const import FLOAT_DEFAULT
-from ._lib import dtype_np2py
+from ._lib import dtype_np2py, dtype_name
 from ._numpy import np
 from ._single2ddist import Vector2Ddist
 from ._array2d import VectorArray2D
@@ -87,7 +87,7 @@ class VectorArray2Ddist(VectorArray2D):
         String representation for interactive use
         """
 
-        return f'<VectorArray2Ddist len={len(self):d}>'
+        return f'<VectorArray2Ddist len={len(self):d} dtype={dtype_name(self.dtype):s}>'
 
     def __getitem__(self, idx: Union[int, slice]) -> Union[Vector2Ddist, VectorArray2DABC]:
         """

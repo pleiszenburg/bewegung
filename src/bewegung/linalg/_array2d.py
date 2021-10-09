@@ -40,7 +40,7 @@ from ._abc import (
 )
 from ._array import VectorArray
 from ._const import FLOAT_DEFAULT
-from ._lib import dtype_np2py
+from ._lib import dtype_np2py, dtype_name
 from ._numpy import np
 from ._single2d import Vector2D
 
@@ -84,7 +84,7 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
         String representation for interactive use
         """
 
-        return f'<VectorArray2D len={len(self):d}>'
+        return f'<VectorArray2D len={len(self):d} dtype={dtype_name(self.dtype):s}>'
 
     def __len__(self) -> int:
         """

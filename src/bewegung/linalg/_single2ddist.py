@@ -36,6 +36,7 @@ from ._abc import (
     NumberType,
     Vector2DABC,
 )
+from .lib import dtype_name
 from ._single2d import Vector2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -72,8 +73,8 @@ class Vector2Ddist(Vector2D):
         """
 
         if self.dtype == int:
-            return f'<Vector2Ddist x={self._x:d} y={self._y:d} dist={self._dist:d} dtype={self.dtype.__name__:s}>'
-        return f'<Vector2Ddist x={self._x:e} y={self._y:e} dist={self._dist:e} dtype={self.dtype.__name__:s}>'
+            return f'<Vector2Ddist x={self._x:d} y={self._y:d} dist={self._dist:d} dtype={dtype_name(self.dtype):s}>'
+        return f'<Vector2Ddist x={self._x:e} y={self._y:e} dist={self._dist:e} dtype={dtype_name(self.dtype):s}>'
 
     def mul(self, scalar: Number):
         ""

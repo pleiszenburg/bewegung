@@ -41,6 +41,7 @@ from ._abc import (
     Vector2DABC,
 )
 from ._const import FLOAT_DEFAULT
+from ._lib import dtype_name
 from ._numpy import np, ndarray
 from ._single import Vector
 from ._svg import Svg
@@ -78,8 +79,8 @@ class Vector2D(Vector, Vector2DABC):
         """
 
         if self.dtype == int:
-            return f'<Vector2D x={self._x:d} y={self._y:d} dtype={self.dtype.__name__:s}>'
-        return f'<Vector2D x={self._x:e} y={self._y:e} dtype={self.dtype.__name__:s}>'
+            return f'<Vector2D x={self._x:d} y={self._y:d} dtype={dtype_name(self.dtype):s}>'
+        return f'<Vector2D x={self._x:e} y={self._y:e} dtype={dtype_name(self.dtype):s}>'
 
     def _repr_svg_(self) -> str:
 

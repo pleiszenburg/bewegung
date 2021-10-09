@@ -41,6 +41,7 @@ from ._abc import (
     Vector3DABC,
 )
 from ._const import FLOAT_DEFAULT
+from ._lib import dtype_name
 from ._numpy import np, ndarray
 from ._single import Vector
 
@@ -81,8 +82,8 @@ class Vector3D(Vector, Vector3DABC):
         """
 
         if self.dtype == int:
-            return f'<Vector3D x={self._x:d} y={self._y:d} z={self._z:d} dtype={self.dtype.__name__:s}>'
-        return f'<Vector3D x={self._x:e} y={self._y:e} z={self._z:e} dtype={self.dtype.__name__:s}>'
+            return f'<Vector3D x={self._x:d} y={self._y:d} z={self._z:d} dtype={dtype_name(self.dtype):s}>'
+        return f'<Vector3D x={self._x:e} y={self._y:e} z={self._z:e} dtype={dtype_name(self.dtype):s}>'
 
     def __eq__(self, other: Any) -> Union[bool, NotImplementedType]:
         """
