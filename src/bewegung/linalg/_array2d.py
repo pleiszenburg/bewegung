@@ -104,6 +104,7 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
         Iterator interface (1/2)
         """
 
+        self._iterstate = 0
         return self
 
     def __next__(self) -> Vector2D:

@@ -167,6 +167,7 @@ class MatrixArray(MatrixArrayABC):
         Iterator interface (1/2)
         """
 
+        self._iterstate = 0
         return self
 
     def __next__(self) -> Matrix:
