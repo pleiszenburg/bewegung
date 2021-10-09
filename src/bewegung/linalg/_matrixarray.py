@@ -68,20 +68,23 @@ class MatrixArray(MatrixArrayABC):
         matrix = [list(row) for row in matrix] # convert to lists or copy lists
 
         rows = len(matrix)
-        assert rows in (2, 3) # allow 2D and 3D
-        assert all((len(row) == rows for row in matrix))
+        if rows not in (2, 3): # allow 2D and 3D
+            raise ValueError('dimension mismatch - neither 2D nor 3D')
+        if not all((len(row) == rows for row in matrix)):
+            raise ValueError('inconsistent rows')
 
         self._length = matrix[0][0].shape[0]
         self._dtype = matrix[0][0].dtype
 
-        assert all(
+        if not all(
             all((
-                item.ndim == 1,
-                item.shape[0] == self._length,
-                item.dtype == self._dtype,
+                col.ndim == 1,
+                col.shape[0] == self._length,
+                col.dtype == self._dtype,
             ))
-            for line in matrix for item in line
-        )
+            for row in matrix for col in row
+        ):
+            raise ValueError('inconsistent columns')
 
         self._matrix = matrix
         self._iterstate = 0
