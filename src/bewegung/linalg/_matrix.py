@@ -31,7 +31,7 @@ specific language governing rights and limitations under the License.
 from collections.abc import Iterable
 from math import cos, sin, isclose
 from numbers import Number
-from typing import Any, Tuple, Type, Union
+from typing import Any, Tuple, Union
 
 from ..lib import typechecked
 from ._abc import (
@@ -39,6 +39,7 @@ from ._abc import (
     MatrixABC,
     NotImplementedType,
     Numbers,
+    NumberType,
     Vector3DABC,
 )
 from ._array import VectorArray
@@ -66,19 +67,22 @@ class Matrix(MatrixABC):
         dtype : Data type. Derived from entries in ``matrix`` if not explicitly provided.
     """
 
-    def __init__(self, matrix = Iterable[Iterable[Numbers]], dtype: Union[Type, None] = None):
+    def __init__(self, matrix = Iterable[Iterable[Numbers]], dtype: Union[NumberType, None] = None):
 
         matrix = [list(row) for row in matrix] # convert to lists or copy lists
 
         rows = len(matrix)
-        assert rows in (2, 3) # allow 2D and 3D
-        assert all((len(row) == rows for row in matrix)) # check columns
+        if rows not in (2, 3): # allow 2D and 3D
+            raise ValueError('neither 2D nor 3D')
+        if not all((len(row) == rows for row in matrix)): # check columns
+            raise ValueError('number of rows and columns do not match')
 
         if dtype is None:
             dtype = type(matrix[0][0])
+            if not all(all(isinstance(col, dtype) for col in row) for row in matrix):
+                raise TypeError('can not guess dtype - inconsistent')
         else:
-            assert isinstance(matrix[0][0], dtype)
-        assert all((all((isinstance(number, dtype) for number in row)) for row in matrix))
+            matrix = [[dtype(col) for col in row] for row in matrix]
 
         self._dtype = dtype
         self._matrix = matrix
@@ -217,7 +221,7 @@ class Matrix(MatrixABC):
         return type(self)(matrix = [row.copy() for row in self._matrix], dtype = self.dtype)
 
     @property
-    def dtype(self) -> Type:
+    def dtype(self) -> NumberType:
         """
         (Python) data type of matrix components
         """
@@ -233,7 +237,7 @@ class Matrix(MatrixABC):
         return len(self._matrix)
 
     @classmethod
-    def from_ndarray(cls, matrix: ndarray, dtype: Type = float) -> MatrixABC:
+    def from_ndarray(cls, matrix: ndarray, dtype: NumberType = float) -> MatrixABC:
         """
         Generates new matrix object from ``numpy.ndarray`` object
         of shape ``(2, 2)`` or ``(3, 3)``
