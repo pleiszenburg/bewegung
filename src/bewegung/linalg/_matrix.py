@@ -83,7 +83,6 @@ class Matrix(MatrixABC):
         else:
             matrix = [[dtype(col) for col in row] for row in matrix]
 
-        self._dtype = dtype
         self._matrix = matrix
 
     def __repr__(self) -> str:
@@ -92,8 +91,8 @@ class Matrix(MatrixABC):
         """
 
         dtype = getattr(
-            self._dtype, '__name__',
-            str(self._dtype), # fallback, numpy
+            self.dtype, '__name__',
+            str(self.dtype), # fallback, numpy
         )
 
         values = ',\n'.join([
@@ -158,7 +157,7 @@ class Matrix(MatrixABC):
             value : New value
         """
 
-        self._matrix[index[0]][index[1]] = self._dtype(value)
+        self._matrix[index[0]][index[1]] = self.dtype(value)
 
     def __eq__(self, other: Any) -> Union[bool, NotImplementedType]:
         """
@@ -229,7 +228,7 @@ class Matrix(MatrixABC):
         (Python) data type of matrix components
         """
 
-        return self._dtype
+        return self._matrix[0][0].dtype
 
     @property
     def ndim(self) -> int:
