@@ -40,7 +40,6 @@ from ._abc import (
     NotImplementedType,
     Numbers,
     NumberType,
-    Vector3DABC,
 )
 from ._array import VectorArray
 from ._array2d import VectorArray2D
@@ -277,7 +276,7 @@ class Matrix(MatrixABC):
         ])
 
     @classmethod
-    def from_3d_rotation(cls, v: Vector3DABC, a: Number) -> MatrixABC:
+    def from_3d_rotation(cls, v: Vector3D, a: Number) -> MatrixABC:
         """
         Generates new 3D matrix object from a vector and an angle.
         Rotates by angle around vector.
