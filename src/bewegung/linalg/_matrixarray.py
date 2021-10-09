@@ -40,7 +40,7 @@ from ._abc import (
 )
 from ._const import FLOAT_DEFAULT
 from ._array import VectorArray
-from ._lib import dtype_np2py
+from ._lib import dtype_np2py, dtype_name
 from ._numpy import np, ndarray
 from ._single import Vector
 from ._single3d import Vector3D
@@ -102,12 +102,7 @@ class MatrixArray(MatrixArrayABC):
         String representation for interactive use
         """
 
-        dtype = getattr(
-            self.dtype, '__name__',
-            str(self.dtype), # fallback, numpy
-        )
-
-        return f'<MatrixArray ndim={len(self._matrix):d} dtype={dtype:s} len={len(self):d}>'
+        return f'<MatrixArray ndim={len(self._matrix):d} dtype={dtype_name(self.dtype):s} len={len(self):d}>'
 
     def __len__(self) -> int:
         """

@@ -48,3 +48,14 @@ def dtype_np2py(dtype: Dtype) -> NumberType:
         return float
     else:
         raise TypeError("numpy dtype can not be mapped on Python number types")
+
+@typechecked
+def dtype_name(dtype: Dtype) -> str:
+    """
+    Provides name of both Python and numpy number/array types
+    """
+
+    return getattr(
+        dtype, '__name__',
+        str(dtype), # fallback, numpy
+    )
