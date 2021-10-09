@@ -63,7 +63,7 @@ class MatrixArray(MatrixArrayABC):
         matrix : 2D or 3D arrangement in a list of lists containing numpy nd arrays
     """
 
-    def __init__(self, matrix = Iterable[Iterable[ndarray]]):
+    def __init__(self, matrix = Iterable[Iterable[ndarray]], dtype: Union[Dtype, None] = None):
 
         matrix = [list(row) for row in matrix] # convert to lists or copy lists
 
@@ -73,18 +73,26 @@ class MatrixArray(MatrixArrayABC):
         if not all((len(row) == rows for row in matrix)):
             raise ValueError('inconsistent rows')
 
-        self._length = matrix[0][0].shape[0]
-        self._dtype = matrix[0][0].dtype
+        if not all(col.ndim == 1 for row in matrix for col in row):
+            raise ValueError('inconsistent: ndarray.ndim != 1')
 
-        if not all(
-            all((
-                col.ndim == 1,
-                col.shape[0] == self._length,
-                col.dtype == self._dtype,
-            ))
-            for row in matrix for col in row
-        ):
-            raise ValueError('inconsistent columns')
+        self._length = matrix[0][0].shape[0]
+        if not all(col.shape[0] == self._length for row in matrix for col in row):
+            raise ValueError('inconsistent length')
+
+        if dtype is None:
+            self._dtype = matrix[0][0].dtype
+            if not all(col.dtype == self._dtype for row in matrix for col in row):
+                raise TypeError('can not guess dtype - inconsistent')
+        else:
+            self._dtype = np.dtype(dtype)
+            matrix = [
+                [
+                    col if col.dtype == self._dtype else col.astype(self._dtype)
+                    for col in row
+                ]
+                for row in matrix
+            ]
 
         self._matrix = matrix
         self._iterstate = 0
