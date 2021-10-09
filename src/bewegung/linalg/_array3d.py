@@ -61,14 +61,25 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
         z : z components. Must have the same dtype like ``x`` and ``y``.
     """
 
+    def __init__(self, x: np.ndarray, y: np.ndarray, z: np.ndarray, dtype: Union[Dtype, None] = None):
 
-    def __init__(self, x: np.ndarray, y: np.ndarray, z: np.ndarray):
+        if x.ndim != 1:
+            raise ValueError('inconsistent: x.ndim != 1')
+        if y.ndim != 1:
+            raise ValueError('inconsistent: x.ndim != 1')
+        if z.ndim != 1:
+            raise ValueError('inconsistent: z.ndim != 1')
+        if not x.shape[0] == y.shape[0] == z.shape[0]:
+            raise ValueError('inconsistent length')
 
-        assert x.ndim == 1
-        assert y.ndim == 1
-        assert z.ndim == 1
-        assert x.shape[0] == y.shape[0] == z.shape[0]
-        assert x.dtype == y.dtype == z.dtype
+        if dtype is None:
+            if x.dtype != y.dtype:
+                raise TypeError('can not guess dtype - inconsistent')
+        else:
+            x = x if x.dtype == np.dtype(dtype) else x.astype(dtype)
+            y = y if y.dtype == np.dtype(dtype) else y.astype(dtype)
+            z = z if z.dtype == np.dtype(dtype) else z.astype(dtype)
+
         self._x, self._y, self._z = x, y, z
         self._iterstate = 0
 
