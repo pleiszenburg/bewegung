@@ -36,7 +36,7 @@ from ._abc import (
     NumberType,
     Vector2DABC,
 )
-from .lib import dtype_name
+from ._lib import dtype_name
 from ._single2d import Vector2D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
