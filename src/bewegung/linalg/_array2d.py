@@ -60,12 +60,22 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
         y : y components. Must have the same dtype like ``x``.
     """
 
-    def __init__(self, x: np.ndarray, y: np.ndarray):
+    def __init__(self, x: np.ndarray, y: np.ndarray, dtype: Union[Dtype, None] = None):
 
-        assert x.ndim == 1
-        assert y.ndim == 1
-        assert x.shape[0] == y.shape[0]
-        assert x.dtype == y.dtype
+        if x.ndim != 1:
+            raise ValueError('inconsistent: x.ndim != 1')
+        if y.ndim != 1:
+            raise ValueError('inconsistent: x.ndim != 1')
+        if x.shape[0] != y.shape[0]:
+            raise ValueError('inconsistent length')
+
+        if dtype is None:
+            if x.dtype != y.dtype:
+                raise TypeError('can not guess dtype - inconsistent')
+        else:
+            x = x if x.dtype == np.dtype(dtype) else x.astype(dtype)
+            y = y if y.dtype == np.dtype(dtype) else y.astype(dtype)
+
         self._x, self._y = x, y
         self._iterstate = 0
 
