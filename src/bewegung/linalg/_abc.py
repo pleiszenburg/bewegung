@@ -64,7 +64,7 @@ class Vector3DABC(ABC):
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 if np is not None:
-    Dtype = Union[str, np.dtype]
+    Dtype = Union[str, Number, np.dtype]
 else:
     Dtype = None # HACK
 
