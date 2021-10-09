@@ -467,9 +467,9 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
 
         if radius.ndim != 1:
             raise ValueError('inconsistent: radius.ndim != 1')
-        if lon.ndim != 1
+        if lon.ndim != 1:
             raise ValueError('inconsistent: lon.ndim != 1')
-        if lat.ndim != 1
+        if lat.ndim != 1:
             raise ValueError('inconsistent: lat.ndim != 1')
         if not radius.shape[0] == lon.shape[0] == lat.shape[0]:
             raise ValueError('inconsistent shape')
