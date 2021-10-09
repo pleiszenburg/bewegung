@@ -63,16 +63,16 @@ class Vector3DABC(ABC):
 # Types
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+NumberType = Type[Number]
+
 if np is not None:
-    Dtype = Union[str, Number, np.dtype]
+    Dtype = Union[str, NumberType, np.dtype]
 else:
     Dtype = None # HACK
 
 Numbers = TypeVar('N', bound = Number)
 Number2D = Tuple[Numbers, Numbers]
 Number3D = Tuple[Numbers, Numbers, Numbers]
-
-NumberType = Type[Number]
 
 try:
     from typing import NotImplementedType # re-introduced in Python 3.10
