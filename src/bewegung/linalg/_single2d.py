@@ -97,7 +97,7 @@ class Vector2D(Vector, Vector2DABC):
         if not isinstance(other, Vector2DABC):
             return NotImplemented
 
-        return (self.x == other.x) and (self.y == other.y)
+        return bool(self.x == other.x) and bool(self.y == other.y)
 
     def __mod__(self, other: Any) -> Union[bool, NotImplementedType]:
         """

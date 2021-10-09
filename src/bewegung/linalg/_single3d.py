@@ -96,7 +96,7 @@ class Vector3D(Vector, Vector3DABC):
         if not isinstance(other, Vector3DABC):
             return NotImplemented
 
-        return (self.x == other.x) and (self.y == other.y) and (self.z == other.z)
+        return bool(self.x == other.x) and bool(self.y == other.y) and bool(self.z == other.z)
 
     def __mod__(self, other: Any) -> Union[bool, NotImplementedType]:
         """
