@@ -31,11 +31,11 @@ specific language governing rights and limitations under the License.
 from math import isnan
 
 import numpy as np
-
 from hypothesis import (
     given,
     strategies as st,
 )
+import pytest
 
 from bewegung import Vector3D
 
@@ -153,6 +153,38 @@ def test_dtype_np():
 
     v5 = v1 + v2
     assert v5.dtype == np.float32
+
+def test_dtype_error():
+
+    with pytest.raises(TypeError):
+        _ = Vector3D(0, 0.0, 0.0)
+
+    assert Vector3D(0, 0.0, 0.0, int).dtype == int
+    assert Vector3D(0, 0.0, 0.0, float).dtype == float
+
+    v1 = Vector3D(0, 0, 0, int)
+    v1.update(1.0, 1.0, 1.0)
+    assert v1.dtype == float
+    with pytest.raises(TypeError):
+        v1.update(2, 2.0, 2.0)
+
+    assert isinstance(v1.x, float)
+    assert isinstance(v1.y, float)
+    assert isinstance(v1.z, float)
+
+    with pytest.raises(TypeError):
+        v1.x = 4
+    with pytest.raises(TypeError):
+        v1.y = 4
+    with pytest.raises(TypeError):
+        v1.z = 4
+
+    v1.x = 5.0
+    assert v1 == Vector3D(5.0, 1.0, 1.0)
+    v1.y = 6.0
+    assert v1 == Vector3D(5.0, 6.0, 1.0)
+    v1.z = 7.0
+    assert v1 == Vector3D(5.0, 6.0, 7.0)
 
 def test_tuple():
 
