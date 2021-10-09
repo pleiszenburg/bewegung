@@ -30,6 +30,8 @@ specific language governing rights and limitations under the License.
 
 from math import isnan
 
+import numpy as np
+
 from hypothesis import (
     given,
     strategies as st,
@@ -102,10 +104,13 @@ def test_eq_types(x1, y1, z1):
     else:
         assert v1f != v1
 
-def test_dtype():
+def test_dtype_basic():
 
     v1 = Vector3D(0, 0, 0)
     v2 = Vector3D(0.0, 0.0, 0.0)
+
+    assert v1 == v2
+    assert v1 % v2
 
     v1i = v1.as_dtype(int)
     v1f = v1.as_dtype(float)
@@ -128,6 +133,26 @@ def test_dtype():
     assert v2f == v2
     assert v2f is not v2
     assert v2f.dtype == float
+
+def test_dtype_np():
+
+    v1 = Vector3D(np.int8(0), np.int8(0), np.int8(0))
+    v2 = Vector3D(np.float32(0.0), np.float32(0.0), np.float32(0.0))
+
+    assert v1 == v2
+    assert v1 % v2
+
+    assert v1.dtype == np.int8
+    assert v2.dtype == np.float32
+
+    v3 = v1.as_dtype(int)
+    assert v3.dtype == int
+
+    v4 = v2.as_dtype(float)
+    assert v4.dtype == float
+
+    v5 = v1 + v2
+    assert v5.dtype == np.float32
 
 def test_tuple():
 
