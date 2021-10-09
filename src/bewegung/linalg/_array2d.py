@@ -168,8 +168,10 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
             return NotImplemented
 
         if isinstance(other, VectorArray2DABC):
-            assert len(self) == len(other)
-            assert self.dtype == other.dtype
+            if len(self) != len(other):
+                raise ValueError('inconsistent length')
+            if self.dtype != other.dtype:
+                raise TypeError('inconsistent dtype')
 
         return VectorArray2D(self.x + other.x, self.y + other.y)
 
@@ -189,8 +191,10 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
             return NotImplemented
 
         if isinstance(other, VectorArray2DABC):
-            assert len(self) == len(other)
-            assert self.dtype == other.dtype
+            if len(self) != len(other):
+                raise ValueError('inconsistent length')
+            if self.dtype != other.dtype:
+                raise TypeError('inconsistent dtype')
 
         return VectorArray2D(self.x - other.x, self.y - other.y)
 
@@ -237,8 +241,10 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
         if not isinstance(other, VectorArray2DABC):
             return NotImplemented
 
-        assert len(self) == len(other)
-        assert self.dtype == other.dtype
+        if len(self) != len(other):
+            raise ValueError('inconsistent length')
+        if self.dtype != other.dtype:
+            raise TypeError('inconsistent dtype')
 
         return self.x * other.x + self.y * other.y
 
@@ -401,11 +407,17 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
             angle : Angle components in radians
         """
 
-        assert radius.ndim == 1
-        assert angle.ndim == 1
-        assert radius.shape[0] == angle.shape[0]
-        assert radius.dtype == angle.dtype
+        if radius.ndim != 1:
+            raise ValueError('inconsistent: radius.ndim != 1')
+        if angle.ndim != 1:
+            raise ValueError('inconsistent: angle.ndim != 1')
+        if radius.shape[0] != angle.shape[0]:
+            raise ValueError('inconsistent shape')
+        if radius.dtype != angle.dtype:
+            raise ValueError('inconsistent dtype')
+
         x, y = np.cos(angle), np.sin(angle)
         np.multiply(x, radius, out = x)
         np.multiply(y, radius, out = y)
+
         return cls(x = x, y = y,)
