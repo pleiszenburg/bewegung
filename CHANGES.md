@@ -19,6 +19,7 @@ Highlights: Major overhaul of linear algebra functionality, better package struc
 - FEATURE: All linear algebra classes have consistent dtype and error handling.
 - FEATURE: Cleanup of internal type hierarchy.
 - FEATURE: Added test suite with some initial tests, based on `pytest`, `hypothesis` and `coverage`.
+- API CHANGE: Vector array method `update_from_vector` renamed to `update_from_vectorarray`.
 - FIX: Development dependency switched from unmaintained `python-language-server` to maintained fork `python-lsp-server`.
 - FIX: Imports in `contrib` were broken.
 - FIX: `test` target in `makefile` was broken.
