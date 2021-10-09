@@ -30,13 +30,14 @@ specific language governing rights and limitations under the License.
 
 import math
 from numbers import Number
-from typing import Any, Tuple, Type, Union
+from typing import Any, Tuple, Union
 
 from ..lib import typechecked
 from ._abc import (
     Dtype,
     NotImplementedType,
     Number3D,
+    NumberType,
     Vector3DABC,
 )
 from ._const import FLOAT_DEFAULT
@@ -64,7 +65,7 @@ class Vector3D(Vector, Vector3DABC):
     _rad2deg = math.pi / 180.0
     _halfpi = math.pi / 2.0
 
-    def __init__(self, x: Number, y: Number, z: Number, dtype: Union[Type, None] = None):
+    def __init__(self, x: Number, y: Number, z: Number, dtype: Union[NumberType, None] = None):
 
         assert type(x) == type(y) == type(z)
         if dtype is None:
@@ -179,7 +180,7 @@ class Vector3D(Vector, Vector3DABC):
 
         return self.x * other.x + self.y * other.y + self.z * other.z
 
-    def as_dtype(self, dtype: Type) -> Vector3DABC:
+    def as_dtype(self, dtype: NumberType) -> Vector3DABC:
         """
         Generates new vector with desired data type and returns it.
 
@@ -326,7 +327,7 @@ class Vector3D(Vector, Vector3DABC):
         self._z = value
 
     @property
-    def dtype(self) -> Type:
+    def dtype(self) -> NumberType:
         """
         (Python) data type of vector components
         """
