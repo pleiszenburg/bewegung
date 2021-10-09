@@ -16,6 +16,7 @@ Highlights: Major overhaul of linear algebra functionality, better package struc
 - FEATURE: New dedicated sub-module for core animation engine named `bewegung.animation`.
 - FEATURE: New dedicated sub-module for `DrawingBoard` named `bewegung.drawingboard`, now allowing direct import.
 - FEATURE: New dedicated sub-module for linear algebra named `bewegung.lingalg`.
+- FEATURE: All linear algebra classes have consistent dtype and error handling.
 - FEATURE: Cleanup of internal type hierarchy.
 - FEATURE: Added test suite with some initial tests, based on `pytest`, `hypothesis` and `coverage`.
 - FIX: Development dependency switched from unmaintained `python-language-server` to maintained fork `python-lsp-server`.
