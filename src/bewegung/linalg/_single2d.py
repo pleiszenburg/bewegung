@@ -165,7 +165,10 @@ class Vector2D(Vector, Vector2DABC):
 
         self._x *= scalar
         self._y *= scalar
-        assert type(self._x) == type(self._y)
+
+        if type(self._x) != type(self._y):
+            raise TypeError('inconsistent dtype')
+
         self._dtype = type(self._x)
 
     def __matmul__(self, other: Any) -> Union[Number, NotImplementedType]:
@@ -235,7 +238,9 @@ class Vector2D(Vector, Vector2DABC):
             y : y component. Must have the same type like ``x``.
         """
 
-        assert type(x) == type(y)
+        if type(x) != type(y):
+            raise TypeError('inconsistent dtype')
+
         self._x, self._y = x, y
         self._dtype = type(self._x)
 
@@ -247,7 +252,9 @@ class Vector2D(Vector, Vector2DABC):
             other : Another vector. Remains unchanged.
         """
 
-        assert type(other.x) == type(other.y)
+        if type(other.x) != type(other.y):
+            raise TypeError('inconsistent dtype')
+
         self._x, self._y = other.x, other.y
         self._dtype = type(self._x)
 
@@ -281,7 +288,9 @@ class Vector2D(Vector, Vector2DABC):
         x component
         """
 
-        assert isinstance(value, self._dtype)
+        if not isinstance(value, self._dtype):
+            raise TypeError('inconsistent dtype')
+
         self._x = value
 
     @property
@@ -298,7 +307,9 @@ class Vector2D(Vector, Vector2DABC):
         y component
         """
 
-        assert isinstance(value, self._dtype)
+        if not isinstance(value, self._dtype):
+            raise TypeError('inconsistent dtype')
+
         self._y = value
 
     @property
