@@ -249,9 +249,6 @@ class Vector2D(Vector, Vector2DABC):
             other : Another vector. Remains unchanged.
         """
 
-        if type(other.x) != type(other.y):
-            raise TypeError('inconsistent dtype')
-
         self._x, self._y = other.x, other.y
 
     @property

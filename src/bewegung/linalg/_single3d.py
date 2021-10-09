@@ -250,9 +250,6 @@ class Vector3D(Vector, Vector3DABC):
             other : Another vector. Remains unchanged.
         """
 
-        if not type(other.x) == type(other.y) == type(other.z):
-            raise TypeError('inconsistent dtype')
-
         self._x, self._y, self._z = other.x, other.y, other.z
 
     @property
