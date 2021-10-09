@@ -67,11 +67,12 @@ class Vector3D(Vector, Vector3DABC):
 
     def __init__(self, x: Number, y: Number, z: Number, dtype: Union[NumberType, None] = None):
 
-        assert type(x) == type(y) == type(z)
         if dtype is None:
+            if not type(x) == type(y) == type(z):
+                raise TypeError('can not guess dtype - inconsistent')
             dtype = type(x)
         else:
-            assert dtype == type(x)
+            x, y, z = dtype(x), dtype(y), dtype(z)
 
         self._x, self._y, self._z, self._dtype = x, y, z, dtype
 
