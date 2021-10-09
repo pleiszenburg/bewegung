@@ -172,8 +172,10 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
             return NotImplemented
 
         if isinstance(other, VectorArray3DABC):
-            assert len(self) == len(other)
-            assert self.dtype == other.dtype
+            if len(self) != len(other):
+                raise ValueError('inconsistent length')
+            if self.dtype != other.dtype:
+                raise TypeError('inconsistent dtype')
 
         return VectorArray3D(self.x + other.x, self.y + other.y, self.z + other.z)
 
@@ -193,8 +195,10 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
             return NotImplemented
 
         if isinstance(other, VectorArray3DABC):
-            assert len(self) == len(other)
-            assert self.dtype == other.dtype
+            if len(self) != len(other):
+                raise ValueError('inconsistent length')
+            if self.dtype != other.dtype:
+                raise TypeError('inconsistent dtype')
 
         return VectorArray3D(self.x - other.x, self.y - other.y, self.z - other.z)
 
@@ -242,8 +246,10 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
         if not isinstance(other, VectorArray3DABC):
             return NotImplemented
 
-        assert len(self) == len(other)
-        assert self.dtype == other.dtype
+        if len(self) != len(other):
+            raise ValueError('inconsistent length')
+        if self.dtype != other.dtype:
+            raise TypeError('inconsistent dtype')
 
         return self.x * other.x + self.y * other.y + self.z * other.z
 
@@ -430,11 +436,17 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
             phi : Angle components in radians
         """
 
-        assert radius.ndim == 1
-        assert theta.ndim == 1
-        assert phi.ndim == 1
-        assert radius.shape[0] == theta.shape[0] == phi.shape[0]
-        assert radius.dtype == theta.dtype == phi.dtype
+        if radius.ndim != 1:
+            raise ValueError('inconsistent: radius.ndim != 1')
+        if theta.ndim != 1:
+            raise ValueError('inconsistent: theta.ndim != 1')
+        if phi.ndim != 1:
+            raise ValueError('inconsistent: phi.ndim != 1')
+        if not radius.shape[0] == theta.shape[0] == phi.shape[0]:
+            raise ValueError('inconsistent shape')
+        if not radius.dtype == theta.dtype == phi.dtype:
+            raise ValueError('inconsistent dtype')
+
         RadiusSinTheta = radius * np.sin(theta)
         return cls(
             x = RadiusSinTheta * np.cos(phi),
@@ -453,11 +465,17 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
             lat : Angle components in degree
         """
 
-        assert radius.ndim == 1
-        assert lon.ndim == 1
-        assert lat.ndim == 1
-        assert radius.shape[0] == lon.shape[0] == lat.shape[0]
-        assert radius.dtype == lon.dtype == lat.dtype
+        if radius.ndim != 1:
+            raise ValueError('inconsistent: radius.ndim != 1')
+        if lon.ndim != 1
+            raise ValueError('inconsistent: lon.ndim != 1')
+        if lat.ndim != 1
+            raise ValueError('inconsistent: lat.ndim != 1')
+        if not radius.shape[0] == lon.shape[0] == lat.shape[0]:
+            raise ValueError('inconsistent shape')
+        if not radius.dtype == lon.dtype == lat.dtype:
+            raise ValueError('inconsistent dtype')
+
         rad2deg = np.dtype(radius.dtype).type(np.pi / 180.0)
         halfpi = np.dtype(radius.dtype).type(np.pi / 2.0)
         return cls.from_polar(
