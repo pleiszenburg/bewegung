@@ -165,7 +165,10 @@ class Vector3D(Vector, Vector3DABC):
         self._x *= scalar
         self._y *= scalar
         self._z *= scalar
-        assert type(self._x) == type(self._y) == type(self._z)
+
+        if not type(self._x) == type(self._y) == type(self._z):
+            raise TypeError('inconsistent dtype')
+
         self._dtype = type(self._x)
 
     def __matmul__(self, other: Any) -> Union[Number, NotImplementedType]:
@@ -236,7 +239,9 @@ class Vector3D(Vector, Vector3DABC):
             z : z component. Must have the same type like ``x`` and ``y``.
         """
 
-        assert type(x) == type(y) == type(z)
+        if not type(x) == type(y) == type(z):
+            raise TypeError('inconsistent dtype')
+
         self._x, self._y, self._z = x, y, z
         self._dtype = type(self._x)
 
@@ -248,7 +253,9 @@ class Vector3D(Vector, Vector3DABC):
             other : Another vector. Remains unchanged.
         """
 
-        assert type(other.x) == type(other.y) == type(other.z)
+        if not type(other.x) == type(other.y) == type(other.z):
+            raise TypeError('inconsistent dtype')
+
         self._x, self._y, self._z = other.x, other.y, other.z
         self._dtype = type(self._x)
 
@@ -290,7 +297,9 @@ class Vector3D(Vector, Vector3DABC):
         x component
         """
 
-        assert isinstance(value, self._dtype)
+        if not isinstance(value, self._dtype):
+            raise TypeError('inconsistent dtype')
+
         self._x = value
 
     @property
@@ -307,7 +316,9 @@ class Vector3D(Vector, Vector3DABC):
         y component
         """
 
-        assert isinstance(value, self._dtype)
+        if not isinstance(value, self._dtype):
+            raise TypeError('inconsistent dtype')
+
         self._y = value
 
     @property
@@ -324,7 +335,9 @@ class Vector3D(Vector, Vector3DABC):
         z component
         """
 
-        assert isinstance(value, self._dtype)
+        if not isinstance(value, self._dtype):
+            raise TypeError('inconsistent dtype')
+
         self._z = value
 
     @property
