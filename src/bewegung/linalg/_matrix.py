@@ -228,7 +228,7 @@ class Matrix(MatrixABC):
         (Python) data type of matrix components
         """
 
-        return self._matrix[0][0].dtype
+        return type(self._matrix[0][0])
 
     @property
     def ndim(self) -> int:
