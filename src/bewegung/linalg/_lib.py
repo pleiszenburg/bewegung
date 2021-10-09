@@ -28,10 +28,8 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from typing import Type
-
 from ..lib import typechecked
-from ._abc import Dtype
+from ._abc import Dtype, NumberType
 from ._numpy import np
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -39,7 +37,7 @@ from ._numpy import np
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 @typechecked
-def dtype_np2py(dtype: Dtype) -> Type:
+def dtype_np2py(dtype: Dtype) -> NumberType:
     """
     Map numpy dtypes to Python number types
     """
