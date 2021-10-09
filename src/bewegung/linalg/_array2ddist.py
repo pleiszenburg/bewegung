@@ -187,7 +187,10 @@ class VectorArray2Ddist(VectorArray2D):
 
         if not isinstance(obj, list):
             obj = list(obj)
-        assert all((isinstance(item, Vector2Ddist) for item in obj))
+
+        if not all(isinstance(item, Vector2Ddist) for item in obj):
+            raise TypeError('unexpected item type')
+
         x = np.zeros((len(obj),), dtype = dtype)
         y = np.zeros((len(obj),), dtype = dtype)
         dist = np.zeros((len(obj),), dtype = dtype)
