@@ -59,10 +59,10 @@ class Vector2Ddist(Vector2D):
         super().__init__(x = x, y = y, dtype = dtype)
 
         if dtype is None:
-            if not isinstance(dist, self._dtype):
+            if not isinstance(dist, self.dtype):
                 raise TypeError('can not guess dtype - inconsistent')
         else:
-            dist = self._dtype(dist)
+            dist = self.dtype(dist)
 
         self._dist = dist
 
@@ -71,9 +71,9 @@ class Vector2Ddist(Vector2D):
         String representation for interactive use
         """
 
-        if self._dtype == int:
-            return f'<Vector2Ddist x={self._x:d} y={self._y:d} dist={self._dist:d} dtype={self._dtype.__name__:s}>'
-        return f'<Vector2Ddist x={self._x:e} y={self._y:e} dist={self._dist:e} dtype={self._dtype.__name__:s}>'
+        if self.dtype == int:
+            return f'<Vector2Ddist x={self._x:d} y={self._y:d} dist={self._dist:d} dtype={self.dtype.__name__:s}>'
+        return f'<Vector2Ddist x={self._x:e} y={self._y:e} dist={self._dist:e} dtype={self.dtype.__name__:s}>'
 
     def mul(self, scalar: Number):
         ""
@@ -84,14 +84,14 @@ class Vector2Ddist(Vector2D):
         Exports a vector without distance component
         """
 
-        return Vector2D(self._x, self._y, dtype = self._dtype)
+        return Vector2D(self._x, self._y, dtype = self.dtype)
 
     def copy(self) -> Vector2DABC:
         """
         Copies vector with distance component
         """
 
-        return type(self)(self._x, self._y, self._dist, dtype = self._dtype)
+        return type(self)(self._x, self._y, self._dist, dtype = self.dtype)
 
     def update(self, x: Number, y: Number):
         ""
