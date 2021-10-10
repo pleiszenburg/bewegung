@@ -34,6 +34,7 @@ from hypothesis import (
     given,
     strategies as st,
 )
+import pytest
 
 from bewegung import Vector3D
 
@@ -296,3 +297,39 @@ def test_rmul():
     assert isinstance(v2, Vector3D)
     assert v1 is not v2
     assert v2 == Vector3D(10, 15, 20)
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# TESTS: MISC
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+def test_notimplemented():
+
+    v1 = Vector3D(2, 3, 4)
+
+    assert v1 != 1
+    assert 1 != v1
+
+    with pytest.raises(TypeError):
+        _ = v1 % 1
+    with pytest.raises(TypeError):
+        _ = 1 % v1
+
+    with pytest.raises(TypeError):
+        _ = v1 + 1
+    with pytest.raises(TypeError):
+        _ = 1 + v1
+
+    with pytest.raises(TypeError):
+        _ = v1 - 1
+    with pytest.raises(TypeError):
+        _ = 1 - v1
+
+    with pytest.raises(TypeError):
+        _ = v1 * "1"
+    with pytest.raises(TypeError):
+        _ = "1" * v1
+
+    with pytest.raises(TypeError):
+        _ = v1 @ 1
+    with pytest.raises(TypeError):
+        _ = 1 @ v1
