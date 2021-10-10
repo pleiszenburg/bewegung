@@ -216,6 +216,14 @@ def test_extra():
     assert isinstance(phi, float)
     assert isclose(phi, 0.7853981633974483)
 
+    mag, lon, lat = v2.as_geographic_tuple()
+    assert isinstance(mag, float)
+    assert isclose(mag, sqrt(3))
+    assert isinstance(lon, float)
+    assert isclose(lon, 45.0)
+    assert isinstance(lat, float)
+    assert isclose(lat, 35.264389682754654)
+
     assert v2 % Vector3D.from_polar(sqrt(3), 0.9553166181245092, 0.7853981633974483)
     assert v2 % Vector3D.from_geographic(sqrt(3), 45.0, 35.264389682754654)
 

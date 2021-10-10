@@ -213,6 +213,13 @@ class Vector3D(Vector, Vector3DABC):
 
         return (self.mag, self.theta, self.phi)
 
+    def as_geographic_tuple(self) -> Tuple[float, float, float]:
+        """
+        Exports vector as a tuple of geographic coordinates (radius, lon, lat)
+        """
+
+        return (self.mag, self.lon, self.lat)
+
     def as_tuple(self) -> Number3D:
         """
         Exports vector as a tuple
