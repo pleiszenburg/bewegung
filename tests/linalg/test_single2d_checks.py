@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from math import isnan
+from math import isnan, isclose, pi, sqrt
 
 import numpy as np
 from hypothesis import (
@@ -183,6 +183,24 @@ def test_ndim():
     v1 = Vector2D(0, 0)
 
     assert v1.ndim == 2
+
+def test_extra():
+
+    v1 = Vector2D(3, 4)
+    assert isinstance(v1.mag, float)
+    assert isclose(v1.mag, 5.0)
+
+    v2 = Vector2D(1, 1)
+    assert isinstance(v2.angle, float)
+    assert isclose(v2.angle, pi / 4)
+
+    mag, angle = v2.as_polar_tuple()
+    assert isinstance(mag, float)
+    assert isclose(mag, sqrt(2))
+    assert isinstance(angle, float)
+    assert isclose(angle, pi / 4)
+
+    assert v2 % Vector2D.from_polar(sqrt(2), pi / 4)
 
 def test_update():
 
