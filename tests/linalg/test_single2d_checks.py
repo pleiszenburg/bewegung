@@ -178,6 +178,32 @@ def test_dtype_error():
     v1.y = 6.0
     assert v1 == Vector2D(5.0, 6.0)
 
+def test_update():
+
+    v1 = Vector2D(0, 0)
+
+    v1.update(1, 1)
+    assert v1.dtype == int
+    assert v1 == Vector2D(1, 1)
+
+    v1.update(2.0, 2.0)
+    assert v1.dtype == float
+    assert v1 == Vector2D(2.0, 2.0)
+
+    v2 = Vector2D(3, 3)
+    v1.update_from_vector(v2)
+    assert v1 is not v2
+    assert v1 == v2
+    assert v1.dtype == int
+    assert v1 == Vector2D(3, 3)
+
+    v3 = Vector2D(4.0, 4.0)
+    v1.update_from_vector(v3)
+    assert v1 is not v3
+    assert v1 == v3
+    assert v1.dtype == float
+    assert v1 == Vector2D(4.0, 4.0)
+
 def test_tuple():
 
     v1 = Vector2D(0, 0)
