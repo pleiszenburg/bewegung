@@ -166,8 +166,7 @@ class Vector2D(Vector, Vector2DABC):
         self._x *= scalar
         self._y *= scalar
 
-        if type(self._x) != type(self._y):
-            raise TypeError('inconsistent dtype')
+        assert type(self._x) == type(self._y) # very unlikely
 
     def __matmul__(self, other: Any) -> Union[Number, NotImplementedType]:
         """

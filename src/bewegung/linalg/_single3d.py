@@ -166,8 +166,7 @@ class Vector3D(Vector, Vector3DABC):
         self._y *= scalar
         self._z *= scalar
 
-        if not type(self._x) == type(self._y) == type(self._z):
-            raise TypeError('inconsistent dtype')
+        assert type(self._x) == type(self._y) == type(self._z) # very unlikely
 
     def __matmul__(self, other: Any) -> Union[Number, NotImplementedType]:
         """
