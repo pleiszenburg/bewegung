@@ -476,10 +476,10 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
         if not radius.dtype == lon.dtype == lat.dtype:
             raise ValueError('inconsistent dtype')
 
-        rad2deg = np.dtype(radius.dtype).type(np.pi / 180.0)
+        deg2rad = np.dtype(radius.dtype).type(np.pi / 180.0)
         halfpi = np.dtype(radius.dtype).type(np.pi / 2.0)
         return cls.from_polar(
             radius = radius,
-            theta = halfpi - (lat * rad2deg),
-            phi = lon * rad2deg,
+            theta = halfpi - (lat * deg2rad),
+            phi = lon * deg2rad,
             )

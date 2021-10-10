@@ -63,7 +63,7 @@ class Vector3D(Vector, Vector3DABC):
         dtype : Data type. Derived from ``x``, ``y`` and ``z`` if not explicitly provided.
     """
 
-    _rad2deg = math.pi / 180.0
+    _deg2rad = math.pi / 180.0
     _halfpi = math.pi / 2.0
 
     def __init__(self, x: Number, y: Number, z: Number, dtype: Union[NumberType, None] = None):
@@ -379,6 +379,6 @@ class Vector3D(Vector, Vector3DABC):
 
         return cls.from_polar(
             radius = radius,
-            theta = cls._halfpi - (lat * cls._rad2deg),
-            phi = lon * cls._rad2deg,
+            theta = cls._halfpi - (lat * cls._deg2rad),
+            phi = lon * cls._deg2rad,
             )
