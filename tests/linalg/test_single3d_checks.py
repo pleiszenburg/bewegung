@@ -203,6 +203,10 @@ def test_extra():
     assert isinstance(v2.phi, float)
     assert isclose(v2.theta, 0.9553166181245092)
     assert isclose(v2.phi, 0.7853981633974483)
+    assert isinstance(v2.lon, float)
+    assert isinstance(v2.lat, float)
+    assert isclose(v2.lon, 45.0)
+    assert isclose(v2.lat, 35.264389682754654)
 
     mag, theta, phi = v2.as_polar_tuple()
     assert isinstance(mag, float)

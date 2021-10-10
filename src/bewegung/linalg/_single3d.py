@@ -64,6 +64,7 @@ class Vector3D(Vector, Vector3DABC):
     """
 
     _deg2rad = math.pi / 180.0
+    _rad2deg = 1.0 / _deg2rad
     _halfpi = math.pi / 2.0
 
     def __init__(self, x: Number, y: Number, z: Number, dtype: Union[NumberType, None] = None):
@@ -274,6 +275,22 @@ class Vector3D(Vector, Vector3DABC):
         """
 
         return math.atan2(self._y, self._x)
+
+    @property
+    def lat(self) -> float:
+        """
+        The vector's geographic latitude in degree, computed on demand
+        """
+
+        return -(self.theta - self._halfpi) * self._rad2deg
+
+    @property
+    def lon(self) -> float:
+        """
+        The vector's gepgraphic longitude in degree, computed on demand
+        """
+
+        return self.phi * self._rad2deg
 
     @property
     def x(self) -> Number:
