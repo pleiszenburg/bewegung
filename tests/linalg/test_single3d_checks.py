@@ -186,6 +186,12 @@ def test_dtype_error():
     v1.z = 7.0
     assert v1 == Vector3D(5.0, 6.0, 7.0)
 
+def test_ndim():
+
+    v1 = Vector3D(0, 0, 0)
+
+    assert v1.ndim == 3
+
 def test_update():
 
     v1 = Vector3D(0, 0, 0)
