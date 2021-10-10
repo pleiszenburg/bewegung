@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from math import isnan
+from math import isnan, isclose, pi, sqrt
 
 import numpy as np
 from hypothesis import (
@@ -191,6 +191,29 @@ def test_ndim():
     v1 = Vector3D(0, 0, 0)
 
     assert v1.ndim == 3
+
+def test_extra():
+
+    v1 = Vector3D(2, 3, 6)
+    assert isinstance(v1.mag, float)
+    assert isclose(v1.mag, 7.0)
+
+    v2 = Vector3D(1, 1, 1)
+    assert isinstance(v2.theta, float)
+    assert isinstance(v2.phi, float)
+    assert isclose(v2.theta, 0.9553166181245092)
+    assert isclose(v2.phi, 0.7853981633974483)
+
+    mag, theta, phi = v2.as_polar_tuple()
+    assert isinstance(mag, float)
+    assert isclose(mag, sqrt(3))
+    assert isinstance(theta, float)
+    assert isclose(theta, 0.9553166181245092)
+    assert isinstance(phi, float)
+    assert isclose(phi, 0.7853981633974483)
+
+    assert v2 % Vector3D.from_polar(sqrt(3), 0.9553166181245092, 0.7853981633974483)
+    assert v2 % Vector3D.from_geographic(sqrt(3), 45.0, 35.264389682754654)
 
 def test_update():
 
