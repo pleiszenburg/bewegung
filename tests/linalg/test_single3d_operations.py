@@ -146,6 +146,16 @@ def test_mul_inplace_int(x1, y1, z1, scalar):
     else:
         assert v1.z == z_
 
+def test_matmul_int():
+
+    v1 = Vector3D(2, 3, 4)
+    v2 = Vector3D(5, 7, 8)
+
+    s = v1 @ v2
+
+    assert isinstance(s, int)
+    assert s == 63
+
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # TESTS: FLOAT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -283,6 +293,16 @@ def test_mul_inplace_float(x1, y1, z1, scalar):
         assert isnan(v1.z)
     else:
         assert v1.z == z_
+
+def test_matmul_float():
+
+    v1 = Vector3D(2.0, 3.0, 4.0)
+    v2 = Vector3D(5.0, 7.0, 8.0)
+
+    s = v1 @ v2
+
+    assert isinstance(s, float)
+    assert s == 63.0
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # TESTS: R-OPERATIONS
