@@ -3,7 +3,7 @@
 Vectors and Vector Arrays
 =========================
 
-``bewegung`` offers :ref:`vectors <vector_single>` and :ref:`vector arrays <vector_array>`. Both of them are available in 2D and 3D variants. In 2D space, there are additional variants exposing a "distance property". The distance can be used to describe a (relative) distance to a camera or observer, which is useful for various types of renderings. Both vectors and vector arrays can interact with each other as well as with :ref:`matrices <matrices>`.
+``bewegung`` offers :ref:`vectors <vector_single>` and :ref:`vector arrays <vector_array>`. Both of them are available in 2D and 3D variants. Both vectors and vector arrays can interact with each other as well as with :ref:`matrices <matrices>`.
 
 .. note::
 
@@ -26,12 +26,6 @@ The ``Vector2D`` class
 ~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: bewegung.Vector2D
-    :members:
-
-The ``Vector2Ddist`` class
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. autoclass:: bewegung.Vector2Ddist
     :members:
 
 The ``Vector3D`` class
@@ -57,12 +51,6 @@ The ``VectorArray2D`` class
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: bewegung.VectorArray2D
-    :members:
-
-The ``VectorArray2Ddist`` class
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. autoclass:: bewegung.VectorArray2Ddist
     :members:
 
 The ``VectorArray3D`` class
