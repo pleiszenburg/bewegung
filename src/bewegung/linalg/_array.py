@@ -50,7 +50,14 @@ class VectorArray(ABC, Iterable):
     @abstractmethod
     def __init__(self, meta: Union[MetaMappingArray, None] = None):
 
-        self._meta = {} if meta is None else dict(meta)
+        meta = {} if meta is None else dict(meta)
+
+        if not all(value.ndim == 1 for value in meta.values()):
+            raise ValueError('inconsistent: meta_value.ndim != 1')
+        if not all(value.shape[0] == len(self) for value in meta.values()):
+            raise ValueError('inconsistent length')
+
+        self._meta = meta
 
     @property
     def meta(self) -> MetaMappingArray:
