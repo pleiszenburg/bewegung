@@ -283,6 +283,14 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
 
         return (self.mag, self.theta, self.phi)
 
+    def as_geographic_tuple(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """
+        Exports vector array as a tuple of geographic coordinate components
+        in ``numpy.ndarry`` objects (radius, lon, lat)
+        """
+
+        return (self.mag, self.lon, self.lat)
+
     def as_tuple(self, copy: bool = True) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """
         Exports vector array as a tuple of vector components in ``numpy.ndarry`` objects
@@ -366,6 +374,27 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
         """
 
         return np.arctan2(self._y, self._x)
+
+    @property
+    def lat(self) -> float:
+        """
+        The vectors' geographic latitude in degree, computed on demand
+        """
+
+        rad2deg = self.dtype.type(180.0 / np.pi)
+        halfpi = self.dtype.type(np.pi / 2.0)
+
+        return -(self.theta - halfpi) * rad2deg
+
+    @property
+    def lon(self) -> float:
+        """
+        The vectors' gepgraphic longitude in degree, computed on demand
+        """
+
+        rad2deg = self.dtype.type(180.0 / np.pi)
+
+        return self.phi * rad2deg
 
     @property
     def x(self) -> np.ndarray:
