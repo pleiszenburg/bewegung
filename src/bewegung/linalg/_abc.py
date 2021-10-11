@@ -30,7 +30,7 @@ specific language governing rights and limitations under the License.
 
 from abc import ABC
 from numbers import Number
-from typing import Tuple, Type, TypeVar, Union
+from typing import Mapping, Tuple, Type, TypeVar, Union
 
 from ._numpy import np
 
@@ -78,3 +78,5 @@ try:
     from typing import NotImplementedType # re-introduced in Python 3.10
 except ImportError:
     NotImplementedType = type(NotImplemented)
+
+MetaMapping = Mapping[str, Union[str, bytes, Number]]
