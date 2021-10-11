@@ -32,7 +32,7 @@ from abc import ABC
 from numbers import Number
 from typing import Mapping, Tuple, Type, TypeVar, Union
 
-from ._numpy import np
+from ._numpy import np, ndarray
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASSES
@@ -80,3 +80,4 @@ except ImportError:
     NotImplementedType = type(NotImplemented)
 
 MetaMapping = Mapping[str, Union[str, bytes, Number]]
+MetaMappingArray = Mapping[str, ndarray]
