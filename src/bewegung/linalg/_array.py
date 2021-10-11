@@ -30,8 +30,10 @@ specific language governing rights and limitations under the License.
 
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
+from typing import Union
 
 from ..lib import typechecked
+from ._abc import MetaMappingArray
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -46,5 +48,14 @@ class VectorArray(ABC, Iterable):
     """
 
     @abstractmethod
-    def __init__(self): # pragma: no cover
-        pass
+    def __init__(self, meta: Union[MetaMappingArray, None] = None):
+
+        self._meta = {} if meta is None else dict(meta)
+
+    @property
+    def meta(self) -> MetaMappingArray:
+        """
+        meta data dict
+        """
+
+        return self._meta
