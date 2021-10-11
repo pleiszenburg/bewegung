@@ -29,8 +29,10 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from abc import ABC, abstractmethod
+from typing import Union
 
 from ..lib import typechecked
+from ._abc import MetaMapping
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -45,5 +47,14 @@ class Vector(ABC):
     """
 
     @abstractmethod
-    def __init__(self): # pragma: no cover
-        pass
+    def __init__(self, meta: Union[MetaMapping, None] = None):
+
+        self._meta = {} if meta is None else dict(meta)
+
+    @property
+    def meta(self) -> MetaMapping:
+        """
+        meta data dict
+        """
+
+        return self._meta
