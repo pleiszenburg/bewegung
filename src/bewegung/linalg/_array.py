@@ -46,5 +46,5 @@ class VectorArray(ABC, Iterable):
     """
 
     @abstractmethod
-    def __init__(self):
+    def __init__(self): # pragma: no cover
         pass
