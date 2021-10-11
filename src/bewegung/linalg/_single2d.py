@@ -36,7 +36,7 @@ from ..lib import typechecked
 from ._abc import (
     Dtype,
     NotImplementedType,
-    MetaMapping,
+    MetaDict,
     Number2D,
     NumberType,
     Vector2DABC,
@@ -65,7 +65,7 @@ class Vector2D(Vector, Vector2DABC):
         meta : A mapping holding arbitrary metadata.
     """
 
-    def __init__(self, x: Number, y: Number, dtype: Union[NumberType, None] = None, meta: Union[MetaMapping, None] = None):
+    def __init__(self, x: Number, y: Number, dtype: Union[NumberType, None] = None, meta: Union[MetaDict, None] = None):
 
         if dtype is None:
             if type(x) != type(y):
@@ -324,7 +324,7 @@ class Vector2D(Vector, Vector2DABC):
         return 2
 
     @classmethod
-    def from_polar(cls, radius: Number, angle: Number, meta: Union[MetaMapping, None] = None) -> Vector2DABC:
+    def from_polar(cls, radius: Number, angle: Number, meta: Union[MetaDict, None] = None) -> Vector2DABC:
         """
         Generates vector object from polar coordinates
 

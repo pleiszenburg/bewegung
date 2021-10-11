@@ -35,7 +35,7 @@ from typing import Any, List, Tuple, Union
 from ..lib import typechecked
 from ._abc import (
     Dtype,
-    MetaMappingArray,
+    MetaArrayDict,
     NotImplementedType,
     VectorArray2DABC,
 )
@@ -62,7 +62,7 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
         meta : A mapping holding arbitrary metadata.
     """
 
-    def __init__(self, x: np.ndarray, y: np.ndarray, dtype: Union[Dtype, None] = None, meta: Union[MetaMappingArray, None] = None):
+    def __init__(self, x: np.ndarray, y: np.ndarray, dtype: Union[Dtype, None] = None, meta: Union[MetaArrayDict, None] = None):
 
         if x.ndim != 1:
             raise ValueError('inconsistent: x.ndim != 1')
@@ -419,7 +419,7 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
         return cls(x = x, y = y, meta = meta,)
 
     @classmethod
-    def from_polar(cls, radius: np.ndarray, angle: np.ndarray, meta: Union[MetaMappingArray, None] = None) -> VectorArray2DABC:
+    def from_polar(cls, radius: np.ndarray, angle: np.ndarray, meta: Union[MetaArrayDict, None] = None) -> VectorArray2DABC:
         """
         Generates vector array object from arrays of polar vector components
 

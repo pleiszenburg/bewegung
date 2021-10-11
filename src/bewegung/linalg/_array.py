@@ -33,7 +33,7 @@ from collections.abc import Iterable
 from typing import Union
 
 from ..lib import typechecked
-from ._abc import MetaMappingArray
+from ._abc import MetaArrayDict
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -51,7 +51,7 @@ class VectorArray(ABC, Iterable):
     """
 
     @abstractmethod
-    def __init__(self, meta: Union[MetaMappingArray, None] = None):
+    def __init__(self, meta: Union[MetaArrayDict, None] = None):
 
         meta = {} if meta is None else dict(meta)
 
@@ -63,7 +63,7 @@ class VectorArray(ABC, Iterable):
         self._meta = meta
 
     @property
-    def meta(self) -> MetaMappingArray:
+    def meta(self) -> MetaArrayDict:
         """
         meta data dict
         """

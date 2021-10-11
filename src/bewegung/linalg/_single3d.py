@@ -36,7 +36,7 @@ from ..lib import typechecked
 from ._abc import (
     Dtype,
     NotImplementedType,
-    MetaMapping,
+    MetaDict,
     Number3D,
     NumberType,
     Vector3DABC,
@@ -69,7 +69,7 @@ class Vector3D(Vector, Vector3DABC):
     _rad2deg = 1.0 / _deg2rad
     _halfpi = math.pi / 2.0
 
-    def __init__(self, x: Number, y: Number, z: Number, dtype: Union[NumberType, None] = None, meta: Union[MetaMapping, None] = None):
+    def __init__(self, x: Number, y: Number, z: Number, dtype: Union[NumberType, None] = None, meta: Union[MetaDict, None] = None):
 
         if dtype is None:
             if not type(x) == type(y) == type(z):
@@ -376,7 +376,7 @@ class Vector3D(Vector, Vector3DABC):
         return 3
 
     @classmethod
-    def from_polar(cls, radius: Number, theta: Number, phi: Number, meta: Union[MetaMapping, None] = None) -> Vector3DABC:
+    def from_polar(cls, radius: Number, theta: Number, phi: Number, meta: Union[MetaDict, None] = None) -> Vector3DABC:
         """
         Generates vector object from polar coordinates
 
@@ -396,7 +396,7 @@ class Vector3D(Vector, Vector3DABC):
             )
 
     @classmethod
-    def from_geographic(cls, radius: Number, lon: Number, lat: Number, meta: Union[MetaMapping, None] = None) -> Vector3DABC:
+    def from_geographic(cls, radius: Number, lon: Number, lat: Number, meta: Union[MetaDict, None] = None) -> Vector3DABC:
         """
         Generates vector object from geographic polar coordinates
 

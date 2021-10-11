@@ -32,7 +32,7 @@ from abc import ABC, abstractmethod
 from typing import Union
 
 from ..lib import typechecked
-from ._abc import MetaMapping
+from ._abc import MetaDict
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -50,12 +50,12 @@ class Vector(ABC):
     """
 
     @abstractmethod
-    def __init__(self, meta: Union[MetaMapping, None] = None):
+    def __init__(self, meta: Union[MetaDict, None] = None):
 
         self._meta = {} if meta is None else dict(meta)
 
     @property
-    def meta(self) -> MetaMapping:
+    def meta(self) -> MetaDict:
         """
         meta data dict
         """

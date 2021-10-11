@@ -35,7 +35,7 @@ from typing import Any, List, Tuple, Union
 from ..lib import typechecked
 from ._abc import (
     Dtype,
-    MetaMappingArray,
+    MetaArrayDict,
     NotImplementedType,
     VectorArray3DABC,
 )
@@ -63,7 +63,7 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
         meta : A mapping holding arbitrary metadata.
     """
 
-    def __init__(self, x: np.ndarray, y: np.ndarray, z: np.ndarray, dtype: Union[Dtype, None] = None, meta: Union[MetaMappingArray, None] = None):
+    def __init__(self, x: np.ndarray, y: np.ndarray, z: np.ndarray, dtype: Union[Dtype, None] = None, meta: Union[MetaArrayDict, None] = None):
 
         if x.ndim != 1:
             raise ValueError('inconsistent: x.ndim != 1')
@@ -479,7 +479,7 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
         return cls(x = x, y = y, z = z, meta = meta,)
 
     @classmethod
-    def from_polar(cls, radius: np.ndarray, theta: np.ndarray, phi: np.ndarray, meta: Union[MetaMappingArray, None] = None) -> VectorArray3DABC:
+    def from_polar(cls, radius: np.ndarray, theta: np.ndarray, phi: np.ndarray, meta: Union[MetaArrayDict, None] = None) -> VectorArray3DABC:
         """
         Generates vector array object from arrays of polar vector components
 
@@ -510,7 +510,7 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
             )
 
     @classmethod
-    def from_geographic(cls, radius: np.ndarray, lon: np.ndarray, lat: np.ndarray, meta: Union[MetaMappingArray, None] = None) -> VectorArray3DABC:
+    def from_geographic(cls, radius: np.ndarray, lon: np.ndarray, lat: np.ndarray, meta: Union[MetaArrayDict, None] = None) -> VectorArray3DABC:
         """
         Generates vector array object from arrays of geographic polar vector components
 
