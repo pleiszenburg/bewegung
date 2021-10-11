@@ -10,6 +10,7 @@ Highlights: Major overhaul of linear algebra functionality, better package struc
 - FEATURE: Vector arrays are iterators.
 - FEATURE: Added missing right-hand-side operators to `Vector` and `VectorArray` classes.
 - FEATURE: Tuple export of `VectorArray` types can optionally provide direct access to underlying ``ndarray``s, i.e. new ``copy`` parameter can be set to ``False``.
+- FEATURE: 3D vectors and vector arrays can export geographic coordinates.
 - FEATURE: The `Color` class, using RGBA internally, can now import HSV values.
 - FEATURE: Added equality check, "is close" check, tuple export and copy to `Matrix`.
 - FEATURE: Added new `MatrixArray` class.
