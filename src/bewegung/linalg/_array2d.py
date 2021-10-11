@@ -35,6 +35,7 @@ from typing import Any, List, Tuple, Union
 from ..lib import typechecked
 from ._abc import (
     Dtype,
+    MetaMappingArray,
     NotImplementedType,
     VectorArray2DABC,
 )
@@ -58,9 +59,10 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
     Args:
         x : x components. Must have the same dtype like ``y``.
         y : y components. Must have the same dtype like ``x``.
+        meta : A mapping holding arbitrary metadata.
     """
 
-    def __init__(self, x: np.ndarray, y: np.ndarray, dtype: Union[Dtype, None] = None):
+    def __init__(self, x: np.ndarray, y: np.ndarray, dtype: Union[Dtype, None] = None, meta: Union[MetaMappingArray, None] = None):
 
         if x.ndim != 1:
             raise ValueError('inconsistent: x.ndim != 1')
@@ -78,6 +80,7 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
 
         self._x, self._y = x, y
         self._iterstate = 0
+        super().__init__(meta = meta)
 
     def __repr__(self) -> str:
         """
@@ -105,9 +108,18 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
 
         if isinstance(idx, int):
             dtype = dtype_np2py(self.dtype)
-            return Vector2D(dtype(self._x[idx]), dtype(self._y[idx]), dtype = dtype)
+            return Vector2D(
+                x = dtype(self._x[idx]),
+                y = dtype(self._y[idx]),
+                dtype = dtype,
+                meta = {key: value[idx] for key, value in self._meta.items()},
+            )
 
-        return VectorArray2D(self._x[idx].copy(), self._y[idx].copy())
+        return VectorArray2D(
+            x = self._x[idx].copy(),
+            y = self._y[idx].copy(),
+            meta = {key: value[idx].copy() for key, value in self._meta.items()},
+        )
 
     def __iter__(self) -> VectorArray2DABC:
         """
@@ -253,11 +265,7 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
         Exports a list of :class:`bewegung.Vector2D` objects
         """
 
-        dtype = dtype_np2py(self.dtype)
-        return [
-            Vector2D(dtype(self._x[idx]), dtype(self._y[idx]), dtype = dtype)
-            for idx in range(len(self))
-        ]
+        return list(self)
 
     def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> np.ndarray:
         """
@@ -305,10 +313,14 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
 
     def copy(self) -> VectorArray2DABC:
         """
-        Copies vector array
+        Copies vector array & meta data
         """
 
-        return VectorArray2D(self._x.copy(), self._y.copy())
+        return VectorArray2D(
+            x = self._x.copy(),
+            y = self._y.copy(),
+            meta = {key: value.copy() for key, value in self._meta.items()},
+        )
 
     def update_from_vectorarray(self, other: VectorArray2DABC):
         """
@@ -391,20 +403,30 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
 
         if not isinstance(obj, list):
             obj = list(obj)
+
         x = np.zeros((len(obj),), dtype = dtype)
         y = np.zeros((len(obj),), dtype = dtype)
+        keys = set()
         for idx, item in enumerate(obj):
             x[idx], y[idx] = item.x, item.y
-        return cls(x = x, y = y,)
+            keys.update(item.meta.keys())
+
+        meta = {
+            key: np.array([item.meta.get(key) for item in obj])
+            for key in keys
+        }
+
+        return cls(x = x, y = y, meta = meta,)
 
     @classmethod
-    def from_polar(cls, radius: np.ndarray, angle: np.ndarray) -> VectorArray2DABC:
+    def from_polar(cls, radius: np.ndarray, angle: np.ndarray, meta: Union[MetaMappingArray, None] = None) -> VectorArray2DABC:
         """
         Generates vector array object from arrays of polar vector components
 
         Args:
             radius : Radius components
             angle : Angle components in radians
+            meta : A mapping holding arbitrary metadata
         """
 
         if radius.ndim != 1:
@@ -420,4 +442,4 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
         np.multiply(x, radius, out = x)
         np.multiply(y, radius, out = y)
 
-        return cls(x = x, y = y,)
+        return cls(x = x, y = y, meta = meta,)
