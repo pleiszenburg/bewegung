@@ -45,6 +45,9 @@ class VectorArray(ABC, Iterable):
     Abstract base class for all vector array types.
 
     Not intended to be instantiated.
+
+    Args:
+        meta : A mapping holding arbitrary metadata
     """
 
     @abstractmethod

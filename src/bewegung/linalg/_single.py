@@ -44,6 +44,9 @@ class Vector(ABC):
     Abstract base class for all vector types.
 
     Not intended to be instantiated.
+
+    Args:
+        meta : A mapping holding arbitrary metadata
     """
 
     @abstractmethod
