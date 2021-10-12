@@ -286,13 +286,16 @@ class MatrixArray(MatrixArrayABC):
 
     def copy(self) -> MatrixArrayABC:
         """
-        Copies matrix array
+        Copies matrix array & meta data
         """
 
-        return type(self)([
-            [col.copy() for col in row]
-            for row in self._matrix
-        ])
+        return type(self)(
+            matrix = [
+                [col.copy() for col in row]
+                for row in self._matrix
+            ],
+            meta = {key: value.copy() for key, value in self._meta.items()},
+        )
 
     @property
     def dtype(self) -> np.dtype:
