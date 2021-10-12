@@ -304,6 +304,14 @@ class MatrixArray(MatrixArrayABC):
 
         return len(self._matrix)
 
+    @property
+    def meta(self) -> MetaArrayDict:
+        """
+        meta data dict
+        """
+
+        return self._meta
+
     @classmethod
     def from_ndarray(cls, matrix_array: ndarray) -> MatrixArrayABC:
         """
