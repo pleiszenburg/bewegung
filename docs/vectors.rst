@@ -14,7 +14,7 @@ Vectors and Vector Arrays
 Vector Classes
 --------------
 
-The vector classes describe individual vectors in 2D and 3D space. Vectors are "statically typed", use Python number types and can either have ``int`` or ``float`` components. The data type of a vector is exposed through its ``dtype`` property.
+The vector classes describe individual vectors in 2D and 3D space. Vectors are "statically typed", i.e. all components are of one single type, and use Python number types (sub-classes of ``numbers.Number``). The data type of a vector is exposed through its ``dtype`` property.
 
 The ``Vector`` base class
 ~~~~~~~~~~~~~~~~~~~~~~~~~
