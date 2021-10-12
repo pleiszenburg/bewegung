@@ -322,6 +322,45 @@ class MatrixArray(MatrixArrayABC):
         return self._meta
 
     @classmethod
+    def from_iterable(cls, obj: Iterable[Matrix], dtype: Dtype = FLOAT_DEFAULT) -> MatrixArrayABC:
+        """
+        Generates matrix array object from an iterable of :class:`bewegung.Matrix` objects
+
+        Args:
+            obj : iterable
+            dtype : Desired ``numpy`` data type of new vector array
+        """
+
+        if not isinstance(obj, list):
+            obj = list(obj)
+
+        ndim = obj[0].ndim
+        if not all(item.ndim == ndim for item in obj):
+            raise ValueError('inconsistent ndim')
+
+        matrix = [
+            [
+                np.zeros((len(obj),), dtype = dtype)
+                for __ in range(len(obj))
+            ]
+            for _ in range(len(obj))
+        ]
+
+        keys = set()
+        for idx, item in enumerate(obj):
+            for row in range(ndim):
+                for col in range(ndim):
+                    matrix[row][col][idx] = item[row][col]
+            keys.update(item.meta.keys())
+
+        meta = {
+            key: np.array([item.meta.get(key) for item in obj])
+            for key in keys
+        }
+
+        return cls(matrix = matrix, meta = meta,)
+
+    @classmethod
     def from_ndarray(cls, matrix_array: ndarray, meta: Union[MetaArrayDict, None] = None) -> MatrixArrayABC:
         """
         Generates new matrix array object from single ``numpy.ndarray``
