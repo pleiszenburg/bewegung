@@ -36,6 +36,7 @@ from ..lib import typechecked
 from ._abc import (
     Dtype,
     NotImplementedType,
+    MetaDict,
     Number3D,
     NumberType,
     Vector3DABC,
@@ -61,13 +62,14 @@ class Vector3D(Vector, Vector3DABC):
         y : y component. Must have the same type like ``x`` and ``z``.
         z : z component. Must have the same type like ``x`` and ``y``.
         dtype : Data type. Derived from ``x``, ``y`` and ``z`` if not explicitly provided.
+        meta : A dict holding arbitrary metadata.
     """
 
     _deg2rad = math.pi / 180.0
     _rad2deg = 1.0 / _deg2rad
     _halfpi = math.pi / 2.0
 
-    def __init__(self, x: Number, y: Number, z: Number, dtype: Union[NumberType, None] = None):
+    def __init__(self, x: Number, y: Number, z: Number, dtype: Union[NumberType, None] = None, meta: Union[MetaDict, None] = None):
 
         if dtype is None:
             if not type(x) == type(y) == type(z):
@@ -76,6 +78,7 @@ class Vector3D(Vector, Vector3DABC):
             x, y, z = dtype(x), dtype(y), dtype(z)
 
         self._x, self._y, self._z = x, y, z
+        super().__init__(meta = meta)
 
     def __repr__(self) -> str:
         """
@@ -229,10 +232,10 @@ class Vector3D(Vector, Vector3DABC):
 
     def copy(self) -> Vector3DABC:
         """
-        Copies vector
+        Copies vector & meta data
         """
 
-        return type(self)(self._x, self._y, self._z, self.dtype)
+        return type(self)(x = self._x, y = self._y, z = self._z, dtype = self.dtype, meta = self._meta.copy())
 
     def update(self, x: Number, y: Number, z: Number):
         """
@@ -373,7 +376,7 @@ class Vector3D(Vector, Vector3DABC):
         return 3
 
     @classmethod
-    def from_polar(cls, radius: Number, theta: Number, phi: Number) -> Vector3DABC:
+    def from_polar(cls, radius: Number, theta: Number, phi: Number, meta: Union[MetaDict, None] = None) -> Vector3DABC:
         """
         Generates vector object from polar coordinates
 
@@ -381,6 +384,7 @@ class Vector3D(Vector, Vector3DABC):
             radius : A radius
             theta : An angle in radians
             phi : An angle in radians
+            meta : A dict holding arbitrary metadata
         """
 
         RadiusSinTheta = radius * math.sin(theta)
@@ -388,10 +392,11 @@ class Vector3D(Vector, Vector3DABC):
             x = RadiusSinTheta * math.cos(phi),
             y = RadiusSinTheta * math.sin(phi),
             z = radius * math.cos(theta),
+            meta = meta,
             )
 
     @classmethod
-    def from_geographic(cls, radius: Number, lon: Number, lat: Number) -> Vector3DABC:
+    def from_geographic(cls, radius: Number, lon: Number, lat: Number, meta: Union[MetaDict, None] = None) -> Vector3DABC:
         """
         Generates vector object from geographic polar coordinates
 
@@ -399,10 +404,12 @@ class Vector3D(Vector, Vector3DABC):
             radius : A radius
             lon : An angle in degree
             lat : An angle in degree
+            meta : A dict holding arbitrary metadata
         """
 
         return cls.from_polar(
             radius = radius,
             theta = cls._halfpi - (lat * cls._deg2rad),
             phi = lon * cls._deg2rad,
+            meta = meta,
             )

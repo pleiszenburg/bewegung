@@ -35,6 +35,7 @@ from typing import Any, List, Tuple, Union
 from ..lib import typechecked
 from ._abc import (
     Dtype,
+    MetaArrayDict,
     NotImplementedType,
     VectorArray3DABC,
 )
@@ -59,9 +60,10 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
         x : x components. Must have the same dtype like ``y`` and ``z``.
         y : y components. Must have the same dtype like ``x`` and ``z``.
         z : z components. Must have the same dtype like ``x`` and ``y``.
+        meta : A dict holding arbitrary metadata.
     """
 
-    def __init__(self, x: np.ndarray, y: np.ndarray, z: np.ndarray, dtype: Union[Dtype, None] = None):
+    def __init__(self, x: np.ndarray, y: np.ndarray, z: np.ndarray, dtype: Union[Dtype, None] = None, meta: Union[MetaArrayDict, None] = None):
 
         if x.ndim != 1:
             raise ValueError('inconsistent: x.ndim != 1')
@@ -82,6 +84,7 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
 
         self._x, self._y, self._z = x, y, z
         self._iterstate = 0
+        super().__init__(meta = meta)
 
     def __repr__(self) -> str:
         """
@@ -101,7 +104,7 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
         """
         Item access, returning an independent object - either
         a :class:`bewegung.Vector3D` (index access) or
-        a :class:`bewegung.VectorArray§D` (slicing)
+        a :class:`bewegung.VectorArray3D` (slicing)
 
         Args:
             idx : Either an index or a slice
@@ -109,9 +112,20 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
 
         if isinstance(idx, int):
             dtype = dtype_np2py(self.dtype)
-            return Vector3D(dtype(self._x[idx]), dtype(self._y[idx]), dtype(self._z[idx]), dtype = dtype)
+            return Vector3D(
+                x = dtype(self._x[idx]),
+                y = dtype(self._y[idx]),
+                z = dtype(self._z[idx]),
+                dtype = dtype,
+                meta = {key: value[idx] for key, value in self._meta.items()},
+            )
 
-        return VectorArray3D(self._x[idx].copy(), self._y[idx].copy(), self._z[idx].copy())
+        return VectorArray3D(
+            x = self._x[idx].copy(),
+            y = self._y[idx].copy(),
+            z = self._z[idx].copy(),
+            meta = {key: value[idx].copy() for key, value in self._meta.items()},
+        )
 
     def __iter__(self) -> VectorArray3DABC:
         """
@@ -258,11 +272,7 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
         Exports a list of :class:`bewegung.Vector3D` objects
         """
 
-        dtype = dtype_np2py(self.dtype)
-        return [
-            Vector3D(dtype(self._x[idx]), dtype(self._y[idx]), dtype(self._z[idx]), dtype = dtype)
-            for idx in range(len(self))
-        ]
+        return list(self)
 
     def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> np.ndarray:
         """
@@ -318,10 +328,15 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
 
     def copy(self) -> VectorArray3DABC:
         """
-        Copies vector array
+        Copies vector array & meta data
         """
 
-        return VectorArray3D(self._x.copy(), self._y.copy(), self._z.copy())
+        return VectorArray3D(
+            x = self._x.copy(),
+            y = self._y.copy(),
+            z = self._z.copy(),
+            meta = {key: value.copy() for key, value in self._meta.items()},
+        )
 
     def update_from_vectorarray(self, other: VectorArray3DABC):
         """
@@ -447,15 +462,24 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
 
         if not isinstance(obj, list):
             obj = list(obj)
+
         x = np.zeros((len(obj),), dtype = dtype)
         y = np.zeros((len(obj),), dtype = dtype)
         z = np.zeros((len(obj),), dtype = dtype)
+        keys = set()
         for idx, item in enumerate(obj):
             x[idx], y[idx], z[idx] = item.x, item.y, item.z
-        return cls(x = x, y = y, z = z,)
+            keys.update(item.meta.keys())
+
+        meta = {
+            key: np.array([item.meta.get(key) for item in obj])
+            for key in keys
+        }
+
+        return cls(x = x, y = y, z = z, meta = meta,)
 
     @classmethod
-    def from_polar(cls, radius: np.ndarray, theta: np.ndarray, phi: np.ndarray) -> VectorArray3DABC:
+    def from_polar(cls, radius: np.ndarray, theta: np.ndarray, phi: np.ndarray, meta: Union[MetaArrayDict, None] = None) -> VectorArray3DABC:
         """
         Generates vector array object from arrays of polar vector components
 
@@ -463,6 +487,7 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
             radius : Radius components
             theta : Angle components in radians
             phi : Angle components in radians
+            meta : A dict holding arbitrary metadata
         """
 
         if radius.ndim != 1:
@@ -481,10 +506,11 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
             x = RadiusSinTheta * np.cos(phi),
             y = RadiusSinTheta * np.sin(phi),
             z = radius * np.cos(theta),
+            meta = meta,
             )
 
     @classmethod
-    def from_geographic(cls, radius: np.ndarray, lon: np.ndarray, lat: np.ndarray) -> VectorArray3DABC:
+    def from_geographic(cls, radius: np.ndarray, lon: np.ndarray, lat: np.ndarray, meta: Union[MetaArrayDict, None] = None) -> VectorArray3DABC:
         """
         Generates vector array object from arrays of geographic polar vector components
 
@@ -492,6 +518,7 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
             radius : Radius components
             lon : Angle components in degree
             lat : Angle components in degree
+            meta : A dict holding arbitrary metadata
         """
 
         if radius.ndim != 1:
@@ -511,4 +538,5 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
             radius = radius,
             theta = halfpi - (lat * deg2rad),
             phi = lon * deg2rad,
+            meta = meta,
             )

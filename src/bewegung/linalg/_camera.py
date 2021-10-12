@@ -46,9 +46,8 @@ from ._abc import CameraABC
 from ._matrix import Matrix
 from ._numpy import np
 from ._single2d import Vector2D
-from ._single2ddist import Vector2Ddist
 from ._single3d import Vector3D
-from ._array2ddist import VectorArray2Ddist
+from ._array2d import VectorArray2D
 from ._array3d import VectorArray3D
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -249,10 +248,10 @@ class Camera(CameraABC):
 
         self._planeYFlip = value
 
-    def get_point(self, point3D: Vector3D) -> Vector2Ddist:
+    def get_point(self, point3D: Vector3D) -> Vector2D:
         """
         Projects a 3D vector onto a 2D plane.
-        Returns a 2D vector combined with the absolute distance to the camera in 3D space.
+        Returns a 2D vector combined with the absolute distance to the camera in 3D space (``meta["dist"]``).
 
         Args:
             point3D : point in 3D space
@@ -302,16 +301,16 @@ class Camera(CameraABC):
         point2D.y *= self._planeFactor
         point2D += self._planeOffset
 
-        return Vector2Ddist(
+        return Vector2D(
             x = point2D.x,
             y = point2D.y,
-            dist = (point3D - self._position).mag,
+            meta = dict(dist = (point3D - self._position).mag),
             )
 
-    def get_points(self, points3d: VectorArray3D) -> VectorArray2Ddist:
+    def get_points(self, points3d: VectorArray3D) -> VectorArray2D:
         """
         Projects a 3D vector array onto a 2D plane.
-        Returns a 2D vector array combined with the absolute distances to the camera in 3D space.
+        Returns a 2D vector array combined with the absolute distances to the camera in 3D space (``meta["dist"]``).
 
         Args:
             points3d : points in 3D space
@@ -343,10 +342,10 @@ class Camera(CameraABC):
             planeFactor, self._planeYFlip,
             )
 
-        return VectorArray2Ddist(
+        return VectorArray2D(
             x = points2d[:, 0],
             y = points2d[:, 1],
-            dist = points2d[:, 2],
+            meta = dict(dist = points2d[:, 2]),
             )
 
     @staticmethod

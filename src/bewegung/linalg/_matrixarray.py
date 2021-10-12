@@ -30,12 +30,13 @@ specific language governing rights and limitations under the License.
 
 from collections.abc import Iterable
 from numbers import Number
-from typing import Any, List, Tuple, Type, Union
+from typing import Any, List, Tuple, Union
 
 from ..lib import typechecked
 from ._abc import (
     Dtype,
     MatrixArrayABC,
+    MetaArrayDict,
     NotImplementedType,
 )
 from ._const import FLOAT_DEFAULT
@@ -63,7 +64,7 @@ class MatrixArray(MatrixArrayABC):
         matrix : 2D or 3D arrangement in a list of lists containing numpy nd arrays
     """
 
-    def __init__(self, matrix = Iterable[Iterable[ndarray]], dtype: Union[Dtype, None] = None):
+    def __init__(self, matrix = Iterable[Iterable[ndarray]], dtype: Union[Dtype, None] = None, meta: Union[MetaArrayDict, None] = None):
 
         matrix = [list(row) for row in matrix] # convert to lists or copy lists
 
@@ -76,8 +77,8 @@ class MatrixArray(MatrixArrayABC):
         if not all(col.ndim == 1 for row in matrix for col in row):
             raise ValueError('inconsistent: ndarray.ndim != 1')
 
-        self._length = matrix[0][0].shape[0]
-        if not all(col.shape[0] == self._length for row in matrix for col in row):
+        length = matrix[0][0].shape[0]
+        if not all(col.shape[0] == length for row in matrix for col in row):
             raise ValueError('inconsistent length')
 
         if dtype is None:
@@ -97,6 +98,15 @@ class MatrixArray(MatrixArrayABC):
         self._matrix = matrix
         self._iterstate = 0
 
+        meta = {} if meta is None else dict(meta)
+
+        if not all(value.ndim == 1 for value in meta.values()):
+            raise ValueError('inconsistent: meta_value.ndim != 1')
+        if not all(value.shape[0] == len(self) for value in meta.values()):
+            raise ValueError('inconsistent length')
+
+        self._meta = meta
+
     def __repr__(self) -> str:
         """
         String representation for interactive use
@@ -109,7 +119,7 @@ class MatrixArray(MatrixArrayABC):
         Length of array
         """
 
-        return self._length
+        return self._matrix[0][0].shape[0]
 
     def __matmul__(self, other: Any) -> Union[VectorArray, NotImplementedType]:
         """
@@ -153,17 +163,23 @@ class MatrixArray(MatrixArrayABC):
         """
 
         if isinstance(idx, slice):
-            return MatrixArray([
-                [col[idx].copy() for col in row]
-                for row in self._matrix
-            ])
+            return MatrixArray(
+                matrix = [
+                    [col[idx].copy() for col in row]
+                    for row in self._matrix
+                ],
+                meta = {key: value[idx].copy() for key, value in self._meta.items()},
+            )
 
         dtype = dtype_np2py(self.dtype)
 
-        return MatrixArray([
-            [dtype(col[idx]) for col in row]
-            for row in self._matrix
-        ])
+        return MatrixArray(
+            matrix = [
+                [dtype(col[idx]) for col in row]
+                for row in self._matrix
+            ],
+            meta = {key: value[idx] for key, value in self._meta.items()},
+        )
 
     def __iter__(self) -> MatrixArrayABC:
         """
@@ -231,7 +247,7 @@ class MatrixArray(MatrixArrayABC):
         Exports a list of :class:`bewegung.Matrix` objects
         """
 
-        return [self[idx] for idx in range(len(self))]
+        return list(self)
 
     def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> ndarray:
         """
@@ -270,16 +286,19 @@ class MatrixArray(MatrixArrayABC):
 
     def copy(self) -> MatrixArrayABC:
         """
-        Copies matrix array
+        Copies matrix array & meta data
         """
 
-        return type(self)([
-            [col.copy() for col in row]
-            for row in self._matrix
-        ])
+        return type(self)(
+            matrix = [
+                [col.copy() for col in row]
+                for row in self._matrix
+            ],
+            meta = {key: value.copy() for key, value in self._meta.items()},
+        )
 
     @property
-    def dtype(self) -> Type:
+    def dtype(self) -> np.dtype:
         """
         (Python) data type of matrix components
         """
@@ -294,8 +313,55 @@ class MatrixArray(MatrixArrayABC):
 
         return len(self._matrix)
 
+    @property
+    def meta(self) -> MetaArrayDict:
+        """
+        meta data dict
+        """
+
+        return self._meta
+
     @classmethod
-    def from_ndarray(cls, matrix_array: ndarray) -> MatrixArrayABC:
+    def from_iterable(cls, obj: Iterable[Matrix], dtype: Dtype = FLOAT_DEFAULT) -> MatrixArrayABC:
+        """
+        Generates matrix array object from an iterable of :class:`bewegung.Matrix` objects
+
+        Args:
+            obj : iterable
+            dtype : Desired ``numpy`` data type of new vector array
+        """
+
+        if not isinstance(obj, list):
+            obj = list(obj)
+
+        ndim = obj[0].ndim
+        if not all(item.ndim == ndim for item in obj):
+            raise ValueError('inconsistent ndim')
+
+        matrix = [
+            [
+                np.zeros((len(obj),), dtype = dtype)
+                for __ in range(len(obj))
+            ]
+            for _ in range(len(obj))
+        ]
+
+        keys = set()
+        for idx, item in enumerate(obj):
+            for row in range(ndim):
+                for col in range(ndim):
+                    matrix[row][col][idx] = item[row][col]
+            keys.update(item.meta.keys())
+
+        meta = {
+            key: np.array([item.meta.get(key) for item in obj])
+            for key in keys
+        }
+
+        return cls(matrix = matrix, meta = meta,)
+
+    @classmethod
+    def from_ndarray(cls, matrix_array: ndarray, meta: Union[MetaArrayDict, None] = None) -> MatrixArrayABC:
         """
         Generates new matrix array object from single ``numpy.ndarray``
         object of shape ``(length, ndim, ndim)``
@@ -311,13 +377,16 @@ class MatrixArray(MatrixArrayABC):
 
         ndim = matrix_array.shape[1]
 
-        return cls([
-            [matrix_array[:, row, col] for col in range(ndim)]
-            for row in range(ndim)
-        ])
+        return cls(
+            matrix = [
+                [matrix_array[:, row, col] for col in range(ndim)]
+                for row in range(ndim)
+            ],
+            meta = meta,
+        )
 
     @classmethod
-    def from_2d_rotation(cls, a: ndarray) -> MatrixArrayABC:
+    def from_2d_rotation(cls, a: ndarray, meta: Union[MetaArrayDict, None] = None) -> MatrixArrayABC:
         """
         Generates new 2D matrix array object from an array of angles
 
@@ -330,13 +399,21 @@ class MatrixArray(MatrixArrayABC):
 
         sa, ca = np.sin(a), np.cos(a)
 
-        return cls([
-            [ca, -sa],
-            [sa, ca.copy()],
-        ])
+        return cls(
+            matrix = [
+                [ca, -sa],
+                [sa, ca.copy()],
+            ],
+            meta = meta,
+        )
 
     @classmethod
-    def from_3d_rotation(cls, v: Union[Vector3D, VectorArray3D], a: Union[Number, ndarray]) -> MatrixArrayABC:
+    def from_3d_rotation(
+        cls,
+        v: Union[Vector3D, VectorArray3D],
+        a: Union[Number, ndarray],
+        meta: Union[MetaArrayDict, None] = None,
+    ) -> MatrixArrayABC:
         """
         Generates new 3D matrix array object from a vector or vector array and
         an angle or one-dimensional ``numpy.ndarray`` of angles.
@@ -362,8 +439,11 @@ class MatrixArray(MatrixArrayABC):
         oca = 1 - ca
         sa = np.sin(a)
 
-        return cls([
-            [ca + (v.x ** 2) * oca, v.x * v.y * oca - v.z * sa, v.x * v.y * oca + v.y * sa],
-            [v.y * v.x * oca + v.z * sa, ca + (v.y ** 2) * oca, v.y * v.z * oca - v.x * sa],
-            [v.z * v.x * oca - v.y * sa, v.z * v.y * oca + v.x * sa, ca + (v.z ** 2) * oca],
-        ])
+        return cls(
+            matrix = [
+                [ca + (v.x ** 2) * oca, v.x * v.y * oca - v.z * sa, v.x * v.y * oca + v.y * sa],
+                [v.y * v.x * oca + v.z * sa, ca + (v.y ** 2) * oca, v.y * v.z * oca - v.x * sa],
+                [v.z * v.x * oca - v.y * sa, v.z * v.y * oca + v.x * sa, ca + (v.z ** 2) * oca],
+            ],
+            meta = meta,
+        )

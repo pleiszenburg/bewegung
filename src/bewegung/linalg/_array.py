@@ -30,8 +30,10 @@ specific language governing rights and limitations under the License.
 
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
+from typing import Union
 
 from ..lib import typechecked
+from ._abc import MetaArrayDict
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -43,8 +45,27 @@ class VectorArray(ABC, Iterable):
     Abstract base class for all vector array types.
 
     Not intended to be instantiated.
+
+    Args:
+        meta : A dict holding arbitrary metadata
     """
 
     @abstractmethod
-    def __init__(self): # pragma: no cover
-        pass
+    def __init__(self, meta: Union[MetaArrayDict, None] = None):
+
+        meta = {} if meta is None else dict(meta)
+
+        if not all(value.ndim == 1 for value in meta.values()):
+            raise ValueError('inconsistent: meta_value.ndim != 1')
+        if not all(value.shape[0] == len(self) for value in meta.values()):
+            raise ValueError('inconsistent length')
+
+        self._meta = meta
+
+    @property
+    def meta(self) -> MetaArrayDict:
+        """
+        meta data dict
+        """
+
+        return self._meta

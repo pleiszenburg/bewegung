@@ -21,6 +21,7 @@ Highlights: Major overhaul of linear algebra functionality, better package struc
 - FEATURE: Cleanup of internal type hierarchy.
 - FEATURE: Added test suite with some initial tests, based on `pytest`, `hypothesis` and `coverage`.
 - API CHANGE: Vector array method `update_from_vector` renamed to `update_from_vectorarray`.
+- API CHANGE: `Vector2Ddist` and `VectorArray2Ddist` removed in favor of meta data dictionaries within all vector, vector array, matrix and matrix array classes.
 - FIX: Development dependency switched from unmaintained `python-language-server` to maintained fork `python-lsp-server`.
 - FIX: Imports in `contrib` were broken.
 - FIX: `test` target in `makefile` was broken.

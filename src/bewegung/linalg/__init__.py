@@ -34,7 +34,6 @@ from ._single import Vector
 from ._array import VectorArray
 
 from ._single2d import Vector2D
-from ._single2ddist import Vector2Ddist
 from ._single3d import Vector3D
 from ._matrix import Matrix
 
@@ -42,7 +41,6 @@ from ._numpy import np as _np
 
 if _np is not None:
     from ._array2d import VectorArray2D
-    from ._array2ddist import VectorArray2Ddist
     from ._array3d import VectorArray3D
     from ._matrixarray import MatrixArray
 

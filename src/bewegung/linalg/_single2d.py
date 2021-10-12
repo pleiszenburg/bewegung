@@ -36,6 +36,7 @@ from ..lib import typechecked
 from ._abc import (
     Dtype,
     NotImplementedType,
+    MetaDict,
     Number2D,
     NumberType,
     Vector2DABC,
@@ -61,9 +62,10 @@ class Vector2D(Vector, Vector2DABC):
         x : x component. Must have the same type like ``y``.
         y : y component. Must have the same type like ``x``.
         dtype : Data type. Derived from ``x`` and ``y`` if not explicitly provided.
+        meta : A dict holding arbitrary metadata.
     """
 
-    def __init__(self, x: Number, y: Number, dtype: Union[NumberType, None] = None):
+    def __init__(self, x: Number, y: Number, dtype: Union[NumberType, None] = None, meta: Union[MetaDict, None] = None):
 
         if dtype is None:
             if type(x) != type(y):
@@ -72,6 +74,7 @@ class Vector2D(Vector, Vector2DABC):
             x, y = dtype(x), dtype(y)
 
         self._x, self._y = x, y
+        super().__init__(meta = meta)
 
     def __repr__(self) -> str:
         """
@@ -221,10 +224,10 @@ class Vector2D(Vector, Vector2DABC):
 
     def copy(self) -> Vector2DABC:
         """
-        Copies vector
+        Copies vector & meta data
         """
 
-        return type(self)(self._x, self._y, self.dtype)
+        return type(self)(x = self._x, y = self._y, dtype = self.dtype, meta = self._meta.copy())
 
     def update(self, x: Number, y: Number):
         """
@@ -321,16 +324,18 @@ class Vector2D(Vector, Vector2DABC):
         return 2
 
     @classmethod
-    def from_polar(cls, radius: Number, angle: Number) -> Vector2DABC:
+    def from_polar(cls, radius: Number, angle: Number, meta: Union[MetaDict, None] = None) -> Vector2DABC:
         """
         Generates vector object from polar coordinates
 
         Args:
             radius : A radius
             angle : An angle in radians
+            meta : A dict holding arbitrary metadata
         """
 
         return cls(
             x = radius * math.cos(angle),
             y = radius * math.sin(angle),
+            meta = meta,
             )

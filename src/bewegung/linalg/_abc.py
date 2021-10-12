@@ -30,9 +30,9 @@ specific language governing rights and limitations under the License.
 
 from abc import ABC
 from numbers import Number
-from typing import Tuple, Type, TypeVar, Union
+from typing import Dict, Tuple, Type, TypeVar, Union
 
-from ._numpy import np
+from ._numpy import np, ndarray
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASSES
@@ -78,3 +78,6 @@ try:
     from typing import NotImplementedType # re-introduced in Python 3.10
 except ImportError:
     NotImplementedType = type(NotImplemented)
+
+MetaDict = Dict[str, Union[str, bytes, Number]]
+MetaArrayDict = Dict[str, ndarray]
