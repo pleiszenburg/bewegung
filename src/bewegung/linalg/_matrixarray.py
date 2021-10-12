@@ -30,7 +30,7 @@ specific language governing rights and limitations under the License.
 
 from collections.abc import Iterable
 from numbers import Number
-from typing import Any, List, Tuple, Type, Union
+from typing import Any, List, Tuple, Union
 
 from ..lib import typechecked
 from ._abc import (
@@ -279,7 +279,7 @@ class MatrixArray(MatrixArrayABC):
         ])
 
     @property
-    def dtype(self) -> Type:
+    def dtype(self) -> np.dtype:
         """
         (Python) data type of matrix components
         """
