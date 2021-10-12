@@ -37,6 +37,7 @@ from ..lib import typechecked
 from ._abc import (
     Dtype,
     MatrixABC,
+    MetaDict,
     NotImplementedType,
     Numbers,
     NumberType,
@@ -65,9 +66,10 @@ class Matrix(MatrixABC):
     Args:
         matrix : 2D or 3D arrangement in a list of lists containing Python numbers
         dtype : Data type. Derived from entries in ``matrix`` if not explicitly provided.
+        meta : A dict holding arbitrary metadata
     """
 
-    def __init__(self, matrix = Iterable[Iterable[Numbers]], dtype: Union[NumberType, None] = None):
+    def __init__(self, matrix = Iterable[Iterable[Numbers]], dtype: Union[NumberType, None] = None, meta: Union[MetaDict, None] = None):
 
         matrix = [list(row) for row in matrix] # convert to lists or copy lists
 
@@ -85,6 +87,7 @@ class Matrix(MatrixABC):
             matrix = [[dtype(col) for col in row] for row in matrix]
 
         self._matrix = matrix
+        self._meta = {} if meta is None else dict(meta)
 
     def __repr__(self) -> str:
         """
@@ -213,10 +216,10 @@ class Matrix(MatrixABC):
 
     def copy(self) -> MatrixABC:
         """
-        Copies matrix
+        Copies matrix & meta data
         """
 
-        return type(self)(matrix = [row.copy() for row in self._matrix], dtype = self.dtype)
+        return type(self)(matrix = [row.copy() for row in self._matrix], dtype = self.dtype, meta = self._meta.copy())
 
     @property
     def dtype(self) -> NumberType:
@@ -234,8 +237,16 @@ class Matrix(MatrixABC):
 
         return len(self._matrix)
 
+    @property
+    def meta(self) -> MetaDict:
+        """
+        meta data dict
+        """
+
+        return self._meta
+
     @classmethod
-    def from_ndarray(cls, matrix: ndarray, dtype: NumberType = float) -> MatrixABC:
+    def from_ndarray(cls, matrix: ndarray, dtype: NumberType = float, meta: Union[MetaDict, None] = None) -> MatrixABC:
         """
         Generates new matrix object from ``numpy.ndarray`` object
         of shape ``(2, 2)`` or ``(3, 3)``
@@ -243,6 +254,7 @@ class Matrix(MatrixABC):
         Args:
             matrix : Input data
             dtype : Desired (Python) data type of matrix
+            meta : A dict holding arbitrary metadata
         """
 
         if matrix.ndim != 2:
@@ -252,26 +264,30 @@ class Matrix(MatrixABC):
 
         matrix = [[dtype(col) for col in row] for row in matrix.tolist()]
 
-        return cls(matrix, dtype = dtype)
+        return cls(matrix, dtype = dtype, meta = meta,)
 
     @classmethod
-    def from_2d_rotation(cls, a: Number) -> MatrixABC:
+    def from_2d_rotation(cls, a: Number, meta: Union[MetaDict, None] = None) -> MatrixABC:
         """
         Generates new 2D matrix object from an angle
 
         Args:
             a : An angle in radians
+            meta : A dict holding arbitrary metadata
         """
 
         sa, ca = sin(a), cos(a)
 
-        return cls([
-            [ca, -sa],
-            [sa, ca],
-        ])
+        return cls(
+            [
+                [ca, -sa],
+                [sa, ca],
+            ],
+            meta = meta,
+        )
 
     @classmethod
-    def from_3d_rotation(cls, v: Vector3D, a: Number) -> MatrixABC:
+    def from_3d_rotation(cls, v: Vector3D, a: Number, meta: Union[MetaDict, None] = None) -> MatrixABC:
         """
         Generates new 3D matrix object from a vector and an angle.
         Rotates by angle around vector.
@@ -279,14 +295,18 @@ class Matrix(MatrixABC):
         Args:
             v : A 3D vector
             a : An angle in radians
+            meta : A dict holding arbitrary metadata
         """
 
         ca = cos(a)
         oca = 1 - ca
         sa = sin(a)
 
-        return cls([
-            [ca + (v.x ** 2) * oca, v.x * v.y * oca - v.z * sa, v.x * v.y * oca + v.y * sa],
-            [v.y * v.x * oca + v.z * sa, ca + (v.y ** 2) * oca, v.y * v.z * oca - v.x * sa],
-            [v.z * v.x * oca - v.y * sa, v.z * v.y * oca + v.x * sa, ca + (v.z ** 2) * oca],
-        ])
+        return cls(
+            [
+                [ca + (v.x ** 2) * oca, v.x * v.y * oca - v.z * sa, v.x * v.y * oca + v.y * sa],
+                [v.y * v.x * oca + v.z * sa, ca + (v.y ** 2) * oca, v.y * v.z * oca - v.x * sa],
+                [v.z * v.x * oca - v.y * sa, v.z * v.y * oca + v.x * sa, ca + (v.z ** 2) * oca],
+            ],
+            meta = meta,
+        )
