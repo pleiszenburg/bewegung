@@ -47,7 +47,7 @@ class VectorArray(ABC, Iterable):
     Not intended to be instantiated.
 
     Args:
-        meta : A mapping holding arbitrary metadata
+        meta : A dict holding arbitrary metadata
     """
 
     @abstractmethod

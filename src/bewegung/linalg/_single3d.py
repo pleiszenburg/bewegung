@@ -62,7 +62,7 @@ class Vector3D(Vector, Vector3DABC):
         y : y component. Must have the same type like ``x`` and ``z``.
         z : z component. Must have the same type like ``x`` and ``y``.
         dtype : Data type. Derived from ``x``, ``y`` and ``z`` if not explicitly provided.
-        meta : A mapping holding arbitrary metadata.
+        meta : A dict holding arbitrary metadata.
     """
 
     _deg2rad = math.pi / 180.0
@@ -384,7 +384,7 @@ class Vector3D(Vector, Vector3DABC):
             radius : A radius
             theta : An angle in radians
             phi : An angle in radians
-            meta : A mapping holding arbitrary metadata
+            meta : A dict holding arbitrary metadata
         """
 
         RadiusSinTheta = radius * math.sin(theta)
@@ -404,7 +404,7 @@ class Vector3D(Vector, Vector3DABC):
             radius : A radius
             lon : An angle in degree
             lat : An angle in degree
-            meta : A mapping holding arbitrary metadata
+            meta : A dict holding arbitrary metadata
         """
 
         return cls.from_polar(

@@ -59,7 +59,7 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
     Args:
         x : x components. Must have the same dtype like ``y``.
         y : y components. Must have the same dtype like ``x``.
-        meta : A mapping holding arbitrary metadata.
+        meta : A dict holding arbitrary metadata.
     """
 
     def __init__(self, x: np.ndarray, y: np.ndarray, dtype: Union[Dtype, None] = None, meta: Union[MetaArrayDict, None] = None):
@@ -426,7 +426,7 @@ class VectorArray2D(VectorArray, VectorArray2DABC):
         Args:
             radius : Radius components
             angle : Angle components in radians
-            meta : A mapping holding arbitrary metadata
+            meta : A dict holding arbitrary metadata
         """
 
         if radius.ndim != 1:

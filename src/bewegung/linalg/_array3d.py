@@ -60,7 +60,7 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
         x : x components. Must have the same dtype like ``y`` and ``z``.
         y : y components. Must have the same dtype like ``x`` and ``z``.
         z : z components. Must have the same dtype like ``x`` and ``y``.
-        meta : A mapping holding arbitrary metadata.
+        meta : A dict holding arbitrary metadata.
     """
 
     def __init__(self, x: np.ndarray, y: np.ndarray, z: np.ndarray, dtype: Union[Dtype, None] = None, meta: Union[MetaArrayDict, None] = None):
@@ -487,7 +487,7 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
             radius : Radius components
             theta : Angle components in radians
             phi : Angle components in radians
-            meta : A mapping holding arbitrary metadata
+            meta : A dict holding arbitrary metadata
         """
 
         if radius.ndim != 1:
@@ -518,7 +518,7 @@ class VectorArray3D(VectorArray, VectorArray3DABC):
             radius : Radius components
             lon : Angle components in degree
             lat : Angle components in degree
-            meta : A mapping holding arbitrary metadata
+            meta : A dict holding arbitrary metadata
         """
 
         if radius.ndim != 1:

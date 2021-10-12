@@ -62,7 +62,7 @@ class Vector2D(Vector, Vector2DABC):
         x : x component. Must have the same type like ``y``.
         y : y component. Must have the same type like ``x``.
         dtype : Data type. Derived from ``x`` and ``y`` if not explicitly provided.
-        meta : A mapping holding arbitrary metadata.
+        meta : A dict holding arbitrary metadata.
     """
 
     def __init__(self, x: Number, y: Number, dtype: Union[NumberType, None] = None, meta: Union[MetaDict, None] = None):
@@ -331,7 +331,7 @@ class Vector2D(Vector, Vector2DABC):
         Args:
             radius : A radius
             angle : An angle in radians
-            meta : A mapping holding arbitrary metadata
+            meta : A dict holding arbitrary metadata
         """
 
         return cls(
