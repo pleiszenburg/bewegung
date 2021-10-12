@@ -322,7 +322,7 @@ class MatrixArray(MatrixArrayABC):
         return self._meta
 
     @classmethod
-    def from_ndarray(cls, matrix_array: ndarray) -> MatrixArrayABC:
+    def from_ndarray(cls, matrix_array: ndarray, meta: Union[MetaArrayDict, None] = None) -> MatrixArrayABC:
         """
         Generates new matrix array object from single ``numpy.ndarray``
         object of shape ``(length, ndim, ndim)``
@@ -338,13 +338,16 @@ class MatrixArray(MatrixArrayABC):
 
         ndim = matrix_array.shape[1]
 
-        return cls([
-            [matrix_array[:, row, col] for col in range(ndim)]
-            for row in range(ndim)
-        ])
+        return cls(
+            matrix = [
+                [matrix_array[:, row, col] for col in range(ndim)]
+                for row in range(ndim)
+            ],
+            meta = meta,
+        )
 
     @classmethod
-    def from_2d_rotation(cls, a: ndarray) -> MatrixArrayABC:
+    def from_2d_rotation(cls, a: ndarray, meta: Union[MetaArrayDict, None] = None) -> MatrixArrayABC:
         """
         Generates new 2D matrix array object from an array of angles
 
@@ -357,13 +360,21 @@ class MatrixArray(MatrixArrayABC):
 
         sa, ca = np.sin(a), np.cos(a)
 
-        return cls([
-            [ca, -sa],
-            [sa, ca.copy()],
-        ])
+        return cls(
+            matrix = [
+                [ca, -sa],
+                [sa, ca.copy()],
+            ],
+            meta = meta,
+        )
 
     @classmethod
-    def from_3d_rotation(cls, v: Union[Vector3D, VectorArray3D], a: Union[Number, ndarray]) -> MatrixArrayABC:
+    def from_3d_rotation(
+        cls,
+        v: Union[Vector3D, VectorArray3D],
+        a: Union[Number, ndarray],
+        meta: Union[MetaArrayDict, None] = None,
+    ) -> MatrixArrayABC:
         """
         Generates new 3D matrix array object from a vector or vector array and
         an angle or one-dimensional ``numpy.ndarray`` of angles.
@@ -389,8 +400,11 @@ class MatrixArray(MatrixArrayABC):
         oca = 1 - ca
         sa = np.sin(a)
 
-        return cls([
-            [ca + (v.x ** 2) * oca, v.x * v.y * oca - v.z * sa, v.x * v.y * oca + v.y * sa],
-            [v.y * v.x * oca + v.z * sa, ca + (v.y ** 2) * oca, v.y * v.z * oca - v.x * sa],
-            [v.z * v.x * oca - v.y * sa, v.z * v.y * oca + v.x * sa, ca + (v.z ** 2) * oca],
-        ])
+        return cls(
+            matrix = [
+                [ca + (v.x ** 2) * oca, v.x * v.y * oca - v.z * sa, v.x * v.y * oca + v.y * sa],
+                [v.y * v.x * oca + v.z * sa, ca + (v.y ** 2) * oca, v.y * v.z * oca - v.x * sa],
+                [v.z * v.x * oca - v.y * sa, v.z * v.y * oca + v.x * sa, ca + (v.z ** 2) * oca],
+            ],
+            meta = meta,
+        )
