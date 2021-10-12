@@ -247,7 +247,7 @@ class MatrixArray(MatrixArrayABC):
         Exports a list of :class:`bewegung.Matrix` objects
         """
 
-        return [self[idx] for idx in range(len(self))]
+        return list(self)
 
     def as_ndarray(self, dtype: Dtype = FLOAT_DEFAULT) -> ndarray:
         """
