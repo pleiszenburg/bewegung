@@ -36,6 +36,7 @@ from ..lib import typechecked
 from ._abc import (
     Dtype,
     MatrixArrayABC,
+    MetaArrayDict,
     NotImplementedType,
 )
 from ._const import FLOAT_DEFAULT
@@ -63,7 +64,7 @@ class MatrixArray(MatrixArrayABC):
         matrix : 2D or 3D arrangement in a list of lists containing numpy nd arrays
     """
 
-    def __init__(self, matrix = Iterable[Iterable[ndarray]], dtype: Union[Dtype, None] = None):
+    def __init__(self, matrix = Iterable[Iterable[ndarray]], dtype: Union[Dtype, None] = None, meta: Union[MetaArrayDict, None] = None):
 
         matrix = [list(row) for row in matrix] # convert to lists or copy lists
 
@@ -76,8 +77,8 @@ class MatrixArray(MatrixArrayABC):
         if not all(col.ndim == 1 for row in matrix for col in row):
             raise ValueError('inconsistent: ndarray.ndim != 1')
 
-        self._length = matrix[0][0].shape[0]
-        if not all(col.shape[0] == self._length for row in matrix for col in row):
+        length = matrix[0][0].shape[0]
+        if not all(col.shape[0] == length for row in matrix for col in row):
             raise ValueError('inconsistent length')
 
         if dtype is None:
@@ -97,6 +98,15 @@ class MatrixArray(MatrixArrayABC):
         self._matrix = matrix
         self._iterstate = 0
 
+        meta = {} if meta is None else dict(meta)
+
+        if not all(value.ndim == 1 for value in meta.values()):
+            raise ValueError('inconsistent: meta_value.ndim != 1')
+        if not all(value.shape[0] == len(self) for value in meta.values()):
+            raise ValueError('inconsistent length')
+
+        self._meta = meta
+
     def __repr__(self) -> str:
         """
         String representation for interactive use
@@ -109,7 +119,7 @@ class MatrixArray(MatrixArrayABC):
         Length of array
         """
 
-        return self._length
+        return self._matrix[0][0].shape[0]
 
     def __matmul__(self, other: Any) -> Union[VectorArray, NotImplementedType]:
         """
