@@ -163,17 +163,23 @@ class MatrixArray(MatrixArrayABC):
         """
 
         if isinstance(idx, slice):
-            return MatrixArray([
-                [col[idx].copy() for col in row]
-                for row in self._matrix
-            ])
+            return MatrixArray(
+                matrix = [
+                    [col[idx].copy() for col in row]
+                    for row in self._matrix
+                ],
+                meta = {key: value[idx].copy() for key, value in self._meta.items()},
+            )
 
         dtype = dtype_np2py(self.dtype)
 
-        return MatrixArray([
-            [dtype(col[idx]) for col in row]
-            for row in self._matrix
-        ])
+        return MatrixArray(
+            matrix = [
+                [dtype(col[idx]) for col in row]
+                for row in self._matrix
+            ],
+            meta = {key: value[idx] for key, value in self._meta.items()},
+        )
 
     def __iter__(self) -> MatrixArrayABC:
         """
