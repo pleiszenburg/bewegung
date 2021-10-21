@@ -173,7 +173,7 @@ class MatrixArray(MatrixArrayABC):
 
         dtype = dtype_np2py(self.dtype)
 
-        return MatrixArray(
+        return Matrix(
             matrix = [
                 [dtype(col[idx]) for col in row]
                 for row in self._matrix
