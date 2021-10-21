@@ -120,7 +120,7 @@ class Matrix(MatrixABC):
         vector_tuple = other.as_tuple(copy = False) if isinstance(other, VectorArray) else other.as_tuple()
 
         if isinstance(other, VectorArray) and np is not None:
-            sum_ = lambda x: np.sum(np.array(x))
+            sum_ = lambda x: np.sum(np.array(x), axis = 0)
         else:
             sum_ = sum
 

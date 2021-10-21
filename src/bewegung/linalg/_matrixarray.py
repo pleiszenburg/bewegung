@@ -148,7 +148,7 @@ class MatrixArray(MatrixArrayABC):
             np.sum(np.array([
                 matrix_element * vector_coordinate
                 for matrix_element, vector_coordinate in zip(matrix_row, vector_tuple)
-            ]))
+            ]), axis = 0)
             for matrix_row in self._matrix
         ]
 
