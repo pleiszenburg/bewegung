@@ -41,10 +41,10 @@ The ``DrawingBoard`` Class
 
 The ``DrawingBoard`` class makes use of :ref:`vectors <vectors>` and :ref:`colors <colors>`.
 
-.. autoclass:: bewegung.core.backends.drawingboard.core.DrawingBoard
+.. autoclass:: bewegung.drawingboard.DrawingBoard
     :members:
     :private-members:
 
 .. note::
 
-    The ``DrawingBoard`` class can, most efficiently, be accessed via ``bewegung.backends['drawingboard'].type``.
+    The ``DrawingBoard`` class can be imported from ``bewegung.drawingboard``.

@@ -1,5 +1,32 @@
 # Changes
 
+## 0.0.6 (2021-11-07)
+
+Highlights: Major overhaul of linear algebra functionality, better package structure and a test suite.
+
+- FEATURE: All vector and vector array classes expose `ndim`, number of dimensions.
+- FEATURE: Common base class, `Vector`, for all vector classes.
+- FEATURE: Common base class, `VectorArray`, for all vector array classes.
+- FEATURE: Vector arrays are iterators.
+- FEATURE: Added missing right-hand-side operators to `Vector` and `VectorArray` classes.
+- FEATURE: Tuple export of `VectorArray` types can optionally provide direct access to underlying ``ndarray``s, i.e. new ``copy`` parameter can be set to ``False``.
+- FEATURE: 3D vectors and vector arrays can export geographic coordinates.
+- FEATURE: The `Color` class, using RGBA internally, can now import HSV values.
+- FEATURE: Added equality check, "is close" check, tuple export and copy to `Matrix`.
+- FEATURE: Added new `MatrixArray` class.
+- FEATURE: New dedicated sub-module for core animation engine named `bewegung.animation`.
+- FEATURE: New dedicated sub-module for `DrawingBoard` named `bewegung.drawingboard`, now allowing direct import.
+- FEATURE: New dedicated sub-module for linear algebra named `bewegung.lingalg`.
+- FEATURE: All linear algebra classes have consistent dtype and error handling.
+- FEATURE: Cleanup of internal type hierarchy.
+- FEATURE: Added test suite with some initial tests, based on `pytest`, `hypothesis` and `coverage`.
+- API CHANGE: Vector array method `update_from_vector` renamed to `update_from_vectorarray`.
+- API CHANGE: `Vector2Ddist` and `VectorArray2Ddist` removed in favor of meta data dictionaries within all vector, vector array, matrix and matrix array classes.
+- FIX: Development dependency switched from unmaintained `python-language-server` to maintained fork `python-lsp-server`.
+- FIX: Imports in `contrib` were broken.
+- FIX: `test` target in `makefile` was broken.
+- FIX: `typeguard` was not really an optional dependency.
+
 ## 0.0.5 (2021-07-30)
 
 - FEATURE: Python 3.9 support.

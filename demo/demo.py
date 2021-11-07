@@ -42,10 +42,9 @@ from bewegung import (
     Camera, Color, Video,
     Vector2D, Vector3D, VectorArray3D,
     FadeInEffect, FadeOutEffect,
-    backends,
     )
 
-DrawingBoard = backends['drawingboard'].type
+from bewegung.drawingboard import DrawingBoard
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CONST
@@ -145,9 +144,9 @@ def main():
                 for line2d in self._lines2d
                 for a, b in zip(line2d[:-1], line2d[1:])
             ]
-            self._lines2d.sort(key = lambda item: item[0].dist, reverse = True)
-            minimum = self._lines2d[0][0].dist
-            maximum = self._lines2d[-1][0].dist
+            self._lines2d.sort(key = lambda item: item[0].meta['dist'], reverse = True)
+            minimum = self._lines2d[0][0].meta['dist']
+            maximum = self._lines2d[-1][0].meta['dist']
             self._factor = lambda x: (x - minimum) / (maximum - minimum)
 
         @FadeInEffect(v.time_from_seconds(4.0))
@@ -158,7 +157,7 @@ def main():
         )
         def wiremesh(self, canvas):
             for line in self._lines2d:
-                factor = self._factor(line[0].dist)
+                factor = self._factor(line[0].meta['dist'])
                 gray = round(64 + 191 * factor)
                 canvas.draw_polygon(
                     *line,

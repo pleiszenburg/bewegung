@@ -29,11 +29,12 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+import os
+
 from setuptools import (
     find_packages,
     setup,
 )
-import os
 
 from docs.version import get_version
 
@@ -62,8 +63,10 @@ __version__ = get_version()
 # Requirements
 extras_require = {
     "dev": [
+        "coverage",
         "black",
-        "python-language-server[all]",
+        "hypothesis",
+        "python-lsp-server[all]", # superseeding python-language-server
         "psutil",
         "setuptools",
         "Sphinx",
@@ -71,6 +74,8 @@ extras_require = {
         "sphinx-rtd-theme",
         "sphinxembeddedvideos", # https://github.com/sphinx-contrib/youtube/issues/9#issuecomment-734295832
         "myst-parser", # markdown in sphinx
+        "pytest",
+        "pytest-cov",
         "twine",
         "wheel",
     ],
@@ -106,9 +111,11 @@ extras_require = {
         "typeguard", # for type checking (optional)
     ],
 }
-extras_require["all"] = list(
-    {rq for target in extras_require.keys() for rq in extras_require[target]}
-)
+extras_require["all"] = list({
+    rq
+    for target in extras_require.values()
+    for rq in target
+})
 extras_require["docs"] = list(set(extras_require["all"]) - {'PyGObject'})
 
 # Install package

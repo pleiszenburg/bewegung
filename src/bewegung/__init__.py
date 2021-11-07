@@ -28,19 +28,8 @@ specific language governing rights and limitations under the License.
 # EXPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-__version__ = '0.0.5'
+__version__ = '0.0.6'
 
-from .core.camera import Camera
-from .core.backends import *
-from .core.color import Color
-from .core.const import *
-from .core.effects import EffectBase, FadeInEffect, FadeOutEffect
-from .core.encoders import EncoderBase, FFmpegH264Encoder, FFmpegGifEncoder
-from .core.indexpool import IndexPool
-from .core.layer import Layer
-from .core.sequence import Sequence
-from .core.task import Task
-from .core.time import Time
-from .core.timescale import TimeScale
-from .core.vector import *
-from .core.video import Video
+from .animation import *
+from .lib import *
+from .linalg import *

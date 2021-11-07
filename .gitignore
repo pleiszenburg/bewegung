@@ -15,3 +15,7 @@ test/
 *pleiszenburg*
 _build/
 MATERIAL/
+.hypothesis/
+.coverage
+.pytest_cache/
+htmlcov/
