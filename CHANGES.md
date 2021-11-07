@@ -1,5 +1,9 @@
 # Changes
 
+## 0.0.7 (202X-XX-XX)
+
+- (TBD)
+
 ## 0.0.6 (2021-11-07)
 
 Highlights: Major overhaul of linear algebra functionality, better package structure and a test suite.
