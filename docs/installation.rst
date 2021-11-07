@@ -17,6 +17,21 @@ Quick Install Guide
 
 `bewegung` can be installed both via ``conda`` and via ``pip``.
 
+Via ``conda``
+~~~~~~~~~~~~~
+
+An almost complete installation can be triggered by running:
+
+.. code:: bash
+
+    conda install -c conda-forge bewegung
+
+.. note::
+
+    `mplcairo`_, a dependency of ``bewegung`` and alternative backend for ``matplotlib``, is currently not available via ``conda`` and must be installed manually. ``bewegung`` :ref:`does also work without mplcairo present <acceleratingmatplotlib>` and falls back to the ``cairo`` backend of ``matplotlib``.
+
+.. _mplcairo: https://github.com/matplotlib/mplcairo
+
 Via ``pip``
 ~~~~~~~~~~~
 
@@ -58,21 +73,6 @@ The actual installation of ``bewegung`` can now be triggered as follows:
 .. code:: bash
 
     pip install -vU bewegung[all] # install bewegung
-
-Via ``conda``
-~~~~~~~~~~~~~
-
-An almost complete installation can be triggered by running:
-
-.. code:: bash
-
-    conda install -c conda-forge bewegung
-
-.. note::
-
-    `mplcairo`_, a dependency of ``bewegung`` and alternative backend for ``matplotlib``, is currently not available via ``conda`` and must be installed manually. ``bewegung`` :ref:`does also work without mplcairo present <acceleratingmatplotlib>` and falls back to the ``cairo`` backend of ``matplotlib``.
-
-.. _mplcairo: https://github.com/matplotlib/mplcairo
 
 Validate Installation
 ~~~~~~~~~~~~~~~~~~~~~
