@@ -383,7 +383,7 @@ class DrawingBoard(DrawingBoardABC):
         Generates a Pango font description for re-use.
 
         Args:
-            familiy : Font family (name)
+            family : Font family (name)
             size : Font size
         """
 
