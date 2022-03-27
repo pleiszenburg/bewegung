@@ -2,6 +2,7 @@
 
 ## 0.0.7 (202X-XX-XX)
 
+- DOCS: Updated "Getting Started" chapter to showcase new meta data dictionary in vector and matrix classes.
 - FIX: Docs would not build properly with Python 3.8 and older.
 
 ## 0.0.6 (2021-11-07)
