@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # EXPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-__version__ = '0.0.6'
+__version__ = '0.0.7'
 
 from .animation import *
 from .lib import *
