@@ -8,7 +8,7 @@ https://github.com/pleiszenburg/bewegung
 
     src/bewegung/linalg/_camera.py: Simple pinhole camera
 
-    Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
+    Copyright (C) 2020-2022 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
 <LICENSE_BLOCK>
 The contents of this file are subject to the GNU Lesser General Public License
