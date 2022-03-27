@@ -1,6 +1,6 @@
 # Changes
 
-## 0.0.7 (202X-XX-XX)
+## 0.0.7 (2022-03-27)
 
 - DOCS: Updated "Getting Started" chapter to showcase new meta data dictionary in vector and matrix classes.
 - DOCS: Bumped Python at ReadTheDocs from 3.7 to 3.8.
