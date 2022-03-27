@@ -49,7 +49,7 @@ from docs.version import get_version
 
 project = 'bewegung'
 author = 'Sebastian M. Ernst'
-copyright = f'2020-2021 {author:s}'
+copyright = f'2020-2022 {author:s}'
 
 # The full version, including alpha/beta/rc tags
 release = get_version()
