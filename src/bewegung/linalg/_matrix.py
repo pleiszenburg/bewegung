@@ -28,7 +28,6 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from collections.abc import Iterable
 from math import cos, sin, isclose
 from numbers import Number
 from typing import Any, Tuple, Union
@@ -36,6 +35,7 @@ from typing import Any, Tuple, Union
 from ..lib import typechecked
 from ._abc import (
     Dtype,
+    Iterable,
     MatrixABC,
     MetaDict,
     NotImplementedType,

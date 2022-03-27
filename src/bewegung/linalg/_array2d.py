@@ -28,13 +28,13 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from collections.abc import Iterable
 from numbers import Number
 from typing import Any, List, Tuple, Union
 
 from ..lib import typechecked
 from ._abc import (
     Dtype,
+    Iterable,
     MetaArrayDict,
     NotImplementedType,
     VectorArray2DABC,

@@ -29,11 +29,13 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from abc import ABC, abstractmethod
-from collections.abc import Iterable
 from typing import Union
 
 from ..lib import typechecked
-from ._abc import MetaArrayDict
+from ._abc import (
+    Iterable,
+    MetaArrayDict,
+)
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

@@ -30,6 +30,7 @@ specific language governing rights and limitations under the License.
 
 from abc import ABC
 from numbers import Number
+import sys
 from typing import Dict, Tuple, Type, TypeVar, Union
 
 from ._numpy import np, ndarray
@@ -81,3 +82,9 @@ except ImportError:
 
 MetaDict = Dict[str, Union[str, bytes, Number]]
 MetaArrayDict = Dict[str, ndarray]
+
+assert sys.version_info.major == 3
+if sys.version_info.minor > 8:
+    from collections.abc import Iterable
+else:
+    from typing import Iterable
