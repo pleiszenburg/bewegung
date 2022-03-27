@@ -2,7 +2,7 @@
 
 ## 0.0.7 (202X-XX-XX)
 
-- (TBD)
+- FIX: Docs would not build properly with Python 3.8 and older.
 
 ## 0.0.6 (2021-11-07)
 
