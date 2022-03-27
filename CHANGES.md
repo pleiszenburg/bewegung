@@ -1,5 +1,9 @@
 # Changes
 
+## 0.0.8 (2022-XX-XX)
+
+- (TBD)
+
 ## 0.0.7 (2022-03-27)
 
 - DOCS: Updated "Getting Started" chapter to showcase new meta data dictionary in vector and matrix classes.
