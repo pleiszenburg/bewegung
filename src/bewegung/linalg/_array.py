@@ -8,7 +8,7 @@ https://github.com/pleiszenburg/bewegung
 
     src/bewegung/linalg/_array.py: Array base class
 
-    Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
+    Copyright (C) 2020-2022 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
 <LICENSE_BLOCK>
 The contents of this file are subject to the GNU Lesser General Public License
@@ -29,11 +29,13 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from abc import ABC, abstractmethod
-from collections.abc import Iterable
 from typing import Union
 
 from ..lib import typechecked
-from ._abc import MetaArrayDict
+from ._abc import (
+    Iterable,
+    MetaArrayDict,
+)
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS

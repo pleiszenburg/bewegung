@@ -8,7 +8,7 @@ https://github.com/pleiszenburg/bewegung
 
     src/bewegung/linalg/_matrixarray.py: Array of simple 2x2/3x3 matrices for rotations
 
-    Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
+    Copyright (C) 2020-2022 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
 <LICENSE_BLOCK>
 The contents of this file are subject to the GNU Lesser General Public License
@@ -28,13 +28,13 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from collections.abc import Iterable
 from numbers import Number
 from typing import Any, List, Tuple, Union
 
 from ..lib import typechecked
 from ._abc import (
     Dtype,
+    Iterable,
     MatrixArrayABC,
     MetaArrayDict,
     NotImplementedType,

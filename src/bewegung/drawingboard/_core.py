@@ -8,7 +8,7 @@ https://github.com/pleiszenburg/bewegung
 
     src/bewegung/drawingboard/_core.py: Simple 2D cairo renderer
 
-    Copyright (C) 2020-2021 Sebastian M. Ernst <ernst@pleiszenburg.de>
+    Copyright (C) 2020-2022 Sebastian M. Ernst <ernst@pleiszenburg.de>
 
 <LICENSE_BLOCK>
 The contents of this file are subject to the GNU Lesser General Public License
@@ -383,7 +383,7 @@ class DrawingBoard(DrawingBoardABC):
         Generates a Pango font description for re-use.
 
         Args:
-            familiy : Font family (name)
+            family : Font family (name)
             size : Font size
         """
 

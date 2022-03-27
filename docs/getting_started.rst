@@ -387,7 +387,7 @@ Because many of ``bewegung``'s backends have their own interpretations of colors
     >>> Color.from_hex('FF0000')
     <Color r=255 g=0 b=0 a=255>
 
-Simple vector algebra is also a rather common task, which is why ``bewegung`` offers vector classes (:class:`bewegung.Vector2D`, :class:`bewegung.Vector2Ddist`, :class:`bewegung.Vector3D`) and vector array classes (:class:`bewegung.VectorArray2D`, :class:`bewegung.VectorArray2Ddist`, :class:`bewegung.VectorArray3D`) as well as a :class:`bewegung.Matrix` class. While the vector classes simply hold two or three Python numbers, the vector array classes are wrappers around ``numpy`` arrays. The :class:`bewegung.Matrix` class is meant for simple tasks like rotations. A :class:`bewegung.Camera` class allows to define a "pinhole camera" in 3D space which can project 3D vectors onto a 2D plane. The "dist" variants of the 2D vector and vector array classes not only contain an "x" and a "y" value but also the absolute distance to a Camera in 3D space as a third parameter, which can be important for depth perception.
+Simple vector algebra is also a rather common task, which is why ``bewegung`` offers vector classes (:class:`bewegung.Vector2D`, :class:`bewegung.Vector2Ddist`, :class:`bewegung.Vector3D`) and vector array classes (:class:`bewegung.VectorArray2D`, :class:`bewegung.VectorArray2Ddist`, :class:`bewegung.VectorArray3D`) as well as a :class:`bewegung.Matrix` and a :class:`bewegung.MatrixArray` class. While the vector classes simply hold two or three Python numbers, the vector array classes are wrappers around ``numpy`` arrays. The :class:`bewegung.Matrix` class is meant for simple tasks like rotations. A :class:`bewegung.Camera` class allows to define a "pinhole camera" in 3D space which can project 3D vectors onto a 2D plane. All linear algebra objects can carry meta data such as the absolute distance to a Camera in 3D space, which can be important for depth perception.
 
 .. code:: ipython
 
@@ -401,10 +401,9 @@ Simple vector algebra is also a rather common task, which is why ``bewegung`` of
     <Vector3D x=0.000000e+00 y=5.000000e+00 z=5.000000e+00 dtype=float>
     >>> g2D_dist = c.get_point(g3D)
     >>> print(g2D_dist)
-    <Vector2Ddist x=2.500000e-01 y=-2.500000e-01 dist=2.121320e+01 dtype=float>
-    >>> g2D = g2D_dist.as_vector()
-    >>> print(g2D)
     <Vector2D x=2.500000e-01 y=-2.500000e-01 dtype=float>
+    >>> g2D_dist.meta['dist']
+    21.213203435596427
     >>> m = Matrix.from_2d_rotation(0.25 * pi)
     >>> print(m)
     <Matrix shape=2x2 dtype=float>
